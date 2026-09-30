@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beakim Hospitality Group | Admin CRM</title>
+
+  <!-- Google Fonts: Inter & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'deep-forest': '#0D2318',
+            'canopy': '#1A3D28',
+            'moss': '#2C5A3A',
+            'champagne': '#B8965A',
+            'driftwood': '#D4B07A',
+            'ivory': '#F5F0E8',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Playfair Display', 'serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Firebase compatibility SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+  <!-- Client-side PDF Generation SDK -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    /* Styling custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0D2318;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #B8965A;
+      border-radius: 3px;
+    }
+
+    /* Print styling to generate clean A4 invoice documents */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #print-area, #print-area * {
+        visibility: visible;
+      }
+      #print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body class="bg-deep-forest text-ivory font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- â”€â”€ DEMO MODE HEADER ALERT â”€â”€ -->
+  <div id="demo-banner" class="bg-amber-600 text-white text-xs font-semibold py-2 px-4 text-center hidden">
+    ⚡ Running in Demo Mode. Connect your Firebase credentials in Step 5 of the implementation plan to sync live.
+  </div>
+
+  <!-- â”€â”€ LOGIN CONTAINER â”€â”€ -->
+  <div id="login-container" class="flex-1 flex items-center justify-center p-6">
+    <div class="bg-canopy border border-champagne/20 max-w-md w-full rounded-2xl p-8 space-y-6 shadow-2xl relative">
+      <div class="text-center space-y-2">
+        <div class="w-12 h-12 rounded-full border border-champagne flex items-center justify-center bg-deep-forest mx-auto">
+          <span class="font-display font-bold text-champagne text-sm">BH</span>
+        </div>
+        <h2 class="font-display text-2xl font-bold text-ivory">Admin CRM Login</h2>
+        <p class="text-xs text-driftwood tracking-wider uppercase font-medium">Beakim Hospitality Group</p>
+      </div>
+
+      <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4 text-sm">
+        <div class="flex flex-col gap-1">
+          <label for="login-email" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Email Address</label>
+          <input type="email" id="login-email" required placeholder="admin@beakim.com" 
+                 class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label for="login-password" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Password</label>
+          <input type="password" id="login-password" required placeholder="••••••••" 
+                 class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+        </div>
+        <div id="login-error" class="text-red-400 text-xs hidden"></div>
+        <button type="submit" class="w-full bg-champagne hover:bg-driftwood text-deep-forest py-3.5 rounded font-semibold tracking-widest uppercase transition duration-300 shadow-md">
+          Authenticate
+        </button>
+      </form>
+      
+      <div class="text-center pt-2">
+        <button onclick="bypassLogin()" class="text-xs text-driftwood hover:underline">
+          Bypass Login (Developer Demo Mode)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- â”€â”€ MAIN CRM INTERFACE (HIDDEN BY DEFAULT) â”€â”€ -->
+  <div id="crm-container" class="hidden flex-1 flex flex-col">
+    
+    <!-- Header -->
+    <header class="bg-canopy/90 border-b border-champagne/15 px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full border border-champagne flex items-center justify-center bg-deep-forest">
+          <span class="font-display font-bold text-champagne text-xs">BH</span>
+        </div>
+        <div>
+          <span class="font-display text-sm font-semibold tracking-widest text-ivory uppercase">Beakim</span>
+          <span class="text-[9px] tracking-widest text-driftwood uppercase block leading-none">Hospitality CRM</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex flex-wrap gap-2 text-xs font-semibold tracking-wider uppercase">
+        <button onclick="showTab('dashboard')" id="tab-btn-dashboard" class="tab-button px-4 py-2.5 rounded bg-champagne text-deep-forest transition duration-200">
+          Dashboard
+        </button>
+        <button onclick="showTab('occupancy')" id="tab-btn-occupancy" class="tab-button px-4 py-2.5 rounded bg-deep-forest text-ivory/70 hover:text-champagne transition duration-200">
+          Occupancy Grid
+        </button>
+        <button onclick="showTab('pipeline')" id="tab-btn-pipeline" class="tab-button px-4 py-2.5 rounded bg-deep-forest text-ivory/70 hover:text-champagne transition duration-200">
+          Lead Pipeline
+        </button>
+        <button onclick="showTab('guests')" id="tab-btn-guests" class="tab-button px-4 py-2.5 rounded bg-deep-forest text-ivory/70 hover:text-champagne transition duration-200">
+          Guest Directory
+        </button>
+      </nav>
+
+      <!-- User controls -->
+      <div class="flex items-center gap-4">
+        <button onclick="openBookingModal()" class="bg-moss hover:bg-emerald-800 text-white px-4 py-2.5 rounded text-xs font-semibold tracking-wider uppercase transition shadow-md">
+          + Manual Booking
+        </button>
+        <button onclick="handleLogout()" class="text-xs font-semibold uppercase text-ivory/50 hover:text-red-400 transition">
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- Content Workspace -->
+    <main class="flex-1 p-6 max-w-7xl mx-auto w-full">
+
+      <!-- â”€â”€ TAB: DASHBOARD â”€â”€ -->
+      <div id="view-dashboard" class="crm-view space-y-6">
+        <!-- Stats Row -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div class="bg-canopy border border-champagne/10 p-5 rounded-xl space-y-2">
+            <span class="text-xs text-driftwood uppercase tracking-wider">Active Inquiries</span>
+            <div id="stat-active" class="text-3xl font-display font-semibold">0</div>
+          </div>
+          <div class="bg-canopy border border-champagne/10 p-5 rounded-xl space-y-2">
+            <span class="text-xs text-driftwood uppercase tracking-wider">Confirmed Bookings</span>
+            <div id="stat-confirmed" class="text-3xl font-display font-semibold">0</div>
+          </div>
+          <div class="bg-canopy border border-champagne/10 p-5 rounded-xl space-y-2">
+            <span class="text-xs text-driftwood uppercase tracking-wider">Payments Collected</span>
+            <div id="stat-payments" class="text-3xl font-display font-semibold">KSh 0</div>
+          </div>
+          <div class="bg-canopy border border-champagne/10 p-5 rounded-xl space-y-2">
+            <span class="text-xs text-driftwood uppercase tracking-wider">Occupancy Rate</span>
+            <div id="stat-occupancy" class="text-3xl font-display font-semibold">0%</div>
+          </div>
+        </div>
+
+        <!-- Lists Split -->
+        <div class="grid lg:grid-cols-2 gap-6">
+          <!-- Recent Inquiries -->
+          <div class="bg-canopy border border-champagne/10 rounded-xl p-6 space-y-4">
+            <h3 class="font-display text-lg font-bold text-ivory border-b border-champagne/10 pb-2">Recent Inquiries</h3>
+            <div id="list-recent" class="space-y-3 overflow-y-auto max-h-[400px]">
+              <!-- Injected by JS -->
+            </div>
+          </div>
+
+          <!-- Upcoming Check-ins -->
+          <div class="bg-canopy border border-champagne/10 rounded-xl p-6 space-y-4">
+            <h3 class="font-display text-lg font-bold text-ivory border-b border-champagne/10 pb-2">Upcoming Arrivals (7 Days)</h3>
+            <div id="list-arrivals" class="space-y-3 overflow-y-auto max-h-[400px]">
+              <!-- Injected by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- â”€â”€ TAB: OCCUPANCY GRID â”€â”€ -->
+      <div id="view-occupancy" class="crm-view hidden space-y-6">
+        <div class="bg-canopy border border-champagne/10 p-6 rounded-xl space-y-6">
+          <!-- Controls -->
+          <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-champagne/10 pb-4">
+            <div class="flex flex-col gap-1.5 w-full sm:w-64">
+              <label for="occ-property" class="text-xs font-semibold uppercase tracking-wider text-ivory/60">Filter Property</label>
+              <select id="occ-property" onchange="renderOccupancyGrid()"
+                      class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-xs text-ivory outline-none cursor-pointer">
+                <option value="Diani Darling Cottages">Diani Darling Cottages (10 units)</option>
+                <option value="Tower Cottages">Tower Cottages (3 units)</option>
+                <option value="Beakim Darad">Beakim Darad (5 units)</option>
+                <option value="Beakim Apartments">Beakim Apartments (12 units)</option>
+              </select>
+            </div>
+            <!-- Month selector -->
+            <div class="flex items-center gap-3">
+              <button onclick="changeOccMonth(-1)" class="p-2 border border-champagne/20 hover:border-champagne rounded text-xs">â† Prev</button>
+              <span id="occ-month-label" class="font-display font-semibold text-sm w-36 text-center">July 2026</span>
+              <button onclick="changeOccMonth(1)" class="p-2 border border-champagne/20 hover:border-champagne rounded text-xs">Next</button>
+            </div>
+          </div>
+
+          <!-- Grid Table Container -->
+          <div class="overflow-x-auto border border-champagne/10 rounded-lg">
+            <table class="w-full text-xs text-left border-collapse min-w-[900px]">
+              <thead>
+                <tr class="bg-deep-forest border-b border-champagne/10" id="grid-header">
+                  <!-- Header generated by JS -->
+                </tr>
+              </thead>
+              <tbody id="grid-body" class="divide-y divide-champagne/5 bg-deep-forest/40">
+                <!-- Body generated by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="flex items-center gap-6 text-xs border-t border-champagne/10 pt-4 justify-center">
+            <span class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded bg-emerald-700 inline-block border border-emerald-950"></span> Available (Click to Book)</span>
+            <span class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded bg-amber-600 inline-block border border-amber-950"></span> Pending Hold</span>
+            <span class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded bg-rose-700 inline-block border border-rose-950"></span> Confirmed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- â”€â”€ TAB: PIPELINE BOARD â”€â”€ -->
+      <div id="view-pipeline" class="crm-view hidden space-y-6">
+        <div class="flex gap-4 overflow-x-auto pb-4 scroll-smooth min-h-[500px]">
+          <!-- Columns will be injected by JS -->
+          <div class="flex-1 min-w-[280px] bg-canopy/40 border border-champagne/10 p-4 rounded-xl flex flex-col gap-4">
+            <h3 class="font-display text-sm font-bold border-b border-champagne/10 pb-2 text-ivory flex justify-between">New Inquiry <span id="count-new-inquiry" class="text-xs bg-champagne/10 text-champagne px-2 py-0.5 rounded">0</span></h3>
+            <div id="col-new-inquiry" class="flex-1 flex flex-col gap-3 overflow-y-auto max-h-[500px]"></div>
+          </div>
+          <div class="flex-1 min-w-[280px] bg-canopy/40 border border-champagne/10 p-4 rounded-xl flex flex-col gap-4">
+            <h3 class="font-display text-sm font-bold border-b border-champagne/10 pb-2 text-ivory flex justify-between">Pending Payment <span id="count-pending-payment" class="text-xs bg-champagne/10 text-champagne px-2 py-0.5 rounded">0</span></h3>
+            <div id="col-pending-payment" class="flex-1 flex flex-col gap-3 overflow-y-auto max-h-[500px]"></div>
+          </div>
+          <div class="flex-1 min-w-[280px] bg-canopy/40 border border-champagne/10 p-4 rounded-xl flex flex-col gap-4">
+            <h3 class="font-display text-sm font-bold border-b border-champagne/10 pb-2 text-ivory flex justify-between">Priority Hold <span id="count-priority-hold" class="text-xs bg-champagne/10 text-champagne px-2 py-0.5 rounded">0</span></h3>
+            <div id="col-priority-hold" class="flex-1 flex flex-col gap-3 overflow-y-auto max-h-[500px]"></div>
+          </div>
+          <div class="flex-1 min-w-[280px] bg-canopy/40 border border-champagne/10 p-4 rounded-xl flex flex-col gap-4">
+            <h3 class="font-display text-sm font-bold border-b border-champagne/10 pb-2 text-ivory flex justify-between">Payment Verified <span id="count-payment-verified" class="text-xs bg-champagne/10 text-champagne px-2 py-0.5 rounded">0</span></h3>
+            <div id="col-payment-verified" class="flex-1 flex flex-col gap-3 overflow-y-auto max-h-[500px]"></div>
+          </div>
+          <div class="flex-1 min-w-[280px] bg-canopy/40 border border-champagne/10 p-4 rounded-xl flex flex-col gap-4">
+            <h3 class="font-display text-sm font-bold border-b border-champagne/10 pb-2 text-ivory flex justify-between">Ready for Check-In <span id="count-ready-for-checkin" class="text-xs bg-champagne/10 text-champagne px-2 py-0.5 rounded">0</span></h3>
+            <div id="col-ready-for-checkin" class="flex-1 flex flex-col gap-3 overflow-y-auto max-h-[500px]"></div>
+          </div>
+          <div class="flex-1 min-w-[280px] bg-canopy/40 border border-champagne/10 p-4 rounded-xl flex flex-col gap-4">
+            <h3 class="font-display text-sm font-bold border-b border-champagne/10 pb-2 text-ivory flex justify-between">Checked In <span id="count-checked-in" class="text-xs bg-champagne/10 text-champagne px-2 py-0.5 rounded">0</span></h3>
+            <div id="col-checked-in" class="flex-1 flex flex-col gap-3 overflow-y-auto max-h-[500px]"></div>
+          </div>
+          <div class="flex-1 min-w-[280px] bg-canopy/40 border border-champagne/10 p-4 rounded-xl flex flex-col gap-4">
+            <h3 class="font-display text-sm font-bold border-b border-champagne/10 pb-2 text-ivory flex justify-between">Checked Out <span id="count-checked-out" class="text-xs bg-champagne/10 text-champagne px-2 py-0.5 rounded">0</span></h3>
+            <div id="col-checked-out" class="flex-1 flex flex-col gap-3 overflow-y-auto max-h-[500px]"></div>
+          </div>
+          <div class="flex-1 min-w-[280px] bg-canopy/40 border border-champagne/10 p-4 rounded-xl flex flex-col gap-4">
+            <h3 class="font-display text-sm font-bold border-b border-champagne/10 pb-2 text-ivory flex justify-between">Cancelled <span id="count-cancelled" class="text-xs bg-champagne/10 text-champagne px-2 py-0.5 rounded">0</span></h3>
+            <div id="col-cancelled" class="flex-1 flex flex-col gap-3 overflow-y-auto max-h-[500px]"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- â”€â”€ TAB: GUEST DIRECTORY â”€â”€ -->
+      <div id="view-guests" class="crm-view hidden space-y-6">
+        <div class="bg-canopy border border-champagne/10 p-6 rounded-xl space-y-4">
+          <div class="flex justify-between items-center">
+            <h3 class="font-display text-lg font-bold text-ivory">Guest Directory</h3>
+            <input type="text" id="guest-search" oninput="renderGuests()" placeholder="Search guest name or contact..."
+                   class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-xs text-ivory outline-none w-64" />
+          </div>
+
+          <div class="overflow-x-auto border border-champagne/10 rounded-lg">
+            <table class="w-full text-xs text-left border-collapse min-w-[600px]">
+              <thead>
+                <tr class="bg-deep-forest border-b border-champagne/10 text-driftwood">
+                  <th class="p-3">Guest Name</th>
+                  <th class="p-3">Phone</th>
+                  <th class="p-3">Stays Count</th>
+                  <th class="p-3">Assigned Notes</th>
+                  <th class="p-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="guests-body" class="divide-y divide-champagne/5">
+                <!-- Injected by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- â”€â”€ MODAL: MANUAL BOOKING / EDIT â”€â”€ -->
+  <div id="booking-modal" class="fixed inset-0 z-50 bg-deep-forest/90 backdrop-blur-md flex items-center justify-center p-6 hidden">
+    <div class="bg-canopy border border-champagne/20 max-w-lg w-full rounded-2xl p-6 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b border-champagne/10 pb-2">
+        <h3 id="booking-modal-title" class="font-display text-lg font-bold text-ivory">Manual Booking Entry</h3>
+        <button onclick="closeBookingModal()" class="text-ivory/50 hover:text-ivory text-xl">x</button>
+      </div>
+
+      <form id="booking-form" onsubmit="saveBooking(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="form-booking-id" />
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <label for="form-guest-name" class="font-semibold uppercase tracking-wider text-ivory/80">Guest Name</label>
+            <input type="text" id="form-guest-name" required placeholder="John Doe" 
+                   class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="form-guest-phone" class="font-semibold uppercase tracking-wider text-ivory/80">Phone Number</label>
+            <input type="text" id="form-guest-phone" required placeholder="+254 7..." 
+                   class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <label for="form-property" class="font-semibold uppercase tracking-wider text-ivory/80">Select Property</label>
+            <select id="form-property" required onchange="populateFormUnits(); calculateAutoTotal();"
+                    class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none cursor-pointer">
+              <option value="Diani Darling Cottages">Diani Darling Cottages</option>
+              <option value="Tower Cottages">Tower Cottages</option>
+              <option value="Beakim Darad">Beakim Darad</option>
+              <option value="Beakim Apartments">Beakim Apartments</option>
+            </select>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="form-unit" class="font-semibold uppercase tracking-wider text-ivory/80">Assigned Unit</label>
+            <select id="form-unit" required onchange="calculateAutoTotal()"
+                    class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none cursor-pointer">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <label for="form-checkin" class="font-semibold uppercase tracking-wider text-ivory/80">Check-In</label>
+            <input type="date" id="form-checkin" required onchange="calculateAutoTotal()" 
+                   class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="form-checkout" class="font-semibold uppercase tracking-wider text-ivory/80">Check-Out</label>
+            <input type="date" id="form-checkout" required onchange="calculateAutoTotal()" 
+                   class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4">
+          <div class="flex flex-col gap-1">
+            <label for="form-adults" class="font-semibold uppercase tracking-wider text-ivory/80">Adults</label>
+            <input type="number" id="form-adults" min="1" value="2" required 
+                   class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="form-children" class="font-semibold uppercase tracking-wider text-ivory/80">Children</label>
+            <input type="number" id="form-children" min="0" value="0" required 
+                   class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="form-stage" class="font-semibold uppercase tracking-wider text-ivory/80">Stage</label>
+            <select id="form-stage" required
+                    class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none cursor-pointer">
+              <option value="New Inquiry">New Inquiry</option>
+              <option value="Pending Payment">Pending Payment</option>
+              <option value="Priority Hold">Priority Hold</option>
+              <option value="Payment Verified">Payment Verified</option>
+              <option value="Ready for Check-In">Ready for Check-In</option>
+              <option value="Checked In">Checked In</option>
+              <option value="Checked Out">Checked Out</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 border-t border-champagne/10 pt-4">
+          <div class="flex flex-col gap-1">
+            <label for="form-total" class="font-semibold uppercase tracking-wider text-ivory/80">Total Price (KSh)</label>
+            <input type="number" id="form-total" placeholder="Total Quote Amount" 
+                   class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="form-deposit" class="font-semibold uppercase tracking-wider text-ivory/80">Deposit Received (KSh)</label>
+            <input type="number" id="form-deposit" value="0"
+                   class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none" />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="form-mpesa-raw" class="font-semibold uppercase tracking-wider text-ivory/80">M-Pesa SMS — Paste to Auto-Parse</label>
+          <textarea id="form-mpesa-raw" rows="2" placeholder="Paste full M-Pesa SMS here to auto-extract code and amount..."
+                    oninput="parseMpesaSms()"
+                    class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none resize-none text-xs"></textarea>
+          <div id="mpesa-parse-result" class="hidden text-[10px] text-emerald-400 bg-emerald-950/30 border border-emerald-500/20 rounded px-3 py-1.5 mt-1"></div>
+          <div id="mpesa-duplicate-warning" class="hidden text-[10px] text-rose-400 bg-rose-950/30 border border-rose-500/20 rounded px-3 py-1.5 mt-1">
+            &#9888; Duplicate transaction code detected! This code may have already been used on another booking.
+          </div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <label for="form-payment-ref" class="font-semibold uppercase tracking-wider text-ivory/80">M-Pesa Transaction Ref <span class="text-champagne/50 normal-case text-[9px]">(auto-filled on parse)</span></label>
+          <input type="text" id="form-payment-ref" placeholder="e.g. QXA23479B" 
+                 class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="form-notes" class="font-semibold uppercase tracking-wider text-ivory/80">Internal Notes</label>
+          <textarea id="form-notes" placeholder="Special guest instructions, preferences..." rows="3"
+                    class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none resize-none"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-2">
+          <button type="button" onclick="closeBookingModal()" class="px-5 py-3 border border-champagne/20 hover:border-champagne rounded font-semibold uppercase tracking-widest text-[10px]">Cancel</button>
+          <button type="submit" class="px-6 py-3 bg-champagne hover:bg-driftwood text-deep-forest rounded font-semibold uppercase tracking-widest text-[10px]">Save Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- â”€â”€ MODAL: BOOKING DETAIL CARD & ACTIONS â”€â”€ -->
+  <div id="detail-modal" class="fixed inset-0 z-50 bg-deep-forest/90 backdrop-blur-md flex items-center justify-center p-6 hidden">
+    <div class="bg-canopy border border-champagne/20 max-w-2xl w-full rounded-2xl p-6 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b border-champagne/10 pb-2">
+        <h3 class="font-display text-lg font-bold text-ivory">Booking Control Center</h3>
+        <button onclick="closeDetailModal()" class="text-ivory/50 hover:text-ivory text-xl">x</button>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 text-xs">
+        
+        <!-- Left: Summary Details -->
+        <div class="space-y-4 bg-deep-forest/40 p-4 rounded-xl border border-champagne/10">
+          <h4 class="font-display text-sm font-semibold text-champagne border-b border-champagne/10 pb-1">Guest Summary</h4>
+          <div class="space-y-2">
+            <div><span class="text-ivory/50 block">Name</span><strong id="det-name" class="text-sm">John Doe</strong></div>
+            <div><span class="text-ivory/50 block">Contact Phone</span><strong id="det-phone">+254 746 938529</strong></div>
+            <div><span class="text-ivory/50 block">Property &amp; Unit</span><strong id="det-property-unit">Diani Darling Cottages - Cottage 3</strong></div>
+            <div><span class="text-ivory/50 block">Duration of Stay</span><strong id="det-dates">Check-In: 2026-07-01 to 2026-07-05</strong></div>
+            <div><span class="text-ivory/50 block">Guests</span><strong id="det-guests">2 Adults / 0 Children</strong></div>
+            <div><span class="text-ivory/50 block">Pipeline Status</span><strong id="det-status" class="text-champagne">New Inquiry</strong></div>
+            <div><span class="text-ivory/50 block">Notes</span><p id="det-notes" class="text-ivory/70 italic mt-0.5">No internal notes logged.</p></div>
+          </div>
+        </div>
+
+        <!-- Right: Payments & Financials -->
+        <div class="space-y-4 bg-deep-forest/40 p-4 rounded-xl border border-champagne/10 flex flex-col justify-between">
+          <div>
+            <h4 class="font-display text-sm font-semibold text-champagne border-b border-champagne/10 pb-1">Financial Summary</h4>
+            <div class="grid grid-cols-2 gap-4 mt-3">
+              <div><span class="text-ivory/50 block">Total Quoted</span><strong id="det-total" class="text-sm">KSh 0</strong></div>
+              <div><span class="text-ivory/50 block">Deposit Logged</span><strong id="det-deposit" class="text-sm text-emerald-400">KSh 0</strong></div>
+              <div class="col-span-2 border-t border-champagne/10 pt-2"><span class="text-ivory/50 block">Balance Remaining</span><strong id="det-balance" class="text-lg text-amber-500">KSh 0</strong></div>
+            </div>
+          </div>
+
+          <div class="space-y-2 pt-4 border-t border-champagne/10">
+            <button onclick="triggerDownloadPDF()" class="w-full bg-champagne hover:bg-driftwood text-deep-forest py-2.5 rounded font-semibold uppercase tracking-wider text-[10px] shadow">
+              Download PDF
+            </button>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="shareReceipt('whatsapp')" class="bg-emerald-700 hover:bg-emerald-800 text-white py-2 rounded font-semibold uppercase tracking-wider text-[10px]">
+                WhatsApp Document
+              </button>
+              <button onclick="shareReceipt('email')" class="bg-canopy border border-champagne/20 hover:border-champagne text-ivory py-2 rounded font-semibold uppercase tracking-wider text-[10px]">
+                Email Document
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Automation Alert Banner -->
+      <div id="det-automation-alerts" class="hidden space-y-2"></div>
+
+      <!-- Action Panel Buttons -->
+      <div class="flex flex-wrap gap-2 justify-between border-t border-champagne/10 pt-4">
+        <div class="flex gap-2 flex-wrap">
+          <button onclick="editCurrentBooking()" class="px-4 py-2 bg-moss hover:bg-emerald-800 text-white rounded font-semibold uppercase tracking-wider text-[10px]">
+            Edit Details
+          </button>
+          <button onclick="triggerRefundPrompt()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded font-semibold uppercase tracking-wider text-[10px]">
+            Issue Refund
+          </button>
+          <button id="btn-send-reminder" onclick="sendPaymentReminder()" class="hidden px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded font-semibold uppercase tracking-wider text-[10px]">
+            &#9888; Send Payment Reminder
+          </button>
+          <button id="btn-auto-allocate" onclick="autoAllocateRoom()" class="hidden px-4 py-2 bg-indigo-700 hover:bg-indigo-800 text-white rounded font-semibold uppercase tracking-wider text-[10px]">
+            &#128205; Auto-Assign Room
+          </button>
+        </div>
+        <button onclick="deleteCurrentBooking()" class="px-4 py-2 bg-red-800 hover:bg-red-900 text-white rounded font-semibold uppercase tracking-wider text-[10px]">
+          Delete Record
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- â”€â”€ HIDDEN PRINT/PDF EXPORT AREA â”€â”€ -->
+  <div id="print-area" class="hidden p-12 bg-white text-gray-900 font-sans leading-relaxed text-xs">
+    <div class="max-w-2xl mx-auto space-y-6">
+      <!-- Header -->
+      <div class="flex justify-between items-center border-b-2 border-gray-100 pb-4">
+        <div class="space-y-1">
+          <h2 class="text-xl font-bold text-emerald-950 font-serif tracking-wide">BEAKIM HOSPITALITY GROUP</h2>
+          <p class="text-gray-500 text-[10px] uppercase tracking-wider">Luxury Stays &bull; Diani &bull; Ukunda</p>
+        </div>
+        <div class="text-right space-y-1">
+          <h3 id="doc-type-label" class="text-lg font-bold text-gray-800 font-serif uppercase tracking-widest">INVOICE</h3>
+          <p class="text-gray-500 text-[10px]" id="doc-date-label">Date Generated: 2026-07-02</p>
+        </div>
+      </div>
+
+      <!-- Guest Details -->
+      <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
+        <div>
+          <span class="text-gray-500 uppercase text-[9px] block font-semibold">Prepared For</span>
+          <strong id="doc-guest-name" class="text-sm font-serif">Guest Name</strong>
+          <span id="doc-guest-phone" class="block text-gray-600 mt-1">Guest Phone</span>
+        </div>
+        <div>
+          <span class="text-gray-500 uppercase text-[9px] block font-semibold">Booking Reference</span>
+          <strong id="doc-ref-id" class="text-sm font-serif">Ref ID</strong>
+          <span id="doc-property" class="block text-gray-600 mt-1">Property Name</span>
+        </div>
+      </div>
+
+      <!-- Reservation Details Table -->
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-emerald-950 text-white text-[10px] uppercase font-bold tracking-wider">
+            <th class="p-3 rounded-l">Reservation Summary</th>
+            <th class="p-3">Check-In</th>
+            <th class="p-3">Check-Out</th>
+            <th class="p-3 text-right rounded-r">Total Quote</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr>
+            <td class="p-3 font-medium" id="doc-desc">Diani Darling Cottages - Unit 3</td>
+            <td class="p-3" id="doc-checkin">2026-07-01</td>
+            <td class="p-3" id="doc-checkout">2026-07-05</td>
+            <td class="p-3 text-right font-semibold" id="doc-total">KSh 0</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Payment Logs Table -->
+      <div class="space-y-2">
+        <h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Payments Logged</h4>
+        <table class="w-full text-left border-collapse text-[10px]">
+          <thead>
+            <tr class="border-b-2 border-gray-100 text-gray-600 font-semibold">
+              <th class="pb-2">Date Received</th>
+              <th class="pb-2">Transaction Ref</th>
+              <th class="pb-2 text-right">Amount</th>
+            </tr>
+          </thead>
+          <tbody id="doc-payment-rows" class="divide-y divide-gray-100">
+            <!-- Injected by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Financial Totals -->
+      <div class="border-t-2 border-gray-100 pt-4 flex justify-end">
+        <div class="w-64 space-y-2 text-right">
+          <div class="flex justify-between text-gray-600">
+            <span>Total Quoted</span>
+            <span id="doc-tot-cost">KSh 0</span>
+          </div>
+          <div class="flex justify-between text-emerald-800 font-semibold">
+            <span>Deposits Paid</span>
+            <span id="doc-tot-paid">- KSh 0</span>
+          </div>
+          <div class="flex justify-between border-t border-gray-200 pt-2 text-sm font-bold text-rose-700">
+            <span>Balance Due</span>
+            <span id="doc-balance-due">KSh 0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- M-Pesa Info Footer -->
+      <div class="bg-emerald-50 text-emerald-950 p-4 rounded-lg text-center space-y-1">
+        <p class="font-bold">M-Pesa Direct Payment Instructions</p>
+        <p class="text-[10px] text-emerald-900">Please send money via Lipa Na M-Pesa Buy Goods &amp; Services Till Number: <strong>552946</strong></p>
+      </div>
+
+      <div class="text-center text-[8px] text-gray-400 pt-8 border-t border-gray-100">
+        Thank you for booking with Beakim Hospitality Group. For questions or modifications, call +254 746 938529.
+      </div>
+    </div>
+  </div>
+
+  <!-- â”€â”€ MAIN LOGIC SCRIPT â”€â”€ -->
+  <script>
+    // Firebase Config (Placeholder - User will replace this with their actual config)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDrp54AAhgTuKCfJHrHS5xJaT_rhELYdsY",
+      authDomain: "beakim-hospitality.firebaseapp.com",
+      projectId: "beakim-hospitality",
+      storageBucket: "beakim-hospitality.firebasestorage.app",
+      messagingSenderId: "626848144950",
+      appId: "1:626848144950:web:9d0b04bd190eb65de64297"
+    };
+
+    let db = null;
+    let isDemoMode = true;
+    let activeTab = 'dashboard';
+    let currentOccMonth = new Date().getMonth();
+    let currentOccYear = new Date().getFullYear();
+    let activeBooking = null;
+
+    // Standard Property Unit Configuration
+    const propertyUnits = {
+      "Diani Darling Cottages": Array.from({length: 10}, (_, i) => `Cottage ${i + 1}`),
+      "Tower Cottages": ["Apartment A", "Apartment B", "Apartment C"],
+      "Beakim Darad": ["Standard Room 1", "Standard Room 2", "Deluxe Studio 1", "Deluxe Studio 2", "2-Bed Cottage 1"],
+      "Beakim Apartments": Array.from({length: 12}, (_, i) => `Apartment ${i + 1}`)
+    };
+
+    // Local Storage Mock Database
+    let mockBookings = [
+      {
+        id: "BK-DEMO-001",
+        name: "Alice Mwangi",
+        phone: "+254712345678",
+        property: "Diani Darling Cottages",
+        unit: "Cottage 3",
+        checkIn: "2026-07-02",
+        checkOut: "2026-07-06",
+        adults: 2,
+        children: 1,
+        status: "Ready for Check-In",
+        paymentStatus: "Partial",
+        totalPrice: 20000,
+        depositPrice: 5000,
+        paymentRef: "RQXA7234B",
+        notes: "Requested extra pillows. Arriving late evening.",
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "BK-DEMO-002",
+        name: "David Smith",
+        phone: "+447911123456",
+        property: "Tower Cottages",
+        unit: "Apartment A",
+        checkIn: "2026-07-10",
+        checkOut: "2026-07-15",
+        adults: 1,
+        children: 0,
+        status: "Pending Payment",
+        paymentStatus: "Unpaid",
+        totalPrice: 7500,
+        depositPrice: 0,
+        paymentRef: "",
+        notes: "Business trip traveler.",
+        createdAt: new Date().toISOString()
+      }
+    ];
+
+    // Initialize Database Access
+    try {
+      if (firebaseConfig.apiKey !== "YOUR_API_KEY_HERE") {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+        isDemoMode = false;
+        console.log("Firebase initialized successfully.");
+      } else {
+        document.getElementById('demo-banner').classList.remove('hidden');
+        console.log("Running in local Demo mode.");
+        // Load mock bookings from localStorage if exists
+        const stored = localStorage.getItem("beakim_mock_bookings");
+        if (stored) {
+          mockBookings = JSON.parse(stored);
+        }
+      }
+    } catch (e) {
+      console.error("Database connection failure, falling back to Demo mode:", e);
+      document.getElementById('demo-banner').classList.remove('hidden');
+    }
+
+    // Auth & Navigation handlers
+    function handleLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const errorDiv = document.getElementById('login-error');
+
+      if (isDemoMode) {
+        if (email === "admin@beakim.com" && password === "admin123") {
+          bypassLogin();
+        } else {
+          errorDiv.textContent = "Demo password: admin@beakim.com / admin123";
+          errorDiv.classList.remove('hidden');
+        }
+        return;
+      }
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => {
+          document.getElementById('login-container').classList.add('hidden');
+          document.getElementById('crm-container').classList.remove('hidden');
+          loadAllData();
+        })
+        .catch(err => {
+          errorDiv.textContent = err.message;
+          errorDiv.classList.remove('hidden');
+        });
+    }
+
+    function bypassLogin() {
+      document.getElementById('login-container').classList.add('hidden');
+      document.getElementById('crm-container').classList.remove('hidden');
+      loadAllData();
+    }
+
+    function handleLogout() {
+      if (!isDemoMode) {
+        firebase.auth().signOut();
+      }
+      document.getElementById('login-container').classList.remove('hidden');
+      document.getElementById('crm-container').classList.add('hidden');
+    }
+
+    // Tab Switching Layout Engine
+    function showTab(tabName) {
+      activeTab = tabName;
+      document.querySelectorAll('.crm-view').forEach(view => view.classList.add('hidden'));
+      document.getElementById(`view-${tabName}`).classList.remove('hidden');
+
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('bg-champagne', 'text-deep-forest');
+        btn.classList.add('bg-deep-forest', 'text-ivory/70');
+      });
+      document.getElementById(`tab-btn-${tabName}`).classList.add('bg-champagne', 'text-deep-forest');
+      document.getElementById(`tab-btn-${tabName}`).classList.remove('bg-deep-forest', 'text-ivory/70');
+
+      if (tabName === 'occupancy') renderOccupancyGrid();
+      if (tabName === 'pipeline') renderPipeline();
+      if (tabName === 'guests') renderGuests();
+      if (tabName === 'dashboard') renderDashboard();
+    }
+
+    // Booking Loader
+    function loadAllData() {
+      if (isDemoMode) {
+        runAutomationSweepers();
+        renderDashboard();
+        return;
+      }
+      // Firestore Live Sync listener
+      db.collection("bookings").orderBy("createdAt", "desc")
+        .onSnapshot(snapshot => {
+          mockBookings = [];
+          snapshot.forEach(doc => {
+            mockBookings.push({ id: doc.id, ...doc.data() });
+          });
+          runAutomationSweepers();
+          showTab(activeTab);
+        }, err => {
+          console.error("Live sync failed, using local fallback database.", err);
+        });
+    }
+
+    // ─── AUTOMATION ENGINE ───────────────────────────────────────────────────
+
+    // Property unit registry
+    const PROPERTY_UNITS = {
+      "Diani Darling Cottages": ["Cottage 1","Cottage 2","Cottage 3","Cottage 4","Cottage 5","Cottage 6","Cottage 7","Cottage 8","Cottage 9","Cottage 10"],
+      "Tower Cottages": ["Tower Unit A","Tower Unit B","Tower Unit C"],
+      "Beakim Apartments": ["Apt 1","Apt 2","Apt 3","Apt 4","Apt 5","Apt 6","Apt 7","Apt 8","Apt 9","Apt 10","Apt 11","Apt 12"],
+      "Beakim Darad": ["Standard Room 1","Standard Room 2","Deluxe Studio 1","Deluxe Studio 2","2-Bedroom Cottage"]
+    };
+
+    function runAutomationSweepers() {
+      const now = new Date();
+      const todayStr = now.toISOString().split('T')[0];
+
+      mockBookings.forEach(b => {
+        const createdAt = b.createdAt ? new Date(b.createdAt.seconds ? b.createdAt.seconds * 1000 : b.createdAt) : null;
+        const checkInDate = b.checkIn ? new Date(b.checkIn) : null;
+        const msUntilCheckIn = checkInDate ? (checkInDate - now) : Infinity;
+        const hoursUntilCheckIn = msUntilCheckIn / (1000 * 60 * 60);
+
+        // ── AUTO-CHECKOUT SWEEPER ──
+        // If checkout date has passed and booking is still active, auto-checkout
+        if (b.checkOut && b.checkOut < todayStr && b.status !== "Checked Out" && b.status !== "Cancelled") {
+          const msg = `[System Auto-Checkout: Stay ended ${b.checkOut}]`;
+          updateBookingField(b.id, "status", "Checked Out");
+          updateBookingField(b.id, "notes", `${b.notes || ''} ${msg}`.trim());
+          console.log(`[AUTO-CHECKOUT] Booking ${b.id} (${b.name}) auto-checked out.`);
+        }
+
+        // ── 48-HOUR PAYMENT REMINDER FLAG ──
+        // Flag unpaid holds within 48 hours of check-in
+        if (b.status === "Pending Payment" && hoursUntilCheckIn <= 48 && hoursUntilCheckIn > 0) {
+          if (!b.reminderSent48h) {
+            updateBookingField(b.id, "reminderSent48h", true);
+            updateBookingField(b.id, "needsPaymentReminder", true);
+            console.log(`[48H REMINDER] Booking ${b.id} (${b.name}) flagged for payment reminder.`);
+          }
+        }
+
+        // ── 24-HOUR AUTO-CANCEL ──
+        // Auto-cancel unpaid holds within 24 hours of check-in
+        if (b.status === "Pending Payment" && hoursUntilCheckIn <= 24 && hoursUntilCheckIn > 0) {
+          const msg = `[System Auto-Cancelled: Unpaid hold expired 24hrs before check-in (${b.checkIn})]`;
+          updateBookingField(b.id, "status", "Cancelled");
+          updateBookingField(b.id, "notes", `${b.notes || ''} ${msg}`.trim());
+          console.log(`[AUTO-CANCEL] Booking ${b.id} (${b.name}) auto-cancelled — unpaid within 24h of check-in.`);
+        }
+      });
+    }
+
+    // ── M-PESA SMS AUTO-PARSER ──
+    function parseMpesaSms() {
+      const raw = document.getElementById('form-mpesa-raw').value.trim();
+      const resultEl = document.getElementById('mpesa-parse-result');
+      const dupEl = document.getElementById('mpesa-duplicate-warning');
+      resultEl.classList.add('hidden');
+      dupEl.classList.add('hidden');
+      if (!raw) return;
+
+      // Match standard Safaricom format: e.g. "SIL1TRG2HB Confirmed."
+      const codeMatch = raw.match(/\b([A-Z0-9]{10})\b/);
+      const amountMatch = raw.match(/Ksh\s?([\d,]+(?:\.\d{2})?)/i);
+      const nameMatch = raw.match(/sent to ([A-Za-z ]+) on/i);
+
+      if (codeMatch) {
+        const code = codeMatch[1];
+        const amount = amountMatch ? amountMatch[1].replace(/,/g, '') : 'Unknown';
+        const recipient = nameMatch ? nameMatch[1].trim() : 'Unknown';
+
+        document.getElementById('form-payment-ref').value = code;
+        resultEl.textContent = `Parsed ✓  Code: ${code}  |  Amount: KSh ${amount}  |  Sent to: ${recipient}`;
+        resultEl.classList.remove('hidden');
+
+        // Duplicate check
+        const duplicate = mockBookings.find(b => b.paymentRef === code && b.id !== (activeBooking ? activeBooking.id : null));
+        if (duplicate) {
+          dupEl.classList.remove('hidden');
+        }
+      } else {
+        resultEl.textContent = 'Could not detect a valid M-Pesa transaction code. Please check the message.';
+        resultEl.classList.remove('hidden');
+      }
+    }
+
+    // ── ROOM AUTO-ALLOCATOR ──
+    function autoAllocateRoom() {
+      if (!activeBooking) return;
+      const units = PROPERTY_UNITS[activeBooking.property];
+      if (!units || units.length === 0) {
+        alert('No unit registry found for this property. Please assign manually.');
+        return;
+      }
+
+      const checkIn = activeBooking.checkIn;
+      const checkOut = activeBooking.checkOut;
+
+      // Find bookings that overlap this date range for the same property
+      const occupiedUnits = new Set();
+      mockBookings.forEach(b => {
+        if (b.id === activeBooking.id) return;
+        if (b.property !== activeBooking.property) return;
+        if (b.status === "Cancelled" || b.status === "Checked Out") return;
+        if (b.checkIn < checkOut && b.checkOut > checkIn && b.unit) {
+          occupiedUnits.add(b.unit);
+        }
+      });
+
+      const freeUnit = units.find(u => !occupiedUnits.has(u));
+      if (freeUnit) {
+        if (confirm(`Auto-assign "${freeUnit}" to ${activeBooking.name}?`)) {
+          updateBookingField(activeBooking.id, "unit", freeUnit);
+          const msg = `[System Auto-Allocated Unit: ${freeUnit}]`;
+          updateBookingField(activeBooking.id, "notes", `${activeBooking.notes || ''} ${msg}`.trim());
+          activeBooking.unit = freeUnit;
+          document.getElementById('det-property-unit').textContent = `${activeBooking.property} — ${freeUnit}`;
+          alert(`Done! ${freeUnit} has been assigned to ${activeBooking.name}.`);
+        }
+      } else {
+        alert(`All units at ${activeBooking.property} are occupied for these dates. Please check the occupancy grid.`);
+      }
+    }
+
+    // ── PAYMENT REMINDER GENERATOR ──
+    function sendPaymentReminder() {
+      if (!activeBooking) return;
+      const name = activeBooking.name;
+      const phone = (activeBooking.phone || '').replace(/\D/g, '');
+      const property = activeBooking.property;
+      const checkIn = activeBooking.checkIn;
+      const checkOut = activeBooking.checkOut;
+      const total = activeBooking.totalPrice ? `KSh ${Number(activeBooking.totalPrice).toLocaleString()}` : 'the total amount';
+
+      const isConflict = activeBooking.isConflict || false;
+
+      let message;
+      if (isConflict) {
+        message =
+          `Hi ${name}, we hope you're doing well! \u{1F3E0}\n\n` +
+          `We've received a new booking request for *${property}* on your reserved dates (${checkIn} to ${checkOut}).\n\n` +
+          `To protect your reservation, please complete your payment of *${total}* to:\n` +
+          `\u{1F4B3} *Till Number:* 588365\n` +
+          `\u{1F4B3} *Account Name:* Beakim Property Group\n\n` +
+          `Once done, paste your M-Pesa confirmation message here so we can verify and lock in your stay.\n\n` +
+          `*Note:* If payment is not received within the next 2 hours, we may have to release your dates to the next paying guest. ` +
+          `We value your interest and hope to host you soon! \u{1F1F0}\u{1F1EA}`;
+      } else {
+        message =
+          `Hi ${name}! \u{1F3E0}\n\n` +
+          `Just a friendly reminder that your check-in at *${property}* is coming up on *${checkIn}*.\n\n` +
+          `To secure your booking, please complete your payment of *${total}* to:\n` +
+          `\u{1F4B3} *Till Number:* 588365\n` +
+          `\u{1F4B3} *Account Name:* Beakim Property Group\n\n` +
+          `Once you've paid, please paste your M-Pesa confirmation message here so we can confirm your reservation.\n\n` +
+          `Looking forward to hosting you! \u{2728}`;
+      }
+
+      const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+      window.open(waUrl, '_blank');
+
+      // Mark reminder as sent
+      updateBookingField(activeBooking.id, "reminderSentAt", new Date().toISOString());
+      updateBookingField(activeBooking.id, "needsPaymentReminder", false);
+    }
+
+    // Tab: Dashboard logic
+    function renderDashboard() {
+      const activeLeads = mockBookings.filter(b => b.status !== "Checked Out" && b.status !== "Cancelled");
+      const confirmedThisMonth = mockBookings.filter(b => b.status === "Ready for Check-In" || b.status === "Payment Verified");
+      
+      const totalRevenue = mockBookings.reduce((sum, b) => sum + (parseFloat(b.depositPrice) || 0), 0);
+
+      document.getElementById('stat-active').textContent = activeLeads.length;
+      document.getElementById('stat-confirmed').textContent = confirmedThisMonth.length;
+      document.getElementById('stat-payments').textContent = `KSh ${totalRevenue.toLocaleString()}`;
+      
+      // Calculate generic occupancy percentage
+      const totalUnitsCount = 30; // Total sum of properties units
+      const bookedDaysCount = mockBookings.length * 3; // Mock average days count
+      const occupancyPercent = Math.min(Math.round((bookedDaysCount / (totalUnitsCount * 30)) * 100), 100);
+      document.getElementById('stat-occupancy').textContent = `${occupancyPercent}%`;
+
+      // Render recent activity
+      const recentContainer = document.getElementById('list-recent');
+      recentContainer.innerHTML = '';
+      if (mockBookings.length === 0) {
+        recentContainer.innerHTML = `<p class="text-xs text-ivory/40 italic">No inquiries logged yet.</p>`;
+      }
+      mockBookings.slice(0, 5).forEach(b => {
+        const div = document.createElement('div');
+        div.className = "p-3.5 bg-deep-forest/40 border border-champagne/10 rounded-lg flex justify-between items-center text-xs";
+        div.innerHTML = `
+          <div>
+            <strong class="text-ivory block">${b.name}</strong>
+            <span class="text-ivory/50 text-[10px] block">${b.property} (${b.unit || 'Pending Unit'})</span>
+          </div>
+          <div class="text-right">
+            <span class="text-champagne font-semibold block">${b.status}</span>
+            <span class="text-[10px] text-ivory/40">${b.checkIn}</span>
+          </div>
+        `;
+        div.onclick = () => openDetailCard(b);
+        div.style.cursor = "pointer";
+        recentContainer.appendChild(div);
+      });
+
+      // Render arrivals
+      const arrivalsContainer = document.getElementById('list-arrivals');
+      arrivalsContainer.innerHTML = '';
+      const upcoming = mockBookings.filter(b => {
+        const daysDiff = (new Date(b.checkIn) - new Date()) / (1000 * 60 * 60 * 24);
+        return daysDiff >= -1 && daysDiff <= 7;
+      });
+
+      if (upcoming.length === 0) {
+        arrivalsContainer.innerHTML = `<p class="text-xs text-ivory/40 italic">No check-ins arriving this week.</p>`;
+      }
+      upcoming.forEach(b => {
+        const div = document.createElement('div');
+        div.className = "p-3.5 bg-deep-forest/40 border border-champagne/10 rounded-lg flex justify-between items-center text-xs";
+        div.innerHTML = `
+          <div>
+            <strong class="text-ivory block">${b.name}</strong>
+            <span class="text-[10px] text-driftwood block uppercase tracking-wider">${b.unit}</span>
+          </div>
+          <div class="text-right">
+            <span class="text-emerald-400 font-semibold block">${b.checkIn}</span>
+            <span class="text-[10px] text-ivory/40">Total: ${b.adults} Adults</span>
+          </div>
+        `;
+        div.onclick = () => openDetailCard(b);
+        div.style.cursor = "pointer";
+        arrivalsContainer.appendChild(div);
+      });
+    }
+
+    // Tab: Pipeline Kanban Board logic
+    function renderPipeline() {
+      const stages = {
+        "New Inquiry": { col: document.getElementById('col-new-inquiry'), count: document.getElementById('count-new-inquiry') },
+        "Pending Payment": { col: document.getElementById('col-pending-payment'), count: document.getElementById('count-pending-payment') },
+        "Priority Hold": { col: document.getElementById('col-priority-hold'), count: document.getElementById('count-priority-hold') },
+        "Payment Verified": { col: document.getElementById('col-payment-verified'), count: document.getElementById('count-payment-verified') },
+        "Ready for Check-In": { col: document.getElementById('col-ready-for-checkin'), count: document.getElementById('count-ready-for-checkin') },
+        "Checked In": { col: document.getElementById('col-checked-in'), count: document.getElementById('count-checked-in') },
+        "Checked Out": { col: document.getElementById('col-checked-out'), count: document.getElementById('count-checked-out') },
+        "Cancelled": { col: document.getElementById('col-cancelled'), count: document.getElementById('count-cancelled') }
+      };
+
+      // Reset
+      Object.keys(stages).forEach(key => {
+        if (stages[key].col) stages[key].col.innerHTML = '';
+        if (stages[key].count) stages[key].count.textContent = 0;
+      });
+
+      mockBookings.forEach(b => {
+        const stage = stages[b.status];
+        if (!stage) return;
+
+        if (stage.count) {
+          stage.count.textContent = parseInt(stage.count.textContent) + 1;
+        }
+
+        const card = document.createElement('div');
+        card.className = "bg-deep-forest border border-champagne/10 p-4 rounded-lg space-y-3 cursor-pointer hover:border-champagne/30 transition shadow-md";
+        card.onclick = () => openDetailCard(b);
+        card.innerHTML = `
+          <div class="flex justify-between items-start gap-2">
+            <h4 class="font-display font-semibold text-ivory text-xs">${b.name}</h4>
+            <span class="text-[9px] bg-champagne/10 text-champagne px-1.5 py-0.5 rounded font-mono">${b.paymentStatus || 'Unpaid'}</span>
+          </div>
+          <div class="space-y-1 text-[10px] text-ivory/60">
+            <p><strong>Property:</strong> ${b.property}</p>
+            <p><strong>Unit:</strong> ${b.unit || 'Not Assigned'}</p>
+            <p><strong>Stay:</strong> ${b.checkIn} to ${b.checkOut}</p>
+          </div>
+          <div class="flex justify-between items-center border-t border-champagne/10 pt-2 text-[9px]">
+            <span class="text-driftwood">${b.id.substring(0, 10)}</span>
+            <div class="flex gap-1" onclick="event.stopPropagation()">
+              <button onclick="movePipelineStage('${b.id}', -1)" class="p-1 border border-champagne/20 hover:border-champagne rounded">&lt;</button>
+              <button onclick="movePipelineStage('${b.id}', 1)" class="p-1 border border-champagne/20 hover:border-champagne rounded">&gt;</button>
+            </div>
+          </div>
+        `;
+        if (stage.col) {
+          stage.col.appendChild(card);
+        }
+      });
+    }
+
+    // Move Pipeline stages
+    function movePipelineStage(id, direction) {
+      const order = [
+        "New Inquiry",
+        "Pending Payment",
+        "Priority Hold",
+        "Payment Verified",
+        "Ready for Check-In",
+        "Checked In",
+        "Checked Out",
+        "Cancelled"
+      ];
+      const booking = mockBookings.find(b => b.id === id);
+      if (!booking) return;
+
+      let idx = order.indexOf(booking.status) + direction;
+      if (idx >= 0 && idx < order.length) {
+        updateBookingField(id, "status", order[idx]);
+      }
+    }
+
+    function updateBookingField(id, field, value) {
+      if (isDemoMode) {
+        const booking = mockBookings.find(b => b.id === id);
+        if (booking) {
+          booking[field] = value;
+          localStorage.setItem("beakim_mock_bookings", JSON.stringify(mockBookings));
+          showTab(activeTab);
+        }
+      } else {
+        db.collection("bookings").doc(id).update({ [field]: value });
+      }
+    }
+
+    // Tab: Live Occupancy Matrix Grid logic
+    function changeOccMonth(direction) {
+      currentOccMonth += direction;
+      if (currentOccMonth < 0) {
+        currentOccMonth = 11;
+        currentOccYear -= 1;
+      } else if (currentOccMonth > 11) {
+        currentOccMonth = 0;
+        currentOccYear += 1;
+      }
+      renderOccupancyGrid();
+    }
+
+    function renderOccupancyGrid() {
+      const property = document.getElementById('occ-property').value;
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      
+      document.getElementById('occ-month-label').textContent = `${monthNames[currentOccMonth]} ${currentOccYear}`;
+
+      const totalDays = new Date(currentOccYear, currentOccMonth + 1, 0).getDate();
+      const headerRow = document.getElementById('grid-header');
+      const bodyContainer = document.getElementById('grid-body');
+
+      // Clear
+      headerRow.innerHTML = `<th class="p-3 text-driftwood border-r border-champagne/10 w-44">Room / Unit</th>`;
+      bodyContainer.innerHTML = '';
+
+      // Render days header columns
+      for (let day = 1; day <= totalDays; day++) {
+        const th = document.createElement('th');
+        th.className = "p-1.5 text-center border-r border-champagne/10 min-w-[28px]";
+        th.textContent = day;
+        headerRow.appendChild(th);
+      }
+
+      const units = propertyUnits[property] || [];
+
+      // Render rows per unit
+      units.forEach(unit => {
+        const tr = document.createElement('tr');
+        tr.className = "border-b border-champagne/5";
+        
+        // Unit label cell
+        const labelCell = document.createElement('td');
+        labelCell.className = "p-3 font-semibold text-ivory/80 border-r border-champagne/10 bg-deep-forest/60";
+        labelCell.textContent = unit;
+        tr.appendChild(labelCell);
+
+        // Find bookings in current month for this unit (excluding cancelled ones)
+        const bookingsForUnit = mockBookings.filter(b => b.property === property && b.unit === unit && b.status !== "Cancelled");
+
+        // Render cell for each day of the month
+        for (let day = 1; day <= totalDays; day++) {
+          const td = document.createElement('td');
+          td.className = "p-0 border-r border-champagne/10 relative h-10 min-w-[28px]";
+
+          const cellDateStr = `${currentOccYear}-${String(currentOccMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          
+          // Find if this day has a booking
+          const match = bookingsForUnit.find(b => {
+            return cellDateStr >= b.checkIn && cellDateStr < b.checkOut;
+          });
+
+          if (match) {
+            const div = document.createElement('div');
+            div.style.cursor = "pointer";
+            div.onclick = () => openDetailCard(match);
+            
+            if (["Ready for Check-In", "Payment Verified", "Checked In", "Checked Out"].includes(match.status)) {
+              div.className = "absolute inset-0 bg-rose-700/60 hover:bg-rose-700/80 transition flex items-center justify-center text-[9px] text-white font-bold";
+              div.textContent = "R";
+              div.title = `Booked: ${match.name} (${match.checkIn} to ${match.checkOut})`;
+            } else {
+              div.className = "absolute inset-0 bg-amber-600/60 hover:bg-amber-600/80 transition flex items-center justify-center text-[9px] text-white font-bold";
+              div.textContent = "H";
+              div.title = `Hold: ${match.name} (${match.checkIn} to ${match.checkOut})`;
+            }
+            td.appendChild(div);
+          } else {
+            // Free slot logic
+            const div = document.createElement('div');
+            div.className = "absolute inset-0 hover:bg-emerald-800/20 cursor-pointer transition";
+            div.title = `Available: Click to book this unit for ${cellDateStr}`;
+            div.onclick = () => openBookingModal(property, unit, cellDateStr);
+            td.appendChild(div);
+          }
+          tr.appendChild(td);
+        }
+        bodyContainer.appendChild(tr);
+      });
+    }
+
+    // Tab: Guest Directory Directory logic
+    function renderGuests() {
+      const search = document.getElementById('guest-search').value.toLowerCase();
+      const body = document.getElementById('guests-body');
+      body.innerHTML = '';
+
+      // Aggregate guest directory
+      const guestsMap = {};
+      mockBookings.forEach(b => {
+        const key = b.phone.trim();
+        if (!guestsMap[key]) {
+          guestsMap[key] = {
+            name: b.name,
+            phone: b.phone,
+            stays: 0,
+            notes: b.notes || '',
+            lastBooking: b
+          };
+        }
+        guestsMap[key].stays += 1;
+      });
+
+      const filtered = Object.values(guestsMap).filter(g => {
+        return g.name.toLowerCase().includes(search) || g.phone.includes(search);
+      });
+
+      if (filtered.length === 0) {
+        body.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-ivory/40 italic">No guests found.</td></tr>`;
+      }
+
+      filtered.forEach(g => {
+        const tr = document.createElement('tr');
+        tr.className = "border-b border-champagne/5";
+        tr.innerHTML = `
+          <td class="p-3 font-semibold text-ivory">${g.name}</td>
+          <td class="p-3 text-ivory/70">${g.phone}</td>
+          <td class="p-3 text-champagne font-bold">${g.stays} Stays</td>
+          <td class="p-3 text-ivory/50 italic max-w-xs truncate">${g.notes || 'No notes.'}</td>
+          <td class="p-3 text-right">
+            <button onclick="openDetailCard(mockBookings.find(b => b.id === '${g.lastBooking.id}'))" class="text-xs bg-deep-forest border border-champagne/20 hover:border-champagne text-champagne px-3 py-1.5 rounded transition">
+              View History
+            </button>
+          </td>
+        `;
+        body.appendChild(tr);
+      });
+    }
+
+    // Modal Control: Manual booking addition/edits
+    function openBookingModal(property = null, unit = null, checkin = null) {
+      // Reset form
+      document.getElementById('booking-form').reset();
+      document.getElementById('form-booking-id').value = '';
+      document.getElementById('booking-modal-title').textContent = 'Manual Booking Entry';
+
+      // Set defaults if clicked from grid occupancy cells
+      if (property) document.getElementById('form-property').value = property;
+      populateFormUnits();
+
+      if (unit) document.getElementById('form-unit').value = unit;
+      if (checkin) {
+        document.getElementById('form-checkin').value = checkin;
+        // set checkout +1 day default
+        const nextDay = new Date(checkin);
+        nextDay.setDate(nextDay.getDate() + 1);
+        document.getElementById('form-checkout').value = nextDay.toISOString().split('T')[0];
+      }
+
+      document.getElementById('booking-modal').classList.remove('hidden');
+    }
+
+    function closeBookingModal() {
+      document.getElementById('booking-modal').classList.add('hidden');
+    }
+
+    function populateFormUnits() {
+      const property = document.getElementById('form-property').value;
+      const unitSelect = document.getElementById('form-unit');
+      unitSelect.innerHTML = '';
+
+      const units = propertyUnits[property] || [];
+      units.forEach(unit => {
+        const opt = document.createElement('option');
+        opt.value = unit;
+        opt.textContent = unit;
+        unitSelect.appendChild(opt);
+      });
+    }
+
+    // Dynamic Booking Stay Price Calculator
+    function calculateAutoTotal() {
+      const checkinVal = document.getElementById('form-checkin').value;
+      const checkoutVal = document.getElementById('form-checkout').value;
+      if (!checkinVal || !checkoutVal) return;
+
+      const checkinDate = new Date(checkinVal);
+      const checkoutDate = new Date(checkoutVal);
+      const timeDiff = checkoutDate.getTime() - checkinDate.getTime();
+      const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      
+      if (nights <= 0) return;
+
+      const property = document.getElementById('form-property').value;
+      const unit = document.getElementById('form-unit').value;
+      let rate = 0;
+
+      if (property === "Diani Darling Cottages") {
+        rate = 5000;
+      } else if (property === "Tower Cottages") {
+        rate = 1500;
+      } else if (property === "Beakim Apartments") {
+        rate = 5000;
+      } else if (property === "Beakim Darad") {
+        if (unit && unit.startsWith("Standard Room")) {
+          rate = 1500;
+        } else if (unit && unit.startsWith("Deluxe Studio")) {
+          rate = 2500;
+        } else if (unit && (unit.startsWith("2-Bed Cottage") || unit.startsWith("2-Bedroom"))) {
+          rate = 4000;
+        } else {
+          rate = 1500; // Default
+        }
+      }
+
+      document.getElementById('form-total').value = rate * nights;
+    }
+  
+
+    // Save/Insert Booking Record
+    function saveBooking(event) {
+      event.preventDefault();
+
+      const bookingId = document.getElementById('form-booking-id').value;
+      const data = {
+        name: document.getElementById('form-guest-name').value.trim(),
+        phone: document.getElementById('form-guest-phone').value.trim(),
+        property: document.getElementById('form-property').value,
+        unit: document.getElementById('form-unit').value,
+        checkIn: document.getElementById('form-checkin').value,
+        checkOut: document.getElementById('form-checkout').value,
+        adults: parseInt(document.getElementById('form-adults').value) || 2,
+        children: parseInt(document.getElementById('form-children').value) || 0,
+        status: document.getElementById('form-stage').value,
+        totalPrice: parseFloat(document.getElementById('form-total').value) || 0,
+        depositPrice: parseFloat(document.getElementById('form-deposit').value) || 0,
+        paymentRef: document.getElementById('form-payment-ref').value.trim(),
+        notes: document.getElementById('form-notes').value.trim(),
+        createdAt: new Date().toISOString()
+      };
+
+      // Set payment status badge helper logic
+      if (data.depositPrice >= data.totalPrice && data.totalPrice > 0) {
+        data.paymentStatus = "Fully Paid";
+      } else if (data.depositPrice > 0) {
+        data.paymentStatus = "Partial";
+      } else {
+        data.paymentStatus = "Unpaid";
+      }
+
+      if (isDemoMode) {
+        if (bookingId) {
+          // Edit Mode
+          const idx = mockBookings.findIndex(b => b.id === bookingId);
+          if (idx !== -1) {
+            mockBookings[idx] = { id: bookingId, ...data };
+          }
+        } else {
+          // Insert Mode
+          const newId = `BK-${Date.now().toString().substring(6)}`;
+          mockBookings.push({ id: newId, ...data });
+        }
+        localStorage.setItem("beakim_mock_bookings", JSON.stringify(mockBookings));
+        closeBookingModal();
+        showTab(activeTab);
+      } else {
+        if (bookingId) {
+          db.collection("bookings").doc(bookingId).update(data)
+            .then(() => { closeBookingModal(); });
+        } else {
+          db.collection("bookings").add(data)
+            .then(() => { closeBookingModal(); });
+        }
+      }
+    }
+
+    // Modal Control: Booking Detail card overview
+    function openDetailCard(booking) {
+      activeBooking = booking;
+
+      document.getElementById('det-name').textContent = booking.name;
+      document.getElementById('det-phone').textContent = booking.phone;
+      document.getElementById('det-property-unit').textContent = `${booking.property} — ${booking.unit || 'Not Assigned'}`;
+      document.getElementById('det-dates').textContent = `Check-In: ${booking.checkIn} to ${booking.checkOut}`;
+      document.getElementById('det-guests').textContent = `${booking.adults} Adults / ${booking.children} Children`;
+      document.getElementById('det-status').textContent = booking.status;
+      document.getElementById('det-notes').textContent = booking.notes || 'No internal notes logged.';
+
+      const total = booking.totalPrice || 0;
+      const deposit = booking.depositPrice || 0;
+      const balance = Math.max(total - deposit, 0);
+
+      document.getElementById('det-total').textContent = `KSh ${total.toLocaleString()}`;
+      document.getElementById('det-deposit').textContent = `KSh ${deposit.toLocaleString()}`;
+      document.getElementById('det-balance').textContent = `KSh ${balance.toLocaleString()}`;
+
+      // Adjust badge colors
+      const balEl = document.getElementById('det-balance');
+      if (balance === 0 && total > 0) {
+        balEl.className = "text-lg text-emerald-400";
+      } else {
+        balEl.className = "text-lg text-rose-500";
+      }
+
+      // ── AUTOMATION ALERTS & SMART BUTTONS ──
+      const alertsEl = document.getElementById('det-automation-alerts');
+      alertsEl.innerHTML = '';
+      alertsEl.classList.add('hidden');
+
+      const reminderBtn = document.getElementById('btn-send-reminder');
+      const allocateBtn = document.getElementById('btn-auto-allocate');
+      reminderBtn.classList.add('hidden');
+      allocateBtn.classList.add('hidden');
+
+      const alerts = [];
+
+      // Conflict alert
+      if (booking.isConflict) {
+        alerts.push({
+          color: 'rose',
+          text: '⚠️ <strong>High Demand Conflict:</strong> A competing booking request exists for these dates. Send a priority payment reminder to this guest immediately.'
+        });
+        reminderBtn.classList.remove('hidden');
+      }
+
+      // 48h payment reminder flag
+      if (booking.needsPaymentReminder && booking.status === 'Pending Payment') {
+        const checkInDate = new Date(booking.checkIn);
+        const hoursLeft = Math.round((checkInDate - new Date()) / (1000 * 60 * 60));
+        alerts.push({
+          color: 'amber',
+          text: `⏰ <strong>Payment Reminder Due:</strong> Check-in is in ~${hoursLeft} hours and payment hasn't been received. Send a WhatsApp reminder now.`
+        });
+        reminderBtn.classList.remove('hidden');
+      }
+
+      // Unpaid pending general flag
+      if (booking.status === 'Pending Payment' && !booking.needsPaymentReminder) {
+        alerts.push({
+          color: 'amber',
+          text: '💳 <strong>Awaiting Payment:</strong> This booking is still in the Pending Payment stage. Monitor until payment is confirmed or the 48-hour reminder triggers.'
+        });
+        reminderBtn.classList.remove('hidden');
+      }
+
+      // No unit assigned
+      if (!booking.unit && (booking.status === 'Priority Hold' || booking.status === 'Payment Verified' || booking.status === 'Ready for Check-In')) {
+        alerts.push({
+          color: 'indigo',
+          text: '🏠 <strong>No Unit Assigned:</strong> This booking has been confirmed but no unit has been allocated. Use Auto-Assign Room to find the first available unit.'
+        });
+        allocateBtn.classList.remove('hidden');
+      }
+
+      if (alerts.length > 0) {
+        alertsEl.classList.remove('hidden');
+        alerts.forEach(a => {
+          const div = document.createElement('div');
+          div.className = `text-xs bg-${a.color}-950/30 border border-${a.color}-500/30 text-${a.color}-300 px-3 py-2 rounded-lg leading-relaxed`;
+          div.innerHTML = a.text;
+          alertsEl.appendChild(div);
+        });
+      }
+
+      document.getElementById('detail-modal').classList.remove('hidden');
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detail-modal').classList.add('hidden');
+    }
+
+    // Delete Record
+    function deleteCurrentBooking() {
+      if (!activeBooking) return;
+      if (!confirm("Are you absolutely sure you want to delete this booking record? This cannot be undone.")) return;
+
+      if (isDemoMode) {
+        mockBookings = mockBookings.filter(b => b.id !== activeBooking.id);
+        localStorage.setItem("beakim_mock_bookings", JSON.stringify(mockBookings));
+        closeDetailModal();
+        showTab(activeTab);
+      } else {
+        db.collection("bookings").doc(activeBooking.id).delete()
+          .then(() => { closeDetailModal(); });
+      }
+    }
+
+    // Edit current booking from Detail Modal
+    function editCurrentBooking() {
+      if (!activeBooking) return;
+      closeDetailModal();
+
+      document.getElementById('form-booking-id').value = activeBooking.id;
+      document.getElementById('booking-modal-title').textContent = 'Modify Booking Record';
+
+      document.getElementById('form-guest-name').value = activeBooking.name;
+      document.getElementById('form-guest-phone').value = activeBooking.phone;
+      document.getElementById('form-property').value = activeBooking.property;
+      populateFormUnits();
+      document.getElementById('form-unit').value = activeBooking.unit || '';
+      document.getElementById('form-checkin').value = activeBooking.checkIn;
+      document.getElementById('form-checkout').value = activeBooking.checkOut;
+      document.getElementById('form-adults').value = activeBooking.adults;
+      document.getElementById('form-children').value = activeBooking.children;
+      document.getElementById('form-stage').value = activeBooking.status;
+      document.getElementById('form-total').value = activeBooking.totalPrice || 0;
+      document.getElementById('form-deposit').value = activeBooking.depositPrice || 0;
+      document.getElementById('form-payment-ref').value = activeBooking.paymentRef || '';
+      document.getElementById('form-notes').value = activeBooking.notes || '';
+
+      document.getElementById('booking-modal').classList.remove('hidden');
+    }
+
+    // Issue refund workflow
+    function triggerRefundPrompt() {
+      if (!activeBooking) return;
+      const refundAmount = prompt(`Enter refund amount to issue (Max KSh ${activeBooking.depositPrice}):`);
+      if (refundAmount === null || refundAmount === "") return;
+
+      const parsedRefund = parseFloat(refundAmount);
+      if (isNaN(parsedRefund) || parsedRefund <= 0) {
+        alert("Please enter a valid numeric refund amount.");
+        return;
+      }
+
+      if (parsedRefund > activeBooking.depositPrice) {
+        alert("Refund amount cannot exceed deposit paid.");
+        return;
+      }
+
+      const txRef = prompt("Enter Refund Transaction reference ID (e.g. M-Pesa code):");
+
+      // Update calculations
+      const newDeposit = Math.max(activeBooking.depositPrice - parsedRefund, 0);
+      let newPayStatus = "Unpaid";
+      if (newDeposit > 0 && newDeposit < activeBooking.totalPrice) {
+        newPayStatus = "Partial";
+      }
+
+      if (isDemoMode) {
+        const booking = mockBookings.find(b => b.id === activeBooking.id);
+        if (booking) {
+          booking.depositPrice = newDeposit;
+          booking.paymentStatus = newPayStatus;
+          booking.status = "Cancelled"; // Free up units on cancel/refund
+          booking.notes = `${booking.notes}\n[REFUND: KSh ${parsedRefund} refunded on ${new Date().toLocaleDateString()} Ref: ${txRef || 'None'}]`.trim();
+          localStorage.setItem("beakim_mock_bookings", JSON.stringify(mockBookings));
+          alert(`Refund logged successfully. Deposit updated to KSh ${newDeposit}`);
+          closeDetailModal();
+          showTab(activeTab);
+        }
+      } else {
+        db.collection("bookings").doc(activeBooking.id).update({
+          depositPrice: newDeposit,
+          paymentStatus: newPayStatus,
+          status: "Cancelled",
+          notes: `${activeBooking.notes}\n[REFUND: KSh ${parsedRefund} refunded on ${new Date().toLocaleDateString()} Ref: ${txRef || 'None'}]`.trim()
+        }).then(() => {
+          alert("Refund successfully synced to Cloud.");
+          closeDetailModal();
+        });
+      }
+    }
+
+    // â”€â”€ INVOICING / RECEIPT GENERATOR LOGIC â”€â”€
+
+    function prepareDocumentArea() {
+      if (!activeBooking) return;
+
+      const isReceipt = activeBooking.depositPrice > 0;
+      document.getElementById('doc-type-label').textContent = isReceipt ? "RECEIPT" : "INVOICE";
+      document.getElementById('doc-date-label').textContent = `Date: ${new Date().toLocaleDateString()}`;
+
+      document.getElementById('doc-guest-name').textContent = activeBooking.name;
+      document.getElementById('doc-guest-phone').textContent = activeBooking.phone;
+      document.getElementById('doc-ref-id').textContent = activeBooking.id.substring(0, 10).toUpperCase();
+      document.getElementById('doc-property').textContent = activeBooking.property;
+
+      document.getElementById('doc-desc').textContent = `${activeBooking.property} — ${activeBooking.unit || 'Standard Accommodation'}`;
+      document.getElementById('doc-checkin').textContent = activeBooking.checkIn;
+      document.getElementById('doc-checkout').textContent = activeBooking.checkOut;
+
+      const total = activeBooking.totalPrice || 0;
+      const deposit = activeBooking.depositPrice || 0;
+      const balance = Math.max(total - deposit, 0);
+
+      document.getElementById('doc-total').textContent = `KSh ${total.toLocaleString()}`;
+      document.getElementById('doc-tot-cost').textContent = `KSh ${total.toLocaleString()}`;
+      document.getElementById('doc-tot-paid').textContent = `- KSh ${deposit.toLocaleString()}`;
+      document.getElementById('doc-balance-due').textContent = `KSh ${balance.toLocaleString()}`;
+
+      // Populate dynamic payment rows
+      const paymentRows = document.getElementById('doc-payment-rows');
+      paymentRows.innerHTML = '';
+      if (deposit > 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="py-2">${new Date(activeBooking.createdAt || Date.now()).toLocaleDateString()}</td>
+          <td class="py-2">${activeBooking.paymentRef || 'Standard Deposit'}</td>
+          <td class="py-2 text-right font-semibold text-emerald-800">KSh ${deposit.toLocaleString()}</td>
+        `;
+        paymentRows.appendChild(tr);
+      } else {
+        paymentRows.innerHTML = `<tr><td colspan="3" class="py-2 text-gray-400 italic">No payments logged yet.</td></tr>`;
+      }
+    }
+
+    function triggerDownloadPDF() {
+      if (!activeBooking) return;
+      
+      const printArea = document.getElementById('print-area');
+      printArea.classList.remove('hidden');
+      prepareDocumentArea();
+
+      const docName = `${activeBooking.name.replace(/\s+/g, '_')}_${activeBooking.depositPrice > 0 ? 'Receipt' : 'Invoice'}.pdf`;
+
+      const options = {
+        margin: 0.5,
+        filename: docName,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+
+      html2pdf().set(options).from(printArea).save().then(() => {
+        printArea.classList.add('hidden');
+      });
+    }
+
+    // Share workflows (WhatsApp / Email)
+    function shareReceipt(channel) {
+      if (!activeBooking) return;
+
+      const isReceipt = activeBooking.depositPrice > 0;
+      const docType = isReceipt ? "receipt" : "invoice";
+      
+      // Auto trigger PDF download first
+      triggerDownloadPDF();
+
+      // Compile share message
+      const messageText = `Hello ${activeBooking.name},\n\nHere is your ${docType} for your booking stay at ${activeBooking.property} (${activeBooking.unit || 'Standard Room'}).\n\n• Check-In: ${activeBooking.checkIn}\n• Check-Out: ${activeBooking.checkOut}\n• Total Quote: KSh ${activeBooking.totalPrice.toLocaleString()}\n• Deposits Paid: KSh ${activeBooking.depositPrice.toLocaleString()}\n• Balance Due: KSh ${(Math.max(activeBooking.totalPrice - activeBooking.depositPrice, 0)).toLocaleString()}\n\nThank you for choosing Beakim Hospitality Group!`;
+
+      if (channel === 'whatsapp') {
+        const encoded = encodeURIComponent(messageText);
+        // clean phone from non-digit characters
+        const cleanedPhone = activeBooking.phone.replace(/\D/g, '');
+        window.open(`https://wa.me/${cleanedPhone}?text=${encoded}`, '_blank');
+      } else if (channel === 'email') {
+        const subject = encodeURIComponent(`Invoice summary for stay at ${activeBooking.property}`);
+        const body = encodeURIComponent(messageText);
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+      }
+    }
+  </script>
+</body>
+</html>
+
+

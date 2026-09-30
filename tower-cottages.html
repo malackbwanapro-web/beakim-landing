@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tower Cottages | Modern Self-Catering Apartments Ukunda</title>
+  <meta name="description" content="Explore modern, budget-friendly 2-bedroom self-catering apartments at Tower Cottages, Ukunda. Located behind Naivas Supermarket with gated security, AC, and Wi-Fi." />
+
+  <!-- Google Fonts: Inter & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'deep-forest': '#0D2318',
+            'canopy': '#1A3D28',
+            'moss': '#2C5A3A',
+            'champagne': '#B8965A',
+            'driftwood': '#D4B07A',
+            'ivory': '#F5F0E8',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Playfair Display', 'serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Premium Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0D2318;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #B8965A;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #D4B07A;
+    }
+
+    /* Live Pulse Animation */
+    @keyframes pulse-light {
+      0%, 100% { transform: scale(1); opacity: 0.75; }
+      50% { transform: scale(1.4); opacity: 0; }
+    }
+    .pulse-indicator {
+      animation: pulse-light 2s infinite;
+    }
+  </style>
+
+  <!-- Local LodgingBusiness SEO Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LodgingBusiness",
+    "@id": "https://beakimproperties.co.ke/tower-cottages",
+    "name": "Tower Cottages by Beakim Hospitality",
+    "description": "Modern self-catering 2-bedroom apartments located behind Naivas Supermarket in Ukunda, near Diani Beach.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Ukunda",
+      "addressRegion": "Kwale County",
+      "addressCountry": "KE",
+      "streetAddress": "Likoni-Lunga Lunga Road, Behind Naivas Supermarket"
+    },
+    "telephone": "+254746938529",
+    "priceRange": "KSh 1,500 - KSh 3,500",
+    "image": "https://beakimproperties.co.ke/assets/tower-cottages-exterior-1.webp",
+    "url": "https://beakimproperties.co.ke/tower-cottages.html"
+  }
+  </script>
+  <script src="assets/js/main.js" defer></script>
+</head>
+<body class="bg-deep-forest text-ivory font-sans antialiased min-h-screen">
+
+  <!-- â”€â”€ STICKY HEADER NAVIGATION â”€â”€ -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-deep-forest/95 backdrop-blur-md border-b border-champagne/15">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+      
+      <!-- Brand Logo / Monogram -->
+      <a class='flex items-center gap-3 group' href='/'>
+        <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" />
+        <div class="flex flex-col">
+          <span class="font-display text-base tracking-wider text-ivory leading-none font-semibold group-hover:text-champagne transition duration-300">BEAKIM</span>
+          <span class="text-[9px] tracking-widest text-champagne uppercase mt-0.5">Tower Cottages</span>
+        </div>
+      </a>
+      
+      <!-- Back to Home Text Link -->
+      <a class='hidden md:inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest text-ivory/60 hover:text-champagne transition duration-300' href='/'><span class="text-base leading-none">&larr;</span><span class="uppercase">Go Back</span></a>
+
+      <!-- High-contrast Scroll To Booking Form CTA -->
+      <a href="#booking" class="bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 transform active:scale-95 shadow-md">
+        Book This Apartment
+      </a>
+    </div>
+  </header>
+
+  <!-- â”€â”€ HERO SECTION â”€â”€ -->
+  <section class="relative min-h-[90vh] md:min-h-screen flex items-center pt-24 overflow-hidden">
+    <!-- Property Specific Image Background -->
+    <div class="absolute inset-0 z-0">
+      <img src="assets/tower-cottages-exterior-1.webp" alt="Tower Cottages Exterior" class="w-full h-full object-cover brightness-[0.8]" />
+      <div class="absolute inset-0 bg-black/30"></div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 py-12 md:py-24 grid md:grid-cols-2 gap-12 items-center">
+      <div class="bg-deep-forest/80 backdrop-blur-md border border-champagne/20 p-8 md:p-10 rounded-2xl shadow-2xl space-y-6 max-w-xl">
+        <span class="inline-block bg-champagne/10 border border-champagne/30 text-champagne text-xs font-medium tracking-widest uppercase px-4 py-1.5 rounded-full">
+          Modern Self-Catering
+        </span>
+        <h1 class="font-display text-4xl md:text-5xl text-ivory leading-tight font-bold">
+          Modern Holiday Apartments at Tower Cottages
+        </h1>
+        <p class="font-display text-lg md:text-xl text-driftwood italic">
+          From KSh 1,500 / Night — Perfect for Transit & Families
+        </p>
+        <p class="text-ivory/80 leading-relaxed text-sm md:text-base">
+          Located right behind Naivas Supermarket on the Likoni-Lunga Lunga Road, Tower Cottages offers modern, self-catering apartments near the main road. Enjoy easy access to Diani Beach while staying in a highly secure, spacious apartment.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 pt-2">
+          <a href="#booking" class="bg-champagne hover:bg-driftwood text-deep-forest px-8 py-4 rounded font-semibold tracking-wider uppercase text-sm text-center transition duration-300 shadow-md transform active:scale-95">
+            Book Your Stay Now
+          </a>
+          <a class='border border-ivory/30 hover:border-champagne text-ivory hover:text-champagne px-8 py-4 rounded font-semibold tracking-wider uppercase text-sm text-center transition duration-300' href='/'>
+            View All Properties
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- â”€â”€ PROPERTY HIGHLIGHT GALLERY & OVERALL DESCRIPTION â”€â”€ -->
+  <section class="py-24 max-w-7xl mx-auto px-6 border-b border-champagne/15">
+    <div class="grid lg:grid-cols-12 gap-12 items-center mb-16">
+      <div class="lg:col-span-5 space-y-4">
+        <span class="text-xs font-semibold tracking-widest text-champagne uppercase block">Apartment Overview</span>
+        <h2 class="font-display text-3xl md:text-4xl text-ivory font-bold leading-tight">
+          Spacious 2-Bedroom Apartments
+        </h2>
+        <p class="font-display text-lg text-driftwood italic">
+          Featuring a Private Kitchenette, Cozy Living Rooms &amp; Gated Security
+        </p>
+      </div>
+      <div class="lg:col-span-7">
+        <p class="text-ivory/70 leading-relaxed text-sm md:text-base">
+          Tower Cottages offers 3 units of spacious 2-bedroom self-catering apartments. Designed for travelers who value convenience, space, and affordability, each apartment features two private bedrooms, a fully equipped kitchenette for self-catering, a comfortable living area, and a private bathroom. It is the perfect home-away-from-home base in Ukunda.
+        </p>
+      </div>
+    </div>
+
+    <!-- Premium Masonry Gallery Grid -->
+    <div class="columns-1 sm:columns-2 lg:columns-3 gap-6">
+      
+      <!-- Image 1 -->
+      <div class="break-inside-avoid mb-6 group relative overflow-hidden rounded-xl border border-champagne/10 shadow-lg bg-deep-forest/40">
+        <img src="assets/tower-cottages-exterior-1.webp" alt="Tower Cottages Main Exterior" class="w-full h-auto block transition duration-500 group-hover:scale-105" loading="lazy" />
+        <div class="absolute inset-0 bg-gradient-to-t from-deep-forest/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
+          <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Main Property View</span>
+        </div>
+      </div>
+
+      <!-- Image 2 -->
+      <div class="break-inside-avoid mb-6 group relative overflow-hidden rounded-xl border border-champagne/10 shadow-lg bg-deep-forest/40">
+        <img src="assets/tower-cottages-exterior-2.webp" alt="Tower Cottages Exterior Entrance" class="w-full h-auto block transition duration-500 group-hover:scale-105" loading="lazy" />
+        <div class="absolute inset-0 bg-gradient-to-t from-deep-forest/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
+          <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Cottage Exterior</span>
+        </div>
+      </div>
+
+      <!-- Image 3 -->
+      <div class="break-inside-avoid mb-6 group relative overflow-hidden rounded-xl border border-champagne/10 shadow-lg bg-deep-forest/40">
+        <img src="assets/tower-cottages-exterior-gardens.webp" alt="Tower Cottages Gardens" class="w-full h-auto block transition duration-500 group-hover:scale-105" loading="lazy" />
+        <div class="absolute inset-0 bg-gradient-to-t from-deep-forest/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
+          <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Lush Gardens</span>
+        </div>
+      </div>
+
+      <!-- Image 4 -->
+      <div class="break-inside-avoid mb-6 group relative overflow-hidden rounded-xl border border-champagne/10 shadow-lg bg-deep-forest/40">
+        <img src="assets/tower-cottages-bedroom-1.webp" alt="Tower Cottages Bedroom" class="w-full h-auto block transition duration-500 group-hover:scale-105" loading="lazy" />
+        <div class="absolute inset-0 bg-gradient-to-t from-deep-forest/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
+          <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Comfortable Bedroom</span>
+        </div>
+      </div>
+
+      <!-- Image 5 -->
+      <div class="break-inside-avoid mb-6 group relative overflow-hidden rounded-xl border border-champagne/10 shadow-lg bg-deep-forest/40">
+        <img src="assets/tower-cottages-interior-1.webp" alt="Tower Cottages Interior Living Room" class="w-full h-auto block transition duration-500 group-hover:scale-105" loading="lazy" />
+        <div class="absolute inset-0 bg-gradient-to-t from-deep-forest/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
+          <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Spacious Living Area</span>
+        </div>
+      </div>
+
+      <!-- Image 6 -->
+      <div class="break-inside-avoid mb-6 group relative overflow-hidden rounded-xl border border-champagne/10 shadow-lg bg-deep-forest/40">
+        <img src="assets/tower-cottages-interior-2.webp" alt="Tower Cottages Apartment Interior" class="w-full h-auto block transition duration-500 group-hover:scale-105" loading="lazy" />
+        <div class="absolute inset-0 bg-gradient-to-t from-deep-forest/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
+          <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Modern Interior</span>
+        </div>
+      </div>
+
+      <!-- Image 7 -->
+      <div class="break-inside-avoid mb-6 group relative overflow-hidden rounded-xl border border-champagne/10 shadow-lg bg-deep-forest/40">
+        <img src="assets/tower-cottages-interior-3.webp" alt="Tower Cottages Kitchenette Area" class="w-full h-auto block transition duration-500 group-hover:scale-105" loading="lazy" />
+        <div class="absolute inset-0 bg-gradient-to-t from-deep-forest/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
+          <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Dining &amp; Kitchen Area</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- â”€â”€ DEEP-DIVE VISUAL AMENITY GRID â”€â”€ -->
+  <section class="py-24 bg-champagne">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-xl mx-auto mb-16 space-y-2">
+        <span class="text-xs font-bold tracking-widest text-deep-forest uppercase">Property Highlights</span>
+        <h2 class="font-display text-3xl md:text-4xl text-white font-bold" style="text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Uncompromising Deluxe Amenities</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        
+        <!-- Amenity 1 -->
+        <div class="bg-deep-forest border border-transparent p-6 rounded-xl flex flex-col items-center text-center space-y-4 shadow-lg transition duration-300 hover:scale-[1.02]">
+          <svg class="w-10 h-10 text-champagne stroke-current fill-none" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21h18"></path>
+            <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2Z"></path>
+            <path d="M9 5v14"></path>
+          </svg>
+          <div>
+            <h3 class="font-display text-sm font-semibold text-ivory">2-Bedroom Layout</h3>
+            <p class="text-xs text-ivory/70 mt-1">Spacious layout perfect for families or business groups.</p>
+          </div>
+        </div>
+
+        <!-- Amenity 2 -->
+        <div class="bg-deep-forest border border-transparent p-6 rounded-xl flex flex-col items-center text-center space-y-4 shadow-lg transition duration-300 hover:scale-[1.02]">
+          <svg class="w-10 h-10 text-champagne stroke-current fill-none" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20M17 5L7 19M19 12H5M19 17L5 7"></path>
+            <path d="M12 6h2a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-2"></path>
+            <path d="M12 18h-2a2 2 0 0 1-2-2v0a2 2 0 0 1 2-2h2"></path>
+          </svg>
+          <div>
+            <h3 class="font-display text-sm font-semibold text-ivory">Private Kitchenette</h3>
+            <p class="text-xs text-ivory/70 mt-1">Equipped with appliances for private self-catering meals.</p>
+          </div>
+        </div>
+
+        <!-- Amenity 3 -->
+        <div class="bg-deep-forest border border-transparent p-6 rounded-xl flex flex-col items-center text-center space-y-4 shadow-lg transition duration-300 hover:scale-[1.02]">
+          <svg class="w-10 h-10 text-champagne stroke-current fill-none" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"></path>
+            <path d="M12 9H6"></path>
+            <path d="M6 14h6"></path>
+            <path d="M18 8h4"></path>
+            <path d="M18 12h4"></path>
+            <path d="M18 16h4"></path>
+          </svg>
+          <div>
+            <h3 class="font-display text-sm font-semibold text-ivory">Climate Control AC</h3>
+            <p class="text-xs text-ivory/70 mt-1">Keep cool and comfortable against coastal humidity.</p>
+          </div>
+        </div>
+
+        <!-- Amenity 4 -->
+        <div class="bg-deep-forest border border-transparent p-6 rounded-xl flex flex-col items-center text-center space-y-4 shadow-lg transition duration-300 hover:scale-[1.02]">
+          <svg class="w-10 h-10 text-champagne stroke-current fill-none" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12h20"></path>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"></path>
+          </svg>
+          <div>
+            <h3 class="font-display text-sm font-semibold text-ivory">Free High-Speed Wi-Fi</h3>
+            <p class="text-xs text-ivory/70 mt-1">Stay connected with fast internet inside your apartment.</p>
+          </div>
+        </div>
+
+        <!-- Amenity 5 -->
+        <div class="bg-deep-forest border border-transparent p-6 rounded-xl flex flex-col items-center text-center space-y-4 shadow-lg transition duration-300 hover:scale-[1.02]">
+          <svg class="w-10 h-10 text-champagne stroke-current fill-none" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <circle cx="12" cy="11" r="3"></circle>
+          </svg>
+          <div>
+            <h3 class="font-display text-sm font-semibold text-ivory">Gated Security &amp; CCTV</h3>
+            <p class="text-xs text-ivory/70 mt-1">Fully manned guards, gated entry, and active perimeter CCTV.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- â”€â”€ GEO-OPTIMIZED MICRO-LOCATION CARDS â”€â”€ -->
+  <section class="py-20 bg-canopy/40">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-xl mx-auto mb-12 space-y-2">
+        <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Nearby Attractions</span>
+        <h2 class="font-display text-3xl text-ivory font-bold">Steps from Where You Want to Be</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Card 1: Naivas Supermarket -->
+        <div class="bg-deep-forest/80 border border-champagne/10 rounded-xl overflow-hidden shadow-lg group hover:border-champagne/30 transition duration-300">
+          <div class="h-48 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80" alt="Naivas Supermarket Ukunda" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
+            <div class="absolute inset-0 bg-black/20"></div>
+          </div>
+          <div class="p-6 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-display text-lg font-semibold text-ivory">Naivas Supermarket</h3>
+              
+            </div>
+            <p class="text-xs text-driftwood tracking-wider uppercase font-medium">50m Away (1-Min Walk)</p>
+            <p class="text-sm text-ivory/70 leading-relaxed">
+              Located right behind Ukunda's main shopping hub, providing instant access to groceries, essentials, and banking.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 2: Lunga Lunga Highway -->
+        <div class="bg-deep-forest/80 border border-champagne/10 rounded-xl overflow-hidden shadow-lg group hover:border-champagne/30 transition duration-300">
+          <div class="h-48 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80" alt="Likoni Lunga Lunga Highway" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
+            <div class="absolute inset-0 bg-black/20"></div>
+          </div>
+          <div class="p-6 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-display text-lg font-semibold text-ivory">Highway Transit</h3>
+              
+            </div>
+            <p class="text-xs text-driftwood tracking-wider uppercase font-medium">Immediate Access</p>
+            <p class="text-sm text-ivory/70 leading-relaxed">
+              Situated right off the Likoni-Lunga Lunga Road, making local transit, taxis, and public commuting extremely convenient.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3: Diani Beach Access -->
+        <div class="bg-deep-forest/80 border border-champagne/10 rounded-xl overflow-hidden shadow-lg group hover:border-champagne/30 transition duration-300">
+          <div class="h-48 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" alt="Diani Beach Coastline" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
+            <div class="absolute inset-0 bg-black/20"></div>
+          </div>
+          <div class="p-6 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-display text-lg font-semibold text-ivory">Diani Beach</h3>
+              
+            </div>
+            <p class="text-xs text-driftwood tracking-wider uppercase font-medium">5-Min Drive</p>
+            <p class="text-sm text-ivory/70 leading-relaxed">
+              A quick 5-minute drive down the beach road places you right onto the award-winning white sands of Diani Beach.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- â”€â”€ BOOK DIRECT INCENTIVE MATRIX BANNER â”€â”€ -->
+  <section class="py-12 bg-gradient-to-br from-[#9c7d3c] via-[#fadf8c] via-[#e2c378] to-[#9c7d3c]">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        
+        <!-- Incentive 1 -->
+        <div class="flex items-center gap-4 bg-deep-forest p-6 rounded-xl border border-transparent shadow-lg hover:scale-[1.02] transition duration-300">
+          <div class="p-3 bg-champagne/10 rounded-lg shrink-0">
+            <svg class="w-6 h-6 text-champagne" stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+            </svg>
+          </div>
+          <div class="space-y-1">
+            <h4 class="font-display font-semibold text-white text-sm md:text-base">Best Rate Guaranteed</h4>
+            <p class="text-xs text-ivory/70">No hidden middleman or OTA markup fees</p>
+          </div>
+        </div>
+
+        <!-- Incentive 2 -->
+        <div class="flex items-center gap-4 bg-deep-forest p-6 rounded-xl border border-transparent shadow-lg hover:scale-[1.02] transition duration-300">
+          <div class="p-3 bg-champagne/10 rounded-lg shrink-0">
+            <svg class="w-6 h-6 text-champagne" stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+            </svg>
+          </div>
+          <div class="space-y-1">
+            <h4 class="font-display font-semibold text-white text-sm md:text-base">Flexible Modification</h4>
+            <p class="text-xs text-ivory/70">Easy date changes and updates via WhatsApp</p>
+          </div>
+        </div>
+
+        <!-- Incentive 3 -->
+        <div class="flex items-center gap-4 bg-deep-forest p-6 rounded-xl border border-transparent shadow-lg hover:scale-[1.02] transition duration-300">
+          <div class="p-3 bg-champagne/10 rounded-lg shrink-0">
+            <svg class="w-6 h-6 text-champagne" stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+          </div>
+          <div class="space-y-1">
+            <h4 class="font-display font-semibold text-white text-sm md:text-base">Priority Early Check-In</h4>
+            <p class="text-xs text-ivory/70">Get settled in early (subject to cottage availability)</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- â”€â”€ BOOKING FORM & SCARCITY ENGINE â”€â”€ -->
+  <section id="booking" class="py-24 max-w-xl mx-auto px-6 scroll-mt-20">
+    <div class="bg-champagne rounded-xl border border-transparent overflow-hidden p-6 md:p-8 space-y-8 shadow-2xl relative">
+      
+      <!-- Live Pulse Scarcity Badge -->
+      <div class="flex justify-center">
+        <div class="inline-flex items-center gap-2 bg-deep-forest border border-champagne/30 text-champagne text-xs font-semibold px-4 py-2 rounded-full">
+          <span class="relative flex h-2 w-2">
+            <span class="pulse-indicator absolute inline-flex h-full w-full rounded-full bg-champagne opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-champagne"></span>
+          </span>
+          Boutique Property: Only 3 total deluxe units available
+        </div>
+      </div>
+
+      <div class="text-center space-y-2">
+        <h2 class="font-display text-2xl md:text-3xl text-deep-forest font-bold">Reserve Tower Cottages</h2>
+        <p class="text-xs text-deep-forest/70">Fill out your details below to directly verify availability via WhatsApp.</p>
+      </div>
+
+      <form id="property-booking-form" onsubmit="handleCottageSubmit(event)" class="space-y-6 text-sm">
+        
+        <div class="flex flex-col gap-1.5">
+          <label for="guest-name" class="text-xs font-semibold uppercase tracking-wider text-deep-forest/80">Full Name</label>
+          <input type="text" id="guest-name" required placeholder="John Doe" 
+                 class="w-full bg-deep-forest border border-deep-forest/10 focus:border-deep-forest rounded px-4 py-3 text-ivory outline-none transition" />
+        </div>
+
+
+        <div class="flex flex-col gap-1.5">
+          <label for="guest-phone-number" class="text-xs font-semibold uppercase tracking-wider text-deep-forest/80">Phone Number</label>
+          <div class="flex gap-2">
+            <select id="guest-phone-code" required
+                    class="bg-deep-forest border border-deep-forest/10 focus:border-deep-forest rounded px-3 py-3 text-ivory outline-none transition cursor-pointer text-sm flex-shrink-0 w-36">
+              <option value="+254">🇰🇪 +254</option>
+              <option value="+255">🇹🇿 +255</option>
+              <option value="+256">🇺🇬 +256</option>
+              <option value="+250">🇷🇼 +250</option>
+              <option value="+251">🇪🇹 +251</option>
+              <option value="+252">🇸🇴 +252</option>
+              <option value="+253">🇩🇯 +253</option>
+              <option value="+27">🇿🇦 +27</option>
+              <option value="+234">🇳🇬 +234</option>
+              <option value="+233">🇬🇭 +233</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+49">🇩🇪 +49</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+971">🇦🇪 +971</option>
+              <option value="+91">🇮🇳 +91</option>
+              <option value="+86">🇨🇳 +86</option>
+              <option value="+61">🇦🇺 +61</option>
+              <option value="+81">🇯🇵 +81</option>
+            </select>
+            <input type="tel" id="guest-phone-number" required placeholder="712 345 678"
+                   class="flex-1 w-full bg-deep-forest border border-deep-forest/10 focus:border-deep-forest rounded px-4 py-3 text-ivory outline-none transition" />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-xs font-semibold uppercase tracking-wider text-deep-forest/85">Selected Property</label>
+          <div class="w-full bg-deep-forest/80 border border-deep-forest/10 rounded px-4 py-3 text-ivory/50 cursor-not-allowed select-none font-medium flex justify-between items-center">
+            <span>Tower Cottages</span>
+            <span class="bg-champagne/15 text-champagne text-[10px] px-2 py-0.5 rounded font-semibold uppercase">Locked</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label for="check-in" class="text-xs font-semibold uppercase tracking-wider text-deep-forest/80">Check-In</label>
+            <input type="date" id="check-in" required 
+                   class="w-full bg-deep-forest border border-deep-forest/10 focus:border-deep-forest rounded px-4 py-3 text-ivory outline-none transition" />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label for="check-out" class="text-xs font-semibold uppercase tracking-wider text-deep-forest/80">Check-Out</label>
+            <input type="date" id="check-out" required 
+                   class="w-full bg-deep-forest border border-deep-forest/10 focus:border-deep-forest rounded px-4 py-3 text-ivory outline-none transition" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label for="guests-adults" class="text-xs font-semibold uppercase tracking-wider text-deep-forest/80">Adults</label>
+            <input type="number" id="guests-adults" min="1" max="10" value="2" required 
+                   class="w-full bg-deep-forest border border-deep-forest/10 focus:border-deep-forest rounded px-4 py-3 text-ivory outline-none transition" />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label for="guests-children" class="text-xs font-semibold uppercase tracking-wider text-deep-forest/80">Children</label>
+            <input type="number" id="guests-children" min="0" max="10" value="0" required 
+                   class="w-full bg-deep-forest border border-deep-forest/10 focus:border-deep-forest rounded px-4 py-3 text-ivory outline-none transition" />
+          </div>
+        </div>
+
+        <button type="submit" 
+                class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-4 rounded font-semibold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-3">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436.002 9.858-4.384 9.86-9.768.001-2.61-1.013-5.064-2.855-6.909C16.438 2.083 13.99 1.07 11.4 1.07 5.969 1.07 1.547 5.456 1.545 10.842c-.001 1.597.424 3.156 1.233 4.544L1.78 20.58l5.228-1.378c-.138-.077-.257-.15-.361-.208z" />
+          </svg>
+          Send Inquiry via WhatsApp
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- â”€â”€ FOOTER â”€â”€ -->
+  <footer class="bg-deep-forest border-t border-champagne/15 py-12">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8 items-center">
+      <!-- Left side -->
+      <div class="space-y-4 text-center md:text-left">
+        <a class='flex items-center gap-3 justify-center md:justify-start group' href='/'>
+          <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain transition duration-300 group-hover:scale-105" />
+          <span class="font-display text-base tracking-wider text-ivory group-hover:text-champagne transition duration-300">TOWER COTTAGES</span>
+        </a>
+        <p class="text-xs text-ivory/50">
+          Affordable Luxury Accommodations in Diani Beach, Kenya.<br />
+          Experience a warm coastal welcome with premium security.
+        </p>
+      </div>
+
+      <!-- Center social media icons -->
+      <div class="flex justify-center gap-6 text-champagne">
+        <!-- Facebook -->
+        <a href="#" class="hover:text-driftwood transition duration-300" title="Facebook">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/>
+          </svg>
+        </a>
+        <!-- Instagram -->
+        <a href="#" class="hover:text-driftwood transition duration-300" title="Instagram">
+          <svg class="w-5 h-5 fill-none stroke-current" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </a>
+        <!-- TikTok -->
+        <a href="#" class="hover:text-driftwood transition duration-300" title="TikTok">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.59 4.23.95.8 2.07 1.39 3.29 1.72v3.74c-1.4-.17-2.77-.74-3.92-1.59-.03 2.87.03 5.75-.02 8.62-.05 1.52-.56 3.05-1.51 4.25-1.1 1.4-2.8 2.3-4.6 2.5-1.8.3-3.7-.2-5.1-1.3-1.6-1.1-2.6-3-2.6-5 0-1.8.8-3.6 2.2-4.7 1.3-1.1 3-1.6 4.7-1.4v3.6c-.9-.1-1.9.1-2.6.7-.7.6-1.1 1.5-1 2.5.1 1 .7 1.9 1.6 2.3.9.4 2 .3 2.7-.3.7-.6 1.1-1.6 1-2.6-.01-5.73-.01-11.45 0-17.18z"/>
+          </svg>
+        </a>
+        <!-- YouTube -->
+        <a href="#" class="hover:text-driftwood transition duration-300" title="YouTube">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.53 3.5 12 3.5 12 3.5s-7.53 0-9.388.555A3.003 3.003 0 0 0 .502 6.163C0 8.024 0 12 0 12s0 3.976.502 5.837a3.003 3.003 0 0 0 2.11 2.108C4.47 20.5 12 20.5 12 20.5s7.53 0 9.388-.555a3.003 3.003 0 0 0 2.11 2.108C24 15.976 24 12 24 12s0-3.976-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          </svg>
+        </a>
+        <!-- X -->
+        <a href="#" class="hover:text-driftwood transition duration-300" title="X (Twitter)">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+        <!-- Google -->
+        <a href="#" class="hover:text-driftwood transition duration-300" title="Google">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M12.24 10.285V14.4h6.887c-.648 2.43-2.519 4.13-5.285 4.13-3.455 0-6.285-2.83-6.285-6.285s2.83-6.285 6.285-6.285c1.635 0 3.113.627 4.254 1.727l3.15-3.15C18.89 2.42 15.81 1 12.24 1 6.033 1 1 6.033 1 12.24s5.033 11.24 11.24 11.24c5.84 0 10.92-4.13 10.92-11.24 0-.768-.096-1.368-.24-1.956H12.24z"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Right side -->
+      <div class="text-center md:text-right text-xs text-ivory/50 space-y-2">
+        <p><strong>Contact Us:</strong> +254 746 938529</p>
+        <p><strong>Support Email:</strong> info@beakim.com</p>
+        
+      <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs text-ivory/60 pt-2 border-t border-champagne/10 mt-4">
+        <a href="privacy-policy.html" class="hover:text-champagne transition">Privacy Policy</a>
+        <span>•</span>
+        <a href="terms-of-service.html" class="hover:text-champagne transition">Terms of Service</a>
+        <span>•</span>
+        <span>&copy; 2026 Beakim Hospitality Group. All rights reserved.</span>
+      </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- â”€â”€ FLOATING COMMUNICATION ACTIONS (BOTTOM RIGHT) â”€â”€ -->
+  <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+    <!-- Call Action -->
+    <a href="tel:+254746938529" 
+       class="w-12 h-12 bg-champagne hover:bg-driftwood text-deep-forest rounded-full flex items-center justify-center shadow-2xl transition duration-300 transform hover:scale-110 active:scale-95"
+       title="Call Us Directly">
+      <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+        <path d="M6.62 10.79a15.15 15.15 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.11-.27c1.12.45 2.33.69 3.58.69a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.24 2.46.69 3.58a1 1 0 0 1-.27 1.11l-2.2 2.2z"/>
+      </svg>
+    </a>
+    <!-- WhatsApp Action -->
+    <a href="https://wa.me/254746938529" 
+       target="_blank"
+       class="w-12 h-12 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-full flex items-center justify-center shadow-2xl transition duration-300 transform hover:scale-110 active:scale-95"
+       title="Chat on WhatsApp">
+      <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436.002 9.858-4.384 9.86-9.768.001-2.61-1.013-5.064-2.855-6.909C16.438 2.083 13.99 1.07 11.4 1.07 5.969 1.07 1.547 5.456 1.545 10.842c-.001 1.597.424 3.156 1.233 4.544L1.78 20.58l5.228-1.378c-.138-.077-.257-.15-.361-.208z"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- â”€â”€ RESERVATION SUCCESS DIALOG MODAL â”€â”€ -->
+  <div id="success-modal" class="fixed inset-0 z-[100] bg-deep-forest/90 backdrop-blur-md flex items-center justify-center p-6 hidden opacity-0 transition-opacity duration-300">
+    <div class="bg-canopy border border-champagne/20 max-w-md w-full rounded-2xl p-8 text-center space-y-6 shadow-2xl transform scale-95 transition-transform duration-300 overflow-y-auto max-h-[90vh]">
+      
+      <!-- Icon -->
+      <div class="w-16 h-16 bg-champagne/10 border border-champagne/30 text-champagne rounded-full flex items-center justify-center mx-auto text-3xl font-bold">
+        &#10003;
+      </div>
+
+      <!-- Dynamic Title -->
+      <h3 id="success-title" class="font-display text-2xl text-ivory font-bold">Booking Request Received</h3>
+
+      <!-- Summary Card -->
+      <div class="bg-deep-forest/50 border border-champagne/15 rounded-xl p-5 text-left space-y-3 my-4">
+        <h4 class="text-xs font-semibold uppercase tracking-wider text-champagne border-b border-champagne/15 pb-1.5">Inquiry Summary</h4>
+        <div class="space-y-1.5 text-xs text-ivory/90">
+          <div class="flex justify-between"><span class="text-ivory/50">Property:</span> <span id="summary-property" class="font-semibold">-</span></div>
+          <div class="flex justify-between" id="summary-unit-container" style="display:none;"><span class="text-ivory/50">Unit Type:</span> <span id="summary-unit" class="font-semibold">-</span></div>
+          <div class="flex justify-between"><span class="text-ivory/50">Stay Dates:</span> <span id="summary-dates" class="font-semibold">-</span></div>
+          <div class="flex justify-between"><span class="text-ivory/50">Guests:</span> <span id="summary-guests" class="font-semibold">-</span></div>
+          <div class="border-t border-champagne/10 pt-2 flex justify-between items-baseline">
+            <span class="text-ivory/50">Breakdown:</span>
+            <span id="summary-breakdown" class="text-[10px] text-ivory/70">-</span>
+          </div>
+          <div class="flex justify-between items-baseline">
+            <span class="text-champagne font-semibold">Total Stay Cost:</span>
+            <span id="summary-total" class="text-sm font-bold text-champagne">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel A: Available - Payment -->
+      <div id="panel-payment" class="space-y-4 text-left hidden">
+        <div class="bg-emerald-950/30 border border-emerald-500/20 text-emerald-400 p-3 rounded-lg text-xs leading-relaxed">
+          <strong>Available!</strong> Secure your booking now by making your payment.
+        </div>
+        <div class="bg-deep-forest/30 border border-champagne/10 p-3 rounded-lg text-xs space-y-1.5 text-ivory/80">
+          <div>&#128073; <strong>Till Number:</strong> <span class="text-champagne font-bold text-sm">588365</span></div>
+          <div>&#128073; <strong>Account Name:</strong> <span class="text-champagne font-medium">Beakim Property Group</span></div>
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="mpesa-message" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Paste M-Pesa SMS Confirmation Message</label>
+          <textarea id="mpesa-message" placeholder="Paste the SMS message received from M-Pesa here..." rows="3"
+                    class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none resize-none text-xs"></textarea>
+        </div>
+        <button type="button" onclick="submitMpesaCode()" class="w-full bg-champagne hover:bg-driftwood text-deep-forest py-3 rounded text-xs font-semibold tracking-widest uppercase transition duration-300">
+          Submit Payment Details
+        </button>
+      </div>
+
+      <!-- Panel B: Waitlisted -->
+      <div id="panel-waitlist" class="space-y-4 hidden">
+        <p class="text-sm text-ivory/80 leading-relaxed">
+          One of our agents will get back to you within 15 minutes to confirm booking and provide payment instructions and details.
+        </p>
+        <button type="button" onclick="closeSuccessModal()" class="w-full bg-champagne hover:bg-driftwood text-deep-forest py-3 rounded text-xs font-semibold tracking-widest uppercase transition duration-300">
+          Got it, thank you!
+        </button>
+      </div>
+
+      <!-- Panel C: Pre-Confirmed -->
+      <div id="panel-preconfirmed" class="space-y-4 hidden">
+        <p class="text-sm text-emerald-400 leading-relaxed font-semibold">Priority Booking Pre-Confirmed</p>
+        <p class="text-xs text-ivory/80 leading-relaxed">
+          Your details and transaction code have been received. We will only contact you to send a final confirmation or if any payment issue needs to be addressed.
+        </p>
+        <button type="button" onclick="closeSuccessModal()" class="w-full bg-champagne hover:bg-driftwood text-deep-forest py-3 rounded text-xs font-semibold tracking-widest uppercase transition duration-300">
+          Done
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Firebase App & Firestore Compatibility SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <!-- JavaScript Form Handling & Redirect Engine -->
+  <script>
+    // Firebase Config (Replace with your actual Firebase config keys)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDrp54AAhgTuKCfJHrHS5xJaT_rhELYdsY",
+      authDomain: "beakim-hospitality.firebaseapp.com",
+      projectId: "beakim-hospitality",
+      storageBucket: "beakim-hospitality.firebasestorage.app",
+      messagingSenderId: "626848144950",
+      appId: "1:626848144950:web:9d0b04bd190eb65de64297"
+    };
+
+    let db;
+    let activeBookingDocId = null;
+    let pendingWhatsAppUrl = "";
+
+    try {
+      if (firebaseConfig.apiKey !== "YOUR_API_KEY_HERE") {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+      } else {
+        console.warn("Firebase config placeholders are active. CRM auto-capture disabled.");
+      }
+    } catch (e) {
+      console.error("Firebase failed to initialize:", e);
+    }
+
+    function checkAvailability(property, checkIn, checkOut, callback) {
+      let resolved = false;
+      const timeout = setTimeout(() => {
+        if (!resolved) { resolved = true; callback(true, false); }
+      }, 1000);
+      if (!db) { clearTimeout(timeout); callback(true, false); return; }
+      db.collection("bookings").where("property", "==", property).get()
+        .then(querySnapshot => {
+          if (!resolved) {
+            resolved = true; clearTimeout(timeout);
+            let activeOverlaps = 0;
+            let unpaidHoldsCount = 0;
+            querySnapshot.forEach(doc => {
+              const b = doc.data();
+              if (b.status === "Checked Out" || b.status === "Cancelled" || b.status === "Refunded") return;
+              if (b.checkIn < checkOut && b.checkOut > checkIn) {
+                activeOverlaps++;
+                if (b.status === "Pending Payment") unpaidHoldsCount++;
+              }
+            });
+            callback(activeOverlaps < 3, unpaidHoldsCount > 0); // Tower Cottages capacity = 3
+          }
+        })
+        .catch(err => { if (!resolved) { resolved = true; clearTimeout(timeout); callback(true, false); } });
+    }
+
+    function submitMpesaCode() {
+      const mpesaMsg = document.getElementById('mpesa-message').value.trim();
+      if (!mpesaMsg) { alert("Please paste your M-Pesa transaction confirmation message to continue."); return; }
+      if (db && activeBookingDocId) {
+        db.collection("bookings").doc(activeBookingDocId).update({
+          paymentRef: mpesaMsg, status: "Priority Hold", paymentStatus: "Partial"
+        }).catch(err => console.error("Error saving M-Pesa code:", err));
+      }
+      const name = document.getElementById('guest-name').value || "";
+      const phoneCode = document.getElementById('guest-phone-code').value || "";
+      const phoneNum = document.getElementById('guest-phone-number').value || "";
+      const checkIn = document.getElementById('check-in').value;
+      const checkOut = document.getElementById('check-out').value;
+      const formatString = `⚡ PRIORITY BOOKING | TOWER COTTAGES ⚡\n\n• Guest Name: ${name}\n• Phone: ${phoneCode}${phoneNum}\n• Property: Tower Cottages\n• Check-In: ${checkIn}\n• Check-Out: ${checkOut}\n• M-Pesa Ref: ${mpesaMsg}`;
+      pendingWhatsAppUrl = `https://wa.me/254746938529?text=${encodeURIComponent(formatString)}`;
+      document.getElementById('success-title').textContent = "Priority Pre-Confirmed";
+      document.getElementById('panel-payment').classList.add('hidden');
+      document.getElementById('panel-preconfirmed').classList.remove('hidden');
+    }
+
+    // Set date inputs' minimum values dynamically to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('check-in').min = today;
+    document.getElementById('check-out').min = today;
+
+    function handleCottageSubmit(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('guest-name').value.trim();
+      const phoneCode = document.getElementById('guest-phone-code').value;
+      const phoneNum = document.getElementById('guest-phone-number').value.trim();
+      const fullPhone = phoneCode + phoneNum;
+      const checkIn = document.getElementById('check-in').value;
+      const checkOut = document.getElementById('check-out').value;
+      const adults = document.getElementById('guests-adults').value;
+      const children = document.getElementById('guests-children').value;
+
+      if (new Date(checkOut) <= new Date(checkIn)) {
+        alert("Check-Out date must be after the Check-In date.");
+        return;
+      }
+
+      const rate = 1500;
+      const nights = Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 3600 * 24));
+      const totalPrice = nights > 0 ? rate * nights : 0;
+
+      const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      document.getElementById('summary-property').textContent = "Tower Cottages";
+      document.getElementById('summary-dates').textContent = `${formatDate(checkIn)} - ${formatDate(checkOut)}`;
+      document.getElementById('summary-guests').textContent = `${adults} Adults / ${children} Children`;
+      document.getElementById('summary-breakdown').textContent = `KSh ${rate.toLocaleString()} x ${nights} night${nights > 1 ? 's' : ''}`;
+      document.getElementById('summary-total').textContent = `KSh ${totalPrice.toLocaleString()}`;
+
+      checkAvailability("Tower Cottages", checkIn, checkOut, (isAvailable, hasUnpaidHolds) => {
+        const isConflict = !isAvailable && hasUnpaidHolds;
+        if (db) {
+          db.collection("bookings").add({
+            name, property: "Tower Cottages", phone: fullPhone, checkIn, checkOut,
+            adults: parseInt(adults) || 0, children: parseInt(children) || 0,
+            status: isAvailable ? "Pending Payment" : "New Inquiry",
+            source: "Website Form",
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            paymentStatus: "Unpaid", totalPrice, payments: [],
+            isConflict: isConflict
+          }).then(docRef => { activeBookingDocId = docRef.id; })
+            .catch(err => console.error("Error writing lead:", err));
+        }
+
+        document.getElementById('panel-payment').classList.add('hidden');
+        document.getElementById('panel-waitlist').classList.add('hidden');
+        document.getElementById('panel-preconfirmed').classList.add('hidden');
+
+        if (isAvailable) {
+          document.getElementById('success-title').textContent = "Booking Request Available";
+          document.getElementById('panel-payment').classList.remove('hidden');
+          pendingWhatsAppUrl = `https://wa.me/254746938529?text=${encodeURIComponent(`⚡ NEW INQUIRY | TOWER COTTAGES ⚡\n\n• Guest: ${name}\n• Phone: ${fullPhone}\n• Check-In: ${checkIn}\n• Check-Out: ${checkOut}\n• Total: KSh ${totalPrice.toLocaleString()}`)}`;
+        } else if (hasUnpaidHolds) {
+          document.getElementById('success-title').textContent = "Priority Queue Active";
+          document.getElementById('panel-waitlist').classList.remove('hidden');
+          const descEl = document.querySelector('#panel-waitlist p');
+          if (descEl) descEl.innerHTML = `<strong>High Demand!</strong> We have a temporary unpaid hold on these dates. You've been placed in the priority queue — if that hold is released, you'll be first in line. An agent will contact you shortly.`;
+          pendingWhatsAppUrl = `https://wa.me/254746938529?text=${encodeURIComponent(`⚡ PRIORITY WAITLIST | TOWER COTTAGES ⚡\n\n• Guest: ${name}\n• Phone: ${fullPhone}\n• Check-In: ${checkIn}\n• Check-Out: ${checkOut}\n• Status: Conflict — Unpaid Hold Alert`)}`;
+        } else {
+          document.getElementById('success-title').textContent = "Booking Request Received";
+          document.getElementById('panel-waitlist').classList.remove('hidden');
+          const descEl = document.querySelector('#panel-waitlist p');
+          if (descEl) descEl.innerHTML = `One of our agents will get back to you within 15 minutes to confirm booking and provide payment instructions and details.`;
+          pendingWhatsAppUrl = `https://wa.me/254746938529?text=${encodeURIComponent(`⚡ WAITLIST | TOWER COTTAGES ⚡\n\n• Guest: ${name}\n• Phone: ${fullPhone}\n• Check-In: ${checkIn}\n• Check-Out: ${checkOut}\n• Status: Requesting Alternative Dates`)}`;
+        }
+
+        const modal = document.getElementById('success-modal');
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+          modal.classList.remove('opacity-0');
+          modal.querySelector('.transform').classList.remove('scale-95');
+        }, 10);
+      });
+    }
+
+    function closeSuccessModal() {
+      const modal = document.getElementById('success-modal');
+      modal.classList.add('opacity-0');
+      modal.querySelector('.transform').classList.add('scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        document.getElementById('property-booking-form').reset();
+        if (pendingWhatsAppUrl) window.open(pendingWhatsAppUrl, '_blank');
+      }, 300);
+    }
+  </script>
+</body>
+</html>
+
+

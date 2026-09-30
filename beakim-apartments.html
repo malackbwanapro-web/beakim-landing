@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- SEO Optimization Meta Tags -->
+  <title>Beakim Apartments | 1 & 2 Bedroom Stays in Diani Beach</title>
+  <meta name="description" content="Two modern apartment blocks featuring 20 luxury units (10 1-Bedroom & 10 2-Bedroom) in Diani Beach 5th row. Available for short-term holiday stays and long-term rental." />
+  <meta name="keywords" content="Beakim Apartments, Diani Beach apartments, 1 bedroom apartment Diani, 2 bedroom apartment Diani, long term rental Diani, holiday apartment Kenya" />
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:title" content="Beakim Apartments | 1 & 2 Bedroom Stays in Diani Beach" />
+  <meta property="og:description" content="20 Luxury Units (10 1-Bed & 10 2-Bed) across 2 apartment blocks. Short-term from KSh 2,500/night & flexible long-term leases." />
+  <meta property="og:image" content="assets/beakim-apartments-hero.jpg" />
+  <meta property="og:type" content="website" />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'deep-forest': '#0D2318',
+            'canopy': '#1A3D28',
+            'moss': '#2C5A3A',
+            'champagne': '#B8965A',
+            'driftwood': '#D4B07A',
+            'ivory': '#F5F0E8',
+          },
+          fontFamily: {
+            display: ['Playfair Display', 'Georgia', 'serif'],
+            body: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Styling -->
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      background-color: #0D2318;
+      color: #F5F0E8;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0D2318;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2C5A3A;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #B8965A;
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.5; }
+      100% { transform: scale(0.95); opacity: 1; }
+    }
+    .pulse-indicator {
+      animation: pulse-ring 2s infinite;
+    }
+  </style>
+
+  <!-- Verbatim JSON-LD Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LodgingBusiness",
+      "name": "Beakim Apartments | Beakim Hospitality Group",
+      "description": "Two modern apartment blocks featuring 20 units (10 1-Bedroom & 10 2-Bedroom) in Diani Beach 5th row. Available for short-term & long-term stay.",
+      "url": "https://beakimhospitality.com/beakim-apartments",
+      "telephone": "+254746938529",
+      "priceRange": "KES 2,500 - KES 3,500",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Ukunda-Diani Beach Road (5th Row)",
+        "addressLocality": "Diani Beach",
+        "addressRegion": "Kwale County",
+        "addressCountry": "KE"
+      }
+    }
+  </script>
+
+  <!-- Firebase App & Firestore SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="assets/js/main.js" defer></script>
+</head>
+<body class="font-body font-light antialiased overflow-x-hidden">
+
+  <!-- FLOATING ACTIONS -->
+  <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+    <a href="https://wa.me/254746938529" target="_blank" rel="noopener noreferrer" 
+       class="flex items-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white px-5 py-3 rounded-full shadow-2xl transition duration-300 transform hover:-translate-y-1">
+      <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436.002 9.858-4.384 9.86-9.768.001-2.61-1.013-5.064-2.855-6.909C16.438 2.083 13.99 1.07 11.4 1.07 5.969 1.07 1.547 5.456 1.545 10.842c-.001 1.597.424 3.156 1.233 4.544L1.78 20.58l5.228-1.378c-.138-.077-.257-.15-.361-.208z" />
+      </svg>
+      <span class="font-medium text-sm hidden md:inline">WhatsApp</span>
+    </a>
+    <a href="tel:+254746938529" 
+       class="flex items-center gap-3 bg-champagne hover:bg-driftwood text-deep-forest px-5 py-3 rounded-full shadow-2xl transition duration-300 transform hover:-translate-y-1">
+      <svg class="w-6 h-6 stroke-current fill-none" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.824-1.802-5.14-4.117-6.942-6.942l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+      </svg>
+      <span class="font-medium text-sm hidden md:inline">Call Us</span>
+    </a>
+  </div>
+
+  <!-- STICKY HEADER -->
+  <header class="fixed top-0 left-0 right-0 z-40 bg-deep-forest/90 backdrop-blur-md border-b border-champagne/15 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a class="flex items-center gap-3 group" href="index.html">
+        <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" />
+        <div class="flex flex-col">
+          <span class="font-display text-base tracking-wider text-ivory leading-none font-semibold group-hover:text-champagne transition duration-300">BEAKIM</span>
+          <span class="text-[9px] tracking-widest text-champagne uppercase mt-0.5">Beakim Apartments</span>
+        </div>
+      </a>
+      
+      <a class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest text-ivory/60 hover:text-champagne transition duration-300" href="index.html">
+        <span class="text-base leading-none">&larr;</span><span class="uppercase">Go Back</span>
+      </a>
+
+      <a href="#booking" class="bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 transform active:scale-95 shadow-md">
+        Book Your Stay
+      </a>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="relative min-h-[90vh] md:min-h-screen flex items-center pt-24 overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="assets/beakim-apartments-hero.jpg" alt="Beakim Apartments Hero" class="w-full h-full object-cover brightness-[0.7]" />
+      <div class="absolute inset-0 bg-gradient-to-t from-deep-forest via-deep-forest/40 to-black/40"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 py-16 w-full">
+      <div class="max-w-3xl space-y-6">
+        <div class="inline-flex items-center gap-2 bg-canopy/80 border border-champagne/30 backdrop-blur-md px-4 py-2 rounded-full">
+          <span class="w-2 h-2 rounded-full bg-champagne pulse-indicator"></span>
+          <span class="text-xs font-semibold uppercase tracking-widest text-champagne">5th Row Diani Beach Road • 2 Blocks • 20 Units</span>
+        </div>
+
+        <h1 class="font-display text-4xl md:text-6xl text-ivory font-bold leading-tight">
+          Beakim Apartments
+        </h1>
+
+        <p class="text-base md:text-lg text-ivory/80 leading-relaxed font-light">
+          Welcome to modern coastal living in Diani Beach. Featuring two apartment blocks with <strong class="text-champagne">20 spacious units</strong> (10 1-Bedroom & 10 2-Bedroom apartments), our gated compound offers flexible <strong class="text-champagne">short-term holiday stays</strong> and <strong class="text-champagne">long-term rentals</strong> with swimming pool access, 24/7 security, and serene 5th-row coastal privacy.
+        </p>
+
+        <div class="pt-4 flex flex-wrap items-center gap-4">
+          <a href="#units" class="bg-champagne hover:bg-driftwood text-deep-forest px-8 py-4 rounded font-semibold tracking-wider uppercase text-sm text-center transition duration-300 shadow-xl">
+            View 1 & 2 Bedroom Units
+          </a>
+          <a href="#long-term-info" class="border border-ivory/30 hover:border-champagne text-ivory hover:text-champagne px-8 py-4 rounded font-semibold tracking-wider uppercase text-sm text-center transition duration-300">
+            Long-Term Stay Inquiries
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK HIGHLIGHTS -->
+  <section class="bg-canopy/30 border-y border-champagne/10 py-10">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
+      <div class="p-4 rounded-lg bg-deep-forest/40 border border-champagne/10">
+        <div class="text-champagne font-display text-2xl font-bold mb-1">20 Units</div>
+        <div class="text-xs text-ivory/70 uppercase tracking-wider">10 One-Bed & 10 Two-Bed</div>
+      </div>
+      <div class="p-4 rounded-lg bg-deep-forest/40 border border-champagne/10">
+        <div class="text-champagne font-display text-2xl font-bold mb-1">2 Blocks</div>
+        <div class="text-xs text-ivory/70 uppercase tracking-wider">Modern Apartment Buildings</div>
+      </div>
+      <div class="p-4 rounded-lg bg-deep-forest/40 border border-champagne/10">
+        <div class="text-champagne font-display text-2xl font-bold mb-1">Flexible Stays</div>
+        <div class="text-xs text-ivory/70 uppercase tracking-wider">Short-Term & Long-Term</div>
+      </div>
+      <div class="p-4 rounded-lg bg-deep-forest/40 border border-champagne/10">
+        <div class="text-champagne font-display text-2xl font-bold mb-1">Resort Pool</div>
+        <div class="text-xs text-ivory/70 uppercase tracking-wider">Swimming Pool & Gardens</div>
+      </div>
+      <div class="p-4 rounded-lg bg-deep-forest/40 border border-champagne/10 col-span-2 md:col-span-1">
+        <div class="text-champagne font-display text-2xl font-bold mb-1">24/7 Security</div>
+        <div class="text-xs text-ivory/70 uppercase tracking-wider">Gated & Guarded Compound</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHORT & LONG TERM STAY BANNER -->
+  <section class="py-12 bg-deep-forest/80 border-b border-champagne/10">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="bg-canopy/40 border border-champagne/20 rounded-xl p-8 space-y-4">
+        <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Option A • Short-Term Stays</span>
+        <h3 class="font-display text-2xl text-ivory font-bold">Holiday & Short-Term Rentals</h3>
+        <p class="text-xs text-ivory/70 leading-relaxed">
+          Book nightly stays starting at <strong class="text-champagne">KSh 2,500/night</strong> (1-Bedroom) and <strong class="text-champagne">KSh 3,500/night</strong> (2-Bedroom). Fully furnished with AC, high-speed Wi-Fi, kitchen, and pool access. Instant online reservation & WhatsApp confirmation.
+        </p>
+        <a href="#booking" class="inline-block text-xs font-semibold uppercase tracking-wider text-champagne hover:text-driftwood transition">
+          Book Short-Term Stay &rarr;
+        </a>
+      </div>
+
+      <div class="bg-canopy/40 border border-champagne/20 rounded-xl p-8 space-y-4">
+        <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Option B • Long-Term Leases</span>
+        <h3 class="font-display text-2xl text-ivory font-bold">Monthly & Long-Term Rentals</h3>
+        <p class="text-xs text-ivory/70 leading-relaxed">
+          Looking for a monthly residence in Diani Beach? We offer custom negotiated long-term lease terms for both our 1-Bedroom and 2-Bedroom apartments. Contact management directly to negotiate rates based on duration.
+        </p>
+        <a href="#long-term-info" class="inline-block text-xs font-semibold uppercase tracking-wider text-champagne hover:text-driftwood transition">
+          Inquire For Long-Term Rates &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- UNIT SECTIONS CONTAINER -->
+  <section id="units" class="py-20 max-w-7xl mx-auto px-6 space-y-24">
+
+    <div class="text-center space-y-4 max-w-2xl mx-auto">
+      <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Apartment Offerings</span>
+      <h2 class="font-display text-3xl md:text-4xl text-ivory font-semibold">1-Bedroom & 2-Bedroom Apartments</h2>
+      <p class="text-sm text-ivory/70">20 total units across 2 modern blocks (10 1-Bedroom units & 10 2-Bedroom units).</p>
+      
+      <div class="pt-4 flex flex-wrap justify-center gap-3">
+        <a href="#unit-one-bedroom" class="px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase bg-canopy border border-champagne/30 text-champagne hover:bg-champagne hover:text-deep-forest transition">
+          1-Bedroom Units (10 Units)
+        </a>
+        <a href="#unit-two-bedroom" class="px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase bg-canopy border border-champagne/30 text-champagne hover:bg-champagne hover:text-deep-forest transition">
+          2-Bedroom Units (10 Units)
+        </a>
+      </div>
+    </div>
+
+    <!-- SECTION 1: 1-BEDROOM APARTMENTS -->
+    <div id="unit-one-bedroom" class="scroll-mt-32 bg-canopy/20 border border-champagne/15 rounded-2xl p-6 md:p-10 space-y-8 shadow-2xl">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7 space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-champagne/10 pb-4">
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-widest text-champagne">10 Units Available</span>
+              <h3 class="font-display text-3xl text-ivory font-bold">1-Bedroom Apartments</h3>
+            </div>
+            <div class="text-right">
+              <div class="bg-deep-forest border border-champagne/30 text-champagne px-4 py-1.5 rounded-lg text-sm font-semibold tracking-wider">
+                KSh 2,500 / NIGHT
+              </div>
+              <span class="text-[10px] text-ivory/60 uppercase tracking-widest block pt-1">Long-term: Call Management</span>
+            </div>
+          </div>
+
+          <p class="text-sm md:text-base text-ivory/80 leading-relaxed">
+            Our <strong class="text-ivory">1-Bedroom Apartments</strong> feature a master bedroom suite, open-plan living lounge, fully equipped kitchen, en-suite bathroom, and private balcony. Ideal for couples, digital nomads, and single professionals seeking short-term comfort or long-term coastal living.
+          </p>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs text-ivory/70">
+            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
+              <strong class="block text-champagne text-sm">Inventory</strong> 10 Total Units
+            </div>
+            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
+              <strong class="block text-champagne text-sm">Capacity</strong> Max 2 Guests
+            </div>
+            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
+              <strong class="block text-champagne text-sm">Kitchen</strong> Full Kitchenette
+            </div>
+            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
+              <strong class="block text-champagne text-sm">Balcony</strong> Private Outdoor Balcony
+            </div>
+            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
+              <strong class="block text-champagne text-sm">Climate</strong> Full Air Conditioning
+            </div>
+            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
+              <strong class="block text-champagne text-sm">Amenities</strong> Wi-Fi, Pool & Parking
+            </div>
+          </div>
+
+          <div class="pt-2 flex flex-wrap gap-4 items-center">
+            <a href="#booking" onclick="selectUnit('Beakim Apartments (1-Bedroom Unit)')" 
+               class="bg-champagne hover:bg-driftwood text-deep-forest px-8 py-3.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 shadow-md">
+              Book Short-Term (KSh 2,500/night)
+            </a>
+            <a href="tel:+254746938529" 
+               class="border border-ivory/30 hover:border-champagne text-ivory hover:text-champagne px-6 py-3.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300">
+              Call For Long-Term Rates
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="relative h-72 md:h-96 rounded-xl overflow-hidden shadow-xl group border border-champagne/20 cursor-pointer"
+               onclick="openLightbox('assets/beakim-apartments-one-bed.jpg', '1-Bedroom Apartment Interior & Balcony')">
+            <img src="assets/beakim-apartments-one-bed.jpg" alt="1-Bedroom Apartment" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+              <span class="text-xs text-ivory font-medium">Click to view full photo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1-Bedroom Gallery -->
+      <div class="space-y-4 pt-4 border-t border-champagne/10">
+        <h4 class="text-xs font-semibold uppercase tracking-widest text-driftwood">1-Bedroom Apartments Gallery</h4>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+               onclick="openLightbox('assets/beakim-apartments-one-bed.jpg', '1-Bedroom Living Lounge & Balcony')">
+            <img src="assets/beakim-apartments-one-bed.jpg" alt="1-Bedroom Living Lounge" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+          </div>
+          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+               onclick="openLightbox('assets/beakim-apartments-hero.jpg', 'Apartment Block Compound')">
+            <img src="assets/beakim-apartments-hero.jpg" alt="Apartment Block Compound" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+          </div>
+          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+               onclick="openLightbox('assets/beakim-apartments-pool.jpg', 'Resort Swimming Pool Access')">
+            <img src="assets/beakim-apartments-pool.jpg" alt="Resort Swimming Pool Access" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+          </div>
+          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+               onclick="openLightbox('assets/beakim-apartments-two-bed.jpg', 'Modern Open Plan Kitchen & Dining')">
+            <img src="assets/beakim-apartments-two-bed.jpg" alt="Modern Open Plan Kitchen" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- SECTION 2: 2-BEDROOM APARTMENTS -->
+    <div id="unit-two-bedroom" class="scroll-mt-32 bg-canopy/20 border border-champagne/15 rounded-2xl p-6 md:p-10 space-y-8 shadow-2xl">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7 space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-champagne/10 pb-4">
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-widest text-champagne">10 Units Available</span>
+              <h3 class="font-display text-3xl text-ivory font-bold">2-Bedroom Apartments</h3>
+            </div>
+            <div class="text-right">
+              <div class="bg-deep-forest border border-champagne/30 text-champagne px-4 py-1.5 rounded-lg text-sm font-semibold tracking-wider">
+                KSh 3,500 / NIGHT
+              </div>
+              <span class="text-[10px] text-ivory/60 uppercase tracking-widest block pt-1">Long-term: Call Management</span>
+            </div>
+          </div>
+
+          <p class="text-sm md:text-base text-ivory/80 leading-relaxed">
+            Our expansive <strong class="text-ivory">2-Bedroom Apartments</strong> provide multi-room luxury featuring two bedrooms (en-suite master), large family living lounge, dining counter, full kitchen, and private verandah balcony. Excellent for families, groups, or long-term residents wanting maximum space.
+          </p>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs text-ivory/70">
+            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
+              <strong class="block text-champagne text-sm">Inventory</strong> 10 Total Units
+            </div>
+            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
+              <strong class="block text-champagne text-sm">Capacity</strong> Max 4-5 Guests
+            </div>
+            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
+              <strong class="block text-champagne text-sm">Bedrooms</strong> 2 Bedrooms (Master En-Suite)
+            </div>
+            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
+              <strong class="block text-champagne text-sm">Kitchen & Dining</strong> Full Kitchen & Dining Bar
+            </div>
+            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
+              <strong class="block text-champagne text-sm">Balcony</strong> Expansive Private Verandah
+            </div>
+            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
+              <strong class="block text-champagne text-sm">Amenities</strong> AC, Wi-Fi, Pool & Parking
+            </div>
+          </div>
+
+          <div class="pt-2 flex flex-wrap gap-4 items-center">
+            <a href="#booking" onclick="selectUnit('Beakim Apartments (2-Bedroom Unit)')" 
+               class="bg-champagne hover:bg-driftwood text-deep-forest px-8 py-3.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 shadow-md">
+              Book Short-Term (KSh 3,500/night)
+            </a>
+            <a href="tel:+254746938529" 
+               class="border border-ivory/30 hover:border-champagne text-ivory hover:text-champagne px-6 py-3.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300">
+              Call For Long-Term Rates
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="relative h-72 md:h-96 rounded-xl overflow-hidden shadow-xl group border border-champagne/20 cursor-pointer"
+               onclick="openLightbox('assets/beakim-apartments-two-bed.jpg', '2-Bedroom Living Lounge & Dining')">
+            <img src="assets/beakim-apartments-two-bed.jpg" alt="2-Bedroom Apartment" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+              <span class="text-xs text-ivory font-medium">Click to view full photo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2-Bedroom Gallery -->
+      <div class="space-y-4 pt-4 border-t border-champagne/10">
+        <h4 class="text-xs font-semibold uppercase tracking-widest text-driftwood">2-Bedroom Apartments Gallery</h4>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+               onclick="openLightbox('assets/beakim-apartments-two-bed.jpg', '2-Bedroom Living & Dining Suite')">
+            <img src="assets/beakim-apartments-two-bed.jpg" alt="2-Bedroom Living Suite" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+          </div>
+          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+               onclick="openLightbox('assets/beakim-apartments-hero.jpg', 'Apartment Building Exterior')">
+            <img src="assets/beakim-apartments-hero.jpg" alt="Apartment Building Exterior" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+          </div>
+          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+               onclick="openLightbox('assets/beakim-apartments-one-bed.jpg', 'Master Bedroom Suite')">
+            <img src="assets/beakim-apartments-one-bed.jpg" alt="Master Bedroom Suite" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+          </div>
+          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+               onclick="openLightbox('assets/beakim-apartments-pool.jpg', 'Resort Swimming Pool & Sun Loungers')">
+            <img src="assets/beakim-apartments-pool.jpg" alt="Resort Swimming Pool" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- LONG-TERM LEASE SPOTLIGHT -->
+  <section id="long-term-info" class="py-16 max-w-7xl mx-auto px-6">
+    <div class="bg-canopy/40 border border-champagne/30 rounded-2xl p-8 md:p-12 space-y-6 shadow-2xl">
+      <div class="inline-flex items-center gap-2 bg-deep-forest px-4 py-1.5 rounded-full border border-champagne/20 text-xs font-semibold uppercase tracking-widest text-champagne">
+        Monthly & Extended Stay Leases
+      </div>
+      <h2 class="font-display text-3xl md:text-4xl text-ivory font-semibold">Interested in Long-Term Rental at Beakim Apartments?</h2>
+      <p class="text-sm md:text-base text-ivory/80 leading-relaxed max-w-3xl">
+        Whether you are relocating to Diani Beach, working remotely, or seeking a quiet multi-month coastal retreat, we offer custom long-term leases for both our 1-Bedroom and 2-Bedroom units. Long-term rates are negotiated directly with management based on lease duration and payment terms.
+      </p>
+      
+      <div class="pt-4 flex flex-wrap gap-4 items-center">
+        <a href="tel:+254746938529" class="bg-champagne hover:bg-driftwood text-deep-forest px-8 py-4 rounded font-semibold tracking-wider uppercase text-xs transition duration-300 shadow-xl">
+          Call Management (+254 746 938 529)
+        </a>
+        <a href="https://wa.me/254746938529?text=Hello%20Beakim%20Hospitality!%20I%20am%20interested%20in%20a%20long-term%20rental%20lease%20at%20Beakim%20Apartments." 
+           target="_blank" rel="noopener noreferrer"
+           class="bg-[#25D366] hover:bg-[#128C7E] text-white px-8 py-4 rounded font-semibold tracking-wider uppercase text-xs transition duration-300 shadow-xl">
+          Inquire via WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX MODAL -->
+  <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4">
+    <button onclick="closeLightbox()" class="absolute top-6 right-6 text-ivory/80 hover:text-champagne text-3xl font-bold transition">&times;</button>
+    <div class="max-w-5xl w-full text-center space-y-4">
+      <img id="lightbox-img" src="" alt="Gallery Image" class="max-h-[80vh] mx-auto rounded-lg shadow-2xl object-contain border border-champagne/20" />
+      <p id="lightbox-title" class="text-sm font-display text-champagne uppercase tracking-widest"></p>
+    </div>
+  </div>
+
+  <!-- BOOKING SECTION -->
+  <section id="booking" class="py-20 bg-canopy/40 border-t border-champagne/10 relative">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="bg-deep-forest border border-champagne/20 rounded-2xl p-8 md:p-12 shadow-2xl space-y-8">
+        <div class="text-center space-y-2">
+          <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Short-Term Reservation</span>
+          <h2 class="font-display text-3xl md:text-4xl text-ivory font-semibold">Book Short-Term Stay at Beakim Apartments</h2>
+          <p class="text-xs text-ivory/70">Select your unit, check availability, and receive instant WhatsApp confirmation.</p>
+        </div>
+
+        <form id="beakim-apartments-booking-form" onsubmit="handleBookingSubmit(event)" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="flex flex-col gap-1.5">
+              <label for="guest-name" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Full Name</label>
+              <input type="text" id="guest-name" required placeholder="e.g. Jane Doe"
+                     class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label for="guest-email" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Email Address</label>
+              <input type="email" id="guest-email" required placeholder="jane@example.com"
+                     class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+            </div>
+
+            <div class="flex flex-col gap-1.5 col-span-1 md:col-span-2">
+              <label for="guest-phone" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Phone Number (WhatsApp)</label>
+              <div class="flex gap-2">
+                <select id="country-code" class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-3 text-ivory outline-none transition">
+                  <option value="+254">🇰🇪 +254</option>
+                  <option value="+255">🇹🇿 +255</option>
+                  <option value="+256">🇺🇬 +256</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+49">🇩🇪 +49</option>
+                </select>
+                <input type="tel" id="guest-phone-number" required placeholder="712 345 678"
+                       class="flex-1 bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5 col-span-1 md:col-span-2">
+              <label for="booking-property" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Select Apartment Unit</label>
+              <select id="booking-property" required onchange="updatePriceCalculation()"
+                      class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition cursor-pointer">
+                <option value="Beakim Apartments (1-Bedroom Unit)">Beakim Apartments (1-Bedroom Unit) — KSh 2,500/night</option>
+                <option value="Beakim Apartments (2-Bedroom Unit)">Beakim Apartments (2-Bedroom Unit) — KSh 3,500/night</option>
+              </select>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label for="check-in" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Check-In Date</label>
+              <input type="date" id="check-in" required onchange="updatePriceCalculation()"
+                     class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label for="check-out" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Check-Out Date</label>
+              <input type="date" id="check-out" required onchange="updatePriceCalculation()"
+                     class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+            </div>
+
+            <div class="flex flex-col gap-1.5 col-span-1 md:col-span-2">
+              <label for="num-guests" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Number of Guests</label>
+              <input type="number" id="num-guests" min="1" max="6" value="2" required
+                     class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+            </div>
+          </div>
+
+          <!-- Price Calculation Box -->
+          <div class="bg-canopy/60 border border-champagne/20 rounded-xl p-5 space-y-3">
+            <div class="flex justify-between items-center text-xs text-ivory/80">
+              <span>Selected Unit:</span>
+              <strong id="summary-unit-name" class="text-champagne">Beakim Apartments (1-Bedroom Unit)</strong>
+            </div>
+            <div class="flex justify-between items-center text-xs text-ivory/80">
+              <span>Rate Per Night:</span>
+              <strong id="summary-rate">KSh 2,500</strong>
+            </div>
+            <div class="flex justify-between items-center text-xs text-ivory/80">
+              <span>Total Stay Nights:</span>
+              <strong id="summary-nights">1 Night</strong>
+            </div>
+            <div class="border-t border-champagne/20 pt-2 flex justify-between items-center font-display text-lg font-bold text-ivory">
+              <span>Estimated Total:</span>
+              <span id="summary-total" class="text-champagne">KSh 2,500</span>
+            </div>
+          </div>
+
+          <div id="availability-message" class="text-center text-xs font-semibold hidden"></div>
+
+          <button type="submit" id="btn-submit-booking"
+                  class="w-full bg-champagne hover:bg-driftwood text-deep-forest py-4 rounded font-semibold tracking-wider uppercase text-sm transition duration-300 shadow-xl transform active:scale-[0.99]">
+            Check Availability & Confirm via WhatsApp
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATION & FAQ -->
+  <section class="py-20 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-champagne/10">
+    <div class="space-y-6">
+      <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Location & Neighborhood</span>
+      <h3 class="font-display text-3xl text-ivory font-semibold">5th Row Ukunda-Diani Beach Road</h3>
+      <p class="text-sm text-ivory/70 leading-relaxed">
+        Beakim Apartments is located in a quiet, serene 5th-row coastal neighborhood along the main Ukunda-Diani Beach Road corridor. Enjoy high privacy, gated compound security, and quick access to shopping centers and beach access points.
+      </p>
+      <div class="space-y-2 text-xs text-ivory/80">
+        <p>• <strong>Diani Beach Access:</strong> ~4 Minutes Drive</p>
+        <p>• <strong>Ukunda Airstrip:</strong> ~8 Minutes Drive</p>
+        <p>• <strong>Supermarkets & Banks:</strong> ~5 Minutes Drive</p>
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Frequently Asked Questions</span>
+      <div class="space-y-4">
+        <details class="bg-canopy/30 border border-champagne/15 rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold text-sm text-ivory">How do long-term lease rates work?</summary>
+          <p class="text-xs text-ivory/70 pt-2 leading-relaxed">Long-term rates depend on lease duration (e.g. 1 month, 6 months, 1 year). Please call or WhatsApp management directly to negotiate rates.</p>
+        </details>
+        <details class="bg-canopy/30 border border-champagne/15 rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold text-sm text-ivory">Is the swimming pool open to residents?</summary>
+          <p class="text-xs text-ivory/70 pt-2 leading-relaxed">Yes, all residents in our 20 apartments have full complimentary access to the resort swimming pool and sun lounges.</p>
+        </details>
+        <details class="bg-canopy/30 border border-champagne/15 rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold text-sm text-ivory">Are utilities included in short-term stays?</summary>
+          <p class="text-xs text-ivory/70 pt-2 leading-relaxed">For short-term nightly bookings, all utilities (electricity, AC, Wi-Fi, water, security) are fully included in the nightly rate.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-deep-forest border-t border-champagne/15 py-12 text-xs text-ivory/60">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+      <div class="flex items-center gap-3">
+        <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain" />
+        <div>
+          <div class="font-display text-sm text-ivory font-semibold">BEAKIM HOSPITALITY GROUP</div>
+          <div class="text-[10px] text-champagne uppercase">Beakim Apartments — Diani Beach, Kenya</div>
+        </div>
+      </div>
+      
+      <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs text-ivory/60 pt-2 border-t border-champagne/10 mt-4">
+        <a href="privacy-policy.html" class="hover:text-champagne transition">Privacy Policy</a>
+        <span>•</span>
+        <a href="terms-of-service.html" class="hover:text-champagne transition">Terms of Service</a>
+        <span>•</span>
+        <span>&copy; 2026 Beakim Hospitality Group. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    function openLightbox(src, title) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox-title').innerText = title;
+      document.getElementById('lightbox-modal').classList.remove('hidden');
+      document.getElementById('lightbox-modal').classList.add('flex');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox-modal').classList.add('hidden');
+      document.getElementById('lightbox-modal').classList.remove('flex');
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    function selectUnit(unitValue) {
+      const selectEl = document.getElementById('booking-property');
+      if (selectEl) {
+        selectEl.value = unitValue;
+        updatePriceCalculation();
+      }
+    }
+
+    function updatePriceCalculation() {
+      const property = document.getElementById('booking-property').value;
+      const checkInVal = document.getElementById('check-in').value;
+      const checkOutVal = document.getElementById('check-out').value;
+      
+      let rate = 2500;
+      if (property.includes("2-Bedroom")) rate = 3500;
+      else if (property.includes("1-Bedroom")) rate = 2500;
+
+      let nights = 1;
+      if (checkInVal && checkOutVal) {
+        const d1 = new Date(checkInVal);
+        const d2 = new Date(checkOutVal);
+        const diffTime = d2 - d1;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays > 0) nights = diffDays;
+      }
+
+      const total = rate * nights;
+      document.getElementById('summary-unit-name').innerText = property;
+      document.getElementById('summary-rate').innerText = 'KSh ' + rate.toLocaleString();
+      document.getElementById('summary-nights').innerText = nights + (nights === 1 ? ' Night' : ' Nights');
+      document.getElementById('summary-total').innerText = 'KSh ' + total.toLocaleString();
+    }
+
+    function handleBookingSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('guest-name').value;
+      const email = document.getElementById('guest-email').value;
+      const code = document.getElementById('country-code').value;
+      const phone = document.getElementById('guest-phone-number').value;
+      const property = document.getElementById('booking-property').value;
+      const checkIn = document.getElementById('check-in').value;
+      const checkOut = document.getElementById('check-out').value;
+      const guests = document.getElementById('num-guests').value;
+      const total = document.getElementById('summary-total').innerText;
+
+      const message = `Hello Beakim Hospitality Group! I would like to book a short-term stay at Beakim Apartments.%0A%0A` +
+        `*Guest Name:* ${name}%0A` +
+        `*Email:* ${email}%0A` +
+        `*Phone:* ${code}${phone}%0A` +
+        `*Apartment Unit:* ${property}%0A` +
+        `*Check-In:* ${checkIn}%0A` +
+        `*Check-Out:* ${checkOut}%0A` +
+        `*Guests:* ${guests}%0A` +
+        `*Estimated Total:* ${total}%0A%0A` +
+        `Please confirm availability and booking details. Thank you!`;
+
+      const whatsappUrl = `https://wa.me/254746938529?text=${message}`;
+      window.open(whatsappUrl, '_blank');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const dayAfter = new Date(today);
+      dayAfter.setDate(dayAfter.getDate() + 2);
+
+      const checkInInput = document.getElementById('check-in');
+      const checkOutInput = document.getElementById('check-out');
+      if (checkInInput && checkOutInput) {
+        checkInInput.value = tomorrow.toISOString().split('T')[0];
+        checkOutInput.value = dayAfter.toISOString().split('T')[0];
+        updatePriceCalculation();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# Ignore CRM subfolder (pushed to its own repository)
+Beakim CRM/
+
+# Local Netlify & Vercel build output
+.netlify
+.vercel
+
+# Dependencies & OS files
+node_modules/
+.DS_Store
+Thumbs.db
+*.log

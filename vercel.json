@@ -1,0 +1,41 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/tower-cottages",
+      "destination": "/tower-cottages.html"
+    },
+    {
+      "source": "/diani-darling",
+      "destination": "/diani-darling.html"
+    },
+    {
+      "source": "/beakim-darad",
+      "destination": "/beakim-darad.html"
+    },
+    {
+      "source": "/beakim-apartments",
+      "destination": "/beakim-apartments.html"
+    },
+    {
+      "source": "/admincrm",
+      "destination": "/admincrm.html"
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/privacy-policy.html"
+    },
+    {
+      "source": "/terms-of-service",
+      "destination": "/terms-of-service.html"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/sitemap.xml"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "/robots.txt"
+    }
+  ]
+}
