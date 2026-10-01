@@ -1,3 +1,6 @@
 User-agent: *
 Allow: /
-Sitemap: https://beakimhospitality.com/sitemap.xml
+Disallow: /admincrm
+Disallow: /admincrm.html
+
+Sitemap: https://beakim-landing.vercel.app/sitemap.xml

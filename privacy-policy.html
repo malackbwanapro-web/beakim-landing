@@ -10,33 +10,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
   
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'deep-forest': '#0D2318',
-            'canopy': '#1A3D28',
-            'moss': '#2C5A3A',
-            'champagne': '#B8965A',
-            'driftwood': '#D4B07A',
-            'ivory': '#F5F0E8',
-          },
-          fontFamily: {
-            display: ['Playfair Display', 'Georgia', 'serif'],
-            body: ['Inter', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    body { background-color: #0D2318; color: #F5F0E8; }
-  </style>
+  <!-- Compiled Production CSS -->
+  <link rel="stylesheet" href="assets/css/styles.css" />
   <script src="assets/js/main.js" defer></script>
+  <link rel="canonical" href="https://beakim-landing.vercel.app/privacy-policy" />
 </head>
 <body class="font-body font-light antialiased">
+
+  <!-- Skip to Main Content Link (WCAG 2.1 AA) -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-champagne focus:text-deep-forest focus:font-semibold focus:rounded-md focus:shadow-lg focus:outline-none">
+    Skip to main content
+  </a>
+
 
   <header class="fixed top-0 left-0 right-0 z-40 bg-deep-forest/90 backdrop-blur-md border-b border-champagne/15 py-4 px-6">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
@@ -50,7 +35,7 @@
     </div>
   </header>
 
-  <main class="pt-32 pb-24 max-w-4xl mx-auto px-6 space-y-10">
+  <main id="main-content" class="pt-32 pb-24 max-w-4xl mx-auto px-6 space-y-10">
     <div class="space-y-3 border-b border-champagne/15 pb-8 text-center md:text-left">
       <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Legal &amp; Privacy Standards</span>
       <h1 class="font-display text-4xl font-bold text-ivory">Privacy Policy</h1>

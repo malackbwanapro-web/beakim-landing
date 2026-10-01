@@ -5,102 +5,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- SEO Optimization Meta Tags -->
-  <title>Beakim Apartments | 1 & 2 Bedroom Stays in Diani Beach</title>
-  <meta name="description" content="Two modern apartment blocks featuring 20 luxury units (10 1-Bedroom & 10 2-Bedroom) in Diani Beach 5th row. Available for short-term holiday stays and long-term rental." />
+  <title>Beakim Apartments | Long-Term 1 & 2-Bedroom Residential Rentals in Diani</title>
+  <meta name="description" content="Long-term monthly rentals in Diani Beach. 1-bedroom apartments at KSh 15,000/month and 2-bedroom apartments at KSh 25,000/month with pool access and security." />
   <meta name="keywords" content="Beakim Apartments, Diani Beach apartments, 1 bedroom apartment Diani, 2 bedroom apartment Diani, long term rental Diani, holiday apartment Kenya" />
 
   <!-- Open Graph / Social Meta -->
-  <meta property="og:title" content="Beakim Apartments | 1 & 2 Bedroom Stays in Diani Beach" />
-  <meta property="og:description" content="20 Luxury Units (10 1-Bed & 10 2-Bed) across 2 apartment blocks. Short-term from KSh 2,500/night & flexible long-term leases." />
-  <meta property="og:image" content="assets/beakim-apartments-hero.jpg" />
-  <meta property="og:type" content="website" />
 
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'deep-forest': '#0D2318',
-            'canopy': '#1A3D28',
-            'moss': '#2C5A3A',
-            'champagne': '#B8965A',
-            'driftwood': '#D4B07A',
-            'ivory': '#F5F0E8',
-          },
-          fontFamily: {
-            display: ['Playfair Display', 'Georgia', 'serif'],
-            body: ['Inter', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- Custom Styling -->
-  <style>
-    html {
-      scroll-behavior: smooth;
-    }
-    body {
-      background-color: #0D2318;
-      color: #F5F0E8;
-    }
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0D2318;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #2C5A3A;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #B8965A;
-    }
-    @keyframes pulse-ring {
-      0% { transform: scale(0.95); opacity: 1; }
-      50% { transform: scale(1.1); opacity: 0.5; }
-      100% { transform: scale(0.95); opacity: 1; }
-    }
-    .pulse-indicator {
-      animation: pulse-ring 2s infinite;
-    }
-  </style>
+  <!-- Compiled Production CSS -->
+  <link rel="stylesheet" href="assets/css/styles.css" />
 
   <!-- Verbatim JSON-LD Schema -->
   <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LodgingBusiness",
-      "name": "Beakim Apartments | Beakim Hospitality Group",
-      "description": "Two modern apartment blocks featuring 20 units (10 1-Bedroom & 10 2-Bedroom) in Diani Beach 5th row. Available for short-term & long-term stay.",
-      "url": "https://beakimhospitality.com/beakim-apartments",
-      "telephone": "+254746938529",
-      "priceRange": "KES 2,500 - KES 3,500",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Ukunda-Diani Beach Road (5th Row)",
-        "addressLocality": "Diani Beach",
-        "addressRegion": "Kwale County",
-        "addressCountry": "KE"
-      }
-    }
+{
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  "name": "Beakim Apartments | Beakim Hospitality Group",
+  "description": "Gated residential community of 1 and 2-bedroom unfurnished apartments geared for long-term residency in Diani Beach, Kenya.",
+  "url": "https://beakim-landing.vercel.app/beakim-apartments",
+  "image": "https://beakim-landing.vercel.app/assets/beakim-apartments-hero.webp",
+  "telephone": "+254746938529",
+  "email": "info@beakimhospitality.com",
+  "priceRange": "KES 15,000 - KES 25,000 / month",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "5th Row, Near Ukunda Airstrip",
+    "addressLocality": "Diani Beach",
+    "addressRegion": "Kwale County",
+    "addressCountry": "KE"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -4.284,
+    "longitude": 39.578
+  }
+}
   </script>
 
   <!-- Firebase App & Firestore SDKs -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="assets/js/catalog.js" defer></script>
   <script src="assets/js/main.js" defer></script>
+  <link rel="canonical" href="https://beakim-landing.vercel.app/beakim-apartments" />
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://beakim-landing.vercel.app/beakim-apartments" />
+  <meta property="og:title" content="Beakim Apartments | Long-Term 1 & 2-Bedroom Residential Rentals in Diani" />
+  <meta property="og:description" content="Long-term monthly rentals in Diani Beach. 1-bedroom apartments at KSh 15,000/month and 2-bedroom apartments at KSh 25,000/month with pool access and security." />
+  <meta property="og:image" content="https://beakim-landing.vercel.app/assets/beakim-apartments-hero.webp" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Beakim Apartments | Long-Term 1 & 2-Bedroom Residential Rentals in Diani" />
+  <meta name="twitter:description" content="Long-term monthly rentals in Diani Beach. 1-bedroom apartments at KSh 15,000/month and 2-bedroom apartments at KSh 25,000/month with pool access and security." />
+  <meta name="twitter:image" content="https://beakim-landing.vercel.app/assets/beakim-apartments-hero.webp" />
 </head>
 <body class="font-body font-light antialiased overflow-x-hidden">
+
+  <!-- Skip to Main Content Link (WCAG 2.1 AA) -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-champagne focus:text-deep-forest focus:font-semibold focus:rounded-md focus:shadow-lg focus:outline-none">
+    Skip to main content
+  </a>
+
 
   <!-- FLOATING ACTIONS -->
   <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
@@ -124,7 +94,7 @@
   <header class="fixed top-0 left-0 right-0 z-40 bg-deep-forest/90 backdrop-blur-md border-b border-champagne/15 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <a class="flex items-center gap-3 group" href="index.html">
-        <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" />
+        <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" / decoding="async" loading="lazy">
         <div class="flex flex-col">
           <span class="font-display text-base tracking-wider text-ivory leading-none font-semibold group-hover:text-champagne transition duration-300">BEAKIM</span>
           <span class="text-[9px] tracking-widest text-champagne uppercase mt-0.5">Beakim Apartments</span>
@@ -141,10 +111,11 @@
     </div>
   </header>
 
+  <main id="main-content">
   <!-- HERO SECTION -->
   <section class="relative min-h-[90vh] md:min-h-screen flex items-center pt-24 overflow-hidden">
     <div class="absolute inset-0 z-0">
-      <img src="assets/beakim-apartments-hero.jpg" alt="Beakim Apartments Hero" class="w-full h-full object-cover brightness-[0.7]" />
+      <img src="assets/beakim-apartments-hero.webp" alt="Beakim Apartments Hero" class="w-full h-full object-cover brightness-[0.7]" / decoding="async" fetchpriority="high">
       <div class="absolute inset-0 bg-gradient-to-t from-deep-forest via-deep-forest/40 to-black/40"></div>
     </div>
 
@@ -208,7 +179,7 @@
         <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Option A • Short-Term Stays</span>
         <h3 class="font-display text-2xl text-ivory font-bold">Holiday & Short-Term Rentals</h3>
         <p class="text-xs text-ivory/70 leading-relaxed">
-          Book nightly stays starting at <strong class="text-champagne">KSh 2,500/night</strong> (1-Bedroom) and <strong class="text-champagne">KSh 3,500/night</strong> (2-Bedroom). Fully furnished with AC, high-speed Wi-Fi, kitchen, and pool access. Instant online reservation & WhatsApp confirmation.
+          Book nightly stays starting at <strong class="text-champagne">KSh 15,000 / month</strong> (1-Bedroom) and <strong class="text-champagne">KSh 25,000 / month</strong> (2-Bedroom). Fully furnished with AC, high-speed Wi-Fi, kitchen, and pool access. Instant online reservation & WhatsApp confirmation.
         </p>
         <a href="#booking" class="inline-block text-xs font-semibold uppercase tracking-wider text-champagne hover:text-driftwood transition">
           Book Short-Term Stay &rarr;
@@ -291,7 +262,7 @@
           <div class="pt-2 flex flex-wrap gap-4 items-center">
             <a href="#booking" onclick="selectUnit('Beakim Apartments (1-Bedroom Unit)')" 
                class="bg-champagne hover:bg-driftwood text-deep-forest px-8 py-3.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 shadow-md">
-              Book Short-Term (KSh 2,500/night)
+              Book Short-Term (KSh 15,000 / month)
             </a>
             <a href="tel:+254746938529" 
                class="border border-ivory/30 hover:border-champagne text-ivory hover:text-champagne px-6 py-3.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300">
@@ -302,8 +273,8 @@
 
         <div class="lg:col-span-5">
           <div class="relative h-72 md:h-96 rounded-xl overflow-hidden shadow-xl group border border-champagne/20 cursor-pointer"
-               onclick="openLightbox('assets/beakim-apartments-one-bed.jpg', '1-Bedroom Apartment Interior & Balcony')">
-            <img src="assets/beakim-apartments-one-bed.jpg" alt="1-Bedroom Apartment" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+               onclick="openLightbox('assets/beakim-apartments-one-bed.webp', '1-Bedroom Apartment Interior & Balcony')">
+            <img src="assets/beakim-apartments-one-bed.webp" alt="1-Bedroom Apartment" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" / decoding="async" loading="lazy">
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
               <span class="text-xs text-ivory font-medium">Click to view full photo</span>
             </div>
@@ -316,20 +287,20 @@
         <h4 class="text-xs font-semibold uppercase tracking-widest text-driftwood">1-Bedroom Apartments Gallery</h4>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
-               onclick="openLightbox('assets/beakim-apartments-one-bed.jpg', '1-Bedroom Living Lounge & Balcony')">
-            <img src="assets/beakim-apartments-one-bed.jpg" alt="1-Bedroom Living Lounge" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+               onclick="openLightbox('assets/beakim-apartments-one-bed.webp', '1-Bedroom Living Lounge & Balcony')">
+            <img src="assets/beakim-apartments-one-bed.webp" alt="1-Bedroom Living Lounge" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" / decoding="async" loading="lazy">
           </div>
           <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
-               onclick="openLightbox('assets/beakim-apartments-hero.jpg', 'Apartment Block Compound')">
-            <img src="assets/beakim-apartments-hero.jpg" alt="Apartment Block Compound" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+               onclick="openLightbox('assets/beakim-apartments-hero.webp', 'Apartment Block Compound')">
+            <img src="assets/beakim-apartments-hero.webp" alt="Apartment Block Compound" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" / decoding="async" loading="lazy">
           </div>
           <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
-               onclick="openLightbox('assets/beakim-apartments-pool.jpg', 'Resort Swimming Pool Access')">
-            <img src="assets/beakim-apartments-pool.jpg" alt="Resort Swimming Pool Access" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+               onclick="openLightbox('assets/beakim-apartments-pool.webp', 'Resort Swimming Pool Access')">
+            <img src="assets/beakim-apartments-pool.webp" alt="Resort Swimming Pool Access" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" / decoding="async" loading="lazy">
           </div>
           <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
-               onclick="openLightbox('assets/beakim-apartments-two-bed.jpg', 'Modern Open Plan Kitchen & Dining')">
-            <img src="assets/beakim-apartments-two-bed.jpg" alt="Modern Open Plan Kitchen" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+               onclick="openLightbox('assets/beakim-apartments-two-bed.webp', 'Modern Open Plan Kitchen & Dining')">
+            <img src="assets/beakim-apartments-two-bed.webp" alt="Modern Open Plan Kitchen" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" / decoding="async" loading="lazy">
           </div>
         </div>
       </div>
@@ -381,7 +352,7 @@
           <div class="pt-2 flex flex-wrap gap-4 items-center">
             <a href="#booking" onclick="selectUnit('Beakim Apartments (2-Bedroom Unit)')" 
                class="bg-champagne hover:bg-driftwood text-deep-forest px-8 py-3.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 shadow-md">
-              Book Short-Term (KSh 3,500/night)
+              Book Short-Term (KSh 25,000 / month)
             </a>
             <a href="tel:+254746938529" 
                class="border border-ivory/30 hover:border-champagne text-ivory hover:text-champagne px-6 py-3.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300">
@@ -392,8 +363,8 @@
 
         <div class="lg:col-span-5">
           <div class="relative h-72 md:h-96 rounded-xl overflow-hidden shadow-xl group border border-champagne/20 cursor-pointer"
-               onclick="openLightbox('assets/beakim-apartments-two-bed.jpg', '2-Bedroom Living Lounge & Dining')">
-            <img src="assets/beakim-apartments-two-bed.jpg" alt="2-Bedroom Apartment" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+               onclick="openLightbox('assets/beakim-apartments-two-bed.webp', '2-Bedroom Living Lounge & Dining')">
+            <img src="assets/beakim-apartments-two-bed.webp" alt="2-Bedroom Apartment" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" / decoding="async" loading="lazy">
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
               <span class="text-xs text-ivory font-medium">Click to view full photo</span>
             </div>
@@ -406,20 +377,20 @@
         <h4 class="text-xs font-semibold uppercase tracking-widest text-driftwood">2-Bedroom Apartments Gallery</h4>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
-               onclick="openLightbox('assets/beakim-apartments-two-bed.jpg', '2-Bedroom Living & Dining Suite')">
-            <img src="assets/beakim-apartments-two-bed.jpg" alt="2-Bedroom Living Suite" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+               onclick="openLightbox('assets/beakim-apartments-two-bed.webp', '2-Bedroom Living & Dining Suite')">
+            <img src="assets/beakim-apartments-two-bed.webp" alt="2-Bedroom Living Suite" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" / decoding="async" loading="lazy">
           </div>
           <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
-               onclick="openLightbox('assets/beakim-apartments-hero.jpg', 'Apartment Building Exterior')">
-            <img src="assets/beakim-apartments-hero.jpg" alt="Apartment Building Exterior" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+               onclick="openLightbox('assets/beakim-apartments-hero.webp', 'Apartment Building Exterior')">
+            <img src="assets/beakim-apartments-hero.webp" alt="Apartment Building Exterior" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" / decoding="async" loading="lazy">
           </div>
           <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
-               onclick="openLightbox('assets/beakim-apartments-one-bed.jpg', 'Master Bedroom Suite')">
-            <img src="assets/beakim-apartments-one-bed.jpg" alt="Master Bedroom Suite" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+               onclick="openLightbox('assets/beakim-apartments-one-bed.webp', 'Master Bedroom Suite')">
+            <img src="assets/beakim-apartments-one-bed.webp" alt="Master Bedroom Suite" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" / decoding="async" loading="lazy">
           </div>
           <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
-               onclick="openLightbox('assets/beakim-apartments-pool.jpg', 'Resort Swimming Pool & Sun Loungers')">
-            <img src="assets/beakim-apartments-pool.jpg" alt="Resort Swimming Pool" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+               onclick="openLightbox('assets/beakim-apartments-pool.webp', 'Resort Swimming Pool & Sun Loungers')">
+            <img src="assets/beakim-apartments-pool.webp" alt="Resort Swimming Pool" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" / decoding="async" loading="lazy">
           </div>
         </div>
       </div>
@@ -452,10 +423,10 @@
   </section>
 
   <!-- LIGHTBOX MODAL -->
-  <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4">
-    <button onclick="closeLightbox()" class="absolute top-6 right-6 text-ivory/80 hover:text-champagne text-3xl font-bold transition">&times;</button>
+  <div id="lightbox-modal" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4">
+    <button id="lightbox-close-btn" type="button" onclick="closeLightbox()" aria-label="Close image preview" class="absolute top-6 right-6 text-ivory/80 hover:text-champagne text-3xl font-bold transition p-2 focus:outline-none focus:ring-2 focus:ring-champagne rounded">&times;</button>
     <div class="max-w-5xl w-full text-center space-y-4">
-      <img id="lightbox-img" src="" alt="Gallery Image" class="max-h-[80vh] mx-auto rounded-lg shadow-2xl object-contain border border-champagne/20" />
+      <img id="lightbox-img" src="" alt="Gallery Image preview" class="max-h-[80vh] mx-auto rounded-lg shadow-2xl object-contain border border-champagne/20" / decoding="async" loading="lazy">
       <p id="lightbox-title" class="text-sm font-display text-champagne uppercase tracking-widest"></p>
     </div>
   </div>
@@ -496,17 +467,17 @@
                   <option value="+49">🇩🇪 +49</option>
                 </select>
                 <input type="tel" id="guest-phone-number" required placeholder="712 345 678"
-                       class="flex-1 bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+                       class="flex-1 min-w-0 bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
               </div>
             </div>
 
             <div class="flex flex-col gap-1.5 col-span-1 md:col-span-2">
               <label for="booking-property" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Select Apartment Unit</label>
-              <select id="booking-property" required onchange="updatePriceCalculation()"
-                      class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition cursor-pointer">
-                <option value="Beakim Apartments (1-Bedroom Unit)">Beakim Apartments (1-Bedroom Unit) — KSh 2,500/night</option>
-                <option value="Beakim Apartments (2-Bedroom Unit)">Beakim Apartments (2-Bedroom Unit) — KSh 3,500/night</option>
-              </select>
+                        <select id="booking-property" required onchange="updatePriceCalculation()"
+                  class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition cursor-pointer">
+            <option value="Beakim Apartments - 1-Bedroom (Monthly Lease)">1-Bedroom Apartment - KSh 15,000 / month (10 Units)</option>
+            <option value="Beakim Apartments - 2-Bedroom (Monthly Lease)">2-Bedroom Apartment - KSh 25,000 / month (10 Units)</option>
+          </select>
             </div>
 
             <div class="flex flex-col gap-1.5">
@@ -593,11 +564,13 @@
     </div>
   </section>
 
+  </main>
+
   <!-- FOOTER -->
   <footer class="bg-deep-forest border-t border-champagne/15 py-12 text-xs text-ivory/60">
     <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
       <div class="flex items-center gap-3">
-        <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain" />
+        <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain" / decoding="async" loading="lazy">
         <div>
           <div class="font-display text-sm text-ivory font-semibold">BEAKIM HOSPITALITY GROUP</div>
           <div class="text-[10px] text-champagne uppercase">Beakim Apartments — Diani Beach, Kenya</div>
@@ -615,98 +588,5 @@
   </footer>
 
   <!-- SCRIPT -->
-  <script>
-    function openLightbox(src, title) {
-      document.getElementById('lightbox-img').src = src;
-      document.getElementById('lightbox-title').innerText = title;
-      document.getElementById('lightbox-modal').classList.remove('hidden');
-      document.getElementById('lightbox-modal').classList.add('flex');
-    }
-
-    function closeLightbox() {
-      document.getElementById('lightbox-modal').classList.add('hidden');
-      document.getElementById('lightbox-modal').classList.remove('flex');
-    }
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeLightbox();
-    });
-
-    function selectUnit(unitValue) {
-      const selectEl = document.getElementById('booking-property');
-      if (selectEl) {
-        selectEl.value = unitValue;
-        updatePriceCalculation();
-      }
-    }
-
-    function updatePriceCalculation() {
-      const property = document.getElementById('booking-property').value;
-      const checkInVal = document.getElementById('check-in').value;
-      const checkOutVal = document.getElementById('check-out').value;
-      
-      let rate = 2500;
-      if (property.includes("2-Bedroom")) rate = 3500;
-      else if (property.includes("1-Bedroom")) rate = 2500;
-
-      let nights = 1;
-      if (checkInVal && checkOutVal) {
-        const d1 = new Date(checkInVal);
-        const d2 = new Date(checkOutVal);
-        const diffTime = d2 - d1;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        if (diffDays > 0) nights = diffDays;
-      }
-
-      const total = rate * nights;
-      document.getElementById('summary-unit-name').innerText = property;
-      document.getElementById('summary-rate').innerText = 'KSh ' + rate.toLocaleString();
-      document.getElementById('summary-nights').innerText = nights + (nights === 1 ? ' Night' : ' Nights');
-      document.getElementById('summary-total').innerText = 'KSh ' + total.toLocaleString();
-    }
-
-    function handleBookingSubmit(e) {
-      e.preventDefault();
-      const name = document.getElementById('guest-name').value;
-      const email = document.getElementById('guest-email').value;
-      const code = document.getElementById('country-code').value;
-      const phone = document.getElementById('guest-phone-number').value;
-      const property = document.getElementById('booking-property').value;
-      const checkIn = document.getElementById('check-in').value;
-      const checkOut = document.getElementById('check-out').value;
-      const guests = document.getElementById('num-guests').value;
-      const total = document.getElementById('summary-total').innerText;
-
-      const message = `Hello Beakim Hospitality Group! I would like to book a short-term stay at Beakim Apartments.%0A%0A` +
-        `*Guest Name:* ${name}%0A` +
-        `*Email:* ${email}%0A` +
-        `*Phone:* ${code}${phone}%0A` +
-        `*Apartment Unit:* ${property}%0A` +
-        `*Check-In:* ${checkIn}%0A` +
-        `*Check-Out:* ${checkOut}%0A` +
-        `*Guests:* ${guests}%0A` +
-        `*Estimated Total:* ${total}%0A%0A` +
-        `Please confirm availability and booking details. Thank you!`;
-
-      const whatsappUrl = `https://wa.me/254746938529?text=${message}`;
-      window.open(whatsappUrl, '_blank');
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const today = new Date();
-      const tomorrow = new Date(today);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      const dayAfter = new Date(today);
-      dayAfter.setDate(dayAfter.getDate() + 2);
-
-      const checkInInput = document.getElementById('check-in');
-      const checkOutInput = document.getElementById('check-out');
-      if (checkInInput && checkOutInput) {
-        checkInInput.value = tomorrow.toISOString().split('T')[0];
-        checkOutInput.value = dayAfter.toISOString().split('T')[0];
-        updatePriceCalculation();
-      }
-    });
-  </script>
-</body>
+  </body>
 </html>

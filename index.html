@@ -4,112 +4,48 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- SEO Optimization Meta Tags -->
-  <title>Beakim Hospitality Group | Budget Luxury Accommodations Diani Beach</title>
-  <meta name="description" content="Looking for affordable apartments and cottages in Diani Beach? Beakim Hospitality Group offers budget-friendly luxury stays starting at KSh 1,500/night. Book your secure, family-friendly stay today!" />
+  <title>Beakim Hospitality Group | Luxury Cottages & Holiday Apartments in Diani Beach</title>
+  <meta name="description" content="Experience serene coastal living at Beakim Hospitality in Diani Beach, Kenya. Verified studio rooms, 2-bedroom cottages, and luxury apartments from KSh 2,000/night." />
   <meta name="keywords" content="Diani Beach, Ukunda, Beakim Hospitality Group, Diani cottages, Diani apartments, budget luxury, family accommodation, Kenya coast stays" />
   
   <!-- Open Graph / Social Meta -->
-  <meta property="og:title" content="Beakim Hospitality Group | Budget Luxury Accommodations Diani Beach" />
-  <meta property="og:description" content="Secure, cozy, and affordable luxury cottages & apartments in Diani Beach starting from KSh 1,500/night." />
-  <meta property="og:image" content="assets/hero-bg.png" />
-  <meta property="og:type" content="website" />
   
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
   
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'deep-forest': '#0D2318',
-            'canopy': '#1A3D28',
-            'moss': '#2C5A3A',
-            'champagne': '#B8965A',
-            'driftwood': '#D4B07A',
-            'ivory': '#F5F0E8',
-          },
-          fontFamily: {
-            display: ['Playfair Display', 'Georgia', 'serif'],
-            body: ['Inter', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
-  
-  <!-- Custom Styling for Fine-Tuned Luxury Aesthetics -->
-  <style>
-    html {
-      scroll-behavior: smooth;
-    }
-    body {
-      background-color: #0D2318;
-      color: #F5F0E8;
-    }
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0D2318;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #2C5A3A;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #B8965A;
-    }
-    /* Diagonal Fine-Line Pattern */
-    .bg-pattern {
-      background-image: repeating-linear-gradient(
-        45deg,
-        rgba(184, 150, 90, 0.05) 0px,
-        rgba(184, 150, 90, 0.05) 1px,
-        transparent 1px,
-        transparent 12px
-      );
-    }
-  </style>
+  <!-- Compiled Production CSS -->
+  <link rel="stylesheet" href="assets/css/styles.css" />
 
   <!-- JSON-LD Structured Data Schema for Local Business SEO -->
   
   <!-- JSON-LD Structured Data Schema with GPS Geo Coordinates for Local & AI SEO -->
   <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LodgingBusiness",
-      "name": "Beakim Hospitality Group",
-      "image": "https://beakimhospitality.com/assets/hero-bg.png",
-      "description": "Budget luxury cottages and apartments in Diani Beach, Kenya, featuring resort swimming pools, AC, high-speed Wi-Fi, and 24/7 gated security.",
-      "url": "https://beakimhospitality.com/",
-      "telephone": "+254746938529",
-      "priceRange": "KES 1,500 - KES 5,000",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Ukunda-Diani Beach Road",
-        "addressLocality": "Diani Beach",
-        "addressRegion": "Kwale County",
-        "addressCountry": "KE"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": "-4.2796",
-        "longitude": "39.5936"
-      },
-      "amenityFeature": [
-        { "@type": "LocationFeatureSpecification", "name": "Resort Swimming Pools", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "Free High-Speed Wi-Fi", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "Air Conditioning", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "24/7 Guarded & Gated Security", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "Free Private Parking", "value": true }
-      ]
-    }
+{
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  "name": "Beakim Hospitality Group",
+  "description": "Premium collection of holiday cottages, vacation studios, and long-term residential apartments in Diani Beach, Kenya.",
+  "url": "https://beakim-landing.vercel.app/",
+  "logo": "https://beakim-landing.vercel.app/assets/logo-monogram.png",
+  "image": "https://beakim-landing.vercel.app/assets/hero-bg.png",
+  "telephone": "+254746938529",
+  "email": "info@beakimhospitality.com",
+  "priceRange": "KES 2,000 - KES 5,000",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Diani Beach Road",
+    "addressLocality": "Diani Beach",
+    "addressRegion": "Kwale County",
+    "addressCountry": "KE"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -4.2796,
+    "longitude": 39.5936
+  }
+}
   </script>
 
 
@@ -155,9 +91,28 @@
   }
   </script>
 
+  <script src="assets/js/catalog.js" defer></script>
   <script src="assets/js/main.js" defer></script>
+  <link rel="canonical" href="https://beakim-landing.vercel.app/" />
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://beakim-landing.vercel.app/" />
+  <meta property="og:title" content="Beakim Hospitality Group | Luxury Cottages & Holiday Apartments in Diani Beach" />
+  <meta property="og:description" content="Experience serene coastal living at Beakim Hospitality in Diani Beach, Kenya. Verified studio rooms, 2-bedroom cottages, and luxury apartments from KSh 2,000/night." />
+  <meta property="og:image" content="https://beakim-landing.vercel.app/assets/hero-bg.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Beakim Hospitality Group | Luxury Cottages & Holiday Apartments in Diani Beach" />
+  <meta name="twitter:description" content="Experience serene coastal living at Beakim Hospitality in Diani Beach, Kenya. Verified studio rooms, 2-bedroom cottages, and luxury apartments from KSh 2,000/night." />
+  <meta name="twitter:image" content="https://beakim-landing.vercel.app/assets/hero-bg.png" />
 </head>
 <body class="font-body font-light antialiased overflow-x-hidden">
+
+  <!-- Skip to Main Content Link (WCAG 2.1 AA) -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-champagne focus:text-deep-forest focus:font-semibold focus:rounded-md focus:shadow-lg focus:outline-none">
+    Skip to main content
+  </a>
+
 
   <!-- â”€â”€ FLOATING ELEMENTS (BOTTOM-RIGHT) â”€â”€ -->
   <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
@@ -183,7 +138,7 @@
   <header class="fixed top-0 left-0 right-0 z-40 bg-deep-forest/90 backdrop-blur-md border-b border-champagne/15 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <a class='flex items-center gap-3 group' href='index.html'>
-        <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" />
+        <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" / decoding="async" loading="lazy">
         <div class="flex flex-col">
           <span class="font-display text-base tracking-wider text-ivory leading-none font-semibold group-hover:text-champagne transition duration-300">BEAKIM</span>
           <span class="text-[9px] tracking-widest text-champagne uppercase mt-0.5">Hospitality Group</span>
@@ -216,11 +171,13 @@
     </div>
   </header>
 
+  <main id="main-content">
+
   <!-- â”€â”€ HERO SECTION â”€â”€ -->
   <section class="relative min-h-[90vh] md:min-h-screen flex items-center pt-24 overflow-hidden">
     <!-- Background Image -->
     <div class="absolute inset-0 z-0">
-      <img src="assets/hero-bg.png" alt="Diani Beach Aerial View" class="w-full h-full object-cover brightness-[0.4]" />
+      <img src="assets/hero-bg.png" alt="Diani Beach Aerial View" class="w-full h-full object-cover brightness-[0.4]" / decoding="async" loading="lazy">
       <div class="absolute inset-0 bg-gradient-to-r from-deep-forest via-deep-forest/70 to-transparent"></div>
     </div>
 
@@ -324,7 +281,7 @@
       <div class="bg-canopy/40 border border-champagne/10 rounded-xl overflow-hidden shadow-lg transition duration-300 hover:scale-[1.01] hover:border-champagne/30 flex flex-col justify-between">
         <div>
           <div class="relative h-64 overflow-hidden bg-deep-forest">
-            <img src="assets/property-tower.png" alt="Tower Cottages" class="w-full h-full object-cover" />
+            <img src="assets/property-tower.png" alt="Tower Cottages" class="w-full h-full object-cover" / decoding="async" loading="lazy">
             <div class="absolute bottom-4 left-4 bg-deep-forest/90 text-champagne px-3 py-1 rounded text-xs font-semibold tracking-wider">
               FROM KSh 1,500 / NIGHT
             </div>
@@ -352,7 +309,7 @@
       <div class="bg-canopy/40 border border-champagne/10 rounded-xl overflow-hidden shadow-lg transition duration-300 hover:scale-[1.01] hover:border-champagne/30 flex flex-col justify-between">
         <div>
           <div class="relative h-64 overflow-hidden bg-deep-forest">
-            <img src="assets/property-darad.png" alt="Beakim Darad" class="w-full h-full object-cover" />
+            <img src="assets/property-darad.png" alt="Beakim Darad" class="w-full h-full object-cover" / decoding="async" loading="lazy">
             <div class="absolute bottom-4 left-4 bg-deep-forest/90 text-champagne px-3 py-1 rounded text-xs font-semibold tracking-wider">
               KSh 1,500 — KSh 4,000 / NIGHT
             </div>
@@ -384,7 +341,7 @@
       <div class="bg-canopy/40 border border-champagne/10 rounded-xl overflow-hidden shadow-lg transition duration-300 hover:scale-[1.01] hover:border-champagne/30 flex flex-col justify-between">
         <div>
           <div class="relative h-64 overflow-hidden bg-deep-forest">
-            <img src="assets/property-darling.jpg" alt="Diani Darling Cottages" class="w-full h-full object-cover" />
+            <img src="assets/property-darling.jpg" alt="Diani Darling Cottages" class="w-full h-full object-cover" / decoding="async" loading="lazy">
             <div class="absolute bottom-4 left-4 bg-deep-forest/90 text-champagne px-3 py-1 rounded text-xs font-semibold tracking-wider">
               FROM KSh 5,000 / NIGHT
             </div>
@@ -412,7 +369,7 @@
       <div class="bg-canopy/40 border border-champagne/10 rounded-xl overflow-hidden shadow-lg transition duration-300 hover:scale-[1.01] hover:border-champagne/30 flex flex-col justify-between">
         <div>
           <div class="relative h-64 overflow-hidden bg-deep-forest">
-            <img src="assets/beakim-apartments-hero.jpg" alt="Beakim Apartments" class="w-full h-full object-cover" />
+            <img src="assets/beakim-apartments-hero.webp" alt="Beakim Apartments" class="w-full h-full object-cover" / decoding="async" loading="lazy">
             <div class="absolute bottom-4 left-4 bg-deep-forest/90 text-champagne px-3 py-1 rounded text-xs font-semibold tracking-wider">
               KSh 2,500 — KSh 3,500 / NIGHT
             </div>
@@ -615,31 +572,33 @@
         <div id="tab-tower" class="tab-panel space-y-3">
           <div class="flex justify-between items-center border-b border-champagne/10 pb-2">
             <span class="text-sm font-semibold text-ivory font-display">Tower Cottages</span>
-            <span class="text-xs text-driftwood">KSh 1,500 / night</span>
+            <span class="text-xs text-driftwood">KSh 2,500 / night (3 Units Available)</span>
           </div>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-            <div><span class="text-ivory/50 block">Layout</span><strong>2-Bed Apartments</strong></div>
-            <div><span class="text-ivory/50 block">Kitchen</span><strong>Kitchenette Included</strong></div>
-            <div><span class="text-ivory/50 block">Location</span><strong>Behind Naivas Ukunda</strong></div>
-            <div><span class="text-ivory/50 block">Gated Compound</span><strong>Manned Guard &amp; CCTV</strong></div>
+            <div><span class="text-ivory/50 block">Layout</span><strong>2-Bedroom Apartments</strong></div>
+            <div><span class="text-ivory/50 block">Kitchen</span><strong>Fully Equipped Kitchen</strong></div>
+            <div><span class="text-ivory/50 block">Compound</span><strong>Gated Private Parking</strong></div>
+            <div><span class="text-ivory/50 block">Location</span><strong>30s to Naivas Ukunda</strong></div>
           </div>
         </div>
+      </div>
 
-        <!-- Beakim Darad -->
+      <!-- Beakim Darad -->
         <div id="tab-darad" class="tab-panel hidden space-y-3">
           <div class="flex justify-between items-center border-b border-champagne/10 pb-2">
             <span class="text-sm font-semibold text-ivory font-display">Beakim Darad</span>
-            <span class="text-xs text-driftwood">KSh 1,500 - KSh 4,000 / night</span>
+            <span class="text-xs text-driftwood">From KSh 2,000 - KSh 4,000 / night (28 Units Total)</span>
           </div>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-            <div><span class="text-ivory/50 block">Layout</span><strong>Rooms, Studios &amp; Cottages</strong></div>
-            <div><span class="text-ivory/50 block">Pools</span><strong>2 Swimming Pools</strong></div>
-            <div><span class="text-ivory/50 block">Kitchen</span><strong>Kitchen / Kitchenette (mostly)</strong></div>
-            <div><span class="text-ivory/50 block">Location</span><strong>Beach Road</strong></div>
+            <div><span class="text-ivory/50 block">Offerings</span><strong>4 Room &amp; Cottage Types</strong></div>
+            <div><span class="text-ivory/50 block">Pools</span><strong>2 Resort Swimming Pools</strong></div>
+            <div><span class="text-ivory/50 block">Comfort</span><strong>AC &amp; Non-AC Options</strong></div>
+            <div><span class="text-ivory/50 block">Location</span><strong>Diani Beach Road</strong></div>
           </div>
         </div>
+      </div>
 
-        <!-- Diani Darling Cottages -->
+      <!-- Diani Darling Cottages -->
         <div id="tab-darling" class="tab-panel hidden space-y-3">
           <div class="flex justify-between items-center border-b border-champagne/10 pb-2">
             <span class="text-sm font-semibold text-ivory font-display">Diani Darling Cottages</span>
@@ -657,18 +616,19 @@
         <div id="tab-beakim" class="tab-panel hidden space-y-3">
           <div class="flex justify-between items-center border-b border-champagne/10 pb-2">
             <span class="text-sm font-semibold text-ivory font-display">Beakim Apartments</span>
-            <span class="text-xs text-driftwood">KSh 5,000 / night</span>
+            <span class="text-xs text-driftwood">KSh 15,000 - 25,000 / month (20 Units Total)</span>
           </div>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-            <div><span class="text-ivory/50 block">Layout</span><strong>Luxury 2-Bed Apartments</strong></div>
-            <div><span class="text-ivory/50 block">Pools</span><strong>2 Swimming Pools</strong></div>
-            <div><span class="text-ivory/50 block">Kitchen</span><strong>Spacious Living &amp; Kitchen</strong></div>
-            <div><span class="text-ivory/50 block">Spaces</span><strong>Maximum Space &amp; Gardens</strong></div>
+            <div><span class="text-ivory/50 block">Model</span><strong>Long-Term Monthly Leases</strong></div>
+            <div><span class="text-ivory/50 block">Units</span><strong>10x 1-Bed &amp; 10x 2-Bed</strong></div>
+            <div><span class="text-ivory/50 block">Pool</span><strong>Resort Swimming Pool</strong></div>
+            <div><span class="text-ivory/50 block">Setting</span><strong>Quiet 5th Row Living</strong></div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Booking Form -->
+    <!-- Booking Form -->
       <form id="booking-form" onsubmit="handleBookingSubmit(event)" class="grid md:grid-cols-2 gap-6 text-sm">
         <div class="flex flex-col gap-1.5 col-span-2">
           <label for="guest-name" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Full Name</label>
@@ -703,21 +663,30 @@
               <option value="+81">🇯🇵 +81</option>
             </select>
             <input type="tel" id="guest-phone-number" required placeholder="712 345 678"
-                   class="flex-1 w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+                   class="flex-1 min-w-0 w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
           </div>
         </div>
 
         <div class="flex flex-col gap-1.5 col-span-2">
           <label for="booking-property" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Select Property</label>
-          <select id="booking-property" required onchange="handlePropertyChange()"
+                    <select id="booking-property" required onchange="handlePropertyChange()"
                   class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition cursor-pointer">
-            <option value="Tower Cottages">Tower Cottages - KSh 1,500/night</option>
-            <option value="Beakim Darad (Standard Room)">Beakim Darad (Standard Room) - KSh 1,500/night</option>
-            <option value="Beakim Darad (Deluxe Studio)">Beakim Darad (Deluxe Studio) - KSh 2,500/night</option>
-            <option value="Beakim Darad (1-Bedroom Unit)">Beakim Darad (1-Bedroom Unit) - KSh 4,000/night</option>
-            <option value="Diani Darling Cottages">Diani Darling Cottages - KSh 5,000/night</option>
-            <option value="Beakim Apartments (1-Bedroom Unit)">Beakim Apartments (1-Bedroom Unit) - KSh 2,500/night</option>
-            <option value="Beakim Apartments (2-Bedroom Unit)">Beakim Apartments (2-Bedroom Unit) - KSh 3,500/night</option>
+            <optgroup label="Beakim Darad (Diani Beach Rd - Nightly)">
+              <option value="Beakim Darad - Standard Studio Room (Without AC)">Beakim Darad: Standard Studio (No AC) - KSh 2,000/night</option>
+              <option value="Beakim Darad - Standard Studio Room (With AC)">Beakim Darad: Standard Studio (With AC) - KSh 2,500/night</option>
+              <option value="Beakim Darad - Deluxe Studio Room (With AC)">Beakim Darad: Deluxe Studio (With AC) - KSh 3,000/night</option>
+              <option value="Beakim Darad - 1-Bedroom Cottage (With AC)">Beakim Darad: 1-Bedroom Cottage (With AC) - KSh 4,000/night</option>
+            </optgroup>
+            <optgroup label="Tower Cottages (Near Naivas Ukunda - Nightly)">
+              <option value="Tower Cottages - 2-Bedroom Apartment">Tower Cottages: 2-Bedroom Apartment - KSh 2,500/night</option>
+            </optgroup>
+            <optgroup label="Diani Darling Cottages (Beach Rd - Nightly)">
+              <option value="Diani Darling Cottages - Deluxe Studio Room">Diani Darling: Deluxe Studio Room - KSh 5,000/night</option>
+            </optgroup>
+            <optgroup label="Beakim Apartments (5th Row - Monthly Residency)">
+              <option value="Beakim Apartments - 1-Bedroom (Monthly Lease)">Beakim Apartments: 1-Bedroom - KSh 15,000/month</option>
+              <option value="Beakim Apartments - 2-Bedroom (Monthly Lease)">Beakim Apartments: 2-Bedroom - KSh 25,000/month</option>
+            </optgroup>
           </select>
         </div>
 
@@ -1024,12 +993,14 @@
 
 
   <!-- â”€â”€ FOOTER â”€â”€ -->
+  </main>
+
   <footer class="bg-deep-forest border-t border-champagne/15 py-12">
     <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8 items-center">
       <!-- Left side -->
       <div class="space-y-4 text-center md:text-left">
         <a class='flex items-center gap-3 justify-center md:justify-start group' href='/'>
-          <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain transition duration-300 group-hover:scale-105" />
+          <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain transition duration-300 group-hover:scale-105" / decoding="async" loading="lazy">
           <span class="font-display text-base tracking-wider text-ivory group-hover:text-champagne transition duration-300">BEAKIM HOSPITALITY GROUP</span>
         </a>
         <p class="text-xs text-ivory/50">
@@ -1038,48 +1009,10 @@
         </p>
       </div>
 
-      <!-- Center social media icons -->
-      <div class="flex justify-center gap-6 text-champagne">
-        <!-- Facebook -->
-        <a href="#" class="hover:text-driftwood transition duration-300" title="Facebook">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-            <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/>
-          </svg>
-        </a>
-        <!-- Instagram -->
-        <a href="#" class="hover:text-driftwood transition duration-300" title="Instagram">
-          <svg class="w-5 h-5 fill-none stroke-current" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-          </svg>
-        </a>
-        <!-- TikTok -->
-        <a href="#" class="hover:text-driftwood transition duration-300" title="TikTok">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.59 4.23.95.8 2.07 1.39 3.29 1.72v3.74c-1.4-.17-2.77-.74-3.92-1.59-.03 2.87.03 5.75-.02 8.62-.05 1.52-.56 3.05-1.51 4.25-1.1 1.4-2.8 2.3-4.6 2.5-1.8.3-3.7-.2-5.1-1.3-1.6-1.1-2.6-3-2.6-5 0-1.8.8-3.6 2.2-4.7 1.3-1.1 3-1.6 4.7-1.4v3.6c-.9-.1-1.9.1-2.6.7-.7.6-1.1 1.5-1 2.5.1 1 .7 1.9 1.6 2.3.9.4 2 .3 2.7-.3.7-.6 1.1-1.6 1-2.6-.01-5.73-.01-11.45 0-17.18z"/>
-          </svg>
-        </a>
-        <!-- YouTube -->
-        <a href="#" class="hover:text-driftwood transition duration-300" title="YouTube">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-            <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.53 3.5 12 3.5 12 3.5s-7.53 0-9.388.555A3.003 3.003 0 0 0 .502 6.163C0 8.024 0 12 0 12s0 3.976.502 5.837a3.003 3.003 0 0 0 2.11 2.108C4.47 20.5 12 20.5 12 20.5s7.53 0 9.388-.555a3.003 3.003 0 0 0 2.11-2.108C24 15.976 24 12 24 12s0-3.976-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-          </svg>
-        </a>
-        <!-- X -->
-        <a href="#" class="hover:text-driftwood transition duration-300" title="X (Twitter)">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-          </svg>
-            <path d="M12.24 10.285V14.4h6.887c-.648 2.43-2.519 4.13-5.285 4.13-3.455 0-6.285-2.83-6.285-6.285s2.83-6.285 6.285-6.285c1.635 0 3.113.627 4.254 1.727l3.15-3.15C18.89 2.42 15.81 1 12.24 1 6.033 1 1 6.033 1 12.24s5.033 11.24 11.24 11.24c5.84 0 10.92-4.13 10.92-11.24 0-.768-.096-1.368-.24-1.956H12.24z"/>
-          </svg>
-        </a>
-      </div>
-
       <!-- Right side -->
       <div class="text-center md:text-right text-xs text-ivory/50 space-y-2">
         <p><strong>Contact Us:</strong> +254 746 938529</p>
-        <p><strong>Support Email:</strong> info@beakim.com</p>
+        <p><strong>Support Email:</strong> info@beakimhospitality.com</p>
         
       <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs text-ivory/60 pt-2 border-t border-champagne/10 mt-4">
         <a href="privacy-policy.html" class="hover:text-champagne transition">Privacy Policy</a>
@@ -1092,446 +1025,6 @@
     </div>
   </footer>
 
-  <!-- —— SUCCESS MODAL —— -->
-  <div id="success-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-deep-forest/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-    <div class="bg-canopy border border-champagne/30 rounded-2xl max-w-md w-full p-8 shadow-2xl space-y-6 text-center transform scale-95 transition-transform duration-300 overflow-y-auto max-h-[90vh]">
-      
-      <!-- Icon indicator -->
-      <div id="success-icon" class="mx-auto flex items-center justify-center w-16 h-16 rounded-full bg-champagne/10 border border-champagne text-champagne text-3xl font-bold">
-        ✓
-      </div>
-
-      <!-- General Title -->
-      <h3 id="success-title" class="font-display text-2xl font-bold text-ivory">Inquiry Sent</h3>
-
-      <!-- Dynamic Summary Card (Always visible) -->
-      <div class="bg-deep-forest/50 border border-champagne/15 rounded-xl p-5 text-left space-y-3 my-4">
-        <h4 class="text-xs font-semibold uppercase tracking-wider text-champagne border-b border-champagne/15 pb-1.5">Inquiry Summary</h4>
-        <div class="space-y-1.5 text-xs text-ivory/90">
-          <div class="flex justify-between"><span class="text-ivory/50">Property:</span> <span id="summary-property" class="font-semibold">-</span></div>
-          <div class="flex justify-between" id="summary-unit-container"><span class="text-ivory/50">Unit Type:</span> <span id="summary-unit" class="font-semibold">-</span></div>
-          <div class="flex justify-between"><span class="text-ivory/50">Stay Dates:</span> <span id="summary-dates" class="font-semibold">-</span></div>
-          <div class="flex justify-between"><span class="text-ivory/50">Guests:</span> <span id="summary-guests" class="font-semibold">-</span></div>
-          <div class="border-t border-champagne/10 pt-2 flex justify-between items-baseline">
-            <span class="text-ivory/50">Breakdown:</span>
-            <span id="summary-breakdown" class="text-[10px] text-ivory/70">-</span>
-          </div>
-          <div class="flex justify-between items-baseline">
-            <span class="text-champagne font-semibold">Total Stay Cost:</span>
-            <span id="summary-total" class="text-sm font-bold text-champagne">-</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Panel A: Available & Pending Payment -->
-      <div id="panel-payment" class="space-y-4 text-left hidden">
-        <div class="bg-emerald-950/30 border border-emerald-500/20 text-emerald-400 p-3 rounded-lg text-xs leading-relaxed">
-          <strong>Available!</strong> Secure your booking now by making your payment.
-        </div>
-        <div class="bg-deep-forest/30 border border-champagne/10 p-3 rounded-lg text-xs space-y-1.5 text-ivory/80">
-          <div>👉 <strong>Till Number:</strong> <span class="text-champagne font-bold text-sm">588365</span></div>
-          <div>👉 <strong>Account Name:</strong> <span class="text-champagne font-medium">Beakim Property Group</span></div>
-        </div>
-        <div class="flex flex-col gap-1.5">
-          <label for="mpesa-message" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Paste M-Pesa SMS Confirmation Message</label>
-          <textarea id="mpesa-message" placeholder="Paste the SMS message received from M-Pesa here..." rows="3"
-                    class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-2 text-ivory outline-none resize-none text-xs"></textarea>
-        </div>
-        <button type="button" onclick="submitMpesaCode()" class="w-full bg-champagne hover:bg-driftwood text-deep-forest py-3 rounded text-xs font-semibold tracking-widest uppercase transition duration-300">
-          Submit Payment Details
-        </button>
-      </div>
-
-      <!-- Panel B: Waitlisted (Unavailable) -->
-      <div id="panel-waitlist" class="space-y-4 hidden">
-        <p class="text-sm text-ivory/80 leading-relaxed">
-          One of our agents will get back to you within 15 minutes to confirm booking and provide payment instructions and details.
-        </p>
-        <button type="button" onclick="closeSuccessModal()" class="w-full bg-champagne hover:bg-driftwood text-deep-forest py-3 rounded text-xs font-semibold tracking-widest uppercase transition duration-300">
-          Got it, thank you!
-        </button>
-      </div>
-
-      <!-- Panel C: Pre-Confirmed -->
-      <div id="panel-preconfirmed" class="space-y-4 hidden">
-        <p class="text-sm text-emerald-400 leading-relaxed font-semibold">
-          Priority Booking Pre-Confirmed
-        </p>
-        <p class="text-xs text-ivory/80 leading-relaxed">
-          Your details and transaction code have been received. We will only contact you to send a final confirmation or if any payment issue needs to be addressed.
-        </p>
-        <button type="button" onclick="closeSuccessModal()" class="w-full bg-champagne hover:bg-driftwood text-deep-forest py-3 rounded text-xs font-semibold tracking-widest uppercase transition duration-300">
-          Done
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Firebase App & Firestore Compatibility SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
-  <!-- â”€â”€ JAVASCRIPT FOR LOGIC AND INTERACTION â”€â”€ -->
-  <script>
-    // Firebase Config (Replace with your actual Firebase config keys)
-    const firebaseConfig = {
-      apiKey: "AIzaSyDrp54AAhgTuKCfJHrHS5xJaT_rhELYdsY",
-      authDomain: "beakim-hospitality.firebaseapp.com",
-      projectId: "beakim-hospitality",
-      storageBucket: "beakim-hospitality.firebasestorage.app",
-      messagingSenderId: "626848144950",
-      appId: "1:626848144950:web:9d0b04bd190eb65de64297"
-    };
-
-    let db;
-    let activeBookingDocId = null;
-    let pendingWhatsAppUrl = "";
-
-    function checkAvailability(property, checkIn, checkOut, callback) {
-      let resolved = false;
-      const timeout = setTimeout(() => {
-        if (!resolved) {
-          resolved = true;
-          console.warn("Availability check timed out. Falling back to available.");
-          callback(true, false);
-        }
-      }, 1000); // 1-second timeout
-
-      if (!db) {
-        clearTimeout(timeout);
-        callback(true, false);
-        return;
-      }
-
-      db.collection("bookings")
-        .where("property", "==", property)
-        .get()
-        .then(querySnapshot => {
-          if (!resolved) {
-            resolved = true;
-            clearTimeout(timeout);
-            let activeOverlaps = 0;
-            let unpaidHoldsCount = 0;
-            querySnapshot.forEach(doc => {
-              const b = doc.data();
-              if (b.status === "Checked Out" || b.status === "Cancelled" || b.status === "Refunded") {
-                return;
-              }
-              if (b.checkIn < checkOut && b.checkOut > checkIn) {
-                activeOverlaps++;
-                if (b.status === "Pending Payment") {
-                  unpaidHoldsCount++;
-                }
-              }
-            });
-
-            let capacity = 999;
-            if (property === "Tower Cottages") {
-              capacity = 3;
-            } else if (property === "Diani Darling Cottages") {
-              capacity = 10;
-            } else if (property === "Beakim Apartments") {
-              capacity = 12;
-            } else if (property.includes("Standard Room")) {
-              capacity = 2;
-            } else if (property.includes("Deluxe Studio")) {
-              capacity = 2;
-            } else if (property.includes("2-Bedroom Cottage")) {
-              capacity = 1;
-            }
-
-            const isAvailable = activeOverlaps < capacity;
-            const hasUnpaidHolds = unpaidHoldsCount > 0;
-            callback(isAvailable, hasUnpaidHolds);
-          }
-        })
-        .catch(err => {
-          if (!resolved) {
-            resolved = true;
-            clearTimeout(timeout);
-            console.error("Availability check failed: ", err);
-            callback(true, false);
-          }
-        });
-    }
-
-    function submitMpesaCode() {
-      const mpesaMsg = document.getElementById('mpesa-message').value.trim();
-      if (!mpesaMsg) {
-        alert("Please paste your M-Pesa transaction confirmation message to continue.");
-        return;
-      }
-
-      if (db && activeBookingDocId) {
-        db.collection("bookings").doc(activeBookingDocId).update({
-          paymentRef: mpesaMsg,
-          status: "Priority Hold",
-          paymentStatus: "Partial"
-        }).then(() => {
-          console.log("M-Pesa payment info saved.");
-        }).catch(err => {
-          console.error("Error saving M-Pesa code:", err);
-        });
-      }
-
-      // Generate a new WhatsApp URL that contains the transaction message for convenience
-      const name = document.getElementById('guest-name').value || "";
-      const phoneCode = document.getElementById('guest-phone-code').value || "";
-      const phoneNum = document.getElementById('guest-phone-number').value || "";
-      const fullPhone = phoneCode + phoneNum;
-      
-      let property = "";
-      const propertyEl = document.getElementById('booking-property');
-      if (propertyEl) property = propertyEl.value;
-      else if (window.location.href.includes("diani-darling")) property = "Diani Darling Cottages";
-      else property = "Tower Cottages";
-
-      const checkIn = document.getElementById('check-in').value;
-      const checkOut = document.getElementById('check-out').value;
-      
-      const formatString = `⚡ PRIORITY BOOKING | BEAKIM HOSPITALITY ⚡\n\n• Guest Name: ${name}\n• Phone: ${fullPhone}\n• Property: ${property}\n• Check-In: ${checkIn}\n• Check-Out: ${checkOut}\n• M-Pesa Ref: ${mpesaMsg}`;
-      const encodedMsg = encodeURIComponent(formatString);
-      pendingWhatsAppUrl = `https://wa.me/254746938529?text=${encodedMsg}`;
-
-      document.getElementById('success-title').textContent = "Priority Pre-Confirmed";
-      document.getElementById('panel-payment').classList.add('hidden');
-      document.getElementById('panel-preconfirmed').classList.remove('hidden');
-    }
-    try {
-      if (firebaseConfig.apiKey !== "YOUR_API_KEY_HERE") {
-        firebase.initializeApp(firebaseConfig);
-        db = firebase.firestore();
-      } else {
-        console.warn("Firebase config placeholders are active. CRM auto-capture disabled.");
-      }
-    } catch (e) {
-      console.error("Firebase failed to initialize:", e);
-    }
-
-    // Set min date on check-in/out to today
-    window.addEventListener('DOMContentLoaded', () => {
-      const today = new Date().toISOString().split('T')[0];
-      document.getElementById('check-in').min = today;
-      document.getElementById('check-out').min = today;
-    });
-
-    // Tab switching for Comparison Engine
-    function switchTab(tabId) {
-      // Hide all panels
-      document.querySelectorAll('.tab-panel').forEach(panel => {
-        panel.classList.add('hidden');
-      });
-      // Show active panel
-      document.getElementById(tabId).classList.remove('hidden');
-
-      // Update button classes
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('bg-deep-forest', 'text-champagne', 'border-champagne/30');
-        btn.classList.add('bg-deep-forest/40', 'text-ivory/60', 'border-transparent');
-      });
-
-      // Match correct button and set active classes
-      let btnId = '';
-      if (tabId === 'tab-tower') btnId = 'btn-tab-tower';
-      else if (tabId === 'tab-darad') btnId = 'btn-tab-darad';
-      else if (tabId === 'tab-darling') btnId = 'btn-tab-darling';
-      else if (tabId === 'tab-beakim') btnId = 'btn-tab-beakim';
-
-      const activeBtn = document.getElementById(btnId);
-      if (activeBtn) {
-        activeBtn.classList.remove('bg-deep-forest/40', 'text-ivory/60', 'border-transparent');
-        activeBtn.classList.add('bg-deep-forest', 'text-champagne', 'border-champagne/30');
-      }
-
-      // Automatically align property select dropdown with tab
-      const selectEl = document.getElementById('booking-property');
-      if (tabId === 'tab-tower') selectEl.value = 'Tower Cottages';
-      else if (tabId === 'tab-darad') selectEl.value = 'Beakim Darad (Standard Room)';
-      else if (tabId === 'tab-darling') selectEl.value = 'Diani Darling Cottages';
-      else if (tabId === 'tab-beakim') selectEl.value = 'Beakim Apartments';
-    }
-
-    // Property card button handler
-    function selectProperty(propertyName) {
-      // Select the item in dropdown
-      const selectEl = document.getElementById('booking-property');
-      if (propertyName === 'Tower Cottages') {
-        selectEl.value = 'Tower Cottages';
-        switchTab('tab-tower');
-      } else if (propertyName === 'Beakim Darad') {
-        selectEl.value = 'Beakim Darad (Standard Room)';
-        switchTab('tab-darad');
-      } else if (propertyName === 'Diani Darling Cottages') {
-        selectEl.value = 'Diani Darling Cottages';
-        switchTab('tab-darling');
-      } else if (propertyName === 'Beakim Apartments') {
-        selectEl.value = 'Beakim Apartments';
-        switchTab('tab-beakim');
-      }
-    }
-
-    // Property dropdown change maps back to tab selection
-    function handlePropertyChange() {
-      const propertyVal = document.getElementById('booking-property').value;
-      if (propertyVal === 'Tower Cottages') {
-        switchTab('tab-tower');
-      } else if (propertyVal.includes('Beakim Darad')) {
-        switchTab('tab-darad');
-      } else if (propertyVal === 'Diani Darling Cottages') {
-        switchTab('tab-darling');
-      } else if (propertyVal === 'Beakim Apartments') {
-        switchTab('tab-beakim');
-      }
-    }
-
-    // Handle Form Submit (WhatsApp Inquiry workflow)
-    function handleBookingSubmit(event) {
-      event.preventDefault();
-
-      const name = document.getElementById('guest-name').value;
-      const phoneCode = document.getElementById('guest-phone-code').value;
-      const phoneNum = document.getElementById('guest-phone-number').value.trim();
-      const fullPhone = phoneCode + phoneNum;
-      const property = document.getElementById('booking-property').value;
-      const checkIn = document.getElementById('check-in').value;
-      const checkOut = document.getElementById('check-out').value;
-      const adults = document.getElementById('guests-adults').value;
-      const children = document.getElementById('guests-children').value;
-
-      // Validate check-out is after check-in
-      if (new Date(checkOut) <= new Date(checkIn)) {
-        alert("Check-Out date must be after Check-In date.");
-        return;
-      }
-
-      // Calculate pricing dynamically
-      let rate = 0;
-      if (property.includes("Diani Darling Cottages")) { rate = 5000; }
-      else if (property.includes("Tower Cottages")) { rate = 1500; }
-      else if (property.includes("Beakim Apartments")) { rate = 5000; }
-      else if (property.includes("Standard Room")) { rate = 1500; }
-      else if (property.includes("Deluxe Studio")) { rate = 2500; }
-      else if (property.includes("2-Bedroom Cottage")) { rate = 4000; }
-      else { rate = 1500; }
-
-      const checkInDate = new Date(checkIn);
-      const checkOutDate = new Date(checkOut);
-      const timeDiff = checkOutDate.getTime() - checkInDate.getTime();
-      const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
-      const totalPrice = nights > 0 ? rate * nights : 0;
-
-      // Populate success screen summary overview card
-      document.getElementById('summary-property').textContent = property;
-      const unitContainer = document.getElementById('summary-unit-container');
-      if (property.includes("Beakim Darad")) {
-        unitContainer.classList.remove('hidden');
-        const match = property.match(/\(([^)]+)\)/);
-        document.getElementById('summary-unit').textContent = match ? match[1] : 'Standard Room';
-      } else {
-        unitContainer.classList.add('hidden');
-      }
-
-      const formatDate = (dateStr) => {
-        const d = new Date(dateStr);
-        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      };
-      document.getElementById('summary-dates').textContent = `${formatDate(checkIn)} - ${formatDate(checkOut)}`;
-      document.getElementById('summary-guests').textContent = `${adults} Adults / ${children} Children`;
-      document.getElementById('summary-breakdown').textContent = `KSh ${rate.toLocaleString()} x ${nights} night${nights > 1 ? 's' : ''}`;
-      document.getElementById('summary-total').textContent = `KSh ${totalPrice.toLocaleString()}`;
-
-      // Query Firestore for overlaps and check availability
-      checkAvailability(property, checkIn, checkOut, (isAvailable, hasUnpaidHolds) => {
-        const leadStatus = isAvailable ? "Pending Payment" : "New Inquiry";
-        const isConflict = (!isAvailable && hasUnpaidHolds);
-
-        // Save lead to Firestore
-        if (db) {
-          db.collection("bookings").add({
-            name: name,
-            property: property,
-            phone: fullPhone,
-            checkIn: checkIn,
-            checkOut: checkOut,
-            adults: parseInt(adults) || 0,
-            children: parseInt(children) || 0,
-            status: leadStatus,
-            source: "Website Form",
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            paymentStatus: "Unpaid",
-            totalPrice: totalPrice,
-            payments: [],
-            isConflict: isConflict
-          }).then((docRef) => {
-            activeBookingDocId = docRef.id;
-            console.log("Captured lead doc id: " + docRef.id);
-          }).catch(err => {
-            console.error("Error writing lead:", err);
-          });
-        }
-
-        // Set up success modal panels
-        document.getElementById('panel-payment').classList.add('hidden');
-        document.getElementById('panel-waitlist').classList.add('hidden');
-        document.getElementById('panel-preconfirmed').classList.add('hidden');
-
-        if (isAvailable) {
-          document.getElementById('success-title').textContent = "Booking Request Available";
-          document.getElementById('panel-payment').classList.remove('hidden');
-          
-          // Default whatsapp payload (fallback if they close without submitting code)
-          const formatString = `⚡ NEW WEB INQUIRY | BEAKIM HOSPITALITY ⚡\n\n• Guest Name: ${name}\n• Phone: ${fullPhone}\n• Property: ${property}\n• Check-In: ${checkIn}\n• Check-Out: ${checkOut}\n• Estimated Total: KSh ${totalPrice.toLocaleString()}`;
-          pendingWhatsAppUrl = `https://wa.me/254746938529?text=${encodeURIComponent(formatString)}`;
-        } else if (hasUnpaidHolds) {
-          document.getElementById('success-title').textContent = "Priority Queue Active";
-          document.getElementById('panel-waitlist').classList.remove('hidden');
-          
-          // Show priority conflict waitlist copy
-          const descEl = document.querySelector('#panel-waitlist p');
-          if (descEl) {
-            descEl.innerHTML = `<strong>High Demand!</strong> We currently have a temporary unpaid hold on these dates. You have been placed in the priority queue. An agent will contact you shortly, and if the current hold is released, priority will go to you.`;
-          }
-          
-          const formatString = `⚡ PRIORITY WAITLIST INQUIRY | BEAKIM HOSPITALITY ⚡\n\n• Guest Name: ${name}\n• Phone: ${fullPhone}\n• Property: ${property}\n• Check-In: ${checkIn}\n• Check-Out: ${checkOut}\n• Status: Requesting Conflicting Dates (Unpaid Hold Alert)`;
-          pendingWhatsAppUrl = `https://wa.me/254746938529?text=${encodeURIComponent(formatString)}`;
-        } else {
-          document.getElementById('success-title').textContent = "Booking Request Received";
-          document.getElementById('panel-waitlist').classList.remove('hidden');
-          
-          const descEl = document.querySelector('#panel-waitlist p');
-          if (descEl) {
-            descEl.innerHTML = `One of our agents will get back to you within 15 minutes to confirm booking and provide payment instructions and details.`;
-          }
-
-          // Waitlist whatsapp payload
-          const formatString = `⚡ WAITLIST INQUIRY | BEAKIM HOSPITALITY ⚡\n\n• Guest Name: ${name}\n• Phone: ${fullPhone}\n• Property: ${property}\n• Check-In: ${checkIn}\n• Check-Out: ${checkOut}\n• Status: Requesting Alternative Dates`;
-          pendingWhatsAppUrl = `https://wa.me/254746938529?text=${encodeURIComponent(formatString)}`;
-        }
-
-        // Open Success Modal
-        const modal = document.getElementById('success-modal');
-        modal.classList.remove('hidden');
-        setTimeout(() => {
-          modal.classList.remove('opacity-0');
-          modal.querySelector('.transform').classList.remove('scale-95');
-        }, 10);
-      });
-    }
-
-    function closeSuccessModal() {
-      const modal = document.getElementById('success-modal');
-      modal.classList.add('opacity-0');
-      modal.querySelector('.transform').classList.add('scale-95');
-      setTimeout(() => {
-        modal.classList.add('hidden');
-        document.getElementById('booking-form').reset();
-        if (pendingWhatsAppUrl) {
-          window.open(pendingWhatsAppUrl, '_blank');
-        }
-      }, 300);
-    }
-  </script>
 </body>
 </html>
 

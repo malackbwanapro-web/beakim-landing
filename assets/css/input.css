@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: #0D2318;
+    color: #F5F0E8;
+  }
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0D2318;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2C5A3A;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #B8965A;
+  }
+}
+
+@layer utilities {
+  /* Diagonal Fine-Line Luxury Pattern */
+  .bg-pattern {
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(184, 150, 90, 0.05) 0px,
+      rgba(184, 150, 90, 0.05) 1px,
+      transparent 1px,
+      transparent 12px
+    );
+  }
+
+  /* Live Pulse Animation */
+  @keyframes pulse-light {
+    0%, 100% { transform: scale(1); opacity: 0.75; }
+    50% { transform: scale(1.4); opacity: 0; }
+  }
+  .pulse-indicator {
+    animation: pulse-light 2s infinite;
+  }
+}
