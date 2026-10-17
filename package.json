@@ -4,8 +4,8 @@
   "description": "Beakim Hospitality Group - Public Website",
   "main": "assets/js/main.js",
   "scripts": {
-    "build:css": "tailwindcss -i ./assets/css/input.css -o ./assets/css/styles.css --minify",
-    "watch:css": "tailwindcss -i ./assets/css/input.css -o ./assets/css/styles.css --watch",
+    "build:css": "npx tailwindcss -i ./assets/css/input.css -o ./assets/css/styles.css --minify",
+    "watch:css": "npx tailwindcss -i ./assets/css/input.css -o ./assets/css/styles.css --watch",
     "build": "npm run build:css"
   },
   "repository": {
@@ -20,7 +20,7 @@
   ],
   "author": "Beakim Hospitality Group",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "tailwindcss": "^3.4.17"
   }
 }
