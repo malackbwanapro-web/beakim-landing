@@ -217,6 +217,13 @@ function buildInquiryMessage({ guestName, contactPhone, guestEmail, propertyName
 // ── 4. HIGH-LEVEL FORM COORDINATORS (STEPDOWN RULE) ──
 
 /**
+ * Backward-compatible alias for cottage-specific booking forms.
+ */
+function handleCottageSubmit(event) {
+  return handleBookingSubmit(event);
+}
+
+/**
  * Primary booking inquiry form submit handler.
  * Validates, serializes, and displays review modal.
  */
@@ -228,7 +235,11 @@ function handleBookingSubmit(event) {
   const formData = extractBookingFormData();
   const validationError = validateBookingFormData(formData);
   if (validationError) {
-    alert(validationError.message);
+    if (typeof showToast === "function") {
+      showToast(validationError.message, 4500);
+    } else {
+      alert(validationError.message);
+    }
     if (validationError.fieldElement && typeof validationError.fieldElement.focus === "function") {
       validationError.fieldElement.focus();
     }
@@ -372,27 +383,200 @@ function renderPriceSummary(summary) {
   if (summaryTotalElement) summaryTotalElement.textContent = summary.formattedTotal;
 }
 
-// ── 5. ACCESSIBLE MODALS & LIGHTBOX MODULE ──
+// ── 5. ACCESSIBLE MODALS, TOASTS & UNIVERSAL LIGHTBOX MODULE ──
 
 let lastFocusedElement = null;
+let currentGalleryImages = [];
+let currentGalleryIndex = 0;
 
-function openLightbox(sourceUrl, captionText) {
-  const modalElement = document.getElementById("lightbox-modal");
+/**
+ * Transient champagne-accented toast notification.
+ */
+function showToast(messageText, durationMs = 3500) {
+  if (typeof document === "undefined") return;
+
+  let toastElement = document.getElementById("beakim-toast");
+  if (!toastElement) {
+    toastElement = document.createElement("div");
+    toastElement.id = "beakim-toast";
+    toastElement.className = "fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] transition-all duration-300 transform opacity-0 pointer-events-none translate-y-4";
+    toastElement.innerHTML = `
+      <div class="bg-deep-forest/95 border border-champagne/40 backdrop-blur-md text-ivory px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 text-xs md:text-sm font-medium">
+        <span class="text-champagne text-base font-bold">✓</span>
+        <span id="beakim-toast-text"></span>
+      </div>
+    `;
+    document.body.appendChild(toastElement);
+  }
+
+  const textElement = document.getElementById("beakim-toast-text");
+  if (textElement) textElement.textContent = messageText;
+
+  // Animate in
+  toastElement.classList.remove("opacity-0", "pointer-events-none", "translate-y-4");
+  toastElement.classList.add("opacity-100", "translate-y-0");
+
+  if (toastElement._timeoutId) clearTimeout(toastElement._timeoutId);
+  toastElement._timeoutId = setTimeout(() => {
+    toastElement.classList.remove("opacity-100", "translate-y-0");
+    toastElement.classList.add("opacity-0", "pointer-events-none", "translate-y-4");
+  }, durationMs);
+}
+
+/**
+ * Ensures a high-end, accessible full-screen Lightbox dialog exists in the DOM.
+ */
+function ensureLightboxModal() {
+  let modalElement = document.getElementById("lightbox-modal");
+  if (!modalElement) {
+    modalElement = document.createElement("div");
+    modalElement.id = "lightbox-modal";
+    modalElement.setAttribute("role", "dialog");
+    modalElement.setAttribute("aria-modal", "true");
+    modalElement.setAttribute("aria-labelledby", "lightbox-title");
+    modalElement.className = "fixed inset-0 z-50 bg-black/95 backdrop-blur-md hidden items-center justify-center p-4 select-none";
+    modalElement.innerHTML = `
+      <!-- Close Button -->
+      <button type="button" id="lightbox-close-btn" onclick="closeLightbox()"
+              class="absolute top-5 right-5 z-20 text-ivory/70 hover:text-champagne bg-black/50 hover:bg-black/80 rounded-full w-11 h-11 flex items-center justify-center text-3xl font-light transition duration-300"
+              aria-label="Close photo gallery">&times;</button>
+
+      <!-- Previous Arrow Button -->
+      <button type="button" id="lightbox-prev-btn" onclick="navigateLightbox(-1)"
+              class="absolute left-3 md:left-6 z-20 text-ivory/80 hover:text-champagne bg-black/50 hover:bg-deep-forest/90 border border-champagne/20 rounded-full w-12 h-12 flex items-center justify-center text-2xl transition duration-300 transform active:scale-90"
+              aria-label="Previous photograph">‹</button>
+
+      <!-- Next Arrow Button -->
+      <button type="button" id="lightbox-next-btn" onclick="navigateLightbox(1)"
+              class="absolute right-3 md:right-6 z-20 text-ivory/80 hover:text-champagne bg-black/50 hover:bg-deep-forest/90 border border-champagne/20 rounded-full w-12 h-12 flex items-center justify-center text-2xl transition duration-300 transform active:scale-90"
+              aria-label="Next photograph">›</button>
+
+      <!-- Photo Display Container -->
+      <div class="relative max-w-5xl w-full flex flex-col items-center justify-center max-h-[92vh] space-y-3" onclick="event.stopPropagation()">
+        <!-- Counter Badge -->
+        <div class="flex items-center gap-2">
+          <span id="lightbox-counter" class="bg-deep-forest/90 border border-champagne/30 text-champagne text-[11px] font-semibold uppercase tracking-widest px-3.5 py-1 rounded-full shadow-lg"></span>
+        </div>
+
+        <!-- Image -->
+        <div class="relative overflow-hidden rounded-xl border border-champagne/20 shadow-2xl bg-deep-forest/50 flex items-center justify-center max-h-[75vh]">
+          <img id="lightbox-img" src="" alt="Property photograph" class="max-h-[75vh] w-auto max-w-full object-contain transition-all duration-300" />
+        </div>
+
+        <!-- Caption -->
+        <div class="text-center px-4 max-w-2xl">
+          <h4 id="lightbox-title" class="font-display text-base md:text-lg text-ivory font-semibold"></h4>
+          <p id="lightbox-desc" class="text-xs text-ivory/70 mt-0.5 line-clamp-2"></p>
+        </div>
+      </div>
+    `;
+    modalElement.addEventListener("click", (e) => {
+      if (e.target === modalElement) closeLightbox();
+    });
+    document.body.appendChild(modalElement);
+  }
+  return modalElement;
+}
+
+/**
+ * Collects and wires all gallery photos in the document for instant Lightbox viewing.
+ */
+function collectGalleryImages() {
+  if (typeof document === "undefined") return;
+  const galleryNodes = document.querySelectorAll(".columns-1 img, [data-gallery] img, .gallery-item img");
+  currentGalleryImages = Array.from(galleryNodes).map((img, idx) => {
+    const card = img.closest(".group") || img.parentElement;
+    const titleEl = card ? card.querySelector(".text-champagne.uppercase, h3, h4") : null;
+    const descEl = card ? card.querySelector("p") : null;
+
+    img.style.cursor = "zoom-in";
+    img.setAttribute("role", "button");
+    img.setAttribute("tabindex", "0");
+    img.setAttribute("aria-label", `View full photo: ${img.alt || "Gallery image"}`);
+
+    if (!img._lightboxBound) {
+      img._lightboxBound = true;
+      img.addEventListener("click", () => openGalleryLightbox(idx));
+      img.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openGalleryLightbox(idx);
+        }
+      });
+    }
+
+    return {
+      src: img.getAttribute("src") || img.src,
+      alt: img.getAttribute("alt") || "Property photograph",
+      title: titleEl ? titleEl.textContent.trim() : (img.getAttribute("alt") || "Property Photograph"),
+      desc: descEl ? descEl.textContent.trim() : ""
+    };
+  });
+}
+
+function openGalleryLightbox(index) {
+  if (!currentGalleryImages.length) {
+    collectGalleryImages();
+  }
+  if (!currentGalleryImages.length) return;
+
+  currentGalleryIndex = (index + currentGalleryImages.length) % currentGalleryImages.length;
+  const item = currentGalleryImages[currentGalleryIndex];
+
+  const modalElement = ensureLightboxModal();
   const imageElement = document.getElementById("lightbox-img");
   const captionElement = document.getElementById("lightbox-title");
+  const descElement = document.getElementById("lightbox-desc");
+  const counterElement = document.getElementById("lightbox-counter");
   const closeButton = document.getElementById("lightbox-close-btn");
+  const prevButton = document.getElementById("lightbox-prev-btn");
+  const nextButton = document.getElementById("lightbox-next-btn");
 
-  if (modalElement && imageElement) {
-    lastFocusedElement = document.activeElement;
-    imageElement.src = sourceUrl;
-    imageElement.alt = captionText || "Property photograph";
+  lastFocusedElement = document.activeElement;
+  imageElement.src = item.src;
+  imageElement.alt = item.alt;
+
+  if (captionElement) captionElement.textContent = item.title;
+  if (descElement) descElement.textContent = item.desc;
+  if (counterElement) counterElement.textContent = `Photo ${currentGalleryIndex + 1} of ${currentGalleryImages.length}`;
+
+  if (prevButton) prevButton.style.display = currentGalleryImages.length > 1 ? "flex" : "none";
+  if (nextButton) nextButton.style.display = currentGalleryImages.length > 1 ? "flex" : "none";
+
+  modalElement.classList.remove("hidden");
+  modalElement.classList.add("flex");
+  modalElement.setAttribute("aria-hidden", "false");
+
+  if (closeButton) closeButton.focus();
+  document.body.style.overflow = "hidden";
+}
+
+function navigateLightbox(step) {
+  if (!currentGalleryImages.length) return;
+  openGalleryLightbox(currentGalleryIndex + step);
+}
+
+function openLightbox(sourceUrl, captionText) {
+  if (!currentGalleryImages.length) collectGalleryImages();
+  const foundIndex = currentGalleryImages.findIndex(img => img.src.includes(sourceUrl) || (sourceUrl && sourceUrl.includes(img.src)));
+  if (foundIndex !== -1) {
+    openGalleryLightbox(foundIndex);
+  } else {
+    const modalElement = ensureLightboxModal();
+    const imageElement = document.getElementById("lightbox-img");
+    const captionElement = document.getElementById("lightbox-title");
+    const descElement = document.getElementById("lightbox-desc");
+    const counterElement = document.getElementById("lightbox-counter");
+    if (imageElement) {
+      imageElement.src = sourceUrl;
+      imageElement.alt = captionText || "Property photograph";
+    }
     if (captionElement) captionElement.textContent = captionText || "";
-
+    if (descElement) descElement.textContent = "";
+    if (counterElement) counterElement.textContent = "Photo";
     modalElement.classList.remove("hidden");
     modalElement.classList.add("flex");
     modalElement.setAttribute("aria-hidden", "false");
-
-    if (closeButton) closeButton.focus();
     document.body.style.overflow = "hidden";
   }
 }
@@ -483,7 +667,7 @@ function copyInquiryDetails(encodedMessageText) {
   const plainText = decodeURIComponent(encodedMessageText);
   if (navigator && navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
     navigator.clipboard.writeText(plainText).then(() => {
-      alert("Inquiry details copied to clipboard!");
+      showToast("Inquiry details copied to clipboard!");
     }).catch(() => {
       prompt("Copy your inquiry details:", plainText);
     });
@@ -620,6 +804,22 @@ if (typeof document !== "undefined") {
   });
 
   document.addEventListener("keydown", function(e) {
+    const lightboxModal = document.getElementById("lightbox-modal");
+    if (lightboxModal && !lightboxModal.classList.contains("hidden")) {
+      if (e.key === "Escape") {
+        closeLightbox();
+        return;
+      }
+      if (e.key === "ArrowLeft") {
+        navigateLightbox(-1);
+        return;
+      }
+      if (e.key === "ArrowRight") {
+        navigateLightbox(1);
+        return;
+      }
+    }
+
     if (e.key === "Escape") {
       closeLightbox();
       closeMobileMenu();
@@ -681,6 +881,25 @@ function initializeDatePickers(checkInInput, checkOutInput) {
   }
 }
 
+function initializeBookingPreFill() {
+  if (typeof window === "undefined") return;
+  const urlParams = new URLSearchParams(window.location.search);
+  const requestedProperty = urlParams.get("property") || urlParams.get("unit");
+  const propertySelect = document.getElementById("booking-property");
+
+  if (requestedProperty && propertySelect) {
+    const cleanReq = requestedProperty.toLowerCase();
+    for (let i = 0; i < propertySelect.options.length; i++) {
+      const opt = propertySelect.options[i];
+      if (opt.value.toLowerCase().includes(cleanReq)) {
+        propertySelect.selectedIndex = i;
+        handlePropertyChange();
+        break;
+      }
+    }
+  }
+}
+
 function bindBookingForms() {
   const bookingForms = document.querySelectorAll("form");
   bookingForms.forEach(form => {
@@ -707,6 +926,8 @@ if (typeof window !== "undefined") {
     }
 
     bindBookingForms();
+    initializeBookingPreFill();
+    collectGalleryImages();
     updatePriceCalculation();
   });
 }

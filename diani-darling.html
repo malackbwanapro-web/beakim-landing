@@ -14,6 +14,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
 
+  <!-- Favicon & Mobile Theme -->
+  <link rel="icon" type="image/png" href="assets/logo-monogram.png" />
+  <link rel="apple-touch-icon" href="assets/logo-monogram.png" />
+  <meta name="theme-color" content="#0d2b24" />
+
   <!-- Compiled Production CSS -->
   <link rel="stylesheet" href="assets/css/styles.css" />
 
@@ -49,15 +54,19 @@
   }
 }
   </script>
+  <script src="assets/js/catalog.js"></script>
   <script src="assets/js/main.js" defer></script>
   <link rel="canonical" href="https://beakim-landing.vercel.app/diani-darling" />
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Beakim Hospitality Group" />
   <meta property="og:url" content="https://beakim-landing.vercel.app/diani-darling" />
   <meta property="og:title" content="Diani Darling Cottages | Deluxe Holiday Studios on Diani Beach Road" />
   <meta property="og:description" content="Deluxe holiday studios with kitchenette, private balcony, and swimming pool access on Diani Beach Road for KSh 5,000/night. 14 units available." />
   <meta property="og:image" content="https://beakim-landing.vercel.app/assets/diani-darling-cottages-resort-walkway-hero.webp" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Diani Darling Cottages | Deluxe Holiday Studios on Diani Beach Road" />
   <meta name="twitter:description" content="Deluxe holiday studios with kitchenette, private balcony, and swimming pool access on Diani Beach Road for KSh 5,000/night. 14 units available." />
@@ -532,7 +541,7 @@
         <p class="text-xs text-deep-forest/70">Fill out your details below to directly verify availability via WhatsApp.</p>
       </div>
 
-      <form id="property-booking-form" onsubmit="handleCottageSubmit(event)" class="space-y-6 text-sm">
+      <form id="property-booking-form" onsubmit="handleBookingSubmit(event)" class="space-y-6 text-sm">
         
         <div class="flex flex-col gap-1.5">
           <label for="guest-name" class="text-xs font-semibold uppercase tracking-wider text-deep-forest/80">Full Name</label>
