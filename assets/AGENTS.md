@@ -17,6 +17,7 @@
 ## 2. Local Contracts & Rules
 - **Image Optimization:** Keep hero images optimized and properly dimensioned.
 - **Styling Rules:** Ensure responsive layout across mobile and desktop breakpoints without layout shift (CLS).
+- **Architectural Storytelling:** On property landing pages (e.g. `diani-darling.html`), imagery is organized in a chronological 7-stage arrival arc (`#arrival-story`) followed by a secondary masonry catalog (`#photo-catalog`). Every image card uses `.gallery-item` or `[data-gallery]` for full lightbox zoom accessibility.
 
 ---
 
