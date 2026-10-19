@@ -195,10 +195,17 @@ function resolveStayPricing(propertyOrOfferingId, checkInDateString, checkOutDat
 /**
  * Builds standard plain-text WhatsApp stay inquiry message with structured formatting.
  */
-function buildInquiryMessage({ guestName, contactPhone, guestEmail, propertyName, checkInDate, checkOutDate, stayDurationText, adultsCount, childrenCount, estimatedTotal }) {
+function buildInquiryMessage({ guestName, contactPhone, guestEmail, propertyName, checkInDate, checkOutDate, stayDurationText, adultsCount, childrenCount, estimatedTotal, selectedAddons = [], specialRequests = "" }) {
   const emailLine = guestEmail ? `• Email: ${guestEmail}\n` : "";
   const childrenText = childrenCount > 0 ? `, ${childrenCount} Child(ren)` : "";
-  const estimatedRateLine = estimatedTotal ? `• Estimated Rate: ${estimatedTotal}\n\n` : "\n";
+  const estimatedRateLine = estimatedTotal ? `• Estimated Rate: ${estimatedTotal}\n` : "";
+
+  let addonsBlock = "";
+  if (selectedAddons && selectedAddons.length > 0) {
+    addonsBlock = `\n• Selected Add-Ons & Preferences:\n` + selectedAddons.map(item => `  - ${item}`).join("\n") + "\n";
+  }
+
+  const specialRequestsBlock = specialRequests ? `\n• Special Requests / Notes: ${specialRequests}\n` : "";
 
   return (
     `🌴 BEAKIM HOSPITALITY - STAY INQUIRY 🌴\n\n` +
@@ -210,7 +217,9 @@ function buildInquiryMessage({ guestName, contactPhone, guestEmail, propertyName
     `• Check-Out: ${checkOutDate} (${stayDurationText})\n` +
     `• Guests: ${adultsCount} Adult(s)${childrenText}\n` +
     estimatedRateLine +
-    `Hello! Please confirm availability and reservation procedures for these dates. Thank you!`
+    addonsBlock +
+    specialRequestsBlock +
+    `\nHello! Please confirm availability and reservation procedures for these dates. Thank you!`
   );
 }
 
@@ -313,6 +322,13 @@ function handleBookingSubmit(event) {
   const formattedContactPhone = `${formData.countryCode} ${normalizedPhone}`;
   const totalGuests = formData.adults + formData.children;
 
+  let breakfastTotal = 0;
+  if (formData.hasBreakfast && pricingSummary.durationDays > 0) {
+    breakfastTotal = 1000 * formData.adults * pricingSummary.durationDays;
+  }
+  const grandTotal = pricingSummary.totalCost + breakfastTotal;
+  const formattedGrandTotal = pricingSummary.isValidRange ? `KSh ${grandTotal.toLocaleString()}` : pricingSummary.formattedTotal;
+
   const messageText = buildInquiryMessage({
     guestName: formData.name,
     contactPhone: formattedContactPhone,
@@ -323,7 +339,9 @@ function handleBookingSubmit(event) {
     stayDurationText: pricingSummary.durationText,
     adultsCount: formData.adults,
     childrenCount: formData.children,
-    estimatedTotal: pricingSummary.formattedTotal
+    estimatedTotal: formattedGrandTotal,
+    selectedAddons: formData.selectedAddons || [],
+    specialRequests: formData.specialRequests || ""
   });
 
   const whatsappUrl = CommunicationService.buildWhatsAppUrl(messageText);
@@ -340,7 +358,9 @@ function handleBookingSubmit(event) {
     checkOutDate: formData.checkOut,
     adults: formData.adults,
     children: formData.children,
-    estimatedTotal: pricingSummary.totalCost || 0,
+    estimatedTotal: grandTotal || 0,
+    selectedAddons: formData.selectedAddons || [],
+    specialRequests: formData.specialRequests || "",
     channel: "website_whatsapp",
     sourceUrl: typeof window !== "undefined" ? window.location.href : "",
     hp_field: formData.honeypot || ""
@@ -353,7 +373,8 @@ function handleBookingSubmit(event) {
     property: formData.property,
     dates: `${formData.checkIn} to ${formData.checkOut} (${pricingSummary.durationText})`,
     guests: `${totalGuests} (${formData.adults} Adults, ${formData.children} Children)`,
-    estimatedTotal: pricingSummary.formattedTotal,
+    estimatedTotal: formattedGrandTotal,
+    selectedAddons: formData.selectedAddons || [],
     whatsappUrl,
     messageText
   });
@@ -373,6 +394,7 @@ function extractBookingFormData() {
   const adultsElement = document.getElementById("guests-adults");
   const childrenElement = document.getElementById("guests-children");
   const numGuestsElement = document.getElementById("num-guests");
+  const specialRequestsElement = document.getElementById("guest-special-requests");
 
   let propertyValue = propertyElement ? propertyElement.value : "";
   if (!propertyValue && typeof window !== "undefined") {
@@ -394,6 +416,30 @@ function extractBookingFormData() {
 
   const honeypotElement = typeof document !== "undefined" ? document.getElementById("website_hp") : null;
 
+  // Curated Add-ons extraction
+  const breakfastCheckbox = document.getElementById("addon-breakfast");
+  const bagDropCheckbox = document.getElementById("addon-bag-drop");
+  const parkingCheckbox = document.getElementById("addon-parking");
+  const taxiCheckbox = document.getElementById("addon-taxi");
+
+  const selectedAddons = [];
+  const durationDays = calculateDateDifferenceInDays(checkInElement ? checkInElement.value : "", checkOutElement ? checkOutElement.value : "");
+  const validNights = durationDays > 0 ? durationDays : 1;
+
+  if (breakfastCheckbox && breakfastCheckbox.checked) {
+    const breakfastTotal = 1000 * adultsCount * validNights;
+    selectedAddons.push(`Chef-Prepared Coastal Breakfast: ${adultsCount} Guest(s) × ${validNights} Night(s) (+KSh ${breakfastTotal.toLocaleString()})`);
+  }
+  if (bagDropCheckbox && bagDropCheckbox.checked) {
+    selectedAddons.push("Early SGR / Flight Bag Drop (Complimentary)");
+  }
+  if (parkingCheckbox && parkingCheckbox.checked) {
+    selectedAddons.push("Reserved Gated Compound Parking (Complimentary)");
+  }
+  if (taxiCheckbox && taxiCheckbox.checked) {
+    selectedAddons.push("SGR / Airport Taxi Driver Coordination (Direct Local Rate)");
+  }
+
   return {
     name: nameElement ? nameElement.value.trim() : "",
     email: emailElement ? emailElement.value.trim() : "",
@@ -404,6 +450,9 @@ function extractBookingFormData() {
     checkOut: checkOutElement ? checkOutElement.value : "",
     adults: adultsCount,
     children: childrenCount,
+    specialRequests: specialRequestsElement ? specialRequestsElement.value.trim() : "",
+    selectedAddons,
+    hasBreakfast: breakfastCheckbox ? breakfastCheckbox.checked : false,
     honeypot: honeypotElement ? honeypotElement.value.trim() : "",
     nameElement,
     phoneElement,
@@ -435,21 +484,115 @@ function validateBookingFormData(data) {
 }
 
 /**
- * Updates dynamic price summary indicators in the booking interface.
+ * Selects an interactive residence card in the 2-column booking form.
  */
-function updatePriceCalculation() {
+function selectResidenceCard(propertyValue, cardElement) {
+  const propertySelectElement = document.getElementById("booking-property");
+  if (propertySelectElement) {
+    let matchedIndex = -1;
+    for (let i = 0; i < propertySelectElement.options.length; i++) {
+      const opt = propertySelectElement.options[i];
+      if (opt.value === propertyValue || opt.value.toLowerCase().includes(propertyValue.toLowerCase()) || propertyValue.toLowerCase().includes(opt.value.toLowerCase())) {
+        matchedIndex = i;
+        break;
+      }
+    }
+    if (matchedIndex >= 0) {
+      propertySelectElement.selectedIndex = matchedIndex;
+    } else {
+      propertySelectElement.value = propertyValue;
+    }
+  }
+
+  const allCards = document.querySelectorAll(".residence-card");
+  allCards.forEach(card => {
+    card.classList.remove("border-2", "border-champagne", "bg-champagne/10");
+    card.classList.add("border", "border-deep-forest/15", "bg-white");
+    card.setAttribute("aria-checked", "false");
+    const radio = card.querySelector(".residence-radio");
+    if (radio) {
+      radio.classList.remove("border-champagne", "bg-champagne");
+      radio.classList.add("border-deep-forest/30", "bg-transparent");
+      const dot = radio.querySelector("div");
+      if (dot) dot.classList.add("opacity-0");
+    }
+  });
+
+  if (cardElement) {
+    cardElement.classList.remove("border", "border-deep-forest/15", "bg-white");
+    cardElement.classList.add("border-2", "border-champagne", "bg-champagne/10");
+    cardElement.setAttribute("aria-checked", "true");
+    const activeRadio = cardElement.querySelector(".residence-radio");
+    if (activeRadio) {
+      activeRadio.classList.remove("border-deep-forest/30", "bg-transparent");
+      activeRadio.classList.add("border-champagne", "bg-champagne");
+      const dot = activeRadio.querySelector("div");
+      if (dot) dot.classList.remove("opacity-0");
+    }
+  }
+
+  const breakfastCard = document.getElementById("addon-card-breakfast");
+  const isDianiDarling = propertyValue.toLowerCase().includes("darling");
+  if (breakfastCard) {
+    if (isDianiDarling) {
+      breakfastCard.classList.remove("opacity-60");
+      breakfastCard.classList.add("border-champagne/50");
+    } else {
+      breakfastCard.classList.add("opacity-60");
+      breakfastCard.classList.remove("border-champagne/50");
+    }
+  }
+
+  handleDateOrAddonChange();
+}
+
+/**
+ * Triggered on date, guest, or add-on checkbox changes to recalculate live totals.
+ */
+function handleDateOrAddonChange() {
   const propertyElement = document.getElementById("booking-property");
   const checkInElement = document.getElementById("check-in");
   const checkOutElement = document.getElementById("check-out");
+  const adultsElement = document.getElementById("guests-adults") || document.getElementById("num-guests");
+  const breakfastCheckbox = document.getElementById("addon-breakfast");
 
   if (!propertyElement) return;
 
   const propertyValue = propertyElement.value;
   const checkInDate = checkInElement ? checkInElement.value : "";
   const checkOutDate = checkOutElement ? checkOutElement.value : "";
+  const adultsCount = adultsElement ? parseInt(adultsElement.value, 10) || 2 : 2;
 
   const pricingSummary = resolveStayPricing(propertyValue, checkInDate, checkOutDate);
-  renderPriceSummary(pricingSummary);
+  const durationDays = pricingSummary.durationDays > 0 ? pricingSummary.durationDays : 0;
+
+  let breakfastTotal = 0;
+  const breakfastRow = document.getElementById("summary-breakfast-row");
+  const breakfastCostElem = document.getElementById("summary-breakfast-cost");
+
+  if (breakfastCheckbox && breakfastCheckbox.checked && durationDays > 0) {
+    breakfastTotal = 1000 * adultsCount * durationDays;
+    if (breakfastRow) breakfastRow.classList.remove("hidden");
+    if (breakfastCostElem) breakfastCostElem.textContent = `+KSh ${breakfastTotal.toLocaleString()}`;
+  } else {
+    if (breakfastRow) breakfastRow.classList.add("hidden");
+  }
+
+  const finalTotal = pricingSummary.totalCost + breakfastTotal;
+  const formattedFinalTotal = pricingSummary.isValidRange ? `KSh ${finalTotal.toLocaleString()}` : pricingSummary.formattedTotal;
+
+  renderPriceSummary({
+    ...pricingSummary,
+    totalCost: finalTotal,
+    formattedTotal: formattedFinalTotal
+  });
+}
+
+/**
+ * Updates dynamic price summary indicators in the booking interface.
+ */
+function updatePriceCalculation() {
+  handleDateOrAddonChange();
 }
 
 /**
@@ -827,12 +970,39 @@ function switchTab(selectedTabId) {
 function selectUnit(unitIdentifier) {
   const propertySelectElement = document.getElementById("booking-property");
   if (propertySelectElement) {
-    propertySelectElement.value = unitIdentifier;
-    updatePriceCalculation();
-    const bookingSection = document.getElementById("booking");
-    if (bookingSection) {
-      bookingSection.scrollIntoView({ behavior: "smooth" });
+    let matchedIndex = -1;
+    for (let i = 0; i < propertySelectElement.options.length; i++) {
+      const opt = propertySelectElement.options[i];
+      if (opt.value === unitIdentifier || opt.value.toLowerCase().includes(unitIdentifier.toLowerCase()) || unitIdentifier.toLowerCase().includes(opt.value.toLowerCase())) {
+        matchedIndex = i;
+        break;
+      }
     }
+    if (matchedIndex >= 0) {
+      propertySelectElement.selectedIndex = matchedIndex;
+    } else {
+      propertySelectElement.value = unitIdentifier;
+    }
+  }
+
+  const allCards = document.querySelectorAll(".residence-card");
+  let matchedCard = null;
+  allCards.forEach(card => {
+    const val = card.getAttribute("data-value") || "";
+    if (val === unitIdentifier || val.toLowerCase().includes(unitIdentifier.toLowerCase()) || unitIdentifier.toLowerCase().includes(val.toLowerCase())) {
+      matchedCard = card;
+    }
+  });
+
+  if (matchedCard && typeof selectResidenceCard === "function") {
+    selectResidenceCard(unitIdentifier, matchedCard);
+  } else {
+    updatePriceCalculation();
+  }
+
+  const bookingSection = document.getElementById("booking");
+  if (bookingSection) {
+    bookingSection.scrollIntoView({ behavior: "smooth" });
   }
 }
 
@@ -848,12 +1018,26 @@ function selectProperty(propertyName) {
     }
   }
 
-  if (propertyName.includes("Tower")) switchTab("tab-tower");
-  else if (propertyName.includes("Darad")) switchTab("tab-darad");
-  else if (propertyName.includes("Darling")) switchTab("tab-darling");
-  else if (propertyName.includes("Apartment")) switchTab("tab-beakim");
+  const selectedVal = propertySelectElement.value;
+  const allCards = document.querySelectorAll(".residence-card");
+  let matchedCard = null;
+  allCards.forEach(card => {
+    const val = card.getAttribute("data-value") || "";
+    if (val.toLowerCase().includes(propertyName.toLowerCase()) || propertyName.toLowerCase().includes(val.toLowerCase())) {
+      matchedCard = card;
+    }
+  });
 
-  updatePriceCalculation();
+  if (matchedCard && typeof selectResidenceCard === "function") {
+    selectResidenceCard(selectedVal, matchedCard);
+  } else {
+    if (propertyName.includes("Tower")) switchTab("tab-tower");
+    else if (propertyName.includes("Darad")) switchTab("tab-darad");
+    else if (propertyName.includes("Darling")) switchTab("tab-darling");
+    else if (propertyName.includes("Apartment")) switchTab("tab-beakim");
+    updatePriceCalculation();
+  }
+
   const bookingSection = document.getElementById("booking");
   if (bookingSection) {
     bookingSection.scrollIntoView({ behavior: "smooth" });
@@ -865,12 +1049,24 @@ function handlePropertyChange() {
   if (!propertySelectElement) return;
   const propertyValue = propertySelectElement.value;
 
-  if (propertyValue.includes("Tower")) switchTab("tab-tower");
-  else if (propertyValue.includes("Darad")) switchTab("tab-darad");
-  else if (propertyValue.includes("Darling")) switchTab("tab-darling");
-  else if (propertyValue.includes("Apartment")) switchTab("tab-beakim");
+  const allCards = document.querySelectorAll(".residence-card");
+  let matchedCard = null;
+  allCards.forEach(card => {
+    const val = card.getAttribute("data-value") || "";
+    if (val === propertyValue || val.toLowerCase().includes(propertyValue.toLowerCase()) || propertyValue.toLowerCase().includes(val.toLowerCase())) {
+      matchedCard = card;
+    }
+  });
 
-  updatePriceCalculation();
+  if (matchedCard && typeof selectResidenceCard === "function") {
+    selectResidenceCard(propertyValue, matchedCard);
+  } else {
+    if (propertyValue.includes("Tower")) switchTab("tab-tower");
+    else if (propertyValue.includes("Darad")) switchTab("tab-darad");
+    else if (propertyValue.includes("Darling")) switchTab("tab-darling");
+    else if (propertyValue.includes("Apartment")) switchTab("tab-beakim");
+    updatePriceCalculation();
+  }
 }
 
 // ── 7. ACCESSIBILITY LISTENERS & MODAL FOCUS TRAPPING ──
