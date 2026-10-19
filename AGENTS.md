@@ -2,7 +2,7 @@
 
 ## 1. Project Overview & Architecture
 - **Tech Stack:**
-  - **Marketing Landing Page:** Semantic HTML5, Vanilla JavaScript (`assets/js/`), CSS3 / Tailwind utilities (`assets/css/`), optimized static asset pipeline, Netlify edge deployment.
+  - **Marketing Landing Page:** Semantic HTML5, Vanilla JavaScript (`assets/js/`), CSS3 / Tailwind utilities (`assets/css/`), optimized static asset pipeline, Vercel edge deployment, Google Analytics GA4 (`G-T5E3SNGQZC`), Google Search Console integration.
   - **Beakim CRM:** Next.js 14 (App Router), React 18, Tailwind CSS, Lucide React icons, atomic file-locking JSON database with AES-256-GCM encryption & SHA-256 tamper-evident audit chaining.
 - **Architecture Layout:**
   - `beakim-landing/` (Root): Public-facing luxury hospitality landing pages for Beakim Beach Darad, Beakim Tower Cottages, Diani Darling, Beakim Apartments, and coastal travel guide journal (`blog.html`).
