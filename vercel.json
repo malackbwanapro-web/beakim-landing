@@ -59,6 +59,10 @@
       "destination": "/terms-of-service.html"
     },
     {
+      "source": "/blog",
+      "destination": "/blog.html"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/sitemap.xml"
     },

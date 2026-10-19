@@ -127,6 +127,9 @@ function resolveStayPricing(propertyOrOfferingId, checkInDateString, checkOutDat
       rate = 4000;
     } else if (propertyIdentifier.includes("Diani Darling")) {
       rate = 5000;
+    } else if (propertyIdentifier.includes("Tower")) {
+      rate = 2500;
+      isMonthly = false;
     } else if (propertyIdentifier.includes("1-Bedroom") && propertyIdentifier.includes("Apartment")) {
       rate = 15000;
       isMonthly = true;
@@ -438,6 +441,8 @@ function extractBookingFormData() {
   const bagDropCheckbox = document.getElementById("addon-bag-drop");
   const parkingCheckbox = document.getElementById("addon-parking");
   const taxiCheckbox = document.getElementById("addon-taxi");
+  const kitchenCheckbox = document.getElementById("addon-kitchen");
+  const groundFloorCheckbox = document.getElementById("addon-ground-floor");
 
   const selectedAddons = [];
   const durationDays = calculateDateDifferenceInDays(checkInElement ? checkInElement.value : "", checkOutElement ? checkOutElement.value : "");
@@ -455,6 +460,22 @@ function extractBookingFormData() {
   }
   if (taxiCheckbox && taxiCheckbox.checked) {
     selectedAddons.push("SGR / Airport Taxi Driver Coordination (Direct Local Rate)");
+  }
+  if (kitchenCheckbox && kitchenCheckbox.checked) {
+    selectedAddons.push("Self-Catering Cooking Setup (Complimentary)");
+  }
+  if (groundFloorCheckbox && groundFloorCheckbox.checked) {
+    selectedAddons.push("Ground Floor / Garden Access Preference (Complimentary)");
+  }
+
+  // Dynamic extraction of any custom property preference carrying data-addon-name
+  if (typeof document !== "undefined") {
+    document.querySelectorAll('input[type="checkbox"][data-addon-name]:checked').forEach(cb => {
+      const customName = cb.getAttribute("data-addon-name");
+      if (customName && !selectedAddons.includes(customName)) {
+        selectedAddons.push(customName);
+      }
+    });
   }
 
   return {

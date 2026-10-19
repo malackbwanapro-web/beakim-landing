@@ -5,7 +5,7 @@
   - **Marketing Landing Page:** Semantic HTML5, Vanilla JavaScript (`assets/js/`), CSS3 / Tailwind utilities (`assets/css/`), optimized static asset pipeline, Netlify edge deployment.
   - **Beakim CRM:** Next.js 14 (App Router), React 18, Tailwind CSS, Lucide React icons, atomic file-locking JSON database with AES-256-GCM encryption & SHA-256 tamper-evident audit chaining.
 - **Architecture Layout:**
-  - `beakim-landing/` (Root): Public-facing luxury hospitality landing page for Beakim Beach Darad & Beakim Tower Cottages.
+  - `beakim-landing/` (Root): Public-facing luxury hospitality landing pages for Beakim Beach Darad, Beakim Tower Cottages, Diani Darling, Beakim Apartments, and coastal travel guide journal (`blog.html`).
   - `assets/`: Landing page static stylesheets, client-side interactive scripts, high-resolution resort imagery.
   - `Beakim CRM/`: Multi-property hospitality Customer Relationship & Property Management System (PMS/CRM).
   - `test/`: Workspace root integration test scripts.
