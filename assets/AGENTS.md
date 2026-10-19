@@ -5,7 +5,7 @@
 - **Key Subdirectories Owned:**
   - `css/`: Landing page CSS stylesheets, animations, and typography.
   - `js/`: Client interactive scripts (smooth scrolling, image galleries, booking inquiries).
-  - `Beakim Darad Images/`: High-resolution resort photography for Beakim Beach Darad.
+  - `Beakim Darad Images/`: 43 high-resolution, SEO-optimized WebP resort photographs for Beakim Beach Darad with embedded EXIF GPS coordinates (-4.2825, 39.5890) and copyright metadata.
   - `Tower Cottages Images/`: High-resolution apartment photography for Beakim Tower Cottages.
   - `diani-darling-*.webp`: 33 high-resolution, SEO-optimized WebP photographs for Diani Darling Cottages with embedded EXIF GPS coordinates (-4.2796, 39.5936) and copyright metadata.
 - **Boundaries & Invariants:**
