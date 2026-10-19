@@ -15,7 +15,7 @@
 ## 2. Local Contracts & Rules
 - **CRM Sync Protocol:** Submissions POST to `getCrmPublicEndpoint()`, resolving `http://localhost:3005/api/public/inquiries` in local development and `https://beakim-crm.vercel.app/api/public/inquiries` in production.
 - **Anti-Spam:** Honeypot field (`website_hp`) must be submitted alongside form values.
-- **2-Column Reservation Command Center:** Interactive residence cards (`.residence-card`), curated stay preferences (early SGR bag drop, gated parking, local taxi driver meet & greet), and authentic paid breakfast add-on for Diani Darling (KSh 1,000/person/day) with real-time live price recalculation (`selectResidenceCard()`, `handleDateOrAddonChange()`).
+- **2-Column Reservation Command Center:** Interactive residence cards (`.residence-card`), curated stay preferences (early SGR bag drop, gated parking, local taxi driver meet & greet), and authentic paid breakfast add-on for Diani Darling (KSh 1,000/person/day) with real-time live price recalculation (`selectResidenceCard()`, `handleDateOrAddonChange()`). Deployed site-wide across `index.html`, `tower-cottages.html`, `diani-darling.html`, and `beakim-darad.html` with property-specific tailoring.
 - **Ergonomics & A11y:** Full keyboard navigation support for residence radio cards via `handleResidenceCardKeydown()` (`Enter` and `Space`), and async submission locking on `#booking-submit-btn` with `aria-busy="true"` and `active:scale-[0.98]` tactile press feedback.
 
 ---

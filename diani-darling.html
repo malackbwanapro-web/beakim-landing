@@ -867,108 +867,348 @@
   </section>
 
   <!-- â”€â”€ BOOKING FORM & SCARCITY ENGINE â”€â”€ -->
-  <section id="booking" class="py-24 max-w-xl mx-auto px-6 scroll-mt-20">
-    <div class="bg-champagne rounded-xl border border-transparent overflow-hidden p-6 md:p-8 space-y-8 shadow-2xl relative">
+    <!-- ── DIRECT RESERVATION ENGINE ── -->
+  <section id="booking" class="py-20 md:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20">
+    <div class="text-center mb-12 md:mb-16 space-y-4">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-champagne/10 border border-champagne/25 text-champagne text-xs font-semibold uppercase tracking-widest">
+        <span class="w-1.5 h-1.5 rounded-full bg-champagne animate-pulse"></span>
+        Direct Host Reservation Engine
+      </div>
+      <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl text-ivory font-bold tracking-tight">Reserve Diani Darling</h2>
+      <p class="text-ivory/70 text-sm sm:text-base max-w-2xl mx-auto font-light leading-relaxed">
+        Boutique deluxe studio cottages with swimming pool along Diani Beach Road. Direct bookings guarantee our lowest seasonal rates and optional chef-prepared breakfast.
+      </p>
+    </div>
+
+    <!-- 2-Column Command Center Container -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 rounded-3xl overflow-hidden shadow-2xl border border-champagne/25 bg-canopy/40 backdrop-blur-md">
       
-      <!-- Live Pulse Scarcity Badge -->
-      <div class="flex justify-center">
-        <div class="inline-flex items-center gap-2 bg-deep-forest border border-champagne/30 text-champagne text-xs font-semibold px-4 py-2 rounded-full">
-          <span class="relative flex h-2 w-2">
-            <span class="pulse-indicator absolute inline-flex h-full w-full rounded-full bg-champagne opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-champagne"></span>
-          </span>
-          Boutique Property: Only 10 total deluxe units available for peak dates
+      <!-- LEFT COLUMN: Trust, Concierge & Direct Booking Benefits (lg:col-span-4) -->
+      <div class="lg:col-span-4 bg-[#0a1914] p-8 sm:p-10 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-champagne/15 text-ivory relative overflow-hidden">
+        <div class="absolute -top-24 -left-24 w-64 h-64 bg-champagne/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="space-y-8 relative z-10">
+          <div>
+            <span class="text-[11px] font-bold tracking-widest text-champagne uppercase block mb-2">[ DIRECT BOOKING ADVANTAGES ]</span>
+            <h3 class="font-display text-2xl font-bold text-ivory">Boutique Poolside Living</h3>
+            <p class="text-xs text-ivory/60 mt-2 leading-relaxed">
+              When booking directly with Diani Darling, you deal straight with on-site management with guaranteed perks and no third-party markups.
+            </p>
+          </div>
+
+          <!-- Trust Perks List -->
+          <ul class="space-y-4 text-xs">
+            <li class="flex items-start gap-3">
+              <div class="w-7 h-7 rounded-lg bg-champagne/15 border border-champagne/30 flex items-center justify-center text-champagne shrink-0 mt-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <div>
+                <strong class="text-ivory block font-medium">Verified Best Rate Guarantee</strong>
+                <span class="text-ivory/60">Zero OTA commission (Save up to 15% vs Airbnb &amp; Booking.com).</span>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="w-7 h-7 rounded-lg bg-champagne/15 border border-champagne/30 flex items-center justify-center text-champagne shrink-0 mt-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+              </div>
+              <div>
+                <strong class="text-ivory block font-medium">Swimming Pool &amp; Sun Verandah</strong>
+                <span class="text-ivory/60">Full access to fresh sunbeds, manicured palms, and outdoor poolside loungers.</span>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="w-7 h-7 rounded-lg bg-champagne/15 border border-champagne/30 flex items-center justify-center text-champagne shrink-0 mt-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              </div>
+              <div>
+                <strong class="text-ivory block font-medium">24/7 Guarded Gated Compound</strong>
+                <span class="text-ivory/60">Secure stone perimeter wall with complimentary personal vehicle parking.</span>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="w-7 h-7 rounded-lg bg-champagne/15 border border-champagne/30 flex items-center justify-center text-champagne shrink-0 mt-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+              </div>
+              <div>
+                <strong class="text-ivory block font-medium">Direct WhatsApp Host Support</strong>
+                <span class="text-ivory/60">Instant coordination for SGR train transfers, local taxi drivers, and breakfast requests.</span>
+              </div>
+            </li>
+          </ul>
+
+          <!-- Host Direct Contact Hotline -->
+          <div class="pt-4 border-t border-champagne/15 space-y-2">
+            <span class="text-[11px] font-semibold text-champagne uppercase tracking-wider block">Direct Concierge Inquiries</span>
+            <div class="flex flex-col gap-2 text-xs">
+              <a href="tel:+254746938529" class="inline-flex items-center gap-2 text-ivory/80 hover:text-champagne transition group">
+                <span class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-champagne/20 transition">📞</span>
+                +254 746 938 529
+              </a>
+              <a href="mailto:info@beakimhospitalitygroup.co.ke" class="inline-flex items-center gap-2 text-ivory/80 hover:text-champagne transition group">
+                <span class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-champagne/20 transition">✉️</span>
+                info@beakimhospitalitygroup.co.ke
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Direct Settlement Badges -->
+        <div class="pt-8 border-t border-champagne/15 mt-8 relative z-10">
+          <span class="text-[10px] font-semibold tracking-wider text-ivory/50 uppercase block mb-3">Accepted Payment Channels</span>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-2.5 py-1 rounded bg-white/5 border border-white/10 text-[11px] font-bold text-emerald-400">M-PESA Till</span>
+            <span class="px-2.5 py-1 rounded bg-white/5 border border-white/10 text-[11px] font-medium text-ivory/80">Visa</span>
+            <span class="px-2.5 py-1 rounded bg-white/5 border border-white/10 text-[11px] font-medium text-ivory/80">Mastercard</span>
+            <span class="px-2.5 py-1 rounded bg-white/5 border border-white/10 text-[11px] font-medium text-red-400">Airtel</span>
+            <span class="px-2.5 py-1 rounded bg-white/5 border border-white/10 text-[11px] font-medium text-ivory/80">Bank Wire</span>
+          </div>
         </div>
       </div>
 
-      <div class="text-center space-y-2">
-        <h2 class="font-display text-2xl md:text-3xl text-deep-forest font-bold">Reserve Diani Darling</h2>
-        <p class="text-xs text-deep-forest/70">Fill out your details below to directly verify availability via WhatsApp.</p>
+      <!-- RIGHT COLUMN: 3-Step Interactive Booking Engine (lg:col-span-8) -->
+      <div class="lg:col-span-8 bg-[#FAF8F5] p-6 sm:p-10 md:p-12 text-deep-forest flex flex-col justify-between">
+        <form id="booking-form" onsubmit="handleBookingSubmit(event)" class="space-y-8">
+          <!-- Honeypot Anti-Spam Hidden Input -->
+          <input type="text" name="website_hp" id="website_hp" class="hidden" tabindex="-1" autocomplete="off" style="display:none !important;" aria-hidden="true" />
+          
+          <!-- Hidden Compatibility Select Element -->
+          <select id="booking-property" class="sr-only" aria-hidden="true" tabindex="-1">
+            <option value="Diani Darling Cottages - Deluxe Studio Room" selected>Diani Darling: Deluxe Studio Room - KSh 5,000/night</option>
+          </select>
+
+          <!-- ── STEP 1: SELECT RESIDENCE, DATES & GUESTS ── -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <span class="w-6 h-6 rounded-full bg-deep-forest text-champagne text-xs font-bold flex items-center justify-center shrink-0">1</span>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-deep-forest">Select Residence, Dates &amp; Guests</h4>
+            </div>
+
+            <!-- Focused Residence Card -->
+            <div class="grid grid-cols-1 gap-3" role="radiogroup" aria-label="Selected Residence">
+              <div onclick="selectResidenceCard('Diani Darling Cottages - Deluxe Studio Room', this)"
+                   onkeydown="handleResidenceCardKeydown(event, 'Diani Darling Cottages - Deluxe Studio Room', this)"
+                   data-value="Diani Darling Cottages - Deluxe Studio Room"
+                   role="radio" aria-checked="true" tabindex="0"
+                   class="residence-card p-4 rounded-xl border-2 border-champagne bg-champagne/10 cursor-pointer transition flex items-start justify-between shadow-sm group">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-bold font-display text-deep-forest">Diani Darling — Deluxe Studio Cottage</span>
+                    <span class="text-[10px] uppercase font-semibold px-2 py-0.5 bg-rose-100 text-rose-800 rounded">10 Boutique Units</span>
+                  </div>
+                  <p class="text-xs text-driftwood">King Bed • Private Verandah • Pool Access • Kitchenette • Beach Road Stroll</p>
+                  <p class="text-xs font-bold text-champagne pt-1">KSh 5,000 / night</p>
+                </div>
+                <div class="w-5 h-5 rounded-full border-2 border-champagne bg-champagne residence-radio flex items-center justify-center shrink-0 mt-0.5">
+                  <div class="w-2 h-2 rounded-full bg-white"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stay Dates & Guests Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+              <div class="flex flex-col gap-1.5">
+                <label for="check-in" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">Check-In Date</label>
+                <input type="date" id="check-in" required onchange="handleDateOrAddonChange()"
+                       class="w-full bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3.5 py-2.5 text-xs text-deep-forest outline-none transition shadow-sm font-medium" />
+              </div>
+              <div class="flex flex-col gap-1.5">
+                <label for="check-out" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">Check-Out Date</label>
+                <input type="date" id="check-out" required onchange="handleDateOrAddonChange()"
+                       class="w-full bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3.5 py-2.5 text-xs text-deep-forest outline-none transition shadow-sm font-medium" />
+              </div>
+              <div class="flex flex-col gap-1.5">
+                <label for="guests-adults" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">Adults</label>
+                <input type="number" id="guests-adults" min="1" max="4" value="2" required onchange="handleDateOrAddonChange()"
+                       class="w-full bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3.5 py-2.5 text-xs text-deep-forest outline-none transition shadow-sm font-medium" />
+              </div>
+              <div class="flex flex-col gap-1.5">
+                <label for="guests-children" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">Children</label>
+                <input type="number" id="guests-children" min="0" max="2" value="0" required onchange="handleDateOrAddonChange()"
+                       class="w-full bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3.5 py-2.5 text-xs text-deep-forest outline-none transition shadow-sm font-medium" />
+              </div>
+            </div>
+          </div>
+
+          <!-- ── STEP 2: STAY PREFERENCES & CURATED ADD-ONS (WITH ACTIVE BREAKFAST) ── -->
+          <div class="space-y-4 pt-4 border-t border-deep-forest/10">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="w-6 h-6 rounded-full bg-deep-forest text-champagne text-xs font-bold flex items-center justify-center shrink-0">2</span>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-deep-forest">Stay Preferences &amp; Authentic Add-Ons</h4>
+              </div>
+              <span class="text-[11px] text-driftwood hidden sm:inline">Tailor your coastal logistics</span>
+            </div>
+
+            <!-- Preferences 2x2 Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              
+              <!-- Card 1: Fresh Coastal Breakfast (Paid Add-On - Active for Diani Darling) -->
+              <label id="addon-card-breakfast" class="relative p-4 rounded-xl border border-champagne/50 bg-white hover:border-champagne cursor-pointer transition shadow-sm flex items-start gap-3.5 group">
+                <input type="checkbox" id="addon-breakfast" onchange="handleDateOrAddonChange()"
+                       class="mt-1 w-4 h-4 text-champagne rounded border-deep-forest/30 focus:ring-champagne accent-champagne cursor-pointer" />
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-xs font-bold text-deep-forest">🍳 Chef-Prepared Coastal Breakfast</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-champagne/20 text-deep-forest">Available</span>
+                  </div>
+                  <p class="text-[11px] text-driftwood leading-snug">
+                    Fresh tropical fruits, eggs made to order, Swahili mahamri, and hot tea/coffee delivered to your verandah.
+                  </p>
+                  <p class="text-xs font-bold text-champagne pt-0.5">+KSh 1,000 / person / day</p>
+                </div>
+              </label>
+
+              <!-- Card 2: Early SGR / Flight Bag Drop (Complimentary) -->
+              <label class="relative p-4 rounded-xl border border-deep-forest/15 bg-white hover:border-champagne/60 cursor-pointer transition shadow-sm flex items-start gap-3.5 group">
+                <input type="checkbox" id="addon-bag-drop" data-addon-name="Early SGR / Flight Bag Drop (Complimentary)" onchange="handleDateOrAddonChange()"
+                       class="mt-1 w-4 h-4 text-champagne rounded border-deep-forest/30 focus:ring-champagne accent-champagne cursor-pointer" />
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-xs font-bold text-deep-forest">🧳 Early SGR / Flight Bag Drop</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Complimentary</span>
+                  </div>
+                  <p class="text-[11px] text-driftwood leading-snug">
+                    Arriving on the morning Madaraka Express (10:30 AM)? Safely stow your bags with security and lounge by the pool before 12 PM check-in.
+                  </p>
+                  <p class="text-xs font-semibold text-emerald-700 pt-0.5">Free for direct guests</p>
+                </div>
+              </label>
+
+              <!-- Card 3: Gated Compound Parking (Complimentary) -->
+              <label class="relative p-4 rounded-xl border border-deep-forest/15 bg-white hover:border-champagne/60 cursor-pointer transition shadow-sm flex items-start gap-3.5 group">
+                <input type="checkbox" id="addon-parking" data-addon-name="Reserved Gated Compound Parking (Complimentary)" onchange="handleDateOrAddonChange()"
+                       class="mt-1 w-4 h-4 text-champagne rounded border-deep-forest/30 focus:ring-champagne accent-champagne cursor-pointer" />
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-xs font-bold text-deep-forest">🚗 Reserved Guarded Parking</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Complimentary</span>
+                  </div>
+                  <p class="text-[11px] text-driftwood leading-snug">
+                    Driving down from Nairobi or Mombasa? Reserved parking bay inside our 24/7 guarded stone perimeter wall.
+                  </p>
+                  <p class="text-xs font-semibold text-emerald-700 pt-0.5">Free for personal vehicles</p>
+                </div>
+              </label>
+
+              <!-- Card 4: SGR / Airport Taxi Driver Coordination (Local Fare Direct) -->
+              <label class="relative p-4 rounded-xl border border-deep-forest/15 bg-white hover:border-champagne/60 cursor-pointer transition shadow-sm flex items-start gap-3.5 group">
+                <input type="checkbox" id="addon-taxi" data-addon-name="SGR / Airport Taxi Driver Coordination (Direct Local Rate)" onchange="handleDateOrAddonChange()"
+                       class="mt-1 w-4 h-4 text-champagne rounded border-deep-forest/30 focus:ring-champagne accent-champagne cursor-pointer" />
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-xs font-bold text-deep-forest">🚖 SGR / Airport Taxi Coordination</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">Direct Local Rate</span>
+                  </div>
+                  <p class="text-[11px] text-driftwood leading-snug">
+                    We connect you directly with our trusted local drivers at Ukunda Airstrip or Miritini SGR via Dongo Kundu (pay driver direct).
+                  </p>
+                  <p class="text-xs font-semibold text-blue-700 pt-0.5">Zero booking commission</p>
+                </div>
+              </label>
+
+            </div>
+          </div>
+
+          <!-- ── STEP 3: GUEST INFORMATION & DIRECT LOCK ── -->
+          <div class="space-y-4 pt-4 border-t border-deep-forest/10">
+            <div class="flex items-center gap-3">
+              <span class="w-6 h-6 rounded-full bg-deep-forest text-champagne text-xs font-bold flex items-center justify-center shrink-0">3</span>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-deep-forest">Guest Information &amp; Direct Lock</h4>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Full Name -->
+              <div class="flex flex-col gap-1.5">
+                <label for="guest-name" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">Full Name *</label>
+                <input type="text" id="guest-name" required autocomplete="name" placeholder="e.g., Sarah Jenkins" 
+                       class="w-full bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3.5 py-2.5 text-xs text-deep-forest outline-none transition shadow-sm font-medium" />
+              </div>
+
+              <!-- Email Address -->
+              <div class="flex flex-col gap-1.5">
+                <label for="guest-email" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">Email Address (Optional)</label>
+                <input type="email" id="guest-email" autocomplete="email" inputmode="email" placeholder="sarah@example.com" 
+                       class="w-full bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3.5 py-2.5 text-xs text-deep-forest outline-none transition shadow-sm font-medium" />
+              </div>
+
+              <!-- Phone Number with Country Code -->
+              <div class="flex flex-col gap-1.5 sm:col-span-2">
+                <label for="guest-phone-number" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">WhatsApp / Contact Phone *</label>
+                <div class="flex gap-2">
+                  <select id="guest-phone-code" required
+                          class="bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3 py-2.5 text-xs text-deep-forest outline-none transition cursor-pointer shadow-sm font-medium flex-shrink-0 w-36">
+                    <option value="+254">🇰🇪 +254</option>
+                    <option value="+255">🇹🇿 +255</option>
+                    <option value="+256">🇺🇬 +256</option>
+                    <option value="+250">🇷🇼 +250</option>
+                    <option value="+251">🇪🇹 +251</option>
+                    <option value="+252">🇸🇴 +252</option>
+                    <option value="+253">🇩🇯 +253</option>
+                    <option value="+27">🇿🇦 +27</option>
+                    <option value="+234">🇳🇬 +234</option>
+                    <option value="+233">🇬🇭 +233</option>
+                    <option value="+44">🇬🇧 +44</option>
+                    <option value="+1">🇺🇸 +1</option>
+                    <option value="+49">🇩🇪 +49</option>
+                    <option value="+33">🇫🇷 +33</option>
+                    <option value="+971">🇦🇪 +971</option>
+                    <option value="+91">🇮🇳 +91</option>
+                    <option value="+86">🇨🇳 +86</option>
+                    <option value="+61">🇦🇺 +61</option>
+                    <option value="+81">🇯🇵 +81</option>
+                  </select>
+                  <input type="tel" id="guest-phone-number" required autocomplete="tel" inputmode="tel" placeholder="712 345 678"
+                         class="flex-1 min-w-0 bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3.5 py-2.5 text-xs text-deep-forest outline-none transition shadow-sm font-medium" />
+                </div>
+              </div>
+
+              <!-- Special Requests / SGR Notes -->
+              <div class="flex flex-col gap-1.5 sm:col-span-2">
+                <label for="guest-special-requests" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">Special Requests / Arrival Notes</label>
+                <textarea id="guest-special-requests" rows="2" placeholder="e.g., Morning SGR arrival at 10:30 AM, vegetarian breakfast preferences..."
+                          class="w-full bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3.5 py-2.5 text-xs text-deep-forest outline-none transition shadow-sm font-medium resize-none"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── DYNAMIC LIVE PRICING BREAKDOWN ── -->
+          <div class="bg-white border border-champagne/30 rounded-2xl p-5 shadow-sm space-y-3">
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-driftwood">Selected Unit &amp; Rate:</span>
+              <span id="summary-unit-name" class="font-bold text-deep-forest">Diani Darling: Deluxe Studio Room</span>
+            </div>
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-driftwood">Base Nightly Rate:</span>
+              <span id="summary-rate" class="font-medium text-deep-forest">KSh 5,000 / night</span>
+            </div>
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-driftwood">Stay Duration:</span>
+              <span id="summary-nights" class="font-medium text-deep-forest">Select dates</span>
+            </div>
+            <div id="summary-breakfast-row" class="hidden flex justify-between items-center text-xs text-emerald-800 bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-200/60">
+              <span class="font-semibold">🍳 Coastal Breakfast Add-on:</span>
+              <span id="summary-breakfast-cost" class="font-bold">+KSh 0</span>
+            </div>
+            <div class="pt-3 border-t border-deep-forest/10 flex justify-between items-center">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-deep-forest block">Estimated Stay Total</span>
+                <span class="text-[10px] text-driftwood">Direct host rate • Zero booking commission</span>
+              </div>
+              <span id="summary-total" class="text-xl sm:text-2xl font-bold font-display text-champagne">Select dates for total</span>
+            </div>
+          </div>
+
+          <!-- Submit CTA Button -->
+          <button type="submit" id="booking-submit-btn"
+                  class="w-full bg-[#1b4332] hover:bg-[#122f23] active:scale-[0.98] text-champagne border border-champagne/40 hover:border-champagne py-4 px-6 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-3 text-sm md:text-base group cursor-pointer">
+            <svg class="w-5 h-5 fill-current text-champagne group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436.002 9.858-4.384 9.86-9.768.001-2.61-1.013-5.064-2.855-6.909C16.438 2.083 13.99 1.07 11.4 1.07 5.969 1.07 1.547 5.456 1.545 10.842c-.001 1.597.424 3.156 1.233 4.544L1.78 20.58l5.228-1.378c-.138-.077-.257-.15-.361-.208z" />
+            </svg>
+            <span>CHECK AVAILABILITY &amp; RESERVE VIA WHATSAPP 🌴</span>
+          </button>
+        </form>
       </div>
-
-      <form id="property-booking-form" onsubmit="handleBookingSubmit(event)" class="space-y-6 text-sm">
-        
-        <div class="flex flex-col gap-1.5">
-          <label for="guest-name" class="text-xs font-semibold uppercase tracking-wider text-deep-forest/80">Full Name</label>
-          <input type="text" id="guest-name" required autocomplete="name" placeholder="John Doe" 
-                 class="w-full bg-deep-forest border border-deep-forest/10 focus:border-deep-forest rounded px-4 py-3 text-ivory outline-none transition" />
-        </div>
-
-
-        <div class="flex flex-col gap-1.5">
-          <label for="guest-phone-number" class="text-xs font-semibold uppercase tracking-wider text-deep-forest/80">Phone Number</label>
-          <div class="flex gap-2">
-            <select id="guest-phone-code" required
-                    class="bg-deep-forest border border-deep-forest/10 focus:border-deep-forest rounded px-3 py-3 text-ivory outline-none transition cursor-pointer text-sm flex-shrink-0 w-36">
-              <option value="+254">🇰🇪 +254</option>
-              <option value="+255">🇹🇿 +255</option>
-              <option value="+256">🇺🇬 +256</option>
-              <option value="+250">🇷🇼 +250</option>
-              <option value="+251">🇪🇹 +251</option>
-              <option value="+252">🇸🇴 +252</option>
-              <option value="+253">🇩🇯 +253</option>
-              <option value="+27">🇿🇦 +27</option>
-              <option value="+234">🇳🇬 +234</option>
-              <option value="+233">🇬🇭 +233</option>
-              <option value="+44">🇬🇧 +44</option>
-              <option value="+1">🇺🇸 +1</option>
-              <option value="+49">🇩🇪 +49</option>
-              <option value="+33">🇫🇷 +33</option>
-              <option value="+971">🇦🇪 +971</option>
-              <option value="+91">🇮🇳 +91</option>
-              <option value="+86">🇨🇳 +86</option>
-              <option value="+61">🇦🇺 +61</option>
-              <option value="+81">🇯🇵 +81</option>
-            </select>
-            <input type="tel" id="guest-phone-number" required autocomplete="tel" inputmode="tel" placeholder="712 345 678"
-                   class="flex-1 min-w-0 w-full bg-deep-forest border border-deep-forest/10 focus:border-deep-forest rounded px-4 py-3 text-ivory outline-none transition" />
-          </div>
-        </div>
-
-        <div class="flex flex-col gap-1.5">
-          <label class="text-xs font-semibold uppercase tracking-wider text-deep-forest/85">Selected Property</label>
-          <div class="w-full bg-deep-forest/80 border border-deep-forest/10 rounded px-4 py-3 text-ivory/50 cursor-not-allowed select-none font-medium flex justify-between items-center">
-            <span>Diani Darling Cottages</span>
-            <span class="bg-champagne/15 text-champagne text-[10px] px-2 py-0.5 rounded font-semibold uppercase">Locked</span>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-          <div class="flex flex-col gap-1.5">
-            <label for="check-in" class="text-xs font-semibold uppercase tracking-wider text-deep-forest/80">Check-In</label>
-            <input type="date" id="check-in" required 
-                   class="w-full bg-deep-forest border border-deep-forest/10 focus:border-deep-forest rounded px-4 py-3 text-ivory outline-none transition" />
-          </div>
-
-          <div class="flex flex-col gap-1.5">
-            <label for="check-out" class="text-xs font-semibold uppercase tracking-wider text-deep-forest/80">Check-Out</label>
-            <input type="date" id="check-out" required 
-                   class="w-full bg-deep-forest border border-deep-forest/10 focus:border-deep-forest rounded px-4 py-3 text-ivory outline-none transition" />
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-          <div class="flex flex-col gap-1.5">
-            <label for="guests-adults" class="text-xs font-semibold uppercase tracking-wider text-deep-forest/80">Adults</label>
-            <input type="number" id="guests-adults" min="1" max="10" value="2" required 
-                   class="w-full bg-deep-forest border border-deep-forest/10 focus:border-deep-forest rounded px-4 py-3 text-ivory outline-none transition" />
-          </div>
-
-          <div class="flex flex-col gap-1.5">
-            <label for="guests-children" class="text-xs font-semibold uppercase tracking-wider text-deep-forest/80">Children</label>
-            <input type="number" id="guests-children" min="0" max="10" value="0" required 
-                   class="w-full bg-deep-forest border border-deep-forest/10 focus:border-deep-forest rounded px-4 py-3 text-ivory outline-none transition" />
-          </div>
-        </div>
-
-        <button type="submit" 
-                class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-4 rounded font-semibold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-3">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436.002 9.858-4.384 9.86-9.768.001-2.61-1.013-5.064-2.855-6.909C16.438 2.083 13.99 1.07 11.4 1.07 5.969 1.07 1.547 5.456 1.545 10.842c-.001 1.597.424 3.156 1.233 4.544L1.78 20.58l5.228-1.378c-.138-.077-.257-.15-.361-.208z" />
-          </svg>
-          Send Inquiry via WhatsApp
-        </button>
-      </form>
 
     </div>
   </section>
