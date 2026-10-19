@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admincrm
 Disallow: /admincrm.html
 
-Sitemap: https://beakim-landing.vercel.app/sitemap.xml
+Sitemap: https://beakimhospitalitygroup.co.ke/sitemap.xml
