@@ -17,7 +17,24 @@ const APP_CONFIG = Object.freeze({
     PHONE_RAW: "254746938529",
     PHONE_FORMATTED: "+254 746 938 529",
     DEFAULT_COUNTRY_CODE: "+254",
-    EMAIL: "info@beakimhospitality.com"
+    CANONICAL_EMAIL: "info@beakimhospitalitygroup.co.ke",
+    EMAIL: "info@beakimhospitalitygroup.co.ke"
+  }),
+  RATES: Object.freeze({
+    BREAKFAST_PER_PERSON_PER_DAY: 1000,
+    FALLBACK_NIGHTLY_RATE: 2500,
+    MONTHLY_APPROXIMATION_DAYS: 30
+  }),
+  CRM: Object.freeze({
+    SYNC_TIMEOUT_MS: 3500,
+    LOCAL_ENDPOINT: "http://localhost:3005/api/public/inquiries",
+    PRODUCTION_ENDPOINT: "https://beakim-crm.vercel.app/api/public/inquiries",
+    DEFAULT_CHANNEL: "website_whatsapp"
+  }),
+  UI: Object.freeze({
+    BUTTON_COOLDOWN_MS: 1800,
+    DEFAULT_TOAST_DURATION_MS: 3500,
+    VALIDATION_TOAST_DURATION_MS: 4500
   }),
   TIME: Object.freeze({
     IANA_TIMEZONE: "Africa/Nairobi",
@@ -45,6 +62,86 @@ const CommunicationService = Object.freeze({
 
   getTelephoneUrl() {
     return `tel:+${APP_CONFIG.CONTACT.PHONE_RAW}`;
+  },
+
+  getEmailUrl(subject = "Stay Inquiry") {
+    return `mailto:${APP_CONFIG.CONTACT.CANONICAL_EMAIL}?subject=${encodeURIComponent(subject)}`;
+  }
+});
+
+const CrmSyncService = Object.freeze({
+  resolveEndpoint() {
+    if (typeof window !== "undefined") {
+      const host = window.location.hostname;
+      if (host === "localhost" || host === "127.0.0.1") {
+        return APP_CONFIG.CRM.LOCAL_ENDPOINT;
+      }
+    }
+    return APP_CONFIG.CRM.PRODUCTION_ENDPOINT;
+  },
+
+  resolvePropertyId(selection) {
+    const str = String(selection || "").toLowerCase();
+    if (str.includes("tower")) return "prop-4";
+    if (str.includes("darling")) return "prop-3";
+    if (str.includes("darad")) return "prop-2";
+    if (str.includes("apartment")) return "prop-1";
+    return "prop-2";
+  },
+
+  buildPayload({ formData, grandTotal, formattedContactPhone }) {
+    return {
+      guestName: formData.name,
+      guestPhone: formattedContactPhone,
+      guestEmail: formData.email,
+      propertyName: formData.property,
+      propertyId: this.resolvePropertyId(formData.property),
+      unitPreference: formData.property,
+      checkInDate: formData.checkIn,
+      checkOutDate: formData.checkOut,
+      adults: formData.adults,
+      children: formData.children,
+      estimatedTotal: grandTotal || 0,
+      selectedAddons: formData.selectedAddons || [],
+      specialRequests: formData.specialRequests || "",
+      channel: APP_CONFIG.CRM.DEFAULT_CHANNEL,
+      sourceUrl: typeof window !== "undefined" ? window.location.href : "",
+      hp_field: formData.honeypot || ""
+    };
+  },
+
+  async sendInquiry(inquiryPayload) {
+    try {
+      const endpoint = this.resolveEndpoint();
+      let controller = null;
+      let timeoutId = null;
+
+      if (typeof AbortController !== "undefined") {
+        controller = new AbortController();
+        timeoutId = setTimeout(() => controller.abort(), APP_CONFIG.CRM.SYNC_TIMEOUT_MS);
+      }
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(inquiryPayload),
+        signal: controller ? controller.signal : undefined
+      });
+
+      if (timeoutId) clearTimeout(timeoutId);
+
+      if (response && response.ok) {
+        return await response.json();
+      }
+    } catch (err) {
+      if (typeof console !== "undefined" && typeof console.debug === "function") {
+        console.debug("[CrmSyncService] Non-blocking intake sync bypassed:", err && err.message);
+      }
+    }
+    return null;
   }
 });
 
@@ -101,6 +198,41 @@ function normalizeKenyanPhoneNumber(countryCode, rawPhoneNumber) {
 }
 
 /**
+ * Pure domain function computing stay pricing plus ancillary add-ons.
+ */
+function calculateReservationTotals({ pricingSummary, adultsCount = 1, hasBreakfast = false }) {
+  const durationDays = pricingSummary && pricingSummary.durationDays > 0 ? pricingSummary.durationDays : 0;
+  const baseCost = pricingSummary ? pricingSummary.totalCost : 0;
+  const breakfastCost = (hasBreakfast && durationDays > 0)
+    ? APP_CONFIG.RATES.BREAKFAST_PER_PERSON_PER_DAY * adultsCount * durationDays
+    : 0;
+  const grandTotal = baseCost + breakfastCost;
+  const isValid = Boolean(pricingSummary && pricingSummary.isValidRange);
+  const formattedGrandTotal = isValid
+    ? `KSh ${grandTotal.toLocaleString()}`
+    : (pricingSummary ? pricingSummary.formattedTotal : "Invalid Dates");
+
+  return {
+    baseCost,
+    breakfastCost,
+    grandTotal,
+    formattedGrandTotal,
+    durationDays,
+    isValid
+  };
+}
+
+const PROPERTY_RATE_CATALOG_FALLBACK = Object.freeze([
+  { matcher: (id) => id.includes("Without AC"), rate: 2000, isMonthly: false },
+  { matcher: (id) => id.includes("Deluxe Studio") && id.includes("Darad"), rate: 3000, isMonthly: false },
+  { matcher: (id) => id.includes("1-Bedroom Cottage") && id.includes("Darad"), rate: 4000, isMonthly: false },
+  { matcher: (id) => id.includes("Diani Darling"), rate: 5000, isMonthly: false },
+  { matcher: (id) => id.includes("Tower"), rate: 2500, isMonthly: false },
+  { matcher: (id) => id.includes("1-Bedroom") && id.includes("Apartment"), rate: 15000, isMonthly: true },
+  { matcher: (id) => id.includes("2-Bedroom") && id.includes("Apartment"), rate: 25000, isMonthly: true }
+]);
+
+/**
  * Computes stay pricing and formatted summary metrics based on catalog offerings or fallback rules.
  */
 function resolveStayPricing(propertyOrOfferingId, checkInDateString, checkOutDateString) {
@@ -119,23 +251,10 @@ function resolveStayPricing(propertyOrOfferingId, checkInDateString, checkOutDat
     unitDisplayName = offering.name;
   } else {
     const propertyIdentifier = String(propertyOrOfferingId);
-    if (propertyIdentifier.includes("Without AC")) {
-      rate = 2000;
-    } else if (propertyIdentifier.includes("Deluxe Studio") && propertyIdentifier.includes("Darad")) {
-      rate = 3000;
-    } else if (propertyIdentifier.includes("1-Bedroom Cottage") && propertyIdentifier.includes("Darad")) {
-      rate = 4000;
-    } else if (propertyIdentifier.includes("Diani Darling")) {
-      rate = 5000;
-    } else if (propertyIdentifier.includes("Tower")) {
-      rate = 2500;
-      isMonthly = false;
-    } else if (propertyIdentifier.includes("1-Bedroom") && propertyIdentifier.includes("Apartment")) {
-      rate = 15000;
-      isMonthly = true;
-    } else if (propertyIdentifier.includes("2-Bedroom") && propertyIdentifier.includes("Apartment")) {
-      rate = 25000;
-      isMonthly = true;
+    const matchedRule = PROPERTY_RATE_CATALOG_FALLBACK.find(rule => rule.matcher(propertyIdentifier));
+    if (matchedRule) {
+      rate = matchedRule.rate;
+      isMonthly = matchedRule.isMonthly;
     }
   }
 
@@ -229,35 +348,17 @@ function buildInquiryMessage({ guestName, contactPhone, guestEmail, propertyName
 // ── 4. HIGH-LEVEL FORM COORDINATORS (STEPDOWN RULE) ──
 
 /**
- * Backward-compatible alias for cottage-specific booking forms.
- */
-function handleCottageSubmit(event) {
-  return handleBookingSubmit(event);
-}
-
-/**
  * Resolves the Beakim CRM public intake API base endpoint based on active runtime hostname.
  */
 function getCrmPublicEndpoint() {
-  if (typeof window !== "undefined") {
-    const host = window.location.hostname;
-    if (host === "localhost" || host === "127.0.0.1") {
-      return "http://localhost:3005/api/public/inquiries";
-    }
-  }
-  return "https://beakim-crm.vercel.app/api/public/inquiries";
+  return CrmSyncService.resolveEndpoint();
 }
 
 /**
  * Maps property name or dropdown selection to authoritative CRM propertyId.
  */
 function resolvePropertyIdFromSelection(selection) {
-  const str = String(selection || "").toLowerCase();
-  if (str.includes("tower")) return "prop-4";
-  if (str.includes("darling")) return "prop-3";
-  if (str.includes("darad")) return "prop-2";
-  if (str.includes("apartment")) return "prop-1";
-  return "prop-2";
+  return CrmSyncService.resolvePropertyId(selection);
 }
 
 /**
@@ -265,89 +366,60 @@ function resolvePropertyIdFromSelection(selection) {
  * Guaranteed non-blocking with 3.5s timeout so WhatsApp modal is never delayed.
  */
 async function syncInquiryToCrm(inquiryPayload) {
-  try {
-    const endpoint = getCrmPublicEndpoint();
-    let controller = null;
-    let timeoutId = null;
+  return CrmSyncService.sendInquiry(inquiryPayload);
+}
 
-    if (typeof AbortController !== "undefined") {
-      controller = new AbortController();
-      timeoutId = setTimeout(() => controller.abort(), 3500);
-    }
+/**
+ * Backward-compatible alias for cottage-specific booking forms.
+ */
+function handleCottageSubmit(event) {
+  return handleBookingSubmit(event);
+}
 
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify(inquiryPayload),
-      signal: controller ? controller.signal : undefined
-    });
-
-    if (timeoutId) clearTimeout(timeoutId);
-
-    if (response && response.ok) {
-      const data = await response.json();
-      return data;
-    }
-  } catch (err) {
-    // Non-fatal: Guest continues to WhatsApp without interruption
+function extractSubmitButton(event) {
+  if (event && event.target && typeof event.target.querySelector === "function") {
+    return event.target.querySelector('button[type="submit"]');
+  }
+  if (typeof document !== "undefined") {
+    return document.querySelector('#booking-form button[type="submit"], #btn-submit-booking');
   }
   return null;
 }
 
-/**
- * Primary booking inquiry form submit handler.
- * Validates, serializes, transmits background sync to CRM, and displays WhatsApp review modal.
- */
-function handleBookingSubmit(event) {
-  if (event && typeof event.preventDefault === "function") {
-    event.preventDefault();
+function temporarilyLockSubmitButton(submitButton) {
+  if (!submitButton) return;
+  submitButton.disabled = true;
+  submitButton.setAttribute("aria-busy", "true");
+  submitButton.classList.add("opacity-75", "cursor-wait");
+  setTimeout(() => {
+    submitButton.disabled = false;
+    submitButton.removeAttribute("aria-busy");
+    submitButton.classList.remove("opacity-75", "cursor-wait");
+  }, APP_CONFIG.UI.BUTTON_COOLDOWN_MS);
+}
+
+function handleValidationFailure(validationError) {
+  if (typeof showToast === "function") {
+    showToast(validationError.message, APP_CONFIG.UI.VALIDATION_TOAST_DURATION_MS);
+  } else {
+    alert(validationError.message);
   }
-
-  const submitBtn = event && event.target && typeof event.target.querySelector === "function"
-    ? event.target.querySelector('button[type="submit"]')
-    : document.querySelector('#booking-form button[type="submit"], #btn-submit-booking');
-
-  if (submitBtn && submitBtn.disabled) return;
-
-  const formData = extractBookingFormData();
-  const validationError = validateBookingFormData(formData);
-  if (validationError) {
-    if (typeof showToast === "function") {
-      showToast(validationError.message, 4500);
-    } else {
-      alert(validationError.message);
-    }
-    if (validationError.fieldElement && typeof validationError.fieldElement.focus === "function") {
-      validationError.fieldElement.focus();
-    }
-    return;
+  if (validationError.fieldElement && typeof validationError.fieldElement.focus === "function") {
+    validationError.fieldElement.focus();
   }
+}
 
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.setAttribute("aria-busy", "true");
-    submitBtn.classList.add("opacity-75", "cursor-wait");
-    setTimeout(() => {
-      submitBtn.disabled = false;
-      submitBtn.removeAttribute("aria-busy");
-      submitBtn.classList.remove("opacity-75", "cursor-wait");
-    }, 1800);
-  }
-
+function processValidBookingSubmission(formData) {
   const pricingSummary = resolveStayPricing(formData.property, formData.checkIn, formData.checkOut);
   const normalizedPhone = normalizeKenyanPhoneNumber(formData.countryCode, formData.phoneNumber);
   const formattedContactPhone = `${formData.countryCode} ${normalizedPhone}`;
   const totalGuests = formData.adults + formData.children;
 
-  let breakfastTotal = 0;
-  if (formData.hasBreakfast && pricingSummary.durationDays > 0) {
-    breakfastTotal = 1000 * formData.adults * pricingSummary.durationDays;
-  }
-  const grandTotal = pricingSummary.totalCost + breakfastTotal;
-  const formattedGrandTotal = pricingSummary.isValidRange ? `KSh ${grandTotal.toLocaleString()}` : pricingSummary.formattedTotal;
+  const totals = calculateReservationTotals({
+    pricingSummary,
+    adultsCount: formData.adults,
+    hasBreakfast: formData.hasBreakfast
+  });
 
   const messageText = buildInquiryMessage({
     guestName: formData.name,
@@ -359,33 +431,19 @@ function handleBookingSubmit(event) {
     stayDurationText: pricingSummary.durationText,
     adultsCount: formData.adults,
     childrenCount: formData.children,
-    estimatedTotal: formattedGrandTotal,
+    estimatedTotal: totals.formattedGrandTotal,
     selectedAddons: formData.selectedAddons || [],
     specialRequests: formData.specialRequests || ""
   });
 
   const whatsappUrl = CommunicationService.buildWhatsAppUrl(messageText);
 
-  // Background non-blocking sync directly to Beakim CRM
-  const inquiryPayload = {
-    guestName: formData.name,
-    guestPhone: formattedContactPhone,
-    guestEmail: formData.email,
-    propertyName: formData.property,
-    propertyId: resolvePropertyIdFromSelection(formData.property),
-    unitPreference: formData.property,
-    checkInDate: formData.checkIn,
-    checkOutDate: formData.checkOut,
-    adults: formData.adults,
-    children: formData.children,
-    estimatedTotal: grandTotal || 0,
-    selectedAddons: formData.selectedAddons || [],
-    specialRequests: formData.specialRequests || "",
-    channel: "website_whatsapp",
-    sourceUrl: typeof window !== "undefined" ? window.location.href : "",
-    hp_field: formData.honeypot || ""
-  };
-  syncInquiryToCrm(inquiryPayload);
+  const inquiryPayload = CrmSyncService.buildPayload({
+    formData,
+    grandTotal: totals.grandTotal,
+    formattedContactPhone
+  });
+  CrmSyncService.sendInquiry(inquiryPayload);
 
   showInquiryReviewModal({
     name: formData.name,
@@ -393,11 +451,68 @@ function handleBookingSubmit(event) {
     property: formData.property,
     dates: `${formData.checkIn} to ${formData.checkOut} (${pricingSummary.durationText})`,
     guests: `${totalGuests} (${formData.adults} Adults, ${formData.children} Children)`,
-    estimatedTotal: formattedGrandTotal,
+    estimatedTotal: totals.formattedGrandTotal,
     selectedAddons: formData.selectedAddons || [],
     whatsappUrl,
     messageText
   });
+}
+
+/**
+ * Primary booking inquiry form submit handler (<20 lines SRP orchestrator).
+ */
+function handleBookingSubmit(event) {
+  if (event && typeof event.preventDefault === "function") {
+    event.preventDefault();
+  }
+
+  const submitBtn = extractSubmitButton(event);
+  if (submitBtn && submitBtn.disabled) return;
+
+  const formData = extractBookingFormData();
+  const validationError = validateBookingFormData(formData);
+  if (validationError) {
+    handleValidationFailure(validationError);
+    return;
+  }
+
+  temporarilyLockSubmitButton(submitBtn);
+  processValidBookingSubmission(formData);
+}
+
+/**
+ * Extracts structured add-ons and complimentary preferences.
+ */
+function extractSelectedAddons({ adultsCount, validNights, breakfastChecked }) {
+  const selectedAddons = [];
+  if (breakfastChecked) {
+    const breakfastTotal = APP_CONFIG.RATES.BREAKFAST_PER_PERSON_PER_DAY * adultsCount * validNights;
+    selectedAddons.push(`Chef-Prepared Coastal Breakfast: ${adultsCount} Guest(s) × ${validNights} Night(s) (+KSh ${breakfastTotal.toLocaleString()})`);
+  }
+
+  const standardAddonMap = [
+    { id: "addon-bag-drop", label: "Early SGR / Flight Bag Drop (Complimentary)" },
+    { id: "addon-parking", label: "Reserved Gated Compound Parking (Complimentary)" },
+    { id: "addon-taxi", label: "SGR / Airport Taxi Driver Coordination (Direct Local Rate)" },
+    { id: "addon-kitchen", label: "Self-Catering Cooking Setup (Complimentary)" },
+    { id: "addon-ground-floor", label: "Ground Floor / Garden Access Preference (Complimentary)" }
+  ];
+
+  if (typeof document !== "undefined") {
+    standardAddonMap.forEach(({ id, label }) => {
+      const checkbox = document.getElementById(id);
+      if (checkbox && checkbox.checked) selectedAddons.push(label);
+    });
+
+    document.querySelectorAll('input[type="checkbox"][data-addon-name]:checked').forEach(cb => {
+      const customName = cb.getAttribute("data-addon-name");
+      if (customName && !selectedAddons.includes(customName)) {
+        selectedAddons.push(customName);
+      }
+    });
+  }
+
+  return selectedAddons;
 }
 
 /**
@@ -435,48 +550,13 @@ function extractBookingFormData() {
   if (childrenElement) childrenCount = parseInt(childrenElement.value, 10) || APP_CONFIG.DEFAULTS.CHILDREN_COUNT;
 
   const honeypotElement = typeof document !== "undefined" ? document.getElementById("website_hp") : null;
+  const breakfastCheckbox = typeof document !== "undefined" ? document.getElementById("addon-breakfast") : null;
+  const breakfastChecked = Boolean(breakfastCheckbox && breakfastCheckbox.checked);
 
-  // Curated Add-ons extraction
-  const breakfastCheckbox = document.getElementById("addon-breakfast");
-  const bagDropCheckbox = document.getElementById("addon-bag-drop");
-  const parkingCheckbox = document.getElementById("addon-parking");
-  const taxiCheckbox = document.getElementById("addon-taxi");
-  const kitchenCheckbox = document.getElementById("addon-kitchen");
-  const groundFloorCheckbox = document.getElementById("addon-ground-floor");
-
-  const selectedAddons = [];
   const durationDays = calculateDateDifferenceInDays(checkInElement ? checkInElement.value : "", checkOutElement ? checkOutElement.value : "");
   const validNights = durationDays > 0 ? durationDays : 1;
 
-  if (breakfastCheckbox && breakfastCheckbox.checked) {
-    const breakfastTotal = 1000 * adultsCount * validNights;
-    selectedAddons.push(`Chef-Prepared Coastal Breakfast: ${adultsCount} Guest(s) × ${validNights} Night(s) (+KSh ${breakfastTotal.toLocaleString()})`);
-  }
-  if (bagDropCheckbox && bagDropCheckbox.checked) {
-    selectedAddons.push("Early SGR / Flight Bag Drop (Complimentary)");
-  }
-  if (parkingCheckbox && parkingCheckbox.checked) {
-    selectedAddons.push("Reserved Gated Compound Parking (Complimentary)");
-  }
-  if (taxiCheckbox && taxiCheckbox.checked) {
-    selectedAddons.push("SGR / Airport Taxi Driver Coordination (Direct Local Rate)");
-  }
-  if (kitchenCheckbox && kitchenCheckbox.checked) {
-    selectedAddons.push("Self-Catering Cooking Setup (Complimentary)");
-  }
-  if (groundFloorCheckbox && groundFloorCheckbox.checked) {
-    selectedAddons.push("Ground Floor / Garden Access Preference (Complimentary)");
-  }
-
-  // Dynamic extraction of any custom property preference carrying data-addon-name
-  if (typeof document !== "undefined") {
-    document.querySelectorAll('input[type="checkbox"][data-addon-name]:checked').forEach(cb => {
-      const customName = cb.getAttribute("data-addon-name");
-      if (customName && !selectedAddons.includes(customName)) {
-        selectedAddons.push(customName);
-      }
-    });
-  }
+  const selectedAddons = extractSelectedAddons({ adultsCount, validNights, breakfastChecked });
 
   return {
     name: nameElement ? nameElement.value.trim() : "",
@@ -490,7 +570,7 @@ function extractBookingFormData() {
     children: childrenCount,
     specialRequests: specialRequestsElement ? specialRequestsElement.value.trim() : "",
     selectedAddons,
-    hasBreakfast: breakfastCheckbox ? breakfastCheckbox.checked : false,
+    hasBreakfast: breakfastChecked,
     honeypot: honeypotElement ? honeypotElement.value.trim() : "",
     nameElement,
     phoneElement,
@@ -614,27 +694,26 @@ function handleDateOrAddonChange() {
   const adultsCount = adultsElement ? parseInt(adultsElement.value, 10) || 2 : 2;
 
   const pricingSummary = resolveStayPricing(propertyValue, checkInDate, checkOutDate);
-  const durationDays = pricingSummary.durationDays > 0 ? pricingSummary.durationDays : 0;
+  const totals = calculateReservationTotals({
+    pricingSummary,
+    adultsCount,
+    hasBreakfast: Boolean(breakfastCheckbox && breakfastCheckbox.checked)
+  });
 
-  let breakfastTotal = 0;
   const breakfastRow = document.getElementById("summary-breakfast-row");
   const breakfastCostElem = document.getElementById("summary-breakfast-cost");
 
-  if (breakfastCheckbox && breakfastCheckbox.checked && durationDays > 0) {
-    breakfastTotal = 1000 * adultsCount * durationDays;
+  if (totals.breakfastCost > 0) {
     if (breakfastRow) breakfastRow.classList.remove("hidden");
-    if (breakfastCostElem) breakfastCostElem.textContent = `+KSh ${breakfastTotal.toLocaleString()}`;
+    if (breakfastCostElem) breakfastCostElem.textContent = `+KSh ${totals.breakfastCost.toLocaleString()}`;
   } else {
     if (breakfastRow) breakfastRow.classList.add("hidden");
   }
 
-  const finalTotal = pricingSummary.totalCost + breakfastTotal;
-  const formattedFinalTotal = pricingSummary.isValidRange ? `KSh ${finalTotal.toLocaleString()}` : pricingSummary.formattedTotal;
-
   renderPriceSummary({
     ...pricingSummary,
-    totalCost: finalTotal,
-    formattedTotal: formattedFinalTotal
+    totalCost: totals.grandTotal,
+    formattedTotal: totals.formattedGrandTotal
   });
 }
 
@@ -669,7 +748,7 @@ let currentGalleryIndex = 0;
 /**
  * Transient champagne-accented toast notification.
  */
-function showToast(messageText, durationMs = 3500) {
+function showToast(messageText, durationMs = APP_CONFIG.UI.DEFAULT_TOAST_DURATION_MS) {
   if (typeof document === "undefined") return;
 
   let toastElement = document.getElementById("beakim-toast");
@@ -1276,13 +1355,16 @@ if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     APP_CONFIG,
     CommunicationService,
+    CrmSyncService,
     getNairobiDateString,
     calculateDateDifferenceInDays,
     isPastDate,
     isInvalidDateRange,
     normalizeKenyanPhoneNumber,
+    calculateReservationTotals,
     resolveStayPricing,
     buildInquiryMessage,
+    extractSelectedAddons,
     extractBookingFormData,
     validateBookingFormData,
     getCrmPublicEndpoint,

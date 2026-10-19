@@ -7,11 +7,13 @@ const assert = require("assert");
 const {
   APP_CONFIG,
   CommunicationService,
+  CrmSyncService,
   getNairobiDateString,
   calculateDateDifferenceInDays,
   isPastDate,
   isInvalidDateRange,
   normalizeKenyanPhoneNumber,
+  calculateReservationTotals,
   resolveStayPricing,
   buildInquiryMessage,
   validateBookingFormData,
@@ -29,8 +31,15 @@ console.log("🧪 RUNNING CLEAN CODE UNIT TEST SUITE...\n");
 console.log("1. Testing APP_CONFIG Immutability & Values...");
 assert.strictEqual(APP_CONFIG.CONTACT.PHONE_RAW, "254746938529");
 assert.strictEqual(APP_CONFIG.CONTACT.DEFAULT_COUNTRY_CODE, "+254");
+assert.strictEqual(APP_CONFIG.CONTACT.CANONICAL_EMAIL, "info@beakimhospitalitygroup.co.ke");
+assert.strictEqual(APP_CONFIG.RATES.BREAKFAST_PER_PERSON_PER_DAY, 1000);
+assert.strictEqual(APP_CONFIG.CRM.SYNC_TIMEOUT_MS, 3500);
+assert.strictEqual(APP_CONFIG.UI.BUTTON_COOLDOWN_MS, 1800);
 assert.strictEqual(Object.isFrozen(APP_CONFIG), true);
 assert.strictEqual(Object.isFrozen(APP_CONFIG.CONTACT), true);
+assert.strictEqual(Object.isFrozen(APP_CONFIG.RATES), true);
+assert.strictEqual(Object.isFrozen(APP_CONFIG.CRM), true);
+assert.strictEqual(Object.isFrozen(APP_CONFIG.UI), true);
 assert.strictEqual(Object.isFrozen(APP_CONFIG.TIME), true);
 assert.strictEqual(Object.isFrozen(APP_CONFIG.DEFAULTS), true);
 console.log("   ✅ APP_CONFIG and nested dictionaries are strictly frozen.");
@@ -154,4 +163,71 @@ handleResidenceCardKeydown(mockTabEvent, "Tower Cottages", null);
 assert.strictEqual(tabPrevented, false);
 console.log("   ✅ Keyboard listeners respond exclusively to Enter/Space without interfering with Tab order.");
 
-console.log("\n🎉 ALL CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 9: Pure Reservation Totals & Breakfast Add-On Calculation
+console.log("9. Testing Pure Reservation Totals & Breakfast Calculation...");
+const standardPricing = {
+  rate: 5000,
+  totalCost: 15000,
+  durationDays: 3,
+  durationText: "3 Nights",
+  formattedTotal: "KSh 15,000",
+  isValidRange: true
+};
+
+const withBreakfast = calculateReservationTotals({
+  pricingSummary: standardPricing,
+  adultsCount: 2,
+  hasBreakfast: true
+});
+assert.strictEqual(withBreakfast.baseCost, 15000);
+assert.strictEqual(withBreakfast.breakfastCost, 6000);
+assert.strictEqual(withBreakfast.grandTotal, 21000);
+assert.strictEqual(withBreakfast.formattedGrandTotal, "KSh 21,000");
+
+const withoutBreakfast = calculateReservationTotals({
+  pricingSummary: standardPricing,
+  adultsCount: 2,
+  hasBreakfast: false
+});
+assert.strictEqual(withoutBreakfast.breakfastCost, 0);
+assert.strictEqual(withoutBreakfast.grandTotal, 15000);
+
+const zeroNightEdgeCase = calculateReservationTotals({
+  pricingSummary: { rate: 2500, totalCost: 0, durationDays: 0, isValidRange: false, formattedTotal: "Invalid Dates" },
+  adultsCount: 2,
+  hasBreakfast: true
+});
+assert.strictEqual(zeroNightEdgeCase.breakfastCost, 0);
+assert.strictEqual(zeroNightEdgeCase.isValid, false);
+console.log("   ✅ Pure reservation totals and breakfast calculations handle standard and edge cases robustly.");
+
+// TEST 10: CrmSyncService Boundary Adapter & Property ID Resolution
+console.log("10. Testing CrmSyncService Boundary Adapter & Property ID Resolution...");
+assert.strictEqual(CrmSyncService.resolvePropertyId("Tower Cottages - 2-Bedroom"), "prop-4");
+assert.strictEqual(CrmSyncService.resolvePropertyId("Diani Darling Cottages"), "prop-3");
+assert.strictEqual(CrmSyncService.resolvePropertyId("Beakim Darad Resort"), "prop-2");
+assert.strictEqual(CrmSyncService.resolvePropertyId("Beakim Apartments 1-Bedroom"), "prop-1");
+
+const testPayload = CrmSyncService.buildPayload({
+  formData: {
+    name: "John Doe",
+    email: "john@example.com",
+    property: "Tower Cottages",
+    checkIn: "2026-11-01",
+    checkOut: "2026-11-03",
+    adults: 2,
+    children: 0,
+    selectedAddons: ["Early SGR Bag Drop"],
+    specialRequests: "Quiet corner unit",
+    honeypot: ""
+  },
+  grandTotal: 5000,
+  formattedContactPhone: "+254 746938529"
+});
+assert.strictEqual(testPayload.guestName, "John Doe");
+assert.strictEqual(testPayload.propertyId, "prop-4");
+assert.strictEqual(testPayload.estimatedTotal, 5000);
+assert.strictEqual(testPayload.channel, "website_whatsapp");
+console.log("   ✅ CrmSyncService correctly maps properties and constructs immutable API payloads.");
+
+console.log("\n🎉 ALL 10 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
