@@ -1,22 +1,25 @@
-# Js
+# Beakim Landing - Client Scripts Domain (`assets/js/`)
 
 ## 1. Purpose & Ownership
-- **Scope:** Responsibility and domain ownership of this folder.
-- **Key Entry Points:** (e.g., `main.py`, `index.ts`, `routes/`)
-- **Boundaries:** What this folder owns and what it must NEVER do.
+- **Scope:** Public client-side JavaScript for interactive UI widgets, dynamic stay pricing computation, gallery lightboxes, WhatsApp inquiry formatting, and background sync to Beakim CRM.
+- **Key Modules Owned:**
+  - `main.js`: Main client orchestrator, booking form serialization, date pickers, honeypot extraction, WhatsApp URL generation, review modal, and non-blocking CRM intake fetcher (`syncInquiryToCrm`).
+  - `catalog.js`: Single Source of Truth for verified property offerings, nightly/monthly rates, room amenities, and unit inventories.
+- **Boundaries & Invariants:**
+  - **Non-Blocking Background Delivery:** `syncInquiryToCrm` must execute asynchronously with an AbortController timeout (3.5s). Network delays or offline states must NEVER block the visitor from viewing the review modal or proceeding to WhatsApp.
+  - **No Magic Numbers:** Centralized configurations are strictly frozen under `APP_CONFIG`.
+  - **CommonJS Test Compatibility:** All pure functions are exported conditionally at the bottom of `main.js` for Node.js unit tests.
 
 ---
 
 ## 2. Local Contracts & Rules
-- **Coding Conventions:** (e.g., typing rules, schema requirements, styling conventions)
-- **Forbidden Patterns:** (e.g., no direct DB queries, no inline CSS)
-- **Shared Utilities:** (Pointers to shared helpers in other directories to prevent duplication)
+- **CRM Sync Protocol:** Submissions POST to `getCrmPublicEndpoint()`, resolving `http://localhost:3005/api/public/inquiries` in local development and `https://beakim-crm.vercel.app/api/public/inquiries` in production.
+- **Anti-Spam:** Honeypot field (`website_hp`) must be submitted alongside form values.
 
 ---
 
 ## 3. Work Guidance & Verification
-- **Test Command:** `(e.g., pytest tests/test_js.py)`
-- **Lint / Type Check:** `(e.g., mypy .)`
+- **Unit Tests:** `node test/clean_code.test.js`
 
 ---
 

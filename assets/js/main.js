@@ -224,8 +224,70 @@ function handleCottageSubmit(event) {
 }
 
 /**
+ * Resolves the Beakim CRM public intake API base endpoint based on active runtime hostname.
+ */
+function getCrmPublicEndpoint() {
+  if (typeof window !== "undefined") {
+    const host = window.location.hostname;
+    if (host === "localhost" || host === "127.0.0.1") {
+      return "http://localhost:3005/api/public/inquiries";
+    }
+  }
+  return "https://beakim-crm.vercel.app/api/public/inquiries";
+}
+
+/**
+ * Maps property name or dropdown selection to authoritative CRM propertyId.
+ */
+function resolvePropertyIdFromSelection(selection) {
+  const str = String(selection || "").toLowerCase();
+  if (str.includes("tower")) return "prop-4";
+  if (str.includes("darling")) return "prop-3";
+  if (str.includes("darad")) return "prop-2";
+  if (str.includes("apartment")) return "prop-1";
+  return "prop-2";
+}
+
+/**
+ * Transmits website booking inquiry asynchronously to Beakim CRM in background.
+ * Guaranteed non-blocking with 3.5s timeout so WhatsApp modal is never delayed.
+ */
+async function syncInquiryToCrm(inquiryPayload) {
+  try {
+    const endpoint = getCrmPublicEndpoint();
+    let controller = null;
+    let timeoutId = null;
+
+    if (typeof AbortController !== "undefined") {
+      controller = new AbortController();
+      timeoutId = setTimeout(() => controller.abort(), 3500);
+    }
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(inquiryPayload),
+      signal: controller ? controller.signal : undefined
+    });
+
+    if (timeoutId) clearTimeout(timeoutId);
+
+    if (response && response.ok) {
+      const data = await response.json();
+      return data;
+    }
+  } catch (err) {
+    // Non-fatal: Guest continues to WhatsApp without interruption
+  }
+  return null;
+}
+
+/**
  * Primary booking inquiry form submit handler.
- * Validates, serializes, and displays review modal.
+ * Validates, serializes, transmits background sync to CRM, and displays WhatsApp review modal.
  */
 function handleBookingSubmit(event) {
   if (event && typeof event.preventDefault === "function") {
@@ -265,6 +327,25 @@ function handleBookingSubmit(event) {
   });
 
   const whatsappUrl = CommunicationService.buildWhatsAppUrl(messageText);
+
+  // Background non-blocking sync directly to Beakim CRM
+  const inquiryPayload = {
+    guestName: formData.name,
+    guestPhone: formattedContactPhone,
+    guestEmail: formData.email,
+    propertyName: formData.property,
+    propertyId: resolvePropertyIdFromSelection(formData.property),
+    unitPreference: formData.property,
+    checkInDate: formData.checkIn,
+    checkOutDate: formData.checkOut,
+    adults: formData.adults,
+    children: formData.children,
+    estimatedTotal: pricingSummary.totalCost || 0,
+    channel: "website_whatsapp",
+    sourceUrl: typeof window !== "undefined" ? window.location.href : "",
+    hp_field: formData.honeypot || ""
+  };
+  syncInquiryToCrm(inquiryPayload);
 
   showInquiryReviewModal({
     name: formData.name,
@@ -311,6 +392,8 @@ function extractBookingFormData() {
 
   if (childrenElement) childrenCount = parseInt(childrenElement.value, 10) || APP_CONFIG.DEFAULTS.CHILDREN_COUNT;
 
+  const honeypotElement = typeof document !== "undefined" ? document.getElementById("website_hp") : null;
+
   return {
     name: nameElement ? nameElement.value.trim() : "",
     email: emailElement ? emailElement.value.trim() : "",
@@ -321,6 +404,7 @@ function extractBookingFormData() {
     checkOut: checkOutElement ? checkOutElement.value : "",
     adults: adultsCount,
     children: childrenCount,
+    honeypot: honeypotElement ? honeypotElement.value.trim() : "",
     nameElement,
     phoneElement,
     checkInElement,
@@ -946,6 +1030,9 @@ if (typeof module !== "undefined" && module.exports) {
     resolveStayPricing,
     buildInquiryMessage,
     extractBookingFormData,
-    validateBookingFormData
+    validateBookingFormData,
+    getCrmPublicEndpoint,
+    resolvePropertyIdFromSelection,
+    syncInquiryToCrm
   };
 }

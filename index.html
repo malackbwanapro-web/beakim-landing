@@ -642,6 +642,7 @@
 
     <!-- Booking Form -->
       <form id="booking-form" onsubmit="handleBookingSubmit(event)" class="grid md:grid-cols-2 gap-6 text-sm">
+        <input type="text" name="website_hp" id="website_hp" class="hidden" tabindex="-1" autocomplete="off" style="display:none !important;" aria-hidden="true" />
         <div class="flex flex-col gap-1.5 col-span-2">
           <label for="guest-name" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Full Name</label>
           <input type="text" id="guest-name" required placeholder="John Doe" 
