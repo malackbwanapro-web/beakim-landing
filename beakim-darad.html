@@ -34,7 +34,7 @@
   "url": "https://www.beakimhospitalitygroup.co.ke/beakim-darad",
   "image": "https://www.beakimhospitalitygroup.co.ke/assets/Beakim%20Darad%20Images/beakim-darad-resort-swimming-pools-deluxe-building.webp",
   "telephone": "+254746938529",
-  "email": "info@beakimhospitality.com",
+  "email": "info@beakimhospitalitygroup.co.ke",
   "priceRange": "KES 2,000 - KES 4,000",
   "address": {
     "@type": "PostalAddress",
@@ -79,7 +79,7 @@
 
 
   <!-- FLOATING ACTIONS -->
-  <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+  <div class="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] right-4 sm:right-6 z-50 flex flex-col gap-3">
     <a href="https://wa.me/254746938529" target="_blank" rel="noopener noreferrer" 
        class="flex items-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white px-5 py-3 rounded-full shadow-2xl transition duration-300 transform hover:-translate-y-1">
       <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
@@ -119,7 +119,7 @@
 
   <main id="main-content">
   <!-- HERO SECTION -->
-  <section class="relative min-h-[90vh] md:min-h-screen flex items-center pt-24 overflow-hidden">
+  <section class="relative min-h-[88svh] md:min-h-[calc(100svh-4.5rem)] flex items-center pt-24 overflow-hidden">
     <div class="absolute inset-0 z-0">
       <img src="assets/Beakim Darad Images/beakim-darad-resort-swimming-pools-deluxe-building.webp" alt="Beakim Darad Resort Swimming Pools and Deluxe Building View" class="w-full h-full object-cover brightness-[0.7]" decoding="async" fetchpriority="high">
       <div class="absolute inset-0 bg-gradient-to-t from-deep-forest via-deep-forest/40 to-black/40"></div>
@@ -179,7 +179,7 @@
   </section>
 
   <!-- UNIT SECTIONS CONTAINER -->
-  <section id="units" class="py-20 max-w-7xl mx-auto px-6 space-y-24">
+  <section id="units" class="py-20 max-w-7xl mx-auto px-6 space-y-24 scroll-mt-24">
 
     <div class="text-center space-y-4 max-w-2xl mx-auto">
       <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Accommodation Choices</span>
@@ -460,17 +460,10 @@
 
   </section>
 
-  <!-- LIGHTBOX MODAL -->
-  <div id="lightbox-modal" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4">
-    <button id="lightbox-close-btn" type="button" onclick="closeLightbox()" aria-label="Close image preview" class="absolute top-6 right-6 text-ivory/80 hover:text-champagne text-3xl font-bold transition p-2 focus:outline-none focus:ring-2 focus:ring-champagne rounded">&times;</button>
-    <div class="max-w-5xl w-full text-center space-y-4">
-      <img id="lightbox-img" src="" alt="Gallery Image preview" class="max-h-[80vh] mx-auto rounded-lg shadow-2xl object-contain border border-champagne/20" decoding="async" loading="lazy">
-      <p id="lightbox-title" class="text-sm font-display text-champagne uppercase tracking-widest"></p>
-    </div>
-  </div>
+  <!-- Lightbox modal dynamically instantiated by assets/js/main.js -->
 
   <!-- BOOKING SECTION -->
-  <section id="booking" class="py-20 bg-canopy/40 border-t border-champagne/10 relative">
+  <section id="booking" class="py-20 bg-canopy/40 border-t border-champagne/10 relative scroll-mt-24">
     <div class="max-w-4xl mx-auto px-6">
       <div class="bg-deep-forest border border-champagne/20 rounded-2xl p-8 md:p-12 shadow-2xl space-y-8">
         <div class="text-center space-y-2">
@@ -480,16 +473,17 @@
         </div>
 
         <form id="beakim-darad-booking-form" onsubmit="handleBookingSubmit(event)" class="space-y-6">
+          <input type="text" name="website_hp" id="website_hp" class="hidden" tabindex="-1" autocomplete="off" style="display:none !important;" aria-hidden="true" />
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="flex flex-col gap-1.5">
               <label for="guest-name" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Full Name</label>
-              <input type="text" id="guest-name" required placeholder="e.g. John Doe"
+              <input type="text" id="guest-name" required autocomplete="name" placeholder="e.g. John Doe"
                      class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
             </div>
 
             <div class="flex flex-col gap-1.5">
               <label for="guest-email" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Email Address</label>
-              <input type="email" id="guest-email" required placeholder="john@example.com"
+              <input type="email" id="guest-email" required autocomplete="email" inputmode="email" placeholder="john@example.com"
                      class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
             </div>
 
@@ -504,7 +498,7 @@
                   <option value="+1">🇺🇸 +1</option>
                   <option value="+49">🇩🇪 +49</option>
                 </select>
-                <input type="tel" id="guest-phone-number" required placeholder="712 345 678"
+                <input type="tel" id="guest-phone-number" required autocomplete="tel" inputmode="tel" placeholder="712 345 678"
                        class="flex-1 min-w-0 bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
               </div>
             </div>
@@ -547,7 +541,7 @@
             </div>
             <div class="flex justify-between items-center text-xs text-ivory/80">
               <span>Rate Per Night:</span>
-              <strong id="summary-rate">KSh 1,500</strong>
+              <strong id="summary-rate">KSh 2,000</strong>
             </div>
             <div class="flex justify-between items-center text-xs text-ivory/80">
               <span>Total Stay Nights:</span>
@@ -555,7 +549,7 @@
             </div>
             <div class="border-t border-champagne/20 pt-2 flex justify-between items-center font-display text-lg font-bold text-ivory">
               <span>Estimated Total:</span>
-              <span id="summary-total" class="text-champagne">KSh 1,500</span>
+              <span id="summary-total" class="text-champagne">KSh 2,000</span>
             </div>
           </div>
 

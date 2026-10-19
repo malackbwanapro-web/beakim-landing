@@ -36,7 +36,7 @@
   "logo": "https://www.beakimhospitalitygroup.co.ke/assets/logo-monogram.png",
   "image": "https://www.beakimhospitalitygroup.co.ke/assets/hero-bg.webp",
   "telephone": "+254746938529",
-  "email": "info@beakimhospitality.com",
+  "email": "info@beakimhospitalitygroup.co.ke",
   "priceRange": "KES 2,000 - KES 5,000",
   "address": {
     "@type": "PostalAddress",
@@ -123,7 +123,7 @@
 
 
   <!-- â”€â”€ FLOATING ELEMENTS (BOTTOM-RIGHT) â”€â”€ -->
-  <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+  <div class="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] right-6 z-50 flex flex-col gap-3">
     <!-- WhatsApp Floating Action -->
     <a href="https://wa.me/254746938529" target="_blank" rel="noopener noreferrer" 
        class="flex items-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white px-5 py-3 rounded-full shadow-2xl transition duration-300 transform hover:-translate-y-1">
@@ -163,7 +163,7 @@
         <a href="#booking" class="hidden sm:inline-block bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 transform active:scale-95 shadow-md">
           Book Your Stay
         </a>
-        <button type="button" onclick="toggleMobileMenu()" class="md:hidden text-ivory p-2 focus:outline-none" aria-label="Toggle Menu">
+        <button type="button" onclick="toggleMobileMenu()" class="md:hidden text-ivory min-w-[48px] min-h-[48px] flex items-center justify-center p-2.5 rounded-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-champagne" aria-label="Toggle Menu">
           <svg class="w-6 h-6 stroke-current" fill="none" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
@@ -182,7 +182,7 @@
   <main id="main-content">
 
   <!-- â”€â”€ HERO SECTION â”€â”€ -->
-  <section class="relative min-h-[90vh] md:min-h-screen flex items-center pt-24 overflow-hidden">
+  <section class="relative min-h-[calc(100svh-4.5rem)] md:min-h-[calc(100svh-5rem)] flex items-center pt-24 pb-12 overflow-hidden">
     <!-- Background Image -->
     <div class="absolute inset-0 z-0">
       <img src="assets/hero-bg.webp" alt="Diani Beach Aerial View" class="w-full h-full object-cover brightness-[0.4]" decoding="async" fetchpriority="high">
@@ -275,7 +275,7 @@
   </section>
 
   <!-- â”€â”€ OUR PROPERTIES SECTION â”€â”€ -->
-  <section id="properties" class="py-24 max-w-7xl mx-auto px-6">
+  <section id="properties" class="py-24 max-w-7xl mx-auto px-6 scroll-mt-24">
     <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
       <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Our Accommodations</span>
       <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-ivory font-bold">Find Your Perfect Coastal Getaway</h2>
@@ -289,7 +289,7 @@
       <div class="bg-canopy/40 border border-champagne/10 rounded-xl overflow-hidden shadow-lg transition duration-300 hover:scale-[1.01] hover:border-champagne/30 flex flex-col justify-between">
         <div>
           <div class="relative h-64 overflow-hidden bg-deep-forest">
-            <img src="assets/property-tower.webp" alt="Tower Cottages 2-bedroom holiday apartments in Ukunda near Diani Beach" class="w-full h-full object-cover" decoding="async" loading="lazy">
+            <img src="assets/property-tower.webp" alt="Tower Cottages 2-bedroom holiday apartments in Ukunda near Diani Beach" width="800" height="500" class="w-full h-full object-cover" decoding="async" loading="lazy">
             <div class="absolute bottom-4 left-4 bg-deep-forest/90 text-champagne px-3 py-1 rounded text-xs font-semibold tracking-wider">
               KSh 2,500 / NIGHT
             </div>
@@ -317,7 +317,7 @@
       <div class="bg-canopy/40 border border-champagne/10 rounded-xl overflow-hidden shadow-lg transition duration-300 hover:scale-[1.01] hover:border-champagne/30 flex flex-col justify-between">
         <div>
           <div class="relative h-64 overflow-hidden bg-deep-forest">
-            <img src="assets/property-darad.webp" alt="Beakim Darad" class="w-full h-full object-cover" decoding="async" loading="lazy">
+            <img src="assets/property-darad.webp" alt="Beakim Darad" width="800" height="500" class="w-full h-full object-cover" decoding="async" loading="lazy">
             <div class="absolute bottom-4 left-4 bg-deep-forest/90 text-champagne px-3 py-1 rounded text-xs font-semibold tracking-wider">
               KSh 2,000 — KSh 4,000 / NIGHT
             </div>
@@ -350,7 +350,7 @@
       <div class="bg-canopy/40 border border-champagne/10 rounded-xl overflow-hidden shadow-lg transition duration-300 hover:scale-[1.01] hover:border-champagne/30 flex flex-col justify-between">
         <div>
           <div class="relative h-64 overflow-hidden bg-deep-forest">
-            <img src="assets/property-darling.webp" alt="Diani Darling Cottages outdoor swimming pool and resort clubhouse on Diani Beach Road" class="w-full h-full object-cover" decoding="async" loading="lazy">
+            <img src="assets/property-darling.webp" alt="Diani Darling Cottages outdoor swimming pool and resort clubhouse on Diani Beach Road" width="800" height="500" class="w-full h-full object-cover" decoding="async" loading="lazy">
             <div class="absolute bottom-4 left-4 bg-deep-forest/90 text-champagne px-3 py-1 rounded text-xs font-semibold tracking-wider">
               KSh 5,000 / NIGHT
             </div>
@@ -378,7 +378,7 @@
       <div class="bg-canopy/40 border border-champagne/10 rounded-xl overflow-hidden shadow-lg transition duration-300 hover:scale-[1.01] hover:border-champagne/30 flex flex-col justify-between">
         <div>
           <div class="relative h-64 overflow-hidden bg-deep-forest">
-            <img src="assets/beakim-apartments-hero.webp" alt="Beakim Apartments" class="w-full h-full object-cover" decoding="async" loading="lazy">
+            <img src="assets/beakim-apartments-hero.webp" alt="Beakim Apartments" width="800" height="500" class="w-full h-full object-cover" decoding="async" loading="lazy">
             <div class="absolute bottom-4 left-4 bg-deep-forest/90 text-champagne px-3 py-1 rounded text-xs font-semibold tracking-wider">
               FROM KSh 15,000 / MONTH
             </div>
@@ -409,7 +409,7 @@
   </section>
 
   <!-- â”€â”€ REVIEWS SECTION â”€â”€ -->
-  <section id="reviews" class="bg-canopy/40 bg-pattern py-24 border-y border-champagne/15">
+  <section id="reviews" class="bg-canopy/40 bg-pattern py-24 border-y border-champagne/15 scroll-mt-24">
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
         <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Guest Feedback</span>
@@ -687,6 +687,7 @@
               
               <!-- Card 1: Beakim Darad (Default Selected) -->
               <div onclick="selectResidenceCard('Beakim Darad - Standard Studio Room (Without AC)', this)"
+                   onkeydown="handleResidenceCardKeydown(event, 'Beakim Darad - Standard Studio Room (Without AC)', this)"
                    data-value="Beakim Darad - Standard Studio Room (Without AC)"
                    role="radio" aria-checked="true" tabindex="0"
                    class="residence-card p-4 rounded-xl border-2 border-champagne bg-champagne/10 hover:border-champagne cursor-pointer transition flex items-start justify-between shadow-sm group">
@@ -705,6 +706,7 @@
 
               <!-- Card 2: Tower Cottages -->
               <div onclick="selectResidenceCard('Tower Cottages - 2-Bedroom Apartment', this)"
+                   onkeydown="handleResidenceCardKeydown(event, 'Tower Cottages - 2-Bedroom Apartment', this)"
                    data-value="Tower Cottages - 2-Bedroom Apartment"
                    role="radio" aria-checked="false" tabindex="0"
                    class="residence-card p-4 rounded-xl border border-deep-forest/15 bg-white hover:border-champagne/60 cursor-pointer transition flex items-start justify-between shadow-sm group">
@@ -723,6 +725,7 @@
 
               <!-- Card 3: Diani Darling Cottages -->
               <div onclick="selectResidenceCard('Diani Darling Cottages - Deluxe Studio Room', this)"
+                   onkeydown="handleResidenceCardKeydown(event, 'Diani Darling Cottages - Deluxe Studio Room', this)"
                    data-value="Diani Darling Cottages - Deluxe Studio Room"
                    role="radio" aria-checked="false" tabindex="0"
                    class="residence-card p-4 rounded-xl border border-deep-forest/15 bg-white hover:border-champagne/60 cursor-pointer transition flex items-start justify-between shadow-sm group">
@@ -741,6 +744,7 @@
 
               <!-- Card 4: Beakim Apartments -->
               <div onclick="selectResidenceCard('Beakim Apartments - 1-Bedroom (Monthly Lease)', this)"
+                   onkeydown="handleResidenceCardKeydown(event, 'Beakim Apartments - 1-Bedroom (Monthly Lease)', this)"
                    data-value="Beakim Apartments - 1-Bedroom (Monthly Lease)"
                    role="radio" aria-checked="false" tabindex="0"
                    class="residence-card p-4 rounded-xl border border-deep-forest/15 bg-white hover:border-champagne/60 cursor-pointer transition flex items-start justify-between shadow-sm group">
@@ -875,14 +879,14 @@
               <!-- Full Name -->
               <div class="flex flex-col gap-1.5">
                 <label for="guest-name" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">Full Name *</label>
-                <input type="text" id="guest-name" required placeholder="e.g., Sarah Jenkins" 
+                <input type="text" id="guest-name" required autocomplete="name" placeholder="e.g., Sarah Jenkins" 
                        class="w-full bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3.5 py-2.5 text-xs text-deep-forest outline-none transition shadow-sm font-medium" />
               </div>
 
               <!-- Email Address -->
               <div class="flex flex-col gap-1.5">
                 <label for="guest-email" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">Email Address (Optional)</label>
-                <input type="email" id="guest-email" placeholder="sarah@example.com" 
+                <input type="email" id="guest-email" autocomplete="email" inputmode="email" placeholder="sarah@example.com" 
                        class="w-full bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3.5 py-2.5 text-xs text-deep-forest outline-none transition shadow-sm font-medium" />
               </div>
 
@@ -912,7 +916,7 @@
                     <option value="+61">🇦🇺 +61</option>
                     <option value="+81">🇯🇵 +81</option>
                   </select>
-                  <input type="tel" id="guest-phone-number" required placeholder="712 345 678"
+                  <input type="tel" id="guest-phone-number" required autocomplete="tel" inputmode="tel" placeholder="712 345 678"
                          class="flex-1 min-w-0 bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3.5 py-2.5 text-xs text-deep-forest outline-none transition shadow-sm font-medium" />
                 </div>
               </div>
@@ -955,8 +959,8 @@
 
           <!-- Submit CTA Button -->
           <div class="space-y-3 pt-2">
-            <button type="submit" 
-                    class="w-full bg-[#1b4332] hover:bg-[#122f23] text-champagne border border-champagne/40 hover:border-champagne py-4 px-6 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-3 text-sm md:text-base group cursor-pointer">
+            <button type="submit" id="booking-submit-btn"
+                    class="w-full bg-[#1b4332] hover:bg-[#122f23] active:scale-[0.98] text-champagne border border-champagne/40 hover:border-champagne py-4 px-6 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-3 text-sm md:text-base group cursor-pointer">
               <svg class="w-5 h-5 fill-current text-champagne group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
                 <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436.002 9.858-4.384 9.86-9.768.001-2.61-1.013-5.064-2.855-6.909C16.438 2.083 13.99 1.07 11.4 1.07 5.969 1.07 1.547 5.456 1.545 10.842c-.001 1.597.424 3.156 1.233 4.544L1.78 20.58l5.228-1.378c-.138-.077-.257-.15-.361-.208z" />
               </svg>
@@ -976,7 +980,7 @@
   </section>
 
   <!-- â”€â”€ FAQ SECTION â”€â”€ -->
-  <section id="faqs" class="bg-canopy border-t border-champagne/15 py-24 relative">
+  <section id="faqs" class="bg-canopy border-t border-champagne/15 py-24 relative scroll-mt-24">
     <div class="max-w-5xl mx-auto px-6">
       <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
         <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Guest Knowledge Base</span>
@@ -989,19 +993,19 @@
       <!-- FAQ Category Navigation Tabs -->
       <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-12 border-b border-champagne/15 pb-6">
         <button type="button" onclick="switchFaqTab('faq-domestic')" id="btn-faq-domestic"
-                class="faq-tab-btn px-5 py-3 rounded-full text-xs font-semibold tracking-wider uppercase transition duration-300 bg-champagne text-deep-forest shadow-lg">
+                class="faq-tab-btn px-5 py-3 rounded-full text-xs font-semibold min-h-[48px] inline-flex items-center justify-center tracking-wider uppercase transition duration-300 bg-champagne text-deep-forest shadow-lg">
           🇰🇪 Domestic &amp; Local Travelers
         </button>
         <button type="button" onclick="switchFaqTab('faq-international')" id="btn-faq-international"
-                class="faq-tab-btn px-5 py-3 rounded-full text-xs font-semibold tracking-wider uppercase transition duration-300 bg-deep-forest/60 text-ivory/70 border border-champagne/20 hover:border-champagne hover:text-champagne">
+                class="faq-tab-btn px-5 py-3 rounded-full text-xs font-semibold min-h-[48px] inline-flex items-center justify-center tracking-wider uppercase transition duration-300 bg-deep-forest/60 text-ivory/70 border border-champagne/20 hover:border-champagne hover:text-champagne">
           🌍 International Visitors
         </button>
         <button type="button" onclick="switchFaqTab('faq-groups')" id="btn-faq-groups"
-                class="faq-tab-btn px-5 py-3 rounded-full text-xs font-semibold tracking-wider uppercase transition duration-300 bg-deep-forest/60 text-ivory/70 border border-champagne/20 hover:border-champagne hover:text-champagne">
+                class="faq-tab-btn px-5 py-3 rounded-full text-xs font-semibold min-h-[48px] inline-flex items-center justify-center tracking-wider uppercase transition duration-300 bg-deep-forest/60 text-ivory/70 border border-champagne/20 hover:border-champagne hover:text-champagne">
           👥 Group &amp; Event Bookings
         </button>
         <button type="button" onclick="switchFaqTab('faq-general')" id="btn-faq-general"
-                class="faq-tab-btn px-5 py-3 rounded-full text-xs font-semibold tracking-wider uppercase transition duration-300 bg-deep-forest/60 text-ivory/70 border border-champagne/20 hover:border-champagne hover:text-champagne">
+                class="faq-tab-btn px-5 py-3 rounded-full text-xs font-semibold min-h-[48px] inline-flex items-center justify-center tracking-wider uppercase transition duration-300 bg-deep-forest/60 text-ivory/70 border border-champagne/20 hover:border-champagne hover:text-champagne">
           🏡 General Policies
         </button>
       </div>
@@ -1011,11 +1015,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: How do we get to Beakim properties from Miritini SGR station without using the Likoni Ferry?
+              How do we get to Beakim properties from Miritini SGR station without using the Likoni Ferry?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p><strong>You do not need to use the Likoni Ferry at all!</strong> Thanks to the newly completed <strong>Dongo Kundu Bypass highway</strong>, your taxi or vehicle travels directly from Miritini SGR Terminus to Ukunda and Diani Beach in <strong>45 to 60 minutes</strong> of uninterrupted highway driving.</p>
             <p class="text-xs text-driftwood">• We can pre-arrange a trusted private driver to meet your train at Miritini arrivals holding a sign with your name (KSh 3,000 – 4,000 per car).</p>
           </div>
@@ -1024,11 +1028,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: What are your payment methods and deposit requirements? How do we verify our booking?
+              What are your payment methods and deposit requirements? How do we verify our booking?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p>We accept 100% transparent M-Pesa payments via our official business <strong>M-Pesa Buy Goods Till / Paybill Number</strong> under <strong>Beakim Hospitality Group</strong>. A 50% deposit locks your reservation dates, and the remaining 50% balance is payable upon check-in after inspecting your unit.</p>
             <p class="text-xs text-driftwood">• You receive an instant SMS payment confirmation and official booking voucher via WhatsApp.</p>
           </div>
@@ -1037,11 +1041,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: Is it safe to park our personal vehicle at your properties if we drive down from Nairobi?
+              Is it safe to park our personal vehicle at your properties if we drive down from Nairobi?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p><strong>Yes, 100% safe!</strong> All four Beakim properties are fully enclosed gated compounds featuring perimeter security walls, electric fencing, 24/7 manned security guards, and active CCTV camera coverage. On-site private parking is provided <strong>completely free of charge</strong> inside the compound for all resident guest vehicles.</p>
           </div>
         </details>
@@ -1049,11 +1053,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: Where do we buy food and groceries, and can we hire a private Swahili chef?
+              Where do we buy food and groceries, and can we hire a private Swahili chef?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p>All our 1-Bedroom and 2-Bedroom units feature fully equipped kitchens (gas stove, fridge, cookware, microwave). <strong>Tower Cottages</strong> is right behind <strong>Naivas Supermarket Ukunda</strong> (30 seconds walk). Beakim Darad and Beakim Apartments are 4 minutes drive from Naivas, Chandarana Foodplus, and local produce markets.</p>
             <p class="text-xs text-driftwood">• We connect you with local fishermen for fresh daily seafood delivery (red snapper, prawns, lobster) and can assign an experienced Swahili chef (KSh 1,500 – 2,500/day) to prepare authentic meals!</p>
           </div>
@@ -1062,11 +1066,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: How far are the 5th-row properties from the beach and ocean swimming access points?
+              How far are the 5th-row properties from the beach and ocean swimming access points?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p>Our Beach Road properties (<strong>Beakim Darad &amp; Diani Darling</strong>) are a 2–4 minute walk to the beach. Our 5th-row properties (<strong>Beakim Apartments &amp; Tower Cottages</strong>) are just a <strong>3 to 5-minute drive</strong> (~1.5–2.5 km) or a quick KSh 50–100 tuktuk ride to free public beach access points like Kongo Mosque Beach, Baharini, and Tradewinds.</p>
           </div>
         </details>
@@ -1077,11 +1081,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: How do airport transfers work from Ukunda Airstrip (UKA) and Mombasa Airport (MBA)?
+              How do airport transfers work from Ukunda Airstrip (UKA) and Mombasa Airport (MBA)?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p>• <strong>Ukunda Airstrip (UKA):</strong> Located in Diani, just 5–10 minutes from all Beakim properties. Taxis cost ~KES 1,200 ($10 USD) or tuktuks KES 300 ($2.50 USD).</p>
             <p>• <strong>Mombasa Airport (MBA):</strong> The Dongo Kundu Bypass highway connects the airport directly to Diani in 45–60 minutes without ferry bottlenecks. Private taxi transfers cost KES 4,500 – 6,500 ($35 – $50 USD).</p>
             <p class="text-xs text-driftwood">👉 We can pre-arrange a trusted driver to meet you at arrival holding a name board.</p>
@@ -1091,11 +1095,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: Is the Wi-Fi fast and reliable for remote work, video calls, and digital nomads?
+              Is the Wi-Fi fast and reliable for remote work, video calls, and digital nomads?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p><strong>Yes! We welcome digital nomads and remote workers.</strong> All Beakim properties feature <strong>free high-speed fiber optic Wi-Fi</strong> (20 Mbps – 50 Mbps upload/download) capable of handling HD Zoom calls, streaming, and software work. Work desks, outdoor patio seating with power outlets, and power backup systems are provided.</p>
           </div>
         </details>
@@ -1103,11 +1107,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: How do credit cards, ATMs, and M-Pesa work for foreign tourists in Kenya?
+              How do credit cards, ATMs, and M-Pesa work for foreign tourists in Kenya?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p>Kenya is a global leader in mobile money. Upon arrival, purchase a local Safaricom SIM or eSIM with your passport. You can load cash onto M-Pesa or top up directly from foreign debit/credit cards using apps like <strong>Wise or Remitly</strong>. Major supermarkets (Naivas) and ATMs (KCB, NCBA, Absa) accept Visa and Mastercard.</p>
           </div>
         </details>
@@ -1115,11 +1119,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: Can I drink tap water in Diani, and what medical facilities are nearby?
+              Can I drink tap water in Diani, and what medical facilities are nearby?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p><strong>Do not drink tap water in Diani.</strong> Tap water is non-potable and intended for showering and washing. Use bottled mineral water for drinking and brushing teeth (available at Naivas for <$1 USD per 5L jug). For medical peace of mind, <strong>Diani Beach Hospital</strong> is a top international-standard private hospital with a 24/7 ER on Beach Road.</p>
           </div>
         </details>
@@ -1127,11 +1131,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: How do I handle local beach operators ("beach boys") politely and safely?
+              How do I handle local beach operators ("beach boys") politely and safely?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p>Local beach operators selling tours or wood carvings are friendly and harmless, but persistent. The best response is a warm smile paired with Swahili phrases: <strong>"Asante, hapana"</strong> (Thank you, no) or <strong>"Niko sawa"</strong> (I'm all set). Once communicated firmly and respectfully, they will politely wish you a pleasant day.</p>
           </div>
         </details>
@@ -1142,11 +1146,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: What is your group capacity, and can we book an entire apartment block exclusively?
+              What is your group capacity, and can we book an entire apartment block exclusively?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p>We accommodate groups from 10 up to 150+ guests. At <strong>Beakim Apartments</strong>, groups booking 10+ units can take over an entire 10-unit block exclusively—giving your school, church, or corporate team private hallways, exclusive lawn access, and zero friction with third-party guests. Combined with <strong>Beakim Darad</strong> (2 resort pools), we tailor compound block takeovers to your exact group size.</p>
           </div>
         </details>
@@ -1154,11 +1158,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: What catering and meal options are available for groups of 20 to 100+ people?
+              What catering and meal options are available for groups of 20 to 100+ people?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p>We offer 3 flexible catering models:</p>
             <p>1. <strong>Self-Catering:</strong> Prepare meals in fully equipped unit kitchens (Naivas supermarket next door for bulk groceries).</p>
             <p>2. <strong>Resident Chef Services:</strong> Hire resident chefs for labor-only prep (saving 40-50% vs hotel buffets) or full-board catering.</p>
@@ -1169,11 +1173,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: Is there bus/coaster parking, and do you issue official KRA ETR tax invoices &amp; accept LPOs?
+              Is there bus/coaster parking, and do you issue official KRA ETR tax invoices &amp; accept LPOs?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p><strong>Yes to all!</strong> Our compounds feature wide entry gates and secure parking for 25-seater coasters and 51-seater buses with discounted driver quarters. We issue formal <strong>Pro-Forma Invoices</strong>, official <strong>KRA ETR Tax Invoices</strong> for corporate VAT compliance, and accept verified corporate/school <strong>LPOs</strong> and bank wire transfers.</p>
           </div>
         </details>
@@ -1181,11 +1185,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: Can our group conduct site visits prior to booking, and are there coordinator perks?
+              Can our group conduct site visits prior to booking, and are there coordinator perks?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p>We actively encourage pre-booking site inspections! Group organizers, HR committees, and trip leaders are invited to inspect rooms, kitchens, pool areas, and security setups. For group bookings of 20+ guests, we offer a <strong>Complimentary VIP Room Slot / Upgrade</strong> for the primary group coordinator or driver.</p>
           </div>
         </details>
@@ -1196,11 +1200,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: What are your standard check-in and check-out times?
+              What are your standard check-in and check-out times?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p>Standard check-in is from <strong>2:00 PM</strong> onwards, and check-out is by <strong>10:00 AM</strong>. If you arrive early via SGR train or morning flight, we offer complimentary secure luggage holding and access to poolside changing facilities so you can start relaxing immediately.</p>
           </div>
         </details>
@@ -1208,11 +1212,11 @@
         <details class="group bg-deep-forest/80 border border-champagne/15 rounded-xl p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer transition duration-300 hover:border-champagne/40">
           <summary class="flex justify-between items-center list-none outline-none">
             <h3 class="font-display text-base md:text-lg font-semibold text-ivory group-hover:text-champagne transition duration-300">
-              Q: What is included in the nightly price? Are utilities charged extra?
+              What is included in the nightly price? Are utilities charged extra?
             </h3>
             <span class="text-champagne text-2xl font-bold transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4">
+          <div class="text-sm text-ivory/80 mt-4 leading-relaxed space-y-2 border-t border-champagne/10 pt-4 max-w-3xl">
             <p>Our nightly rates are 100% all-inclusive: full apartment stay, air conditioning, high-speed fiber Wi-Fi, electricity/water utilities, swimming pool access, daily housekeeping, 24/7 gated compound security, and free private parking. Zero hidden surcharges.</p>
           </div>
         </details>
@@ -1261,7 +1265,7 @@
       <!-- Right side -->
       <div class="text-center md:text-right text-xs text-ivory/50 space-y-2">
         <p><strong>Contact Us:</strong> +254 746 938529</p>
-        <p><strong>Support Email:</strong> info@beakimhospitality.com</p>
+        <p><strong>Support Email:</strong> <a href="mailto:info@beakimhospitalitygroup.co.ke" class="hover:text-champagne transition">info@beakimhospitalitygroup.co.ke</a></p>
         
       <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs text-ivory/60 pt-2 border-t border-champagne/10 mt-4">
         <a href="privacy-policy.html" class="hover:text-champagne transition">Privacy Policy</a>

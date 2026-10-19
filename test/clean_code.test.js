@@ -14,7 +14,8 @@ const {
   normalizeKenyanPhoneNumber,
   resolveStayPricing,
   buildInquiryMessage,
-  validateBookingFormData
+  validateBookingFormData,
+  handleResidenceCardKeydown
 } = require("../assets/js/main.js");
 
 const { BEAKIM_CATALOG, getOfferingById } = require("../assets/js/catalog.js");
@@ -130,5 +131,27 @@ assert.strictEqual(invalidDates.message, "Check-Out date must be strictly after 
 const validForm = validateBookingFormData({ name: "Bob", phoneNumber: "746938529", checkIn: "2026-11-01", checkOut: "2026-11-05" });
 assert.strictEqual(validForm, null);
 console.log("   ✅ Form validation guards catch invalid states and approve valid payloads.");
+
+// TEST 8: Keyboard Navigation & A11y Handlers
+console.log("8. Testing Keyboard Navigation & A11y Handlers...");
+assert.strictEqual(typeof handleResidenceCardKeydown, "function");
+
+let prevented = false;
+const mockEvent = {
+  key: "Enter",
+  preventDefault() { prevented = true; }
+};
+// Function should accept Enter key and preventDefault
+handleResidenceCardKeydown(mockEvent, "Tower Cottages", null);
+assert.strictEqual(prevented, true);
+
+let tabPrevented = false;
+const mockTabEvent = {
+  key: "Tab",
+  preventDefault() { tabPrevented = true; }
+};
+handleResidenceCardKeydown(mockTabEvent, "Tower Cottages", null);
+assert.strictEqual(tabPrevented, false);
+console.log("   ✅ Keyboard listeners respond exclusively to Enter/Space without interfering with Tab order.");
 
 console.log("\n🎉 ALL CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");

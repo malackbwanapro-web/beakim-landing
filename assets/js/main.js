@@ -303,6 +303,12 @@ function handleBookingSubmit(event) {
     event.preventDefault();
   }
 
+  const submitBtn = event && event.target && typeof event.target.querySelector === "function"
+    ? event.target.querySelector('button[type="submit"]')
+    : document.querySelector('#booking-form button[type="submit"], #btn-submit-booking');
+
+  if (submitBtn && submitBtn.disabled) return;
+
   const formData = extractBookingFormData();
   const validationError = validateBookingFormData(formData);
   if (validationError) {
@@ -315,6 +321,17 @@ function handleBookingSubmit(event) {
       validationError.fieldElement.focus();
     }
     return;
+  }
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.setAttribute("aria-busy", "true");
+    submitBtn.classList.add("opacity-75", "cursor-wait");
+    setTimeout(() => {
+      submitBtn.disabled = false;
+      submitBtn.removeAttribute("aria-busy");
+      submitBtn.classList.remove("opacity-75", "cursor-wait");
+    }, 1800);
   }
 
   const pricingSummary = resolveStayPricing(formData.property, formData.checkIn, formData.checkOut);
@@ -487,6 +504,7 @@ function validateBookingFormData(data) {
  * Selects an interactive residence card in the 2-column booking form.
  */
 function selectResidenceCard(propertyValue, cardElement) {
+  if (typeof document === "undefined") return;
   const propertySelectElement = document.getElementById("booking-property");
   if (propertySelectElement) {
     let matchedIndex = -1;
@@ -544,6 +562,17 @@ function selectResidenceCard(propertyValue, cardElement) {
   }
 
   handleDateOrAddonChange();
+}
+
+/**
+ * Handles keyboard navigation (Enter / Space) for accessible residence cards.
+ */
+function handleResidenceCardKeydown(event, propertyValue, cardElement) {
+  if (!event) return;
+  if (event.key === "Enter" || event.key === " " || event.key === "Spacebar") {
+    event.preventDefault();
+    selectResidenceCard(propertyValue, cardElement);
+  }
 }
 
 /**
@@ -665,7 +694,7 @@ function ensureLightboxModal() {
     modalElement.innerHTML = `
       <!-- Close Button -->
       <button type="button" id="lightbox-close-btn" onclick="closeLightbox()"
-              class="absolute top-5 right-5 z-20 text-ivory/70 hover:text-champagne bg-black/50 hover:bg-black/80 rounded-full w-11 h-11 flex items-center justify-center text-3xl font-light transition duration-300"
+              class="absolute top-5 right-5 z-20 text-ivory/70 hover:text-champagne bg-black/50 hover:bg-black/80 rounded-full w-12 h-12 flex items-center justify-center text-3xl font-light transition duration-300"
               aria-label="Close photo gallery">&times;</button>
 
       <!-- Previous Arrow Button -->
@@ -1084,6 +1113,14 @@ if (typeof document !== "undefined") {
   });
 
   document.addEventListener("keydown", function(e) {
+    if (e.target && e.target.classList && e.target.classList.contains("residence-card")) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        e.target.click();
+        return;
+      }
+    }
+
     const lightboxModal = document.getElementById("lightbox-modal");
     if (lightboxModal && !lightboxModal.classList.contains("hidden")) {
       if (e.key === "Escape") {
@@ -1229,6 +1266,7 @@ if (typeof module !== "undefined" && module.exports) {
     validateBookingFormData,
     getCrmPublicEndpoint,
     resolvePropertyIdFromSelection,
-    syncInquiryToCrm
+    syncInquiryToCrm,
+    handleResidenceCardKeydown
   };
 }
