@@ -3,7 +3,7 @@
 ## 1. Purpose & Scope
 - **Domain:** Curated photographic assets from the official **Fit Nation Kenya** coastal convoy retreat (83+ road trippers hosted across Beakim Beach Darad, Beakim Tower Cottages, and Beakim Apartments).
 - **Source:** `C:\Users\Malik\Desktop\output\Beakim Repository\Pictures\Fit Nation\Edited Social Masters\Masters_FullRes\`
-- **Primary Usage:** Featured case study and high-social-proof photography in [`blog.html`](file:///c:/Users/Malik/Desktop/beakim-landing/blog.html#fit-nation-diani-convoy-retreat).
+- **Primary Usage:** Featured case study and high-social-proof photography in [`insights.html`](file:///c:/Users/Malik/Desktop/beakim-landing/insights.html#fit-nation-diani-convoy-retreat).
 
 ## 2. Inventory of Curated Master Images
 | Image File | Description | Primary Role |

@@ -36,6 +36,21 @@
   ],
   "redirects": [
     {
+      "source": "/blog",
+      "destination": "/insights",
+      "permanent": true
+    },
+    {
+      "source": "/blog.html",
+      "destination": "/insights",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:match*",
+      "destination": "/insights/:match*",
+      "permanent": true
+    },
+    {
       "source": "/crm",
       "destination": "https://crm.beakimhospitalitygroup.co.ke",
       "permanent": true
@@ -72,8 +87,8 @@
       "destination": "/terms-of-service.html"
     },
     {
-      "source": "/blog",
-      "destination": "/blog.html"
+      "source": "/insights",
+      "destination": "/insights.html"
     },
     {
       "source": "/seo-matrix",
