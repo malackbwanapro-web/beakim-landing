@@ -1338,6 +1338,51 @@ function bindBookingForms() {
   });
 }
 
+function cleanHashFromUrl() {
+  if (typeof window === "undefined" || !window.location.hash) return;
+  const targetId = window.location.hash.replace(/^#/, "");
+  const targetEl = document.getElementById(targetId);
+  if (targetEl) {
+    setTimeout(() => {
+      targetEl.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  }
+  if (typeof history !== "undefined" && history.replaceState) {
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+  }
+}
+
+function initializeCleanHashScrolling() {
+  if (typeof document === "undefined") return;
+
+  cleanHashFromUrl();
+
+  document.querySelectorAll('a[href^="#"], a[href^="/#"]').forEach(anchor => {
+    anchor.addEventListener("click", function(event) {
+      const href = this.getAttribute("href");
+      if (!href || href === "#" || href === "/#") return;
+
+      const hashIndex = href.indexOf("#");
+      if (hashIndex === -1) return;
+
+      const pathPart = href.substring(0, hashIndex);
+      const targetId = href.substring(hashIndex + 1);
+
+      const isCurrentPage = !pathPart || pathPart === "/" || pathPart === window.location.pathname;
+      if (isCurrentPage && targetId) {
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          event.preventDefault();
+          targetEl.scrollIntoView({ behavior: "smooth" });
+          if (typeof history !== "undefined" && history.replaceState) {
+            history.replaceState(null, "", window.location.pathname + window.location.search);
+          }
+        }
+      }
+    });
+  });
+}
+
 if (typeof window !== "undefined") {
   window.addEventListener("DOMContentLoaded", () => {
     const checkInInput = document.getElementById("check-in");
@@ -1353,6 +1398,7 @@ if (typeof window !== "undefined") {
     initializeBookingPreFill();
     collectGalleryImages();
     updatePriceCalculation();
+    initializeCleanHashScrolling();
   });
 }
 
@@ -1377,6 +1423,8 @@ if (typeof module !== "undefined" && module.exports) {
     getCrmPublicEndpoint,
     resolvePropertyIdFromSelection,
     syncInquiryToCrm,
-    handleResidenceCardKeydown
+    handleResidenceCardKeydown,
+    cleanHashFromUrl,
+    initializeCleanHashScrolling
   };
 }
