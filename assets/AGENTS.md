@@ -33,3 +33,4 @@
 | [`js/`](./js/AGENTS.md) | Client-side interactive scripts | Vanilla JavaScript |
 | [`Beakim Darad Images/`](<./Beakim Darad Images/AGENTS.md>) | Beach resort photography | WebP / JPEG |
 | [`Tower Cottages Images/`](<./Tower Cottages Images/AGENTS.md>) | Serviced apartment photography | WebP / JPEG |
+| [`fit-nation/`](./fit-nation/AGENTS.md) | Fit Nation Kenya convoy case study photography | JPEG Master Photos |
