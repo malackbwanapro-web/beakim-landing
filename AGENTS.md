@@ -32,4 +32,5 @@
 | :--- | :--- | :--- |
 | [`assets/`](./assets/AGENTS.md) | Landing page stylesheets, scripts, and high-res resort photography | Vanilla JS, CSS3, WebP / JPG assets |
 | [`Beakim CRM/`](./Beakim%20CRM/AGENTS.md) | Multi-property boutique hospitality CRM / PMS application | Next.js 14, React 18, Tailwind CSS, Node.js JSON DB |
+| [`docs/`](./docs/AGENTS.md) | Official client-facing contract deliverables, technical specs & SEO matrices | Markdown, GFM, JSON-LD Schemas |
 | [`test/`](./test/AGENTS.md) | Root clean code verification & regression test scripts | Node.js assertion suites |

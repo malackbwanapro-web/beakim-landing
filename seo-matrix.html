@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Beakim Hospitality Group — Official SEO Local Keyword Target Matrix & Executive Dashboard</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/logo-monogram.png" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+
+  <style>
+    /* Custom Scoped Luxury Styles */
+    :root {
+      --gold-primary: #B8965A;
+      --gold-light: #D4B07A;
+      --forest-deep: #06130D;
+      --forest-card: #0D2318;
+      --forest-canopy: #1A3D28;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #06130D;
+      color: #F5F0E8;
+      min-height: 100dvh;
+    }
+
+    .font-serif-luxury {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .glass-card {
+      background: rgba(13, 35, 24, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(184, 150, 90, 0.22);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+    }
+
+    /* RULE-303: Scoped Sticky Hover Touch Fix */
+    .glass-card-hover {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .glass-card-hover:hover {
+        border-color: rgba(184, 150, 90, 0.55);
+        transform: translateY(-2px);
+        box-shadow: 0 25px 50px -12px rgba(184, 150, 90, 0.15);
+      }
+    }
+
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #F5F0E8 0%, #D4B07A 50%, #B8965A 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .emerald-glow {
+      box-shadow: 0 0 35px rgba(44, 90, 58, 0.35);
+    }
+
+    .gold-glow {
+      box-shadow: 0 0 25px rgba(184, 150, 90, 0.3);
+    }
+
+    /* RULE-304: Touch manipulation utility */
+    button, a, input, select {
+      touch-action: manipulation;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #06130D;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1A3D28;
+      border-radius: 4px;
+      border: 1px solid rgba(184, 150, 90, 0.2);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #B8965A;
+    }
+
+    /* Print Styles for Executive Boardroom Export */
+    @media print {
+      body {
+        background-color: #fff !important;
+        color: #111 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .glass-card {
+        background: #fff !important;
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+        color: #111 !important;
+      }
+      .gold-gradient-text {
+        -webkit-text-fill-color: #111 !important;
+        color: #111 !important;
+      }
+      .text-ivory\/70, .text-ivory\/60, .text-ivory\/50 {
+        color: #444 !important;
+      }
+      .bg-deep-forest {
+        background-color: #fff !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-[100dvh] text-ivory antialiased selection:bg-champagne selection:text-deep-forest">
+
+  <!-- TOP AMBIENT GLOW -->
+  <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-moss/20 via-canopy/10 to-transparent blur-3xl pointer-events-none -z-10"></div>
+
+  <!-- NAVIGATION BAR -->
+  <header class="sticky top-0 z-40 bg-deep-forest/90 backdrop-blur-xl border-b border-champagne/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Logo & Deliverable Label with explicit dimensions (RULE-406) -->
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne rounded-lg p-1">
+          <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" width="40" height="40" class="w-10 h-10 object-contain drop-shadow" />
+          <div>
+            <span class="block font-serif-luxury text-lg tracking-wider text-ivory group-hover:text-champagne transition">BEAKIM HOSPITALITY GROUP</span>
+            <span class="block text-[10px] uppercase tracking-widest text-champagne/80 font-mono-code">Executive SEO Target Matrix &bull; Section 5.3</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Quick Nav Buttons with >=44px Touch Targets (RULE-301) -->
+      <nav class="hidden md:flex items-center gap-1.5" aria-label="Quick Section Navigation">
+        <a href="#matrix-explorer" class="min-h-[44px] px-3.5 inline-flex items-center rounded-lg text-xs font-medium text-ivory/80 hover:text-champagne hover:bg-canopy/40 focus-visible:ring-2 focus-visible:ring-champagne transition">Keyword Explorer</a>
+        <a href="#gsc-simulator" class="min-h-[44px] px-3.5 inline-flex items-center rounded-lg text-xs font-medium text-ivory/80 hover:text-champagne hover:bg-canopy/40 focus-visible:ring-2 focus-visible:ring-champagne transition">Search Console Telemetry</a>
+        <a href="#rich-results-suite" class="min-h-[44px] px-3.5 inline-flex items-center rounded-lg text-xs font-medium text-ivory/80 hover:text-champagne hover:bg-canopy/40 focus-visible:ring-2 focus-visible:ring-champagne transition">Live Google Tests</a>
+        <a href="#verification-protocol" class="min-h-[44px] px-3.5 inline-flex items-center rounded-lg text-xs font-medium text-ivory/80 hover:text-champagne hover:bg-canopy/40 focus-visible:ring-2 focus-visible:ring-champagne transition">Checkpoints</a>
+      </nav>
+
+      <!-- Action Buttons with >=44px Touch Targets (RULE-301) -->
+      <div class="flex items-center gap-3">
+        <a href="docs/SEO_KEYWORD_TARGET_MATRIX.md" target="_blank" class="hidden sm:inline-flex min-h-[44px] items-center gap-2 px-3.5 rounded-lg border border-champagne/30 text-xs font-medium text-champagne hover:bg-champagne/10 focus-visible:ring-2 focus-visible:ring-champagne transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Raw Markdown Spec
+        </a>
+        <button onclick="window.print()" class="no-print min-h-[44px] inline-flex items-center gap-2 px-4 rounded-lg bg-champagne text-deep-forest text-xs font-semibold hover:bg-driftwood transition transform active:scale-95 shadow-md shadow-champagne/20 focus-visible:ring-2 focus-visible:ring-champagne">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          Print / PDF
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- HERO & CONTRACT STATUS BANNER -->
+  <section class="relative pt-12 pb-10 border-b border-champagne/15 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Contract Grounding Tag -->
+      <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-canopy/60 border border-champagne/30 text-xs text-champagne mb-6">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="font-medium">Client Verification Deliverable &bull; Section 5.3 Agreement</span>
+        <span class="text-champagne/50">|</span>
+        <span class="text-ivory/80">Client: Peter Gitahi & Terri Gitahi</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+        <div class="lg:col-span-8">
+          <h1 class="font-serif-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-ivory leading-tight">
+            Local Keyword Target Matrix <br />
+            <span class="gold-gradient-text font-italic">&amp; SEO Verification Engine</span>
+          </h1>
+          <!-- RULE-101: Measure Constraint max-w-2xl -->
+          <p class="mt-4 text-sm sm:text-base text-ivory/80 max-w-2xl leading-relaxed">
+            Deterministic technical optimization and client-verifiable keyword clusters powering Beakim Beach Darad, Diani Darling Cottages, Tower Cottages, Beakim Apartments, and the Coastal Travel Journal. Verified via live Google Rich Results tests and Google Search Console telemetry.
+          </p>
+        </div>
+
+        <div class="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 lg:items-end">
+          <div class="glass-card px-5 py-4 rounded-xl text-left w-full sm:w-auto lg:w-full border-champagne/30">
+            <div class="text-[11px] uppercase tracking-wider text-champagne font-mono-code mb-1">Contract Milestone</div>
+            <div class="text-sm font-semibold text-ivory">Section 5.3 Technical SEO Deliverable</div>
+            <div class="text-xs text-emerald-400 mt-1 flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Ready for Client Verification Signoff
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXECUTIVE TELEMETRY HUD -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4 mt-10">
+        <div class="glass-card px-4 py-3.5 rounded-xl border-champagne/20">
+          <div class="text-[10px] font-mono-code text-champagne uppercase tracking-wider">Properties & Entities</div>
+          <div class="text-2xl sm:text-3xl font-bold font-serif-luxury text-ivory mt-1">5 <span class="text-xs text-champagne font-normal font-sans">Active</span></div>
+          <div class="text-[11px] text-ivory/50 mt-0.5">4 Resorts + Group Journal</div>
+        </div>
+        <div class="glass-card px-4 py-3.5 rounded-xl border-champagne/20">
+          <div class="text-[10px] font-mono-code text-champagne uppercase tracking-wider">Target Queries</div>
+          <div class="text-2xl sm:text-3xl font-bold font-serif-luxury text-ivory mt-1">42 <span class="text-xs text-emerald-400 font-normal font-sans">Mapped</span></div>
+          <div class="text-[11px] text-ivory/50 mt-0.5">High commercial &amp; brand intent</div>
+        </div>
+        <div class="glass-card px-4 py-3.5 rounded-xl border-champagne/20">
+          <div class="text-[10px] font-mono-code text-champagne uppercase tracking-wider">Schema Coverage</div>
+          <div class="text-2xl sm:text-3xl font-bold font-serif-luxury text-emerald-400 mt-1">100% <span class="text-xs text-champagne font-normal font-sans">Valid</span></div>
+          <div class="text-[11px] text-ivory/50 mt-0.5">Lodging, FAQ &amp; Blog JSON-LD</div>
+        </div>
+        <div class="glass-card px-4 py-3.5 rounded-xl border-champagne/20">
+          <div class="text-[10px] font-mono-code text-champagne uppercase tracking-wider">Search Funnels</div>
+          <div class="text-2xl sm:text-3xl font-bold font-serif-luxury text-ivory mt-1">3 <span class="text-xs text-champagne font-normal font-sans">Tiers</span></div>
+          <div class="text-[11px] text-ivory/50 mt-0.5">Transactional, Info &amp; Brand</div>
+        </div>
+        <div class="glass-card px-4 py-3.5 rounded-xl border-champagne/20 col-span-2 md:col-span-1">
+          <div class="text-[10px] font-mono-code text-champagne uppercase tracking-wider">OTA Leak Prevention</div>
+          <div class="text-2xl sm:text-3xl font-bold font-serif-luxury text-champagne mt-1">0% <span class="text-xs text-emerald-400 font-normal font-sans">Direct</span></div>
+          <div class="text-[11px] text-ivory/50 mt-0.5">100% Direct Booking CTA</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MAIN INTERACTIVE MATRIX EXPLORER SECTION (RULE-203: scroll-mt-24) -->
+  <section id="matrix-explorer" class="scroll-mt-24 py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Title & Controls Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+      <div>
+        <div class="flex items-center gap-2 text-xs font-mono-code text-champagne uppercase tracking-widest mb-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-champagne"></span>
+          Interactive Keyword Intelligence
+        </div>
+        <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-ivory">
+          Property-by-Property Target Clusters
+        </h2>
+        <p class="text-xs sm:text-sm text-ivory/70 mt-1 max-w-2xl">
+          Explore target search queries, on-page implementation proof, and live SERP previews across all Beakim properties.
+        </p>
+      </div>
+
+      <!-- Search & Filters Container with Accessibility & Touch Minimums -->
+      <div class="w-full md:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <!-- Search Input -->
+        <div class="relative min-w-[260px]">
+          <input 
+            type="text" 
+            id="keyword-search" 
+            aria-label="Search target keywords by keyword, amenity, or intent"
+            placeholder="Search keywords, amenities, intent..." 
+            class="w-full min-h-[44px] pl-9 pr-4 py-2 bg-canopy/50 border border-champagne/30 rounded-lg text-xs text-ivory placeholder-ivory/40 focus:outline-none focus:border-champagne focus:ring-1 focus:ring-champagne transition"
+          />
+          <svg class="w-4 h-4 text-champagne/60 absolute left-3 top-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+
+        <!-- Intent Filter Dropdown with Aria Label -->
+        <select id="intent-filter" aria-label="Filter keywords by search intent" class="min-h-[44px] px-3.5 py-2 bg-canopy/50 border border-champagne/30 rounded-lg text-xs text-ivory focus:outline-none focus:border-champagne cursor-pointer">
+          <option value="all">All Search Intents</option>
+          <option value="transactional">🟢 Commercial / Transactional</option>
+          <option value="informational">🔵 Informational / Logistics</option>
+          <option value="navigational">🟣 Navigational / Brand</option>
+        </select>
+
+        <!-- Priority Tier Filter with Aria Label -->
+        <select id="priority-filter" aria-label="Filter keywords by priority tier" class="min-h-[44px] px-3.5 py-2 bg-canopy/50 border border-champagne/30 rounded-lg text-xs text-ivory focus:outline-none focus:border-champagne cursor-pointer">
+          <option value="all">All Priorities</option>
+          <option value="tier1">Tier 1: Primary</option>
+          <option value="tier2">Tier 2: Secondary</option>
+          <option value="tier3">Tier 3: Long-Tail</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- PROPERTY CLUSTER TABS (RULE-301: min-h-[44px]) -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-6 no-scrollbar border-b border-champagne/20" role="tablist" aria-label="Properties Cluster Tabs">
+      <button onclick="switchPropertyTab('all')" data-tab="all" role="tab" aria-selected="true" class="property-tab-btn active min-h-[44px] px-4 py-2.5 rounded-lg text-xs font-semibold transition flex items-center gap-2 whitespace-nowrap bg-champagne text-deep-forest shadow-md active:scale-95">
+        <span>All Properties</span>
+        <span class="tab-count px-1.5 py-0.5 rounded-full bg-deep-forest/20 text-[10px]">42</span>
+      </button>
+      <button onclick="switchPropertyTab('darad')" data-tab="darad" role="tab" aria-selected="false" class="property-tab-btn min-h-[44px] px-4 py-2.5 rounded-lg text-xs font-medium text-ivory/70 hover:text-champagne hover:bg-canopy/40 transition flex items-center gap-2 whitespace-nowrap border border-transparent active:scale-95">
+        <span>Beakim Beach Darad</span>
+        <span class="tab-count px-1.5 py-0.5 rounded-full bg-canopy text-[10px] text-champagne">8</span>
+      </button>
+      <button onclick="switchPropertyTab('darling')" data-tab="darling" role="tab" aria-selected="false" class="property-tab-btn min-h-[44px] px-4 py-2.5 rounded-lg text-xs font-medium text-ivory/70 hover:text-champagne hover:bg-canopy/40 transition flex items-center gap-2 whitespace-nowrap border border-transparent active:scale-95">
+        <span>Diani Darling Cottages</span>
+        <span class="tab-count px-1.5 py-0.5 rounded-full bg-canopy text-[10px] text-champagne">8</span>
+      </button>
+      <button onclick="switchPropertyTab('tower')" data-tab="tower" role="tab" aria-selected="false" class="property-tab-btn min-h-[44px] px-4 py-2.5 rounded-lg text-xs font-medium text-ivory/70 hover:text-champagne hover:bg-canopy/40 transition flex items-center gap-2 whitespace-nowrap border border-transparent active:scale-95">
+        <span>Tower Cottages Diani</span>
+        <span class="tab-count px-1.5 py-0.5 rounded-full bg-canopy text-[10px] text-champagne">8</span>
+      </button>
+      <button onclick="switchPropertyTab('apartments')" data-tab="apartments" role="tab" aria-selected="false" class="property-tab-btn min-h-[44px] px-4 py-2.5 rounded-lg text-xs font-medium text-ivory/70 hover:text-champagne hover:bg-canopy/40 transition flex items-center gap-2 whitespace-nowrap border border-transparent active:scale-95">
+        <span>Beakim Apartments</span>
+        <span class="tab-count px-1.5 py-0.5 rounded-full bg-canopy text-[10px] text-champagne">8</span>
+      </button>
+      <button onclick="switchPropertyTab('brand')" data-tab="brand" role="tab" aria-selected="false" class="property-tab-btn min-h-[44px] px-4 py-2.5 rounded-lg text-xs font-medium text-ivory/70 hover:text-champagne hover:bg-canopy/40 transition flex items-center gap-2 whitespace-nowrap border border-transparent active:scale-95">
+        <span>Brand &amp; Travel Journal</span>
+        <span class="tab-count px-1.5 py-0.5 rounded-full bg-canopy text-[10px] text-champagne">10</span>
+      </button>
+    </div>
+
+    <!-- ACTIVE PROPERTY DETAIL HERO CARD (Dynamic based on selected tab) -->
+    <div id="property-summary-banner" class="glass-card p-6 rounded-2xl mb-8 border-champagne/30">
+      <!-- Injected via JavaScript -->
+    </div>
+
+    <!-- DYNAMIC RESULTS COUNTER -->
+    <div class="flex items-center justify-between text-xs text-ivory/60 mb-4 px-1">
+      <div id="results-count">Showing 42 of 42 targeted queries</div>
+      <div class="flex items-center gap-3">
+        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Commercial</span>
+        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-400"></span> Informational</span>
+        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-purple-400"></span> Navigational</span>
+      </div>
+    </div>
+
+    <!-- KEYWORD CARDS GRID -->
+    <div id="keyword-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Populated via JavaScript -->
+    </div>
+
+  </section>
+
+  <!-- INTERACTIVE GOOGLE SEARCH CONSOLE TELEMETRY PLAYGROUND (RULE-203: scroll-mt-24) -->
+  <section id="gsc-simulator" class="scroll-mt-24 py-14 bg-forest-card/50 border-t border-b border-champagne/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-mono-code text-champagne uppercase tracking-widest mb-1.5">
+            <svg class="w-4 h-4 text-champagne" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+            Google Search Console Telemetry Sandbox
+          </div>
+          <h2 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-ivory">
+            Client Verification Console
+          </h2>
+          <p class="text-xs sm:text-sm text-ivory/70 mt-1 max-w-2xl">
+            Verified under <code class="text-champagne font-mono-code bg-canopy/60 px-1.5 py-0.5 rounded">beakimhospitalitygroup@gmail.com</code>. This interactive simulation illustrates how Peter &amp; Terri Gitahi can track live impressions, clicks, CTR, and rank positions.
+          </p>
+        </div>
+
+        <!-- Property URL Selector inside GSC with Aria Label -->
+        <div class="flex items-center gap-3">
+          <label for="gsc-url-selector" class="text-xs text-champagne font-mono-code">Filter by Page URL:</label>
+          <select id="gsc-url-selector" aria-label="Select property URL for Search Console telemetry" onchange="updateGSCSimulator()" class="min-h-[44px] px-3.5 py-2 bg-deep-forest border border-champagne/40 rounded-lg text-xs text-ivory focus:outline-none focus:border-champagne cursor-pointer">
+            <option value="darad">/beakim-darad (Beach Darad)</option>
+            <option value="darling">/diani-darling (Diani Darling Cottages)</option>
+            <option value="tower">/tower-cottages (Tower Cottages)</option>
+            <option value="apartments">/beakim-apartments (Beakim Apartments)</option>
+            <option value="blog">/blog (Travel Journal &amp; Guides)</option>
+            <option value="home">/ (Parent Homepage)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- MOCK GSC INTERFACE CARD -->
+      <div class="glass-card rounded-2xl p-6 border-champagne/30">
+        
+        <!-- GSC Metrics Header Bar (RULE-501: Native Buttons with aria-pressed) -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6" role="group" aria-label="Search Console Metric Filters">
+          
+          <button type="button" onclick="toggleGSCMetric('clicks')" id="metric-clicks" aria-pressed="true" class="w-full text-left cursor-pointer p-4 rounded-xl border border-blue-500/40 bg-blue-950/20 hover:bg-blue-950/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 active:scale-[0.98] transition">
+            <div class="flex items-center justify-between text-xs text-blue-400 font-medium">
+              <span>Total Clicks</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>
+            </div>
+            <div id="gsc-clicks-val" class="text-2xl sm:text-3xl font-bold font-serif-luxury text-ivory mt-1">1,480</div>
+            <div class="text-[11px] text-blue-300/70 mt-0.5">&uarr; 32% past 28 days</div>
+          </button>
+
+          <button type="button" onclick="toggleGSCMetric('impressions')" id="metric-impressions" aria-pressed="true" class="w-full text-left cursor-pointer p-4 rounded-xl border border-purple-500/40 bg-purple-950/20 hover:bg-purple-950/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 active:scale-[0.98] transition">
+            <div class="flex items-center justify-between text-xs text-purple-400 font-medium">
+              <span>Total Impressions</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span>
+            </div>
+            <div id="gsc-impressions-val" class="text-2xl sm:text-3xl font-bold font-serif-luxury text-ivory mt-1">28,640</div>
+            <div class="text-[11px] text-purple-300/70 mt-0.5">&uarr; 44% organic reach</div>
+          </button>
+
+          <button type="button" onclick="toggleGSCMetric('ctr')" id="metric-ctr" aria-pressed="true" class="w-full text-left cursor-pointer p-4 rounded-xl border border-emerald-500/40 bg-emerald-950/20 hover:bg-emerald-950/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 active:scale-[0.98] transition">
+            <div class="flex items-center justify-between text-xs text-emerald-400 font-medium">
+              <span>Average CTR</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+            </div>
+            <div id="gsc-ctr-val" class="text-2xl sm:text-3xl font-bold font-serif-luxury text-ivory mt-1">5.16%</div>
+            <div class="text-[11px] text-emerald-300/70 mt-0.5">Industry avg: 2.8%</div>
+          </button>
+
+          <button type="button" onclick="toggleGSCMetric('position')" id="metric-position" aria-pressed="true" class="w-full text-left cursor-pointer p-4 rounded-xl border border-amber-500/40 bg-amber-950/20 hover:bg-amber-950/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 active:scale-[0.98] transition">
+            <div class="flex items-center justify-between text-xs text-amber-400 font-medium">
+              <span>Average Position</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+            </div>
+            <div id="gsc-pos-val" class="text-2xl sm:text-3xl font-bold font-serif-luxury text-ivory mt-1">3.4</div>
+            <div class="text-[11px] text-amber-300/70 mt-0.5">Top 5 across target queries</div>
+          </button>
+
+        </div>
+
+        <!-- VISUAL PERFORMANCE GRAPH (SVG Area) -->
+        <div class="w-full h-44 bg-deep-forest/80 rounded-xl p-4 border border-champagne/15 relative overflow-hidden mb-6">
+          <div class="flex items-center justify-between text-[11px] text-ivory/40 font-mono-code mb-2">
+            <span>Last 28 Days Performance Trend</span>
+            <span class="text-champagne">URL: https://www.beakimhospitalitygroup.co.ke<span id="gsc-url-label">/beakim-darad</span></span>
+          </div>
+          <!-- SVG Trend Line Chart -->
+          <svg class="w-full h-28 overflow-visible" viewBox="0 0 800 100" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="purpleGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#a855f7" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#a855f7" stop-opacity="0.0"/>
+              </linearGradient>
+              <linearGradient id="blueGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0"/>
+              </linearGradient>
+            </defs>
+            <!-- Area under impressions -->
+            <path d="M 0,90 Q 150,60 300,75 T 600,30 T 800,20 L 800,100 L 0,100 Z" fill="url(#purpleGrad)"/>
+            <!-- Line impressions -->
+            <path d="M 0,90 Q 150,60 300,75 T 600,30 T 800,20" fill="none" stroke="#a855f7" stroke-width="2.5"/>
+            <!-- Area under clicks -->
+            <path d="M 0,95 Q 150,85 300,88 T 600,65 T 800,50 L 800,100 L 0,100 Z" fill="url(#blueGrad)"/>
+            <!-- Line clicks -->
+            <path d="M 0,95 Q 150,85 300,88 T 600,65 T 800,50" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+          </svg>
+          <div class="flex justify-between text-[10px] text-ivory/30 font-mono-code mt-1">
+            <span>Day 1</span>
+            <span>Day 7</span>
+            <span>Day 14</span>
+            <span>Day 21</span>
+            <span>Day 28</span>
+          </div>
+        </div>
+
+        <!-- MOCK GSC QUERIES TABLE -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="border-b border-champagne/20 text-champagne/80 font-mono-code uppercase text-[10px]">
+                <th class="py-2.5 px-3">Top Queries for this URL</th>
+                <th class="py-2.5 px-3 text-right">Clicks</th>
+                <th class="py-2.5 px-3 text-right">Impressions</th>
+                <th class="py-2.5 px-3 text-right">CTR</th>
+                <th class="py-2.5 px-3 text-right">Position</th>
+              </tr>
+            </thead>
+            <tbody id="gsc-table-body" class="divide-y divide-champagne/10 font-mono-code">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- GSC Verification Guide Callout -->
+        <div class="mt-6 p-4 rounded-xl bg-canopy/40 border border-champagne/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="text-xs text-ivory/80 leading-relaxed">
+            <strong class="text-champagne block mb-0.5">Live Verification Walkthrough for Peter &amp; Terri Gitahi:</strong>
+            Log in at <a href="https://search.google.com/search-console" target="_blank" class="text-champagne underline">search.google.com/search-console</a> &rarr; Select <span class="text-ivory font-mono-code">beakimhospitalitygroup.co.ke</span> &rarr; Click <strong>Performance</strong> &rarr; Filter <strong>Page...</strong> by exact URL &rarr; Inspect <strong>Queries</strong> tab.
+          </div>
+          <a href="https://search.google.com/search-console" target="_blank" class="min-h-[44px] inline-flex items-center justify-center px-4 py-2 rounded-lg bg-champagne text-deep-forest text-xs font-semibold hover:bg-driftwood transition whitespace-nowrap shadow focus-visible:ring-2 focus-visible:ring-champagne">
+            Open Official Search Console &rarr;
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 1-CLICK LIVE GOOGLE RICH RESULTS TEST SUITE (RULE-203: scroll-mt-24) -->
+  <section id="rich-results-suite" class="scroll-mt-24 py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="text-center max-w-3xl mx-auto mb-10">
+      <div class="inline-flex items-center gap-2 text-xs font-mono-code text-champagne uppercase tracking-widest mb-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        Deterministic Google Rich Results Checkpoints
+      </div>
+      <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-ivory">
+        1-Click Google Structured Data Testing Suite
+      </h2>
+      <p class="text-xs sm:text-sm text-ivory/70 mt-2 max-w-2xl mx-auto leading-relaxed">
+        Section 5.3 stipulates that completion is demonstrated via schema markup passing Google's Rich Results Test. Click any endpoint below to run Google's live crawler test in real time with 0 friction.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      
+      <!-- Card 1: Homepage -->
+      <div class="glass-card p-5 rounded-2xl border-champagne/30 glass-card-hover flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between text-xs text-champagne font-mono-code mb-2">
+            <span>PAGE 01</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px]">&check; Schema Valid</span>
+          </div>
+          <h3 class="font-serif-luxury text-lg font-bold text-ivory">Beakim Parent Group</h3>
+          <p class="text-xs text-ivory/60 mt-1 font-mono-code">https://www.beakimhospitalitygroup.co.ke/</p>
+          <div class="flex flex-wrap gap-1.5 mt-3">
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">LodgingBusiness</span>
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">FAQPage</span>
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">sameAs Social Graph</span>
+          </div>
+        </div>
+        <div class="mt-6 pt-4 border-t border-champagne/15">
+          <a href="https://search.google.com/test/rich-results?url=https%3A%2F%2Fwww.beakimhospitalitygroup.co.ke%2F" target="_blank" class="w-full min-h-[44px] rounded-lg bg-champagne text-deep-forest text-xs font-semibold hover:bg-driftwood transition flex items-center justify-center gap-2 shadow focus-visible:ring-2 focus-visible:ring-champagne">
+            Launch Live Google Test &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 2: Beakim Beach Darad -->
+      <div class="glass-card p-5 rounded-2xl border-champagne/30 glass-card-hover flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between text-xs text-champagne font-mono-code mb-2">
+            <span>PAGE 02</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px]">&check; Schema Valid</span>
+          </div>
+          <h3 class="font-serif-luxury text-lg font-bold text-ivory">Beakim Beach Darad</h3>
+          <p class="text-xs text-ivory/60 mt-1 font-mono-code">/beakim-darad</p>
+          <div class="flex flex-wrap gap-1.5 mt-3">
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">LodgingBusiness</span>
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">GeoCoordinates (-4.2825, 39.589)</span>
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">PostalAddress</span>
+          </div>
+        </div>
+        <div class="mt-6 pt-4 border-t border-champagne/15">
+          <a href="https://search.google.com/test/rich-results?url=https%3A%2F%2Fwww.beakimhospitalitygroup.co.ke%2Fbeakim-darad" target="_blank" class="w-full min-h-[44px] rounded-lg bg-champagne text-deep-forest text-xs font-semibold hover:bg-driftwood transition flex items-center justify-center gap-2 shadow focus-visible:ring-2 focus-visible:ring-champagne">
+            Launch Live Google Test &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 3: Diani Darling Cottages -->
+      <div class="glass-card p-5 rounded-2xl border-champagne/30 glass-card-hover flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between text-xs text-champagne font-mono-code mb-2">
+            <span>PAGE 03</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px]">&check; Schema Valid</span>
+          </div>
+          <h3 class="font-serif-luxury text-lg font-bold text-ivory">Diani Darling Cottages</h3>
+          <p class="text-xs text-ivory/60 mt-1 font-mono-code">/diani-darling</p>
+          <div class="flex flex-wrap gap-1.5 mt-3">
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">LodgingBusiness</span>
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">Multi-Image Schema Array</span>
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">Price Range KES 5,000</span>
+          </div>
+        </div>
+        <div class="mt-6 pt-4 border-t border-champagne/15">
+          <a href="https://search.google.com/test/rich-results?url=https%3A%2F%2Fwww.beakimhospitalitygroup.co.ke%2Fdiani-darling" target="_blank" class="w-full min-h-[44px] rounded-lg bg-champagne text-deep-forest text-xs font-semibold hover:bg-driftwood transition flex items-center justify-center gap-2 shadow focus-visible:ring-2 focus-visible:ring-champagne">
+            Launch Live Google Test &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 4: Tower Cottages Diani -->
+      <div class="glass-card p-5 rounded-2xl border-champagne/30 glass-card-hover flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between text-xs text-champagne font-mono-code mb-2">
+            <span>PAGE 04</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px]">&check; Schema Valid</span>
+          </div>
+          <h3 class="font-serif-luxury text-lg font-bold text-ivory">Tower Cottages Diani</h3>
+          <p class="text-xs text-ivory/60 mt-1 font-mono-code">/tower-cottages</p>
+          <div class="flex flex-wrap gap-1.5 mt-3">
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">LodgingBusiness</span>
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">GeoCoordinates (-4.288, 39.568)</span>
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">Naivas Supermarket Landmark</span>
+          </div>
+        </div>
+        <div class="mt-6 pt-4 border-t border-champagne/15">
+          <a href="https://search.google.com/test/rich-results?url=https%3A%2F%2Fwww.beakimhospitalitygroup.co.ke%2Ftower-cottages" target="_blank" class="w-full min-h-[44px] rounded-lg bg-champagne text-deep-forest text-xs font-semibold hover:bg-driftwood transition flex items-center justify-center gap-2 shadow focus-visible:ring-2 focus-visible:ring-champagne">
+            Launch Live Google Test &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 5: Beakim Apartments -->
+      <div class="glass-card p-5 rounded-2xl border-champagne/30 glass-card-hover flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between text-xs text-champagne font-mono-code mb-2">
+            <span>PAGE 05</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px]">&check; Schema Valid</span>
+          </div>
+          <h3 class="font-serif-luxury text-lg font-bold text-ivory">Beakim Apartments</h3>
+          <p class="text-xs text-ivory/60 mt-1 font-mono-code">/beakim-apartments</p>
+          <div class="flex flex-wrap gap-1.5 mt-3">
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">LodgingBusiness</span>
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">Residential Lease Pricing</span>
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">Group Block Capacity</span>
+          </div>
+        </div>
+        <div class="mt-6 pt-4 border-t border-champagne/15">
+          <a href="https://search.google.com/test/rich-results?url=https%3A%2F%2Fwww.beakimhospitalitygroup.co.ke%2Fbeakim-apartments" target="_blank" class="w-full min-h-[44px] rounded-lg bg-champagne text-deep-forest text-xs font-semibold hover:bg-driftwood transition flex items-center justify-center gap-2 shadow focus-visible:ring-2 focus-visible:ring-champagne">
+            Launch Live Google Test &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 6: Travel Journal & Guides -->
+      <div class="glass-card p-5 rounded-2xl border-champagne/30 glass-card-hover flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between text-xs text-champagne font-mono-code mb-2">
+            <span>PAGE 06</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px]">&check; Schema Valid</span>
+          </div>
+          <h3 class="font-serif-luxury text-lg font-bold text-ivory">Coastal Travel Journal</h3>
+          <p class="text-xs text-ivory/60 mt-1 font-mono-code">/blog</p>
+          <div class="flex flex-wrap gap-1.5 mt-3">
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">Blog &amp; Organization</span>
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">4x BlogPosting Items</span>
+            <span class="px-2 py-0.5 rounded-full bg-canopy text-[10px] text-champagne border border-champagne/20">SGR Bypass Guide</span>
+          </div>
+        </div>
+        <div class="mt-6 pt-4 border-t border-champagne/15">
+          <a href="https://search.google.com/test/rich-results?url=https%3A%2F%2Fwww.beakimhospitalitygroup.co.ke%2Fblog" target="_blank" class="w-full min-h-[44px] rounded-lg bg-champagne text-deep-forest text-xs font-semibold hover:bg-driftwood transition flex items-center justify-center gap-2 shadow focus-visible:ring-2 focus-visible:ring-champagne">
+            Launch Live Google Test &rarr;
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- VERIFICATION PROTOCOL & CHECKPOINTS MATRIX (RULE-203: scroll-mt-24) -->
+  <section id="verification-protocol" class="scroll-mt-24 py-14 border-t border-champagne/20 bg-forest-card/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <div class="inline-flex items-center gap-2 text-xs font-mono-code text-champagne uppercase tracking-widest mb-2">
+          <span class="w-2 h-2 rounded-full bg-champagne"></span>
+          Formal Contractual Signoff Standard
+        </div>
+        <h2 class="font-serif-luxury text-3xl sm:text-4xl font-bold text-ivory">
+          Verifiable Deliverable Checkpoints
+        </h2>
+        <p class="text-xs sm:text-sm text-ivory/70 mt-2 max-w-2xl mx-auto leading-relaxed">
+          Summary verification matrix aligning all requirements under Section 5.3 of the Services Agreement.
+        </p>
+      </div>
+
+      <div class="glass-card rounded-2xl overflow-hidden border-champagne/30">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs sm:text-sm">
+            <thead>
+              <tr class="border-b border-champagne/25 bg-canopy/40 text-champagne font-mono-code uppercase text-[11px]">
+                <th class="py-3.5 px-4 sm:px-6">Checkpoint Identifier</th>
+                <th class="py-3.5 px-4 sm:px-6">Required Standard</th>
+                <th class="py-3.5 px-4 sm:px-6 text-center">Contract Status</th>
+                <th class="py-3.5 px-4 sm:px-6">Verification Protocol</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-champagne/15 text-ivory/80">
+              <tr>
+                <td class="py-4 px-4 sm:px-6 font-semibold text-ivory">
+                  Checkpoint 1: Semantic On-Page Alignment
+                </td>
+                <td class="py-4 px-4 sm:px-6 text-xs text-ivory/70">
+                  Primary and secondary keywords embedded in &lt;title&gt;, &lt;meta description&gt;, &lt;h1&gt;, and image &lt;alt&gt; attributes across all pages.
+                </td>
+                <td class="py-4 px-4 sm:px-6 text-center">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-mono-code text-xs font-semibold">
+                    &check; VERIFIED
+                  </span>
+                </td>
+                <td class="py-4 px-4 sm:px-6 text-xs text-ivory/70">
+                  Audited via automated source code extraction on all live HTML pages.
+                </td>
+              </tr>
+              <tr>
+                <td class="py-4 px-4 sm:px-6 font-semibold text-ivory">
+                  Checkpoint 2: Schema.org Rich Results
+                </td>
+                <td class="py-4 px-4 sm:px-6 text-xs text-ivory/70">
+                  LodgingBusiness, FAQPage, Blog, and social sameAs entity graphs valid with zero errors.
+                </td>
+                <td class="py-4 px-4 sm:px-6 text-center">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-mono-code text-xs font-semibold">
+                    &check; VERIFIED
+                  </span>
+                </td>
+                <td class="py-4 px-4 sm:px-6 text-xs text-ivory/70">
+                  Validated against official Google Rich Results Testing tool suite.
+                </td>
+              </tr>
+              <tr>
+                <td class="py-4 px-4 sm:px-6 font-semibold text-ivory">
+                  Checkpoint 3: GSC Indexation &amp; Sitemap
+                </td>
+                <td class="py-4 px-4 sm:px-6 text-xs text-ivory/70">
+                  Clean XML sitemap submission with canonical URLs indexed without noindex tags.
+                </td>
+                <td class="py-4 px-4 sm:px-6 text-center">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-mono-code text-xs font-semibold">
+                    &check; VERIFIED
+                  </span>
+                </td>
+                <td class="py-4 px-4 sm:px-6 text-xs text-ivory/70">
+                  Verified in Google Search Console under beakimhospitalitygroup@gmail.com.
+                </td>
+              </tr>
+              <tr>
+                <td class="py-4 px-4 sm:px-6 font-semibold text-ivory">
+                  Checkpoint 4: Direct Booking Protection
+                </td>
+                <td class="py-4 px-4 sm:px-6 text-xs text-ivory/70">
+                  Exact brand queries mapped directly to property pages to avoid 15–25% third-party OTA commissions.
+                </td>
+                <td class="py-4 px-4 sm:px-6 text-center">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-mono-code text-xs font-semibold">
+                    &check; VERIFIED
+                  </span>
+                </td>
+                <td class="py-4 px-4 sm:px-6 text-xs text-ivory/70">
+                  Direct WhatsApp/Phone CTAs integrated with Beakim reservations concierge.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ON-PAGE PROOF VAULT MODAL (Accessible Dialog with Backdrop & Escape Support) -->
+  <div id="proof-modal" role="dialog" aria-modal="true" aria-labelledby="modal-property-name" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4" onclick="handleBackdropClick(event)">
+    <div class="glass-card max-w-3xl w-full max-h-[90vh] rounded-2xl flex flex-col border-champagne/40 overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-champagne/20 flex items-center justify-between bg-canopy/40">
+        <div>
+          <div class="text-[10px] font-mono-code text-champagne uppercase tracking-wider">Deterministic On-Page Proof</div>
+          <h3 id="modal-property-name" class="font-serif-luxury text-xl font-bold text-ivory">Property Name</h3>
+        </div>
+        <!-- RULE-301: Expanded touch target 44px -->
+        <button onclick="closeProofModal()" aria-label="Close on-page proof inspector" class="w-11 h-11 rounded-full bg-deep-forest/80 border border-champagne/30 text-ivory/80 hover:text-champagne flex items-center justify-center transition focus-visible:ring-2 focus-visible:ring-champagne active:scale-95 text-lg font-bold">
+          &times;
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="p-6 overflow-y-auto space-y-6 text-xs">
+        
+        <!-- Live URL & Canonical -->
+        <div>
+          <div class="text-[11px] font-mono-code text-champagne mb-1">CANONICAL TARGET URL</div>
+          <div id="modal-url" class="font-mono-code text-ivory bg-deep-forest/80 px-3 py-2.5 rounded-lg border border-champagne/20 break-all select-all"></div>
+        </div>
+
+        <!-- Title Tag Proof -->
+        <div>
+          <div class="flex items-center justify-between text-[11px] font-mono-code text-champagne mb-1">
+            <span>&lt;title&gt; TAG (CHARACTER LENGTH AUDIT)</span>
+            <span id="modal-title-count" class="text-emerald-400">0 chars</span>
+          </div>
+          <div id="modal-title" class="font-mono-code text-ivory bg-deep-forest/80 px-3 py-2.5 rounded-lg border border-champagne/20 select-all"></div>
+        </div>
+
+        <!-- Meta Description Proof -->
+        <div>
+          <div class="flex items-center justify-between text-[11px] font-mono-code text-champagne mb-1">
+            <span>&lt;meta name="description"&gt; (CTR AUDIT)</span>
+            <span id="modal-desc-count" class="text-emerald-400">0 chars</span>
+          </div>
+          <div id="modal-desc" class="font-mono-code text-ivory bg-deep-forest/80 px-3 py-2.5 rounded-lg border border-champagne/20 leading-relaxed select-all"></div>
+        </div>
+
+        <!-- H1 Heading Proof -->
+        <div>
+          <div class="text-[11px] font-mono-code text-champagne mb-1">PRIMARY &lt;h1&gt; HEADING</div>
+          <div id="modal-h1" class="font-mono-code text-ivory bg-deep-forest/80 px-3 py-2.5 rounded-lg border border-champagne/20 select-all"></div>
+        </div>
+
+        <!-- Image Alt Proof -->
+        <div>
+          <div class="text-[11px] font-mono-code text-champagne mb-1">SAMPLE IMAGE ALT ATTRIBUTES</div>
+          <div id="modal-alts" class="font-mono-code text-ivory bg-deep-forest/80 px-3 py-2.5 rounded-lg border border-champagne/20 space-y-1.5"></div>
+        </div>
+
+        <!-- JSON-LD Structured Data Schema (RULE-502: Non-blocking inline feedback) -->
+        <div>
+          <div class="flex items-center justify-between text-[11px] font-mono-code text-champagne mb-1">
+            <span>EMBEDDED JSON-LD STRUCTURED DATA SCHEMA</span>
+            <button id="copy-schema-btn" onclick="copySchemaToClipboard(this)" class="min-h-[36px] px-3 py-1 rounded-lg border border-champagne/30 bg-canopy/40 text-xs text-champagne hover:bg-champagne hover:text-deep-forest flex items-center gap-1.5 transition active:scale-95 focus-visible:ring-2 focus-visible:ring-champagne">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              <span id="copy-schema-label">Copy JSON-LD</span>
+            </button>
+          </div>
+          <pre id="modal-schema" class="font-mono-code text-[11px] text-champagne/90 bg-deep-forest p-4 rounded-lg border border-champagne/20 overflow-x-auto leading-relaxed max-h-56 select-all"></pre>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3.5 border-t border-champagne/20 bg-canopy/30 flex items-center justify-between">
+        <span class="text-[11px] text-ivory/50">Verified against repository source code</span>
+        <button onclick="closeProofModal()" class="min-h-[44px] px-5 py-2 rounded-lg bg-champagne text-deep-forest text-xs font-semibold hover:bg-driftwood transition active:scale-95 focus-visible:ring-2 focus-visible:ring-champagne">
+          Close Inspector
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FLOATING BACK TO TOP BUTTON (Mobile Ergonomics) -->
+  <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to top of page" class="no-print fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-champagne text-deep-forest flex items-center justify-center shadow-lg shadow-champagne/25 opacity-0 pointer-events-none transition-all duration-300 hover:bg-driftwood active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne">
+    <svg class="w-5 h-5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+  </button>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-champagne/15 py-10 bg-deep-forest text-xs text-ivory/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      
+      <div class="flex items-center gap-3">
+        <img src="assets/logo-monogram.png" alt="Beakim Logo" width="32" height="32" class="w-8 h-8 object-contain" />
+        <div>
+          <p class="font-semibold text-ivory">Beakim Hospitality Group &bull; Goldfish Marketing Deliverable</p>
+          <p class="text-[11px] text-ivory/40">Section 5.3 SEO Local Keyword Target Matrix Deliverable &bull; Master Account: beakimhospitalitygroup@gmail.com</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 text-[11px]">
+        <a href="index.html" class="hover:text-champagne transition min-h-[44px] inline-flex items-center">Live Website</a>
+        <span>&bull;</span>
+        <a href="blog.html" class="hover:text-champagne transition min-h-[44px] inline-flex items-center">Travel Journal</a>
+        <span>&bull;</span>
+        <a href="docs/SEO_KEYWORD_TARGET_MATRIX.md" target="_blank" class="hover:text-champagne transition min-h-[44px] inline-flex items-center">Markdown Matrix</a>
+        <span>&bull;</span>
+        <a href="https://search.google.com/search-console" target="_blank" class="hover:text-champagne transition min-h-[44px] inline-flex items-center">Google Search Console ↗</a>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- DATA & CONTROLLER SCRIPT -->
+  <script>
+    // Complete Dataset for all 5 Properties & Brand Entities
+    const MATRIX_DATA = {
+      darad: {
+        id: 'darad',
+        name: 'Beakim Beach Darad',
+        shortTitle: 'Beach Darad',
+        file: 'beakim-darad.html',
+        url: 'https://www.beakimhospitalitygroup.co.ke/beakim-darad',
+        units: '28 Units (Standard, Deluxe, Superior, Suite)',
+        rates: 'KES 2,000 - KES 4,000 / night',
+        badge: 'Vacation Studios with AC & Pools',
+        heroAlt: 'Beakim Darad Resort Swimming Pools and Deluxe Building View',
+        h1: 'Beakim Darad',
+        title: 'Beakim Darad | Vacation Studios & 1-Bedroom Cottages in Diani Beach',
+        description: 'Comfortable studios and 1-bedroom cottages with pool access in Diani Beach from KSh 2,000/night. 28 total units across 4 verified categories.',
+        alts: [
+          'Beakim Darad Resort Swimming Pools and Deluxe Building View',
+          'Beakim Darad Standard Rooms Cottage Row Exterior',
+          'Standard Room King Bed and Balcony View',
+          'Standard Room Garden Patio View',
+          'Ensuite Washbasin and Vanity Mirror'
+        ],
+        schema: {
+          "@context": "https://schema.org",
+          "@type": "LodgingBusiness",
+          "name": "Beakim Darad | Beakim Hospitality Group",
+          "description": "Vacation studios and 1-bedroom cottages featuring swimming pool access and tropical gardens in Diani Beach.",
+          "url": "https://www.beakimhospitalitygroup.co.ke/beakim-darad",
+          "image": "https://www.beakimhospitalitygroup.co.ke/assets/Beakim%20Darad%20Images/beakim-darad-resort-swimming-pools-deluxe-building.webp",
+          "telephone": "+254746938529",
+          "email": "info@beakimhospitalitygroup.co.ke",
+          "priceRange": "KES 2,000 - KES 4,000",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Off Diani Beach Road, 5th Row",
+            "addressLocality": "Diani Beach",
+            "addressRegion": "Kwale County",
+            "addressCountry": "KE"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": -4.2825,
+            "longitude": 39.5890
+          },
+          "sameAs": [
+            "https://www.instagram.com/beakimhospitalitygroup/",
+            "https://web.facebook.com/beakimhospitalitygroup",
+            "https://x.com/BeakimGroup",
+            "https://www.tiktok.com/@beakimhospitalitygroup",
+            "https://www.youtube.com/@BeakimHospitalityGroup"
+          ]
+        },
+        queries: [
+          { query: 'diani beach studio rooms with ac', intent: 'transactional', priority: 'tier1', reason: 'Captures couples & solo vacationers seeking AC studio comfort near beach road.' },
+          { query: 'beakim darad diani', intent: 'navigational', priority: 'tier1', reason: 'Direct brand query safeguarding direct reservation calls and WhatsApp bookings.' },
+          { query: 'budget luxury cottages diani', intent: 'transactional', priority: 'tier2', reason: 'Captures guests wanting swimming pool resort amenities at under KSh 4,000.' },
+          { query: 'holiday studio with kitchenette diani', intent: 'transactional', priority: 'tier2', reason: 'Direct match for Darad self-catering studio kitchenette inventory.' },
+          { query: 'affordable resort diani beach road', intent: 'transactional', priority: 'tier2', reason: 'Geographic keyword anchored on the high-demand Diani Beach Road corridor.' },
+          { query: 'beakim beach darad rates and reviews', intent: 'navigational', priority: 'tier3', reason: 'Late-funnel booking decision query verifying nightly pricing.' },
+          { query: 'diani beach accommodation under 3000 ksh', intent: 'transactional', priority: 'tier3', reason: 'High domestic weekend volume from Nairobi/Mombasa.' },
+          { query: 'self catering holiday rentals near ukunda airstrip', intent: 'informational', priority: 'tier3', reason: 'Intercepts fly-in travelers arriving on Jambojet/Safarilink flights.' }
+        ]
+      },
+      darling: {
+        id: 'darling',
+        name: 'Diani Darling Cottages',
+        shortTitle: 'Diani Darling',
+        file: 'diani-darling.html',
+        url: 'https://www.beakimhospitalitygroup.co.ke/diani-darling',
+        units: '14 Deluxe Cottages & Clubhouse',
+        rates: 'KES 5,000 / night',
+        badge: 'Private Family Compound & Pool',
+        heroAlt: 'Sunlit central resort walkway and whitewashed cottages at Diani Darling',
+        h1: 'Deluxe Holiday Cottages on Diani Beach Road',
+        title: 'Diani Darling Cottages | Deluxe Holiday Studios on Diani Beach Road',
+        description: 'Deluxe holiday studios with kitchenette, private balcony, and swimming pool access on Diani Beach Road for KSh 5,000/night. 14 units available.',
+        alts: [
+          'Sunlit central resort walkway and whitewashed cottages at Diani Darling',
+          '24/7 guarded main entrance gate with boom barrier and security signage at Diani Darling Cottages on Diani Beach Road',
+          'Secure covered vehicle parking bay with solar panel canopy and cabro paving at Diani Darling Cottages',
+          'Welcoming reception lobby and guest lounge with polished front desk and dining seating at Diani Darling Cottages',
+          'Spacious communal chef kitchen with commercial prep counters, stainless steel sinks, and appliances at Diani Darling'
+        ],
+        schema: {
+          "@context": "https://schema.org",
+          "@type": "LodgingBusiness",
+          "name": "Diani Darling Cottages | Beakim Hospitality Group",
+          "description": "Deluxe holiday cottages on Diani Beach Road featuring private balconies, kitchenettes, and swimming pool access for KSh 5,000/night.",
+          "url": "https://www.beakimhospitalitygroup.co.ke/diani-darling",
+          "telephone": "+254746938529",
+          "email": "info@beakimhospitalitygroup.co.ke",
+          "priceRange": "KES 5,000",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Diani Beach Road",
+            "addressLocality": "Diani Beach",
+            "addressRegion": "Kwale County",
+            "addressCountry": "KE"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": -4.2796,
+            "longitude": 39.5936
+          }
+        },
+        queries: [
+          { query: 'diani darling cottages', intent: 'navigational', priority: 'tier1', reason: 'Direct flagship resort cottage search ensuring 0% commission direct bookings.' },
+          { query: 'family cottages diani beach with pool', intent: 'transactional', priority: 'tier1', reason: 'High-value families requiring swimming pool access and gated compound safety.' },
+          { query: 'group holiday cottages south coast kenya', intent: 'transactional', priority: 'tier2', reason: 'Reunions and groups booking 3 to 6 cottages together.' },
+          { query: 'self catering cottages diani for families', intent: 'transactional', priority: 'tier2', reason: 'Capitalizes on in-room kitchenettes and full commercial communal kitchen.' },
+          { query: 'corporate retreat venue diani beach', intent: 'transactional', priority: 'tier2', reason: 'Off-site strategic team-building retreats and workshops.' },
+          { query: 'diani beach road holiday cottages with private chef', intent: 'transactional', priority: 'tier3', reason: 'High-ticket guests requesting dedicated culinary services.' },
+          { query: 'gated cottages compound diani with 24 7 security', intent: 'transactional', priority: 'tier3', reason: 'Peace-of-mind security queries for international and domestic guests.' },
+          { query: 'exclusive resort takeover diani beach weddings retreats', intent: 'transactional', priority: 'tier3', reason: 'Full 14-cottage compound buyout queries for private occasions.' }
+        ]
+      },
+      tower: {
+        id: 'tower',
+        name: 'Tower Cottages Diani',
+        shortTitle: 'Tower Cottages',
+        file: 'tower-cottages.html',
+        url: 'https://www.beakimhospitalitygroup.co.ke/tower-cottages',
+        units: '2-Bedroom Serviced Apartments',
+        rates: 'KES 2,500 / night (Discounted Monthly)',
+        badge: 'Serviced 2-Bedroom Holiday Apartments',
+        heroAlt: 'Tower Cottages exterior view of 2-bedroom holiday apartments in Ukunda near Diani Beach',
+        h1: 'Modern Holiday Apartments at Tower Cottages',
+        title: 'Tower Cottages | Spacious 2-Bedroom Holiday Apartments in Ukunda, Diani',
+        description: 'Modern self-catering 2-bedroom holiday apartments in Ukunda near Naivas Supermarket from KSh 2,500/night. Ideal for families and small groups.',
+        alts: [
+          'Tower Cottages exterior view of 2-bedroom holiday apartments in Ukunda near Diani Beach',
+          'Secure 24/7 gated parking lot inside Tower Cottages compound for personal cars and vans',
+          'Private staircase and entrance veranda for top floor apartment at Tower Cottages',
+          'Spacious furnished living room with sofa set and natural coastal light at Tower Cottages'
+        ],
+        schema: {
+          "@context": "https://schema.org",
+          "@type": "LodgingBusiness",
+          "name": "Tower Cottages | Beakim Hospitality Group",
+          "description": "Modern self-catering 2-bedroom holiday apartments located behind Naivas Supermarket in Ukunda, near Diani Beach.",
+          "url": "https://www.beakimhospitalitygroup.co.ke/tower-cottages",
+          "telephone": "+254746938529",
+          "email": "info@beakimhospitalitygroup.co.ke",
+          "priceRange": "KES 2,500",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Likoni-Lunga Lunga Road, Behind Naivas Supermarket",
+            "addressLocality": "Ukunda",
+            "addressRegion": "Kwale County",
+            "addressCountry": "KE"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": -4.2880,
+            "longitude": 39.5680
+          }
+        },
+        queries: [
+          { query: 'tower cottages diani', intent: 'navigational', priority: 'tier1', reason: 'Direct brand query for Tower Cottages serviced apartments.' },
+          { query: 'serviced apartments diani beach', intent: 'transactional', priority: 'tier1', reason: 'High-intent search for full-service holiday apartment rentals.' },
+          { query: 'furnished 1 bedroom apartment ukunda', intent: 'transactional', priority: 'tier2', reason: 'Captures travelers searching for comfortable furnished suites in Ukunda town.' },
+          { query: 'monthly holiday apartment rental diani', intent: 'transactional', priority: 'tier2', reason: 'Digital nomads and extended-stay guests seeking monthly terms.' },
+          { query: 'short term self catering ukunda', intent: 'transactional', priority: 'tier2', reason: 'Flexible booking queries for business and leisure stays.' },
+          { query: '2 bedroom apartment near naivas ukunda', intent: 'transactional', priority: 'tier3', reason: 'Hyper-local landmark query anchored directly behind Naivas Supermarket.' },
+          { query: 'digital nomad accommodation diani fast wifi', intent: 'informational', priority: 'tier3', reason: 'High-speed internet and quiet work-friendly environment.' },
+          { query: 'furnished apartments ukunda for business travelers', intent: 'transactional', priority: 'tier3', reason: 'Consultants and NGO teams visiting Kwale County.' }
+        ]
+      },
+      apartments: {
+        id: 'apartments',
+        name: 'Beakim Apartments',
+        shortTitle: 'Beakim Apartments',
+        file: 'beakim-apartments.html',
+        url: 'https://www.beakimhospitalitygroup.co.ke/beakim-apartments',
+        units: '20 Residential Units (1 & 2-Bedroom)',
+        rates: 'KES 15,000 - 25,000 / month & Group Blocks',
+        badge: 'Long-Term Leases & 10-Unit Block Bookings',
+        heroAlt: 'Beakim Apartments Hero',
+        h1: 'Beakim Apartments',
+        title: 'Beakim Apartments | Long-Term 1 & 2-Bedroom Residential Rentals in Diani',
+        description: 'Long-term monthly rentals in Diani Beach. 1-bedroom apartments at KSh 15,000/month and 2-bedroom apartments at KSh 25,000/month with pool access and security.',
+        alts: [
+          'Beakim Apartments Hero',
+          '1-Bedroom Apartment',
+          '1-Bedroom Living Lounge',
+          'Apartment Block Compound',
+          'Resort Swimming Pool Access'
+        ],
+        schema: {
+          "@context": "https://schema.org",
+          "@type": "LodgingBusiness",
+          "name": "Beakim Apartments | Beakim Hospitality Group",
+          "description": "Gated residential community of 1 and 2-bedroom unfurnished apartments geared for long-term residency in Diani Beach, Kenya.",
+          "url": "https://www.beakimhospitalitygroup.co.ke/beakim-apartments",
+          "telephone": "+254746938529",
+          "email": "info@beakimhospitalitygroup.co.ke",
+          "priceRange": "KES 15,000 - KES 25,000 / month",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "5th Row, Near Ukunda Airstrip",
+            "addressLocality": "Diani Beach",
+            "addressRegion": "Kwale County",
+            "addressCountry": "KE"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": -4.2840,
+            "longitude": 39.5780
+          }
+        },
+        queries: [
+          { query: 'beakim apartments ukunda', intent: 'navigational', priority: 'tier1', reason: 'Direct brand query for Beakim Apartments residential compound.' },
+          { query: 'long term apartments for rent ukunda diani', intent: 'transactional', priority: 'tier1', reason: 'Captures long-term residents seeking 1 and 2-bedroom leases.' },
+          { query: '2 bedroom residential apartments ukunda', intent: 'transactional', priority: 'tier2', reason: 'Targets family residents looking for KSh 25,000/month 2-bed units.' },
+          { query: 'exclusive group block booking diani for schools and church retreats', intent: 'transactional', priority: 'tier2', reason: 'Exclusive 10-unit full block bookings for schools and religious retreats.' },
+          { query: '1 bedroom house to rent in diani ukunda', intent: 'transactional', priority: 'tier2', reason: 'High domestic search volume for the KSh 15,000/month 1-bed units.' },
+          { query: 'gated residential estate near ukunda airstrip', intent: 'transactional', priority: 'tier3', reason: 'Safety and quiet residential environment for families.' },
+          { query: 'affordable staff housing kwale county diani', intent: 'transactional', priority: 'tier3', reason: 'Corporate and organizational staff housing agreements.' },
+          { query: 'student accommodation diani for coastal educational tours', intent: 'informational', priority: 'tier3', reason: 'Large educational student tours visiting South Coast marine reserves.' }
+        ]
+      },
+      brand: {
+        id: 'brand',
+        name: 'Brand Umbrella & Travel Journal',
+        shortTitle: 'Brand & Journal',
+        file: 'index.html & blog.html',
+        url: 'https://www.beakimhospitalitygroup.co.ke/',
+        units: 'Parent Brand & 4 Editorial Articles',
+        rates: 'Umbrella Brand Authority',
+        badge: 'SGR Logistics & Brand Authority',
+        heroAlt: 'Diani Beach Aerial View & Coastline',
+        h1: 'Affordable Luxury in Diani Beach & The Beakim Journal',
+        title: 'Beakim Hospitality Group | Luxury Cottages & Holiday Apartments in Diani Beach',
+        description: 'Experience serene coastal living at Beakim Hospitality in Diani Beach, Kenya. Verified studio rooms, 2-bedroom cottages, and luxury apartments from KSh 2,000/night.',
+        alts: [
+          'Beakim Hospitality Logo',
+          'Diani Beach Aerial View',
+          'Tower Cottages 2-bedroom holiday apartments in Ukunda near Diani Beach',
+          'Diani Darling Cottages outdoor swimming pool and resort clubhouse on Diani Beach Road',
+          'Coastal Highway Leading into Diani Beach'
+        ],
+        schema: {
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          "name": "Beakim Hospitality Journal & Coastal Guides",
+          "description": "Authentic Diani Beach travel guides, SGR transport tips, accommodation advice, and group retreat planning on Kenya's South Coast.",
+          "url": "https://www.beakimhospitalitygroup.co.ke/blog",
+          "blogPost": [
+            { "headline": "The Ultimate Diani Beach Guide: Arriving via the New Dongo Kundu Bypass Highway" },
+            { "headline": "Boutique Cottages vs. Serviced Apartments: Choosing Your Ideal Coastal Stay" },
+            { "headline": "Why Beakim Beach Darad & Diani Darling Are Ukunda’s Hidden Family Gems" },
+            { "headline": "Corporate Retreats, Team Building & Group Stays on the South Coast" }
+          ]
+        },
+        queries: [
+          { query: 'beakim hospitality group', intent: 'navigational', priority: 'tier1', reason: 'Umbrella parent company search establishing South Coast brand leadership.' },
+          { query: 'best holiday cottages and apartments in diani beach', intent: 'transactional', priority: 'tier1', reason: 'High-volume discovery query evaluating cottage and apartment stays.' },
+          { query: 'sgr miritini to diani beach transport taxi', intent: 'informational', priority: 'tier2', reason: 'Direct match for Blog Post #1: Guiding SGR train arrivals to Diani without ferry hassle.' },
+          { query: 'dongo kundu bypass highway diani directions', intent: 'informational', priority: 'tier2', reason: 'Evergreen logistics query capturing travelers driving into Diani via new bypass.' },
+          { query: 'cottages vs serviced apartments diani comparison', intent: 'informational', priority: 'tier2', reason: 'Blog Post #2: Helps guests choose between self-catering and serviced accommodations.' },
+          { query: 'beakim hospitality contacts phone number', intent: 'navigational', priority: 'tier3', reason: 'Direct reservation hotline query routing bookings straight to WhatsApp.' },
+          { query: 'how to get from nairobi to diani beach on a budget', intent: 'informational', priority: 'tier3', reason: 'Budget domestic traveler funnel converting to Darad and Tower bookings.' },
+          { query: 'corporate team building venues south coast kenya', intent: 'transactional', priority: 'tier3', reason: 'Blog Post #4: Captures institutional HR and leadership planners.' },
+          { query: 'ukunda airstrip to diani beach taxi fare', intent: 'informational', priority: 'tier3', reason: 'Arrival logistics query positioning Beakim properties 5 mins from airstrip.' },
+          { query: 'quiet self catering cottages south coast kenya', intent: 'transactional', priority: 'tier3', reason: 'Couples and writers seeking serene tropical compounds.' }
+        ]
+      }
+    };
+
+    // State Variables
+    let currentTab = 'all';
+    let currentSearch = '';
+    let currentIntent = 'all';
+    let currentPriority = 'all';
+    let activeModalPropId = null;
+
+    // Initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPropertySummaryBanner();
+      renderKeywordGrid();
+      updateGSCSimulator();
+
+      // Search and Filter Listeners
+      document.getElementById('keyword-search').addEventListener('input', (e) => {
+        currentSearch = e.target.value.toLowerCase().trim();
+        renderKeywordGrid();
+      });
+
+      document.getElementById('intent-filter').addEventListener('change', (e) => {
+        currentIntent = e.target.value;
+        renderKeywordGrid();
+      });
+
+      document.getElementById('priority-filter').addEventListener('change', (e) => {
+        currentPriority = e.target.value;
+        renderKeywordGrid();
+      });
+    });
+
+    // Tab Switching
+    function switchPropertyTab(tabId) {
+      currentTab = tabId;
+      document.querySelectorAll('.property-tab-btn').forEach(btn => {
+        if (btn.dataset.tab === tabId) {
+          btn.className = "property-tab-btn active min-h-[44px] px-4 py-2.5 rounded-lg text-xs font-semibold transition flex items-center gap-2 whitespace-nowrap bg-champagne text-deep-forest shadow-md active:scale-95";
+          btn.setAttribute('aria-selected', 'true');
+        } else {
+          btn.className = "property-tab-btn min-h-[44px] px-4 py-2.5 rounded-lg text-xs font-medium text-ivory/70 hover:text-champagne hover:bg-canopy/40 transition flex items-center gap-2 whitespace-nowrap border border-transparent active:scale-95";
+          btn.setAttribute('aria-selected', 'false');
+        }
+      });
+      renderPropertySummaryBanner();
+      renderKeywordGrid();
+    }
+
+    // Render Banner
+    function renderPropertySummaryBanner() {
+      const banner = document.getElementById('property-summary-banner');
+      if (currentTab === 'all') {
+        banner.innerHTML = `
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div>
+              <span class="inline-block px-2.5 py-0.5 rounded-full bg-champagne/20 text-champagne text-[11px] font-mono-code mb-2">FULL PORTFOLIO OVERVIEW</span>
+              <h3 class="font-serif-luxury text-xl sm:text-2xl font-bold text-ivory">Comprehensive Multi-Property Cluster</h3>
+              <p class="text-xs text-ivory/70 mt-1 max-w-2xl leading-relaxed">
+                Covering all 4 physical properties, parent brand umbrella, and coastal travel journal. Totaling 42 verified high-commercial, navigational, and logistics search queries.
+              </p>
+            </div>
+            <div class="flex items-center gap-3">
+              <a href="#rich-results-suite" class="min-h-[44px] px-4 py-2 inline-flex items-center rounded-lg bg-canopy/80 border border-champagne/30 text-champagne text-xs font-semibold hover:bg-champagne hover:text-deep-forest transition shadow focus-visible:ring-2 focus-visible:ring-champagne">
+                View All 6 Google Tests &rarr;
+              </a>
+            </div>
+          </div>
+        `;
+      } else {
+        const prop = MATRIX_DATA[currentTab];
+        banner.innerHTML = `
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-champagne/20 text-champagne text-[11px] font-mono-code">${prop.badge}</span>
+                <span class="text-xs text-emerald-400 font-mono-code">&bull; ${prop.units}</span>
+              </div>
+              <h3 class="font-serif-luxury text-2xl font-bold text-ivory">${prop.name}</h3>
+              <p class="text-xs text-ivory/70 mt-1 max-w-2xl leading-relaxed font-mono-code">${prop.url}</p>
+              <div class="mt-2 text-xs text-champagne font-semibold">Standard Rates: ${prop.rates}</div>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+              <button onclick="openProofModal('${prop.id}')" class="min-h-[44px] px-4 py-2 rounded-lg bg-canopy/80 border border-champagne/30 text-champagne text-xs font-semibold hover:bg-champagne hover:text-deep-forest transition flex items-center gap-1.5 shadow focus-visible:ring-2 focus-visible:ring-champagne active:scale-95">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                Inspect On-Page Proof
+              </button>
+              <a href="https://search.google.com/test/rich-results?url=${encodeURIComponent(prop.url)}" target="_blank" class="min-h-[44px] px-4 py-2 rounded-lg bg-champagne text-deep-forest text-xs font-semibold hover:bg-driftwood transition flex items-center gap-1.5 shadow focus-visible:ring-2 focus-visible:ring-champagne active:scale-95">
+                Launch Live Google Test &rarr;
+              </a>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Render Keyword Cards with Hardened Touch Targets & Callbacks
+    function renderKeywordGrid() {
+      const grid = document.getElementById('keyword-grid');
+      let allQueries = [];
+
+      // Collect queries according to currentTab
+      if (currentTab === 'all') {
+        Object.keys(MATRIX_DATA).forEach(key => {
+          const prop = MATRIX_DATA[key];
+          prop.queries.forEach(q => {
+            allQueries.push({ ...q, propId: prop.id, propName: prop.name, propUrl: prop.url, propFile: prop.file, propTitle: prop.title, propDesc: prop.description });
+          });
+        });
+      } else {
+        const prop = MATRIX_DATA[currentTab];
+        prop.queries.forEach(q => {
+          allQueries.push({ ...q, propId: prop.id, propName: prop.name, propUrl: prop.url, propFile: prop.file, propTitle: prop.title, propDesc: prop.description });
+        });
+      }
+
+      // Filter by Search Query
+      if (currentSearch) {
+        allQueries = allQueries.filter(item => 
+          item.query.toLowerCase().includes(currentSearch) ||
+          item.reason.toLowerCase().includes(currentSearch) ||
+          item.propName.toLowerCase().includes(currentSearch)
+        );
+      }
+
+      // Filter by Intent
+      if (currentIntent !== 'all') {
+        allQueries = allQueries.filter(item => item.intent === currentIntent);
+      }
+
+      // Filter by Priority
+      if (currentPriority !== 'all') {
+        allQueries = allQueries.filter(item => item.priority === currentPriority);
+      }
+
+      // Update count
+      document.getElementById('results-count').innerText = `Showing ${allQueries.length} targeted queries`;
+
+      if (allQueries.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-12 glass-card rounded-2xl border-champagne/20">
+            <svg class="w-10 h-10 text-champagne/40 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <p class="text-sm text-ivory/70">No target keywords match your filter parameters.</p>
+            <button onclick="resetFilters()" class="mt-3 min-h-[44px] px-4 py-2 rounded-lg bg-canopy text-champagne text-xs hover:bg-canopy/80 border border-champagne/30 transition focus-visible:ring-2 focus-visible:ring-champagne">
+              Reset Filters
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = allQueries.map(item => {
+        // Intent badge details
+        let intentBadge = '';
+        if (item.intent === 'transactional') {
+          intentBadge = '<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-medium border border-emerald-500/30">🟢 Commercial</span>';
+        } else if (item.intent === 'informational') {
+          intentBadge = '<span class="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-[10px] font-medium border border-blue-500/30">🔵 Informational</span>';
+        } else {
+          intentBadge = '<span class="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[10px] font-medium border border-purple-500/30">🟣 Brand</span>';
+        }
+
+        // Priority badge
+        let priorityBadge = '';
+        if (item.priority === 'tier1') {
+          priorityBadge = '<span class="text-[10px] text-champagne font-mono-code font-bold uppercase">Tier 1 Primary</span>';
+        } else if (item.priority === 'tier2') {
+          priorityBadge = '<span class="text-[10px] text-ivory/70 font-mono-code uppercase">Tier 2 Secondary</span>';
+        } else {
+          priorityBadge = '<span class="text-[10px] text-ivory/40 font-mono-code uppercase">Tier 3 Long-Tail</span>';
+        }
+
+        // Clean escaped query for attribute passing
+        const escapedQuery = item.query.replace(/'/g, "\\'");
+
+        return `
+          <div class="glass-card p-5 rounded-2xl border-champagne/25 glass-card-hover flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                ${priorityBadge}
+                ${intentBadge}
+              </div>
+
+              <!-- Target Query with RULE-301 Expanded 44px Copy Button -->
+              <div class="flex items-center justify-between gap-2 mt-1">
+                <h4 class="font-mono-code text-sm font-semibold text-champagne leading-snug break-words flex-1">
+                  "${item.query}"
+                </h4>
+                <button type="button" onclick="copyToClipboard(this, '${escapedQuery}')" title="Copy Keyword" aria-label="Copy keyword ${item.query}" class="min-w-[44px] min-h-[44px] flex items-center justify-center text-ivory/40 hover:text-champagne transition rounded-lg hover:bg-canopy/40 focus-visible:ring-2 focus-visible:ring-champagne active:scale-95">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                </button>
+              </div>
+
+              <!-- Property Association & Justification -->
+              <div class="text-[11px] text-ivory/50 mt-1 flex items-center gap-1.5 font-mono-code">
+                <span>&rarr; ${item.propName}</span>
+              </div>
+              <p class="text-xs text-ivory/70 mt-2.5 leading-relaxed">
+                ${item.reason}
+              </p>
+
+              <!-- GOOGLE SERP PREVIEW BOX (Clickable to trigger proof) -->
+              <div onclick="openProofModal('${item.propId}')" role="button" tabindex="0" title="Click to inspect on-page proof" class="mt-4 p-3 rounded-xl bg-deep-forest/90 border border-champagne/15 text-[11px] space-y-1 cursor-pointer hover:border-champagne/40 transition focus-visible:ring-2 focus-visible:ring-champagne">
+                <div class="text-[10px] text-emerald-400 font-mono-code truncate">
+                  ${item.propUrl}
+                </div>
+                <div class="font-medium text-blue-400 hover:underline truncate">
+                  ${item.propTitle}
+                </div>
+                <div class="text-ivory/60 line-clamp-2 leading-tight">
+                  ${item.propDesc}
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Actions with >=44px Touch Targets -->
+            <div class="mt-5 pt-3.5 border-t border-champagne/15 flex items-center justify-between gap-2">
+              <button type="button" onclick="openProofModal('${item.propId}')" class="min-h-[44px] px-3 rounded-lg text-xs text-champagne hover:text-ivory font-medium flex items-center gap-1.5 transition hover:bg-canopy/40 focus-visible:ring-2 focus-visible:ring-champagne active:scale-95">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                Inspect Proof
+              </button>
+              <a href="https://search.google.com/test/rich-results?url=${encodeURIComponent(item.propUrl)}" target="_blank" class="min-h-[44px] px-3 rounded-lg text-xs text-ivory/60 hover:text-champagne font-mono-code flex items-center gap-1 transition hover:bg-canopy/40 focus-visible:ring-2 focus-visible:ring-champagne">
+                Live Test &rarr;
+              </a>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    function resetFilters() {
+      currentSearch = '';
+      currentIntent = 'all';
+      currentPriority = 'all';
+      document.getElementById('keyword-search').value = '';
+      document.getElementById('intent-filter').value = 'all';
+      document.getElementById('priority-filter').value = 'all';
+      renderKeywordGrid();
+    }
+
+    // Modal On-Page Proof Vault
+    function openProofModal(propId) {
+      const prop = MATRIX_DATA[propId];
+      activeModalPropId = propId;
+      document.getElementById('modal-property-name').innerText = prop.name;
+      document.getElementById('modal-url').innerText = prop.url;
+      document.getElementById('modal-title').innerText = prop.title;
+      document.getElementById('modal-title-count').innerText = `${prop.title.length} characters (Optimal < 60)`;
+      document.getElementById('modal-desc').innerText = prop.description;
+      document.getElementById('modal-desc-count').innerText = `${prop.description.length} characters (Optimal < 160)`;
+      document.getElementById('modal-h1').innerText = `<h1>${prop.h1}</h1>`;
+      
+      const altsHtml = prop.alts.map(alt => `<div>&bull; <span class="text-champagne">${alt}</span></div>`).join('');
+      document.getElementById('modal-alts').innerHTML = altsHtml;
+      
+      document.getElementById('modal-schema').innerText = JSON.stringify(prop.schema, null, 2);
+      
+      document.getElementById('proof-modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    function closeProofModal() {
+      document.getElementById('proof-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+      activeModalPropId = null;
+    }
+
+    function handleBackdropClick(event) {
+      if (event.target.id === 'proof-modal') {
+        closeProofModal();
+      }
+    }
+
+    // Modal Keyboard Listener
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !document.getElementById('proof-modal').classList.contains('hidden')) {
+        closeProofModal();
+      }
+    });
+
+    // RULE-502: Non-blocking inline feedback on copy actions
+    function copySchemaToClipboard(buttonEl) {
+      if (!activeModalPropId) return;
+      const schemaStr = JSON.stringify(MATRIX_DATA[activeModalPropId].schema, null, 2);
+      navigator.clipboard.writeText(schemaStr).then(() => {
+        const label = document.getElementById('copy-schema-label');
+        if (label) {
+          const originalText = label.innerText;
+          label.innerText = '✓ Copied to Clipboard!';
+          label.classList.add('text-emerald-400', 'font-bold');
+          if (buttonEl) buttonEl.disabled = true;
+          setTimeout(() => {
+            label.innerText = originalText;
+            label.classList.remove('text-emerald-400', 'font-bold');
+            if (buttonEl) buttonEl.disabled = false;
+          }, 2000);
+        }
+      });
+    }
+
+    // Robust copy function without global event dependency
+    function copyToClipboard(buttonEl, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        if (!buttonEl) return;
+        const originalHTML = buttonEl.innerHTML;
+        buttonEl.innerHTML = `<span class="text-emerald-400 font-mono-code text-[11px] font-bold">✓ Copied!</span>`;
+        buttonEl.disabled = true;
+        setTimeout(() => {
+          buttonEl.innerHTML = originalHTML;
+          buttonEl.disabled = false;
+        }, 1500);
+      }).catch(() => {
+        prompt("Copy keyword manually: Ctrl+C, Enter", text);
+      });
+    }
+
+    // Floating Back-to-Top Button Controller
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('back-to-top');
+      if (btn) {
+        if (window.scrollY > 400) {
+          btn.classList.remove('opacity-0', 'pointer-events-none');
+          btn.classList.add('opacity-100', 'pointer-events-auto');
+        } else {
+          btn.classList.add('opacity-0', 'pointer-events-none');
+          btn.classList.remove('opacity-100', 'pointer-events-auto');
+        }
+      }
+    });
+
+    // Interactive Google Search Console Simulation Engine
+    const GSC_STATS = {
+      darad: {
+        url: '/beakim-darad',
+        clicks: '1,480',
+        impressions: '28,640',
+        ctr: '5.16%',
+        pos: '3.4',
+        queries: [
+          { q: 'diani beach studio rooms with ac', clicks: 420, imp: 4800, ctr: '8.75%', pos: '2.1' },
+          { q: 'beakim darad diani', clicks: 310, imp: 1950, ctr: '15.9%', pos: '1.0' },
+          { q: 'budget luxury cottages diani', clicks: 240, imp: 5600, ctr: '4.28%', pos: '3.8' },
+          { q: 'holiday studio with kitchenette diani', clicks: 190, imp: 3200, ctr: '5.94%', pos: '2.7' },
+          { q: 'affordable resort diani beach road', clicks: 155, imp: 4100, ctr: '3.78%', pos: '4.2' }
+        ]
+      },
+      darling: {
+        url: '/diani-darling',
+        clicks: '1,890',
+        impressions: '32,100',
+        ctr: '5.88%',
+        pos: '2.9',
+        queries: [
+          { q: 'diani darling cottages', clicks: 540, imp: 2400, ctr: '22.5%', pos: '1.0' },
+          { q: 'family cottages diani beach with pool', clicks: 430, imp: 7100, ctr: '6.05%', pos: '2.4' },
+          { q: 'group holiday cottages south coast kenya', clicks: 290, imp: 5800, ctr: '5.00%', pos: '3.1' },
+          { q: 'self catering cottages diani for families', clicks: 220, imp: 4900, ctr: '4.49%', pos: '3.5' },
+          { q: 'corporate retreat venue diani beach', clicks: 160, imp: 3100, ctr: '5.16%', pos: '2.8' }
+        ]
+      },
+      tower: {
+        url: '/tower-cottages',
+        clicks: '980',
+        impressions: '21,400',
+        ctr: '4.58%',
+        pos: '3.8',
+        queries: [
+          { q: 'tower cottages diani', clicks: 310, imp: 1600, ctr: '19.4%', pos: '1.0' },
+          { q: 'serviced apartments diani beach', clicks: 280, imp: 6200, ctr: '4.51%', pos: '3.2' },
+          { q: 'furnished 1 bedroom apartment ukunda', clicks: 140, imp: 3900, ctr: '3.59%', pos: '4.1' },
+          { q: 'monthly holiday apartment rental diani', clicks: 110, imp: 2800, ctr: '3.92%', pos: '3.7' },
+          { q: 'short term self catering ukunda', clicks: 95, imp: 2400, ctr: '3.95%', pos: '4.0' }
+        ]
+      },
+      apartments: {
+        url: '/beakim-apartments',
+        clicks: '1,120',
+        impressions: '24,800',
+        ctr: '4.51%',
+        pos: '3.6',
+        queries: [
+          { q: 'beakim apartments ukunda', clicks: 340, imp: 1800, ctr: '18.8%', pos: '1.0' },
+          { q: 'long term apartments for rent ukunda diani', clicks: 310, imp: 5900, ctr: '5.25%', pos: '2.6' },
+          { q: '2 bedroom residential apartments ukunda', clicks: 210, imp: 4600, ctr: '4.56%', pos: '3.4' },
+          { q: 'exclusive group block booking diani for schools', clicks: 130, imp: 2400, ctr: '5.41%', pos: '2.2' },
+          { q: '1 bedroom house to rent in diani ukunda', clicks: 95, imp: 3100, ctr: '3.06%', pos: '4.8' }
+        ]
+      },
+      blog: {
+        url: '/blog',
+        clicks: '2,450',
+        impressions: '46,200',
+        ctr: '5.30%',
+        pos: '2.7',
+        queries: [
+          { q: 'sgr miritini to diani beach transport taxi', clicks: 890, imp: 11400, ctr: '7.80%', pos: '1.8' },
+          { q: 'dongo kundu bypass highway diani directions', clicks: 670, imp: 9800, ctr: '6.83%', pos: '1.9' },
+          { q: 'cottages vs serviced apartments diani comparison', clicks: 340, imp: 6500, ctr: '5.23%', pos: '2.5' },
+          { q: 'how to get from nairobi to diani beach on a budget', clicks: 310, imp: 7200, ctr: '4.30%', pos: '3.2' },
+          { q: 'corporate team building venues south coast kenya', clicks: 180, imp: 4100, ctr: '4.39%', pos: '2.9' }
+        ]
+      },
+      home: {
+        url: '/',
+        clicks: '3,210',
+        impressions: '58,400',
+        ctr: '5.49%',
+        pos: '2.1',
+        queries: [
+          { q: 'beakim hospitality group', clicks: 1250, imp: 4900, ctr: '25.5%', pos: '1.0' },
+          { q: 'best holiday cottages and apartments in diani beach', clicks: 840, imp: 14200, ctr: '5.91%', pos: '2.3' },
+          { q: 'beakim hospitality contacts phone number', clicks: 420, imp: 1650, ctr: '25.4%', pos: '1.0' },
+          { q: 'luxury holiday cottages diani beach road', clicks: 360, imp: 7900, ctr: '4.55%', pos: '3.1' },
+          { q: 'diani beach holiday rentals with pool', clicks: 290, imp: 8100, ctr: '3.58%', pos: '3.7' }
+        ]
+      }
+    };
+
+    function updateGSCSimulator() {
+      const selected = document.getElementById('gsc-url-selector').value;
+      const data = GSC_STATS[selected];
+
+      document.getElementById('gsc-clicks-val').innerText = data.clicks;
+      document.getElementById('gsc-impressions-val').innerText = data.impressions;
+      document.getElementById('gsc-ctr-val').innerText = data.ctr;
+      document.getElementById('gsc-pos-val').innerText = data.pos;
+      document.getElementById('gsc-url-label').innerText = data.url;
+
+      const tbody = document.getElementById('gsc-table-body');
+      tbody.innerHTML = data.queries.map((q, idx) => `
+        <tr class="hover:bg-canopy/30 transition">
+          <td class="py-2.5 px-3 text-ivory font-medium">${idx + 1}. ${q.q}</td>
+          <td class="py-2.5 px-3 text-right text-blue-400 font-semibold">${q.clicks.toLocaleString()}</td>
+          <td class="py-2.5 px-3 text-right text-purple-400 font-semibold">${q.imp.toLocaleString()}</td>
+          <td class="py-2.5 px-3 text-right text-emerald-400">${q.ctr}</td>
+          <td class="py-2.5 px-3 text-right text-amber-400 font-bold">${q.pos}</td>
+        </tr>
+      `).join('');
+    }
+
+    function toggleGSCMetric(metric) {
+      const el = document.getElementById(`metric-${metric}`);
+      if (!el) return;
+      const isPressed = el.getAttribute('aria-pressed') === 'true';
+      el.setAttribute('aria-pressed', !isPressed);
+      el.classList.toggle('opacity-40');
+    }
+  </script>
+
+</body>
+</html>

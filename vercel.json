@@ -62,6 +62,10 @@
       "destination": "/blog.html"
     },
     {
+      "source": "/seo-matrix",
+      "destination": "/seo-matrix.html"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/sitemap.xml"
     },
