@@ -1,3 +1,5 @@
+/crm                https://crm.beakimhospitalitygroup.co.ke  301!
+/crm/*              https://crm.beakimhospitalitygroup.co.ke/:splat  301!
 /tower-cottages    /tower-cottages.html    200
 /diani-darling     /diani-darling.html     200
 /beakim-darad      /beakim-darad.html      200
