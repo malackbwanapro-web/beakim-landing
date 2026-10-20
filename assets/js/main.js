@@ -20,6 +20,13 @@ const APP_CONFIG = Object.freeze({
     CANONICAL_EMAIL: "info@beakimhospitalitygroup.co.ke",
     EMAIL: "info@beakimhospitalitygroup.co.ke"
   }),
+  SOCIAL: Object.freeze({
+    INSTAGRAM: "https://www.instagram.com/beakimhospitalitygroup/",
+    FACEBOOK: "https://web.facebook.com/beakimhospitalitygroup",
+    X: "https://x.com/BeakimGroup",
+    TIKTOK: "https://www.tiktok.com/@beakimhospitalitygroup",
+    YOUTUBE: "https://www.youtube.com/@BeakimHospitalityGroup"
+  }),
   RATES: Object.freeze({
     BREAKFAST_PER_PERSON_PER_DAY: 1000,
     FALLBACK_NIGHTLY_RATE: 2500,
