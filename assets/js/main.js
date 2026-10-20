@@ -658,9 +658,9 @@ function selectResidenceCard(propertyValue, cardElement) {
   }
 
   const breakfastCard = document.getElementById("addon-card-breakfast");
-  const isDianiDarling = propertyValue.toLowerCase().includes("darling");
+  const isBreakfastEligible = propertyValue.toLowerCase().includes("darling") || propertyValue.toLowerCase().includes("darad");
   if (breakfastCard) {
-    if (isDianiDarling) {
+    if (isBreakfastEligible) {
       breakfastCard.classList.remove("opacity-60");
       breakfastCard.classList.add("border-champagne/50");
     } else {

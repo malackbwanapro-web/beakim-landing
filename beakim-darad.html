@@ -719,7 +719,23 @@
             <!-- Preferences 2x2 Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               
-              <!-- Card 1: Ground Floor / Garden Access Preference (Complimentary) -->
+              <!-- Card 1: Fresh Coastal Breakfast (Paid Add-On - Active for Beakim Darad) -->
+              <label id="addon-card-breakfast" class="relative p-4 rounded-xl border border-champagne/50 bg-white hover:border-champagne cursor-pointer transition shadow-sm flex items-start gap-3.5 group">
+                <input type="checkbox" id="addon-breakfast" onchange="handleDateOrAddonChange()"
+                       class="mt-1 w-4 h-4 text-champagne rounded border-deep-forest/30 focus:ring-champagne accent-champagne cursor-pointer" />
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-xs font-bold text-deep-forest">🍳 Chef-Prepared Coastal Breakfast</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-champagne/20 text-deep-forest">Available</span>
+                  </div>
+                  <p class="text-[11px] text-driftwood leading-snug">
+                    Fresh coastal tropical fruits, eggs made to order, Swahili mahamri, and hot tea/coffee served poolside.
+                  </p>
+                  <p class="text-xs font-bold text-champagne pt-0.5">+KSh 1,000 / person / day</p>
+                </div>
+              </label>
+
+              <!-- Card 2: Ground Floor / Garden Access Preference (Complimentary) -->
               <label class="relative p-4 rounded-xl border border-deep-forest/15 bg-white hover:border-champagne/60 cursor-pointer transition shadow-sm flex items-start gap-3.5 group">
                 <input type="checkbox" id="addon-ground-floor" data-addon-name="Ground Floor / Garden Access Preference (Complimentary)" onchange="handleDateOrAddonChange()"
                        class="mt-1 w-4 h-4 text-champagne rounded border-deep-forest/30 focus:ring-champagne accent-champagne cursor-pointer" />
