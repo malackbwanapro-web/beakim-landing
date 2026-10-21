@@ -35,7 +35,7 @@ const APP_CONFIG = Object.freeze({
   CRM: Object.freeze({
     SYNC_TIMEOUT_MS: 3500,
     LOCAL_ENDPOINT: "http://localhost:3005/api/public/inquiries",
-    PRODUCTION_ENDPOINT: "https://beakim-crm.vercel.app/api/public/inquiries",
+    PRODUCTION_ENDPOINT: "https://crm.beakimhospitalitygroup.co.ke/api/public/inquiries",
     DEFAULT_CHANNEL: "website_whatsapp"
   }),
   UI: Object.freeze({
