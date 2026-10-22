@@ -97,6 +97,15 @@ const CrmSyncService = Object.freeze({
   },
 
   buildPayload({ formData, grandTotal, formattedContactPhone }) {
+    const isTestMode = typeof window !== "undefined" && Boolean(
+      window.location.search && (
+        window.location.search.includes("demo=true") || 
+        window.location.search.includes("test=true") || 
+        window.location.search.includes("demo=1") || 
+        window.location.search.includes("test=1")
+      )
+    );
+
     return {
       guestName: formData.name,
       guestPhone: formattedContactPhone,
@@ -113,7 +122,8 @@ const CrmSyncService = Object.freeze({
       specialRequests: formData.specialRequests || "",
       channel: APP_CONFIG.CRM.DEFAULT_CHANNEL,
       sourceUrl: typeof window !== "undefined" ? window.location.href : "",
-      hp_field: formData.honeypot || ""
+      hp_field: formData.honeypot || "",
+      isTest: isTestMode
     };
   },
 
@@ -1383,8 +1393,25 @@ function initializeCleanHashScrolling() {
   });
 }
 
+function initializeDemoModeBanner() {
+  if (typeof window === "undefined" || !window.location || !window.location.search) return;
+  const isDemo = window.location.search.includes("demo=true") || 
+    window.location.search.includes("test=true") || 
+    window.location.search.includes("demo=1") || 
+    window.location.search.includes("test=1");
+  if (!isDemo) return;
+
+  const banner = document.createElement("div");
+  banner.id = "demo-mode-badge";
+  banner.setAttribute("role", "status");
+  banner.style.cssText = "position:fixed;bottom:20px;right:20px;z-index:9999;background:#0f172a;color:#fcd34d;border:1px solid #f59e0b;padding:8px 14px;border-radius:10px;font-family:sans-serif;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,0.5);";
+  banner.innerHTML = '<span>🧪 Demo / Test Mode Active</span> <a href="' + window.location.pathname + '" style="color:#94a3b8;margin-left:8px;text-decoration:underline;font-size:11px;">Exit</a>';
+  document.body.appendChild(banner);
+}
+
 if (typeof window !== "undefined") {
   window.addEventListener("DOMContentLoaded", () => {
+    initializeDemoModeBanner();
     const checkInInput = document.getElementById("check-in");
     const checkOutInput = document.getElementById("check-out");
     initializeDatePickers(checkInInput, checkOutInput);
