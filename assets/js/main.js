@@ -569,8 +569,6 @@ function extractSelectedAddons({ adultsCount, validNights, breakfastChecked }) {
 
   const standardAddonMap = [
     { id: "addon-bag-drop", label: "Early SGR / Flight Bag Drop (Complimentary)" },
-    { id: "addon-parking", label: "Reserved Gated Compound Parking (Complimentary)" },
-    { id: "addon-taxi", label: "SGR / Airport Taxi Driver Coordination (Direct Local Rate)" },
     { id: "addon-kitchen", label: "Self-Catering Cooking Setup (Complimentary)" },
     { id: "addon-ground-floor", label: "Ground Floor / Garden Access Preference (Complimentary)" }
   ];
