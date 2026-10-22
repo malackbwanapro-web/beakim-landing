@@ -393,13 +393,19 @@
       <div class="bg-canopy/40 border border-champagne/10 rounded-xl overflow-hidden shadow-lg transition duration-300 hover:scale-[1.01] hover:border-champagne/30 flex flex-col justify-between">
         <div>
           <div class="relative h-64 overflow-hidden bg-deep-forest">
-            <img src="assets/beakim-apartments-hero.webp" alt="Beakim Apartments" width="800" height="500" class="w-full h-full object-cover" decoding="async" loading="lazy">
+            <img src="assets/beakim-apartments-hero.webp" alt="Beakim Apartments" width="800" height="500" class="w-full h-full object-cover opacity-75 grayscale-[25%]" decoding="async" loading="lazy">
+            <div class="absolute top-4 right-4 bg-amber-500/95 text-deep-forest px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider shadow-lg flex items-center gap-1.5">
+              <span>🛠️</span> Under Renovation
+            </div>
             <div class="absolute bottom-4 left-4 bg-deep-forest/90 text-champagne px-3 py-1 rounded text-xs font-semibold tracking-wider">
               FROM KSh 15,000 / MONTH
             </div>
           </div>
           <div class="p-8 space-y-4">
-            <h3 class="font-display text-2xl text-ivory font-semibold">Beakim Apartments</h3>
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <h3 class="font-display text-2xl text-ivory font-semibold">Beakim Apartments</h3>
+              <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-amber-500/20 border border-amber-400/40 text-amber-300">Under Renovation</span>
+            </div>
             <p class="text-xs font-medium text-driftwood italic uppercase tracking-wider">Perfect For: Long-term coastal residents & monthly rentals</p>
             <p class="text-sm text-ivory/70 leading-relaxed">
               Situated in a serene 5th-row coastal setting off Ukunda-Diani Beach Road, Beakim Apartments features two modern residential blocks with 20 total apartments for monthly living.
@@ -414,9 +420,9 @@
           </div>
         </div>
         <div class="p-8 pt-0">
-          <a href="/beakim-apartments" class="block w-full border border-champagne text-champagne hover:bg-champagne hover:text-deep-forest text-center py-3 rounded text-xs font-semibold tracking-wider uppercase transition duration-300">
-            View Property Details & Units
-          </a>
+          <button type="button" disabled aria-disabled="true" class="block w-full border border-amber-400/30 bg-deep-forest/80 text-amber-300/90 text-center py-3 rounded text-xs font-semibold tracking-wider uppercase cursor-not-allowed select-none opacity-80">
+            🛠️ Currently Under Renovation — Bookings Paused
+          </button>
         </div>
       </div>
 
@@ -910,9 +916,9 @@
             <optgroup label="Diani Darling Cottages (Beach Rd - Nightly)">
               <option value="Diani Darling Cottages - Deluxe Studio Room">Diani Darling: Deluxe Studio Room - KSh 5,000/night</option>
             </optgroup>
-            <optgroup label="Beakim Apartments (5th Row - Monthly Residency)">
-              <option value="Beakim Apartments - 1-Bedroom (Monthly Lease)">Beakim Apartments: 1-Bedroom - KSh 15,000/month</option>
-              <option value="Beakim Apartments - 2-Bedroom (Monthly Lease)">Beakim Apartments: 2-Bedroom - KSh 25,000/month</option>
+            <optgroup label="Beakim Apartments (Under Renovation - Unavailable)">
+              <option value="Beakim Apartments - 1-Bedroom (Monthly Lease)" disabled>Beakim Apartments: 1-Bedroom - Currently Under Renovation</option>
+              <option value="Beakim Apartments - 2-Bedroom (Monthly Lease)" disabled>Beakim Apartments: 2-Bedroom - Currently Under Renovation</option>
             </optgroup>
           </select>
 
@@ -983,22 +989,19 @@
                 </div>
               </div>
 
-              <!-- Card 4: Beakim Apartments -->
-              <div onclick="selectResidenceCard('Beakim Apartments - 1-Bedroom (Monthly Lease)', this)"
-                   onkeydown="handleResidenceCardKeydown(event, 'Beakim Apartments - 1-Bedroom (Monthly Lease)', this)"
-                   data-value="Beakim Apartments - 1-Bedroom (Monthly Lease)"
-                   role="radio" aria-checked="false" tabindex="0"
-                   class="residence-card p-4 rounded-xl border border-deep-forest/15 bg-white hover:border-champagne/60 cursor-pointer transition flex items-start justify-between shadow-sm group">
+              <!-- Card 4: Beakim Apartments (Disabled - Under Renovation) -->
+              <div data-value="Beakim Apartments - 1-Bedroom (Monthly Lease)"
+                   role="radio" aria-checked="false" aria-disabled="true"
+                   class="p-4 rounded-xl border border-deep-forest/15 bg-deep-forest/5 cursor-not-allowed select-none opacity-65 flex items-start justify-between shadow-sm">
                 <div class="space-y-1">
-                  <div class="flex items-center gap-2">
-                    <span class="text-sm font-bold font-display text-deep-forest">Beakim Apartments</span>
-                    <span class="text-[10px] uppercase font-semibold px-2 py-0.5 bg-blue-100 text-blue-800 rounded">Monthly</span>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-sm font-bold font-display text-deep-forest/70">Beakim Apartments</span>
+                    <span class="text-[10px] uppercase font-bold px-2 py-0.5 bg-amber-100 text-amber-900 border border-amber-300 rounded">Under Renovation</span>
                   </div>
                   <p class="text-xs text-driftwood">1 &amp; 2-Bed Leases • Pool • Quiet 5th Row</p>
-                  <p class="text-xs font-bold text-champagne pt-1">KSh 15k - 25k / mo</p>
+                  <p class="text-xs font-semibold text-amber-800 pt-1">🛠️ Temporarily Unavailable</p>
                 </div>
-                <div class="w-5 h-5 rounded-full border-2 border-deep-forest/30 bg-transparent residence-radio flex items-center justify-center shrink-0 mt-0.5">
-                  <div class="w-2 h-2 rounded-full bg-white opacity-0"></div>
+                <div class="w-5 h-5 rounded-full border-2 border-deep-forest/20 bg-deep-forest/10 flex items-center justify-center shrink-0 mt-0.5">
                 </div>
               </div>
 
