@@ -15,6 +15,7 @@ node_modules/
 .DS_Store
 Thumbs.db
 *.log
+data_store.enc
 
 # Raw uncompressed source images
 assets/Tower Cottages Images/
