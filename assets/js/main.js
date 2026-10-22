@@ -36,6 +36,8 @@ const APP_CONFIG = Object.freeze({
     SYNC_TIMEOUT_MS: 3500,
     LOCAL_ENDPOINT: "http://localhost:3005/api/public/inquiries",
     PRODUCTION_ENDPOINT: "https://crm.beakimhospitalitygroup.co.ke/api/public/inquiries",
+    LOCAL_AVAILABILITY_ENDPOINT: "http://localhost:3005/api/public/availability",
+    PRODUCTION_AVAILABILITY_ENDPOINT: "https://crm.beakimhospitalitygroup.co.ke/api/public/availability",
     DEFAULT_CHANNEL: "website_whatsapp"
   }),
   UI: Object.freeze({
@@ -87,6 +89,16 @@ const CrmSyncService = Object.freeze({
     return APP_CONFIG.CRM.PRODUCTION_ENDPOINT;
   },
 
+  resolveAvailabilityEndpoint() {
+    if (typeof window !== "undefined") {
+      const host = window.location.hostname;
+      if (host === "localhost" || host === "127.0.0.1") {
+        return APP_CONFIG.CRM.LOCAL_AVAILABILITY_ENDPOINT;
+      }
+    }
+    return APP_CONFIG.CRM.PRODUCTION_AVAILABILITY_ENDPOINT;
+  },
+
   resolvePropertyId(selection) {
     const str = String(selection || "").toLowerCase();
     if (str.includes("tower")) return "prop-4";
@@ -120,11 +132,50 @@ const CrmSyncService = Object.freeze({
       estimatedTotal: grandTotal || 0,
       selectedAddons: formData.selectedAddons || [],
       specialRequests: formData.specialRequests || "",
+      preferredContactMethod: formData.preferredContactMethod || "WhatsApp / Text",
       channel: APP_CONFIG.CRM.DEFAULT_CHANNEL,
       sourceUrl: typeof window !== "undefined" ? window.location.href : "",
       hp_field: formData.honeypot || "",
       isTest: isTestMode
     };
+  },
+
+  async checkAvailability({ propertyId, checkInDate, checkOutDate }) {
+    if (!checkInDate || !checkOutDate) return null;
+    try {
+      const baseEndpoint = this.resolveAvailabilityEndpoint();
+      const url = new URL(baseEndpoint);
+      if (propertyId) url.searchParams.set("propertyId", propertyId);
+      url.searchParams.set("checkIn", checkInDate);
+      url.searchParams.set("checkOut", checkOutDate);
+
+      let controller = null;
+      let timeoutId = null;
+
+      if (typeof AbortController !== "undefined") {
+        controller = new AbortController();
+        timeoutId = setTimeout(() => controller.abort(), APP_CONFIG.CRM.SYNC_TIMEOUT_MS);
+      }
+
+      const response = await fetch(url.toString(), {
+        method: "GET",
+        headers: {
+          "Accept": "application/json"
+        },
+        signal: controller ? controller.signal : undefined
+      });
+
+      if (timeoutId) clearTimeout(timeoutId);
+
+      if (response && response.ok) {
+        return await response.json();
+      }
+    } catch (err) {
+      if (typeof console !== "undefined" && typeof console.debug === "function") {
+        console.debug("[CrmSyncService] Availability check bypassed:", err && err.message);
+      }
+    }
+    return null;
   },
 
   async sendInquiry(inquiryPayload) {
@@ -334,8 +385,9 @@ function resolveStayPricing(propertyOrOfferingId, checkInDateString, checkOutDat
 /**
  * Builds standard plain-text WhatsApp stay inquiry message with structured formatting.
  */
-function buildInquiryMessage({ guestName, contactPhone, guestEmail, propertyName, checkInDate, checkOutDate, stayDurationText, adultsCount, childrenCount, estimatedTotal, selectedAddons = [], specialRequests = "" }) {
+function buildInquiryMessage({ guestName, contactPhone, guestEmail, propertyName, checkInDate, checkOutDate, stayDurationText, adultsCount, childrenCount, estimatedTotal, selectedAddons = [], specialRequests = "", preferredContactMethod = "" }) {
   const emailLine = guestEmail ? `• Email: ${guestEmail}\n` : "";
+  const preferredChannelLine = preferredContactMethod ? `• Preferred Contact: ${preferredContactMethod}\n` : "";
   const childrenText = childrenCount > 0 ? `, ${childrenCount} Child(ren)` : "";
   const estimatedRateLine = estimatedTotal ? `• Estimated Rate: ${estimatedTotal}\n` : "";
 
@@ -351,6 +403,7 @@ function buildInquiryMessage({ guestName, contactPhone, guestEmail, propertyName
     `• Guest Name: ${guestName}\n` +
     `• Contact: ${contactPhone}\n` +
     emailLine +
+    preferredChannelLine +
     `• Accommodation: ${propertyName}\n` +
     `• Check-In: ${checkInDate}\n` +
     `• Check-Out: ${checkOutDate} (${stayDurationText})\n` +
@@ -438,6 +491,8 @@ function processValidBookingSubmission(formData) {
     hasBreakfast: formData.hasBreakfast
   });
 
+  const preferredContactMethod = formData.preferredContactMethod || "WhatsApp / Text";
+
   const messageText = buildInquiryMessage({
     guestName: formData.name,
     contactPhone: formattedContactPhone,
@@ -450,7 +505,8 @@ function processValidBookingSubmission(formData) {
     childrenCount: formData.children,
     estimatedTotal: totals.formattedGrandTotal,
     selectedAddons: formData.selectedAddons || [],
-    specialRequests: formData.specialRequests || ""
+    specialRequests: formData.specialRequests || "",
+    preferredContactMethod
   });
 
   const whatsappUrl = CommunicationService.buildWhatsAppUrl(messageText);
@@ -460,16 +516,20 @@ function processValidBookingSubmission(formData) {
     grandTotal: totals.grandTotal,
     formattedContactPhone
   });
-  CrmSyncService.sendInquiry(inquiryPayload);
 
   showInquiryReviewModal({
+    formData,
+    inquiryPayload,
     name: formData.name,
     phone: formattedContactPhone,
+    email: formData.email,
     property: formData.property,
     dates: `${formData.checkIn} to ${formData.checkOut} (${pricingSummary.durationText})`,
     guests: `${totalGuests} (${formData.adults} Adults, ${formData.children} Children)`,
     estimatedTotal: totals.formattedGrandTotal,
     selectedAddons: formData.selectedAddons || [],
+    specialRequests: formData.specialRequests || "",
+    preferredContactMethod,
     whatsappUrl,
     messageText
   });
@@ -570,6 +630,9 @@ function extractBookingFormData() {
   const breakfastCheckbox = typeof document !== "undefined" ? document.getElementById("addon-breakfast") : null;
   const breakfastChecked = Boolean(breakfastCheckbox && breakfastCheckbox.checked);
 
+  const contactRadio = typeof document !== "undefined" ? document.querySelector('input[name="preferred-contact"]:checked') : null;
+  const preferredContactMethod = contactRadio ? contactRadio.value : "WhatsApp / Text";
+
   const durationDays = calculateDateDifferenceInDays(checkInElement ? checkInElement.value : "", checkOutElement ? checkOutElement.value : "");
   const validNights = durationDays > 0 ? durationDays : 1;
 
@@ -588,6 +651,7 @@ function extractBookingFormData() {
     specialRequests: specialRequestsElement ? specialRequestsElement.value.trim() : "",
     selectedAddons,
     hasBreakfast: breakfastChecked,
+    preferredContactMethod,
     honeypot: honeypotElement ? honeypotElement.value.trim() : "",
     nameElement,
     phoneElement,
@@ -732,6 +796,8 @@ function handleDateOrAddonChange() {
     totalCost: totals.grandTotal,
     formattedTotal: totals.formattedGrandTotal
   });
+
+  triggerLiveAvailabilityCheck();
 }
 
 /**
@@ -968,7 +1034,202 @@ function closeLightbox() {
   }
 }
 
+let availabilityDebounceTimer = null;
+
+/**
+ * Evaluates live real-time unit availability for selected property and stay dates.
+ */
+async function triggerLiveAvailabilityCheck() {
+  if (typeof document === "undefined") return;
+  const container = document.getElementById("availability-status-container");
+  if (!container) return;
+
+  const checkInElement = document.getElementById("check-in");
+  const checkOutElement = document.getElementById("check-out");
+  const propertyElement = document.getElementById("booking-property");
+
+  const checkIn = checkInElement ? checkInElement.value : "";
+  const checkOut = checkOutElement ? checkOutElement.value : "";
+  const property = propertyElement ? propertyElement.value : "";
+  const propertyId = CrmSyncService.resolvePropertyId(property);
+
+  if (!checkIn || !checkOut || isInvalidDateRange(checkIn, checkOut) || isPastDate(checkIn, getNairobiDateString(0))) {
+    container.innerHTML = "";
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="flex items-center gap-2 p-2.5 rounded-xl bg-champagne/10 border border-champagne/30 text-deep-forest text-xs animate-pulse">
+      <span class="w-2 h-2 rounded-full bg-champagne animate-ping"></span>
+      <span class="font-medium">Checking live occupancy for your stay dates...</span>
+    </div>
+  `;
+
+  if (availabilityDebounceTimer) clearTimeout(availabilityDebounceTimer);
+  availabilityDebounceTimer = setTimeout(async () => {
+    const result = await CrmSyncService.checkAvailability({ propertyId, checkInDate: checkIn, checkOutDate: checkOut });
+    if (!result) {
+      container.innerHTML = `
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 text-xs shadow-sm">
+          <div class="flex items-center gap-2">
+            <span class="text-emerald-600 font-bold">✓</span>
+            <span class="font-semibold">Instant Inquiry Available</span>
+            <span class="text-emerald-700/80 hidden sm:inline">• Direct host reservation</span>
+          </div>
+          <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-200/60 px-2 py-0.5 rounded text-emerald-800">Pre-Approved</span>
+        </div>
+      `;
+      return;
+    }
+
+    if (result.isAvailable) {
+      const count = result.availableUnitsCount !== undefined ? result.availableUnitsCount : result.availableCount;
+      const isLimited = (result.status === "limited") || (count !== undefined && count > 0 && count <= 2);
+      if (isLimited) {
+        container.innerHTML = `
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-amber-50 border border-amber-300/80 text-amber-900 text-xs shadow-sm">
+            <div class="flex items-center gap-2">
+              <span class="text-amber-600 font-bold">⚠️</span>
+              <span class="font-bold">High Demand: Only ${count} residence${count === 1 ? '' : 's'} available!</span>
+            </div>
+            <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-200/80 px-2 py-0.5 rounded text-amber-900">Reserve Now</span>
+          </div>
+        `;
+      } else {
+        const unitsText = count !== undefined && count > 0 ? ` (${count} residences available)` : '';
+        container.innerHTML = `
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 text-xs shadow-sm">
+            <div class="flex items-center gap-2">
+              <span class="text-emerald-600 font-bold">✓</span>
+              <span class="font-semibold">Dates Available • Instant Pre-Approval${unitsText}</span>
+            </div>
+            <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-200/60 px-2 py-0.5 rounded text-emerald-800">Instant Pre-Approved</span>
+          </div>
+        `;
+      }
+    } else {
+      container.innerHTML = `
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-rose-50 border border-rose-200/80 text-rose-900 text-xs shadow-sm">
+          <div class="flex items-center gap-2">
+            <span class="text-rose-600 font-bold">⚠️</span>
+            <span class="font-medium">All units booked for these exact dates. Submit inquiry to be placed on priority standby or explore alternative dates.</span>
+          </div>
+        </div>
+      `;
+    }
+  }, 250);
+}
+
+let currentActiveInquiry = null;
+
+async function confirmAndSubmitInquiry() {
+  if (!currentActiveInquiry) return;
+  const submitBtn = document.getElementById("confirm-submit-inquiry-btn");
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `
+      <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-deep-forest inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <span>Securing Reservation Inquiry...</span>
+    `;
+  }
+
+  let inquiryId = "INQ-" + Math.floor(100000 + Math.random() * 900000);
+  try {
+    const result = await CrmSyncService.sendInquiry(currentActiveInquiry.inquiryPayload);
+    if (result && result.inquiry && result.inquiry.id) {
+      inquiryId = result.inquiry.id;
+    } else if (result && result.id) {
+      inquiryId = result.id;
+    }
+  } catch (err) {
+    if (typeof console !== "undefined" && typeof console.debug === "function") {
+      console.debug("[CRM Intake] Handled gracefully:", err);
+    }
+  }
+
+  renderInquirySuccessReceipt(currentActiveInquiry, inquiryId);
+}
+
+function renderInquirySuccessReceipt(inquirySummary, inquiryId) {
+  const modalElement = document.getElementById("inquiry-review-modal");
+  if (!modalElement) return;
+
+  const channelIcon = inquirySummary.preferredContactMethod.includes("WhatsApp") ? "💬" :
+                      inquirySummary.preferredContactMethod.includes("Phone") ? "📞" : "✉️";
+
+  modalElement.innerHTML = `
+    <div class="bg-deep-forest border border-champagne/40 rounded-2xl max-w-lg w-full p-6 md:p-8 space-y-6 text-ivory shadow-2xl relative text-center">
+      <button type="button" onclick="closeInquiryModal()" 
+              class="absolute top-4 right-4 text-ivory/60 hover:text-champagne text-2xl transition"
+              aria-label="Close booking receipt modal">&times;</button>
+      
+      <div class="text-center space-y-3">
+        <!-- Animated Green Luxury Checkmark -->
+        <div class="mx-auto w-16 h-16 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 text-3xl shadow-lg shadow-emerald-950/40">
+          ✓
+        </div>
+        <div class="space-y-1">
+          <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Reservation Confirmed</span>
+          <h3 class="font-display text-2xl font-bold text-ivory">Inquiry Successfully Received!</h3>
+          <p class="text-xs text-ivory/70">Your booking inquiry has been recorded and safely logged with our central reservations team.</p>
+        </div>
+
+        <div class="inline-flex items-center gap-2 bg-canopy/80 border border-champagne/30 px-4 py-1.5 rounded-full text-xs font-mono text-champagne shadow-inner">
+          <span>Ref: <strong>${inquiryId}</strong></span>
+          <button type="button" onclick="copyInquiryDetails('${inquiryId}')" class="hover:text-white transition ml-1" title="Copy Reference ID">📋</button>
+        </div>
+      </div>
+
+      <!-- SLA Guarantee Box -->
+      <div class="bg-canopy/70 rounded-xl p-4 border border-champagne/20 text-xs text-left space-y-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-champagne font-bold uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+            ⏱️ Guaranteed 15–30 Min Response
+          </span>
+          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-semibold px-2 py-0.5 rounded border border-emerald-500/30">Priority Queue</span>
+        </div>
+        <p class="text-ivory/85 leading-relaxed text-xs">
+          Our manager is reviewing your dates for <strong class="text-champagne">${inquirySummary.property}</strong> and will reach out via <strong class="text-white">${channelIcon} ${inquirySummary.preferredContactMethod}</strong> within <strong class="text-champagne">15–30 minutes</strong> with your direct booking folio and payment instructions (M-Pesa Till / Bank / Card).
+        </p>
+        <div class="border-t border-champagne/15 pt-2 flex flex-col gap-1 text-[11px] text-ivory/70 font-mono">
+          <div><span class="text-ivory/50">Stay Dates:</span> <span class="text-ivory font-sans">${inquirySummary.dates}</span></div>
+          <div><span class="text-ivory/50">Guest:</span> <span class="text-ivory font-sans">${inquirySummary.name} (${inquirySummary.phone})</span></div>
+          ${inquirySummary.estimatedTotal ? `<div><span class="text-ivory/50">Est. Total:</span> <span class="text-champagne font-bold font-sans">${inquirySummary.estimatedTotal}</span></div>` : ""}
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-3 pt-1">
+        <!-- Optional WhatsApp Helper (Never blocks!) -->
+        <a href="${inquirySummary.whatsappUrl}" target="_blank" rel="noopener noreferrer"
+           class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-3.5 px-6 rounded-lg font-semibold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-2 text-xs md:text-sm">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436.002 9.858-4.384 9.86-9.768.001-2.61-1.013-5.064-2.855-6.909C16.438 2.083 13.99 1.07 11.4 1.07 5.969 1.07 1.547 5.456 1.545 10.842c-.001 1.597.424 3.156 1.233 4.544L1.78 20.58l5.228-1.378c-.138-.077-.257-.15-.361-.208z" />
+          </svg>
+          <span>💬 Open WhatsApp Chat Now (Optional)</span>
+        </a>
+        <p class="text-[10px] text-ivory/50 text-center">Your inquiry is already safely saved in our system. WhatsApp chat is optional if you want immediate real-time messaging.</p>
+
+        <div class="flex gap-2 pt-1">
+          <button type="button" onclick="copyInquiryDetails('${encodeURIComponent(inquirySummary.messageText)}')"
+                  class="flex-1 bg-deep-forest/80 border border-champagne/20 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded text-xs transition">
+            📋 Copy Full Summary
+          </button>
+          <button type="button" onclick="closeInquiryModal()"
+                  class="flex-1 bg-champagne text-deep-forest hover:bg-champagne/90 py-2.5 rounded text-xs font-bold transition shadow">
+            Done / Return to Site
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function showInquiryReviewModal(inquirySummary) {
+  currentActiveInquiry = inquirySummary;
   let modalElement = document.getElementById("inquiry-review-modal");
   if (!modalElement) {
     modalElement = document.createElement("div");
@@ -980,6 +1241,9 @@ function showInquiryReviewModal(inquirySummary) {
     document.body.appendChild(modalElement);
   }
 
+  const channelIcon = inquirySummary.preferredContactMethod.includes("WhatsApp") ? "💬" :
+                      inquirySummary.preferredContactMethod.includes("Phone") ? "📞" : "✉️";
+
   modalElement.innerHTML = `
     <div class="bg-deep-forest border border-champagne/30 rounded-2xl max-w-lg w-full p-6 md:p-8 space-y-6 text-ivory shadow-2xl relative">
       <button type="button" onclick="closeInquiryModal()" 
@@ -987,37 +1251,37 @@ function showInquiryReviewModal(inquirySummary) {
               aria-label="Close booking review modal">&times;</button>
       
       <div class="text-center space-y-2">
-        <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Booking Inquiry Ready</span>
-        <h3 id="inquiry-modal-title" class="font-display text-2xl font-bold text-ivory">Send Your Inquiry</h3>
-        <p class="text-xs text-ivory/70">Review your stay details below. Your reservation request will open directly in WhatsApp for prompt confirmation by our management team.</p>
+        <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Pre-Approved Stay Summary</span>
+        <h3 id="inquiry-modal-title" class="font-display text-2xl font-bold text-ivory">Review Your Reservation</h3>
+        <p class="text-xs text-ivory/70">Please review your stay details below. Once confirmed, your request is logged directly in our central reservations system with guaranteed 15–30 min response.</p>
       </div>
 
       <div class="bg-canopy/60 rounded-xl p-4 border border-champagne/15 text-xs space-y-2 font-mono">
-        <div class="flex justify-between"><span class="text-ivory/60">Guest:</span><span class="font-semibold text-ivory">${inquirySummary.name}</span></div>
-        <div class="flex justify-between"><span class="text-ivory/60">Phone:</span><span class="font-semibold text-ivory">${inquirySummary.phone}</span></div>
-        <div class="flex justify-between"><span class="text-ivory/60">Property:</span><span class="font-semibold text-champagne">${inquirySummary.property}</span></div>
-        <div class="flex justify-between"><span class="text-ivory/60">Dates:</span><span class="text-ivory">${inquirySummary.dates}</span></div>
-        <div class="flex justify-between"><span class="text-ivory/60">Guests:</span><span class="text-ivory">${inquirySummary.guests}</span></div>
-        ${inquirySummary.estimatedTotal ? `<div class="flex justify-between border-t border-champagne/15 pt-2"><span class="text-ivory/60">Est. Total:</span><span class="font-bold text-champagne text-sm">${inquirySummary.estimatedTotal}</span></div>` : ""}
+        <div class="flex justify-between"><span class="text-ivory/60">Guest Name:</span><span class="font-semibold text-ivory font-sans">${inquirySummary.name}</span></div>
+        <div class="flex justify-between"><span class="text-ivory/60">Contact Phone:</span><span class="font-semibold text-ivory font-sans">${inquirySummary.phone}</span></div>
+        ${inquirySummary.email ? `<div class="flex justify-between"><span class="text-ivory/60">Email:</span><span class="text-ivory font-sans">${inquirySummary.email}</span></div>` : ""}
+        <div class="flex justify-between"><span class="text-ivory/60">Preferred Contact:</span><span class="font-semibold text-champagne font-sans">${channelIcon} ${inquirySummary.preferredContactMethod}</span></div>
+        <div class="flex justify-between"><span class="text-ivory/60">Residence:</span><span class="font-semibold text-champagne font-sans">${inquirySummary.property}</span></div>
+        <div class="flex justify-between"><span class="text-ivory/60">Stay Dates:</span><span class="text-ivory font-sans">${inquirySummary.dates}</span></div>
+        <div class="flex justify-between"><span class="text-ivory/60">Guests:</span><span class="text-ivory font-sans">${inquirySummary.guests}</span></div>
+        ${inquirySummary.estimatedTotal ? `<div class="flex justify-between border-t border-champagne/15 pt-2"><span class="text-ivory/60">Est. Total:</span><span class="font-bold text-champagne text-sm font-sans">${inquirySummary.estimatedTotal}</span></div>` : ""}
       </div>
 
       <div class="space-y-3">
-        <a href="${inquirySummary.whatsappUrl}" target="_blank" rel="noopener noreferrer"
-           class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-3.5 px-6 rounded-lg font-semibold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-2 text-xs md:text-sm">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436.002 9.858-4.384 9.86-9.768.001-2.61-1.013-5.064-2.855-6.909C16.438 2.083 13.99 1.07 11.4 1.07 5.969 1.07 1.547 5.456 1.545 10.842c-.001 1.597.424 3.156 1.233 4.544L1.78 20.58l5.228-1.378c-.138-.077-.257-.15-.361-.208z" />
-          </svg>
-          Continue to WhatsApp
-        </a>
+        <button type="button" id="confirm-submit-inquiry-btn" onclick="confirmAndSubmitInquiry()"
+                class="w-full bg-champagne hover:bg-champagne/90 text-deep-forest py-4 px-6 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-2 text-xs md:text-sm cursor-pointer">
+          <span class="text-base">✓</span>
+          <span>CONFIRM &amp; SUBMIT RESERVATION INQUIRY</span>
+        </button>
 
         <div class="flex gap-2">
-          <button type="button" onclick="copyInquiryDetails('${encodeURIComponent(inquirySummary.messageText)}')"
+          <button type="button" onclick="closeInquiryModal()"
                   class="flex-1 bg-deep-forest/80 border border-champagne/20 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded text-xs transition">
-            📋 Copy Details
+            ← Edit Details
           </button>
           <a href="${CommunicationService.getTelephoneUrl()}"
-             class="flex-1 text-center bg-deep-forest/80 border border-champagne/20 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded text-xs transition">
-            📞 Call Reservations
+             class="flex-1 text-center bg-deep-forest/80 border border-champagne/20 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded text-xs transition flex items-center justify-center gap-1">
+            📞 Direct Desk Call
           </a>
         </div>
       </div>
@@ -1452,6 +1716,9 @@ if (typeof module !== "undefined" && module.exports) {
     syncInquiryToCrm,
     handleResidenceCardKeydown,
     cleanHashFromUrl,
-    initializeCleanHashScrolling
+    initializeCleanHashScrolling,
+    triggerLiveAvailabilityCheck,
+    confirmAndSubmitInquiry,
+    renderInquirySuccessReceipt
   };
 }

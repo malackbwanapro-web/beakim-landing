@@ -14,6 +14,10 @@
 
 ## 2. Local Contracts & Rules
 - **CRM Sync Protocol:** Submissions POST to `getCrmPublicEndpoint()`, resolving `http://localhost:3005/api/public/inquiries` in local development and `https://crm.beakimhospitalitygroup.co.ke/api/public/inquiries` in production. Supports automatic test/demo tagging via URL search parameter `?demo=true` or `?test=true` (payload `isTest: true`) with subtle floating status banner.
+- **Frictionless Zero-Leak Booking Intake & Live Availability:**
+  - `triggerLiveAvailabilityCheck()`: Real-time debounced date availability checking via `CrmSyncService.checkAvailability({ propertyId, checkInDate, checkOutDate })`, rendering dynamic status badges (`Available`, `High Demand / Limited`, `Sold Out`) in `#availability-status-container`.
+  - Preferred Contact Channel selector (`WhatsApp / Text`, `Phone Call`, `Email`) captured in `extractBookingFormData()` and sent to CRM as `preferredContactMethod`.
+  - 2-Stage Confirmation Modal: Stage 1 displays summary with `"✓ CONFIRM & SUBMIT RESERVATION INQUIRY"`. Stage 2 displays an on-site luxury receipt with Reference ID (`#INQ-...`), guaranteed 15–30 min response time SLA, and an *optional* WhatsApp helper button that never blocks submission or requires external apps.
 - **Anti-Spam:** Honeypot field (`website_hp`) must be submitted alongside form values.
 - **2-Column Reservation Command Center:** Interactive residence cards (`.residence-card`), curated stay preferences (early SGR bag drop, gated parking, local taxi driver meet & greet), and authentic paid breakfast add-on for Diani Darling (KSh 1,000/person/day) with real-time live price recalculation (`selectResidenceCard()`, `handleDateOrAddonChange()`). Deployed site-wide across `index.html`, `tower-cottages.html`, `diani-darling.html`, and `beakim-darad.html` with property-specific tailoring.
 - **Ergonomics & A11y:** Full keyboard navigation support for residence radio cards via `handleResidenceCardKeydown()` (`Enter` and `Space`), and async submission locking on `#booking-submit-btn` with `aria-busy="true"` and `active:scale-[0.98]` tactile press feedback.

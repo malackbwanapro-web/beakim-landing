@@ -704,6 +704,9 @@
                        class="w-full bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3.5 py-2.5 text-xs text-deep-forest outline-none transition shadow-sm font-medium" />
               </div>
             </div>
+
+            <!-- Live Pre-Submission Availability Badge -->
+            <div id="availability-status-container" class="pt-2"></div>
           </div>
 
           <!-- ── STEP 2: STAY PREFERENCES & AUTHENTIC LOGISTICS ── -->
@@ -855,6 +858,25 @@
                 </div>
               </div>
 
+              <!-- Preferred Contact Method Selector -->
+              <div class="flex flex-col gap-2 sm:col-span-2">
+                <label class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">Preferred Contact Channel *</label>
+                <div class="grid grid-cols-3 gap-2 sm:gap-2.5">
+                  <label class="relative flex items-center justify-center gap-1.5 sm:gap-2 p-2.5 rounded-lg border border-champagne/60 bg-champagne/10 hover:border-champagne cursor-pointer transition text-xs font-semibold text-deep-forest contact-method-label has-[:checked]:border-champagne has-[:checked]:bg-champagne/20">
+                    <input type="radio" name="preferred-contact" value="WhatsApp / Text" checked class="accent-champagne" />
+                    <span>💬 WhatsApp / Text</span>
+                  </label>
+                  <label class="relative flex items-center justify-center gap-1.5 sm:gap-2 p-2.5 rounded-lg border border-deep-forest/20 bg-white hover:border-champagne cursor-pointer transition text-xs font-semibold text-deep-forest contact-method-label has-[:checked]:border-champagne has-[:checked]:bg-champagne/20">
+                    <input type="radio" name="preferred-contact" value="Phone Call" class="accent-champagne" />
+                    <span>📞 Phone Call</span>
+                  </label>
+                  <label class="relative flex items-center justify-center gap-1.5 sm:gap-2 p-2.5 rounded-lg border border-deep-forest/20 bg-white hover:border-champagne cursor-pointer transition text-xs font-semibold text-deep-forest contact-method-label has-[:checked]:border-champagne has-[:checked]:bg-champagne/20">
+                    <input type="radio" name="preferred-contact" value="Email" class="accent-champagne" />
+                    <span>✉️ Email</span>
+                  </label>
+                </div>
+              </div>
+
               <!-- Special Requests / SGR Notes -->
               <div class="flex flex-col gap-1.5 sm:col-span-2">
                 <label for="guest-special-requests" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">Special Requests / Arrival Notes</label>
@@ -888,13 +910,18 @@
           </div>
 
           <!-- Submit CTA Button -->
-          <button type="submit" id="booking-submit-btn"
-                  class="w-full bg-[#1b4332] hover:bg-[#122f23] active:scale-[0.98] text-champagne border border-champagne/40 hover:border-champagne py-4 px-6 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-3 text-sm md:text-base group cursor-pointer">
-            <svg class="w-5 h-5 fill-current text-champagne group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
-              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436.002 9.858-4.384 9.86-9.768.001-2.61-1.013-5.064-2.855-6.909C16.438 2.083 13.99 1.07 11.4 1.07 5.969 1.07 1.547 5.456 1.545 10.842c-.001 1.597.424 3.156 1.233 4.544L1.78 20.58l5.228-1.378c-.138-.077-.257-.15-.361-.208z" />
-            </svg>
-            <span>CHECK AVAILABILITY &amp; RESERVE VIA WHATSAPP 🌴</span>
-          </button>
+          <div class="space-y-3 pt-2">
+            <button type="submit" id="booking-submit-btn"
+                    class="w-full bg-[#1b4332] hover:bg-[#122f23] active:scale-[0.98] text-champagne border border-champagne/40 hover:border-champagne py-4 px-6 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-3 text-sm md:text-base group cursor-pointer">
+              <span class="text-champagne font-bold text-lg">✓</span>
+              <span>PROCEED TO REVIEW &amp; CONFIRM →</span>
+            </button>
+            <div class="flex flex-wrap items-center justify-center gap-4 text-[11px] text-driftwood pt-1 text-center">
+              <span class="inline-flex items-center gap-1.5"><span class="text-emerald-600 font-bold">✓</span> Direct Host Rate</span>
+              <span class="inline-flex items-center gap-1.5"><span class="text-emerald-600 font-bold">✓</span> Zero Booking Fees</span>
+              <span class="inline-flex items-center gap-1.5"><span class="text-emerald-600 font-bold">✓</span> Guaranteed 15–30 Min Response</span>
+            </div>
+          </div>
         </form>
       </div>
 

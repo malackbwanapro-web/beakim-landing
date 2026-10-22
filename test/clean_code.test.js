@@ -234,6 +234,38 @@ assert.strictEqual(testPayload.guestName, "John Doe");
 assert.strictEqual(testPayload.propertyId, "prop-4");
 assert.strictEqual(testPayload.estimatedTotal, 5000);
 assert.strictEqual(testPayload.channel, "website_whatsapp");
-console.log("   ✅ CrmSyncService correctly maps properties and constructs immutable API payloads.");
+assert.strictEqual(testPayload.preferredContactMethod, "WhatsApp / Text");
+
+const testPayloadCustom = CrmSyncService.buildPayload({
+  formData: {
+    name: "Jane Mwangi",
+    property: "Diani Darling",
+    checkIn: "2026-11-05",
+    checkOut: "2026-11-08",
+    adults: 2,
+    children: 1,
+    preferredContactMethod: "Phone Call"
+  },
+  grandTotal: 15000,
+  formattedContactPhone: "+254 712345678"
+});
+assert.strictEqual(testPayloadCustom.preferredContactMethod, "Phone Call");
+assert.strictEqual(typeof CrmSyncService.checkAvailability, "function");
+assert.strictEqual(typeof CrmSyncService.resolveAvailabilityEndpoint, "function");
+
+const phoneInquiryText = buildInquiryMessage({
+  guestName: "Jane Mwangi",
+  contactPhone: "+254 712345678",
+  propertyName: "Diani Darling",
+  checkInDate: "2026-11-05",
+  checkOutDate: "2026-11-08",
+  stayDurationText: "3 Nights",
+  adultsCount: 2,
+  childrenCount: 1,
+  estimatedTotal: "KSh 15,000",
+  preferredContactMethod: "Phone Call"
+});
+assert.ok(phoneInquiryText.includes("• Preferred Contact: Phone Call"));
+console.log("   ✅ CrmSyncService correctly maps properties, contact preferences, and constructs immutable API payloads.");
 
 console.log("\n🎉 ALL 10 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
