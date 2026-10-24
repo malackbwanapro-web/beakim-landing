@@ -1159,66 +1159,68 @@ function renderInquirySuccessReceipt(inquirySummary, inquiryId) {
                       inquirySummary.preferredContactMethod.includes("Phone") ? "📞" : "✉️";
 
   modalElement.innerHTML = `
-    <div class="bg-deep-forest border border-champagne/40 rounded-2xl max-w-lg w-full p-6 md:p-8 space-y-6 text-ivory shadow-2xl relative text-center">
-      <button type="button" onclick="closeInquiryModal()" 
-              class="absolute top-4 right-4 text-ivory/60 hover:text-champagne text-2xl transition"
-              aria-label="Close booking receipt modal">&times;</button>
-      
-      <div class="text-center space-y-3">
-        <!-- Animated Green Luxury Checkmark -->
-        <div class="mx-auto w-16 h-16 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 text-3xl shadow-lg shadow-emerald-950/40">
-          ✓
+    <div class="bg-deep-forest border border-champagne/40 rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden text-ivory shadow-2xl relative my-auto">
+      <!-- Zone 1: Pinned Header (Always Visible) -->
+      <div class="flex items-center justify-between px-5 py-4 border-b border-champagne/20 bg-deep-forest/95 shrink-0">
+        <div class="flex items-center gap-3 text-left">
+          <div class="w-10 h-10 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 text-lg font-bold shrink-0 shadow-md">
+            ✓
+          </div>
+          <div>
+            <span class="text-[10px] font-bold tracking-widest text-emerald-400 uppercase block">Reservation Inquiry Logged</span>
+            <h3 class="font-display text-lg sm:text-xl font-bold text-ivory leading-tight">Inquiry Successfully Received!</h3>
+          </div>
         </div>
-        <div class="space-y-1">
-          <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Reservation Confirmed</span>
-          <h3 class="font-display text-2xl font-bold text-ivory">Inquiry Successfully Received!</h3>
-          <p class="text-xs text-ivory/70">Your booking inquiry has been recorded and safely logged with our central reservations team.</p>
+        <button type="button" onclick="closeInquiryModal()" 
+                class="w-9 h-9 rounded-full bg-white/10 hover:bg-champagne text-ivory hover:text-deep-forest flex items-center justify-center text-xl font-bold transition shrink-0 cursor-pointer"
+                aria-label="Close booking receipt modal" title="Close (Esc)">&times;</button>
+      </div>
+
+      <!-- Zone 2: Scrollable Content Body -->
+      <div class="p-5 sm:p-6 space-y-4 overflow-y-auto flex-1 text-left">
+        <div class="flex items-center justify-between bg-canopy/80 border border-champagne/30 px-4 py-2 rounded-xl text-xs font-mono text-champagne">
+          <span>Reference ID: <strong class="text-white">${inquiryId}</strong></span>
+          <button type="button" onclick="copyInquiryDetails('${inquiryId}')" class="hover:text-white transition inline-flex items-center gap-1 text-[11px] font-sans font-semibold bg-deep-forest/60 px-2.5 py-1 rounded border border-champagne/20 cursor-pointer" title="Copy Reference ID">📋 Copy ID</button>
         </div>
 
-        <div class="inline-flex items-center gap-2 bg-canopy/80 border border-champagne/30 px-4 py-1.5 rounded-full text-xs font-mono text-champagne shadow-inner">
-          <span>Ref: <strong>${inquiryId}</strong></span>
-          <button type="button" onclick="copyInquiryDetails('${inquiryId}')" class="hover:text-white transition ml-1" title="Copy Reference ID">📋</button>
+        <!-- SLA Guarantee Box -->
+        <div class="bg-canopy/70 rounded-xl p-4 border border-champagne/20 text-xs space-y-2.5">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <span class="text-champagne font-bold uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+              ⏱️ Guaranteed 15–30 Min Response
+            </span>
+            <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-semibold px-2 py-0.5 rounded border border-emerald-500/30">Priority Queue</span>
+          </div>
+          <p class="text-ivory/85 leading-relaxed text-xs">
+            Our manager is reviewing your dates for <strong class="text-champagne">${inquirySummary.property}</strong> and will reach out via <strong class="text-white">${channelIcon} ${inquirySummary.preferredContactMethod}</strong> within <strong class="text-champagne">15–30 minutes</strong> with your direct booking folio and payment instructions (M-Pesa Till / Bank / Card).
+          </p>
+          <div class="border-t border-champagne/15 pt-2.5 space-y-1 text-[11px] text-ivory/70">
+            <div class="flex justify-between gap-2"><span class="text-ivory/50">Stay Dates:</span> <span class="text-ivory font-medium text-right">${inquirySummary.dates}</span></div>
+            <div class="flex justify-between gap-2"><span class="text-ivory/50">Guest:</span> <span class="text-ivory font-medium text-right">${inquirySummary.name} (${inquirySummary.phone})</span></div>
+            ${inquirySummary.estimatedTotal ? `<div class="flex justify-between gap-2 pt-1 border-t border-champagne/10"><span class="text-ivory/50">Estimated Total:</span> <span class="text-champagne font-bold text-right">${inquirySummary.estimatedTotal}</span></div>` : ""}
+          </div>
         </div>
       </div>
 
-      <!-- SLA Guarantee Box -->
-      <div class="bg-canopy/70 rounded-xl p-4 border border-champagne/20 text-xs text-left space-y-2.5">
-        <div class="flex items-center justify-between">
-          <span class="text-champagne font-bold uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-            ⏱️ Guaranteed 15–30 Min Response
-          </span>
-          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-semibold px-2 py-0.5 rounded border border-emerald-500/30">Priority Queue</span>
-        </div>
-        <p class="text-ivory/85 leading-relaxed text-xs">
-          Our manager is reviewing your dates for <strong class="text-champagne">${inquirySummary.property}</strong> and will reach out via <strong class="text-white">${channelIcon} ${inquirySummary.preferredContactMethod}</strong> within <strong class="text-champagne">15–30 minutes</strong> with your direct booking folio and payment instructions (M-Pesa Till / Bank / Card).
-        </p>
-        <div class="border-t border-champagne/15 pt-2 flex flex-col gap-1 text-[11px] text-ivory/70 font-mono">
-          <div><span class="text-ivory/50">Stay Dates:</span> <span class="text-ivory font-sans">${inquirySummary.dates}</span></div>
-          <div><span class="text-ivory/50">Guest:</span> <span class="text-ivory font-sans">${inquirySummary.name} (${inquirySummary.phone})</span></div>
-          ${inquirySummary.estimatedTotal ? `<div><span class="text-ivory/50">Est. Total:</span> <span class="text-champagne font-bold font-sans">${inquirySummary.estimatedTotal}</span></div>` : ""}
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="space-y-3 pt-1">
+      <!-- Zone 3: Pinned Footer Actions (Always Visible) -->
+      <div class="px-5 py-4 border-t border-champagne/20 bg-[#0a1914] space-y-2.5 shrink-0">
         <!-- Optional WhatsApp Helper (Never blocks!) -->
         <a href="${inquirySummary.whatsappUrl}" target="_blank" rel="noopener noreferrer"
-           class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-3.5 px-6 rounded-lg font-semibold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-2 text-xs md:text-sm">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+           class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-3 px-5 rounded-xl font-semibold tracking-wider uppercase transition duration-300 shadow-lg flex items-center justify-center gap-2 text-xs">
+          <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
             <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436.002 9.858-4.384 9.86-9.768.001-2.61-1.013-5.064-2.855-6.909C16.438 2.083 13.99 1.07 11.4 1.07 5.969 1.07 1.547 5.456 1.545 10.842c-.001 1.597.424 3.156 1.233 4.544L1.78 20.58l5.228-1.378c-.138-.077-.257-.15-.361-.208z" />
           </svg>
           <span>💬 Open WhatsApp Chat Now (Optional)</span>
         </a>
-        <p class="text-[10px] text-ivory/50 text-center">Your inquiry is already safely saved in our system. WhatsApp chat is optional if you want immediate real-time messaging.</p>
 
-        <div class="flex gap-2 pt-1">
+        <div class="flex gap-2">
           <button type="button" onclick="copyInquiryDetails('${encodeURIComponent(inquirySummary.messageText)}')"
-                  class="flex-1 bg-deep-forest/80 border border-champagne/20 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded text-xs transition">
-            📋 Copy Full Summary
+                  class="flex-1 bg-deep-forest/80 border border-champagne/25 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded-lg text-xs font-medium transition cursor-pointer">
+            📋 Copy Summary
           </button>
           <button type="button" onclick="closeInquiryModal()"
-                  class="flex-1 bg-champagne text-deep-forest hover:bg-champagne/90 py-2.5 rounded text-xs font-bold transition shadow">
-            Done / Return to Site
+                  class="flex-1 bg-champagne text-deep-forest hover:bg-champagne/90 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition shadow cursor-pointer">
+            Done / Close ✕
           </button>
         </div>
       </div>
@@ -1232,54 +1234,71 @@ function showInquiryReviewModal(inquirySummary) {
   if (!modalElement) {
     modalElement = document.createElement("div");
     modalElement.id = "inquiry-review-modal";
-    modalElement.className = "fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm";
     modalElement.setAttribute("role", "dialog");
     modalElement.setAttribute("aria-modal", "true");
     modalElement.setAttribute("aria-labelledby", "inquiry-modal-title");
     document.body.appendChild(modalElement);
   }
+  modalElement.className = "fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto overscroll-contain";
 
   const channelIcon = inquirySummary.preferredContactMethod.includes("WhatsApp") ? "💬" :
                       inquirySummary.preferredContactMethod.includes("Phone") ? "📞" : "✉️";
 
+  const addonsHtml = (inquirySummary.selectedAddons && inquirySummary.selectedAddons.length > 0)
+    ? `<div class="pt-2 border-t border-champagne/15 space-y-1">
+         <span class="text-ivory/60 block text-[11px]">Selected Preferences:</span>
+         <div class="text-ivory font-sans text-[11px] space-y-0.5">${inquirySummary.selectedAddons.map(item => `<div>• ${item}</div>`).join("")}</div>
+       </div>`
+    : "";
+
   modalElement.innerHTML = `
-    <div class="bg-deep-forest border border-champagne/30 rounded-2xl max-w-lg w-full p-6 md:p-8 space-y-6 text-ivory shadow-2xl relative">
-      <button type="button" onclick="closeInquiryModal()" 
-              class="absolute top-4 right-4 text-ivory/60 hover:text-champagne text-2xl transition"
-              aria-label="Close booking review modal">&times;</button>
-      
-      <div class="text-center space-y-2">
-        <span class="text-xs font-semibold tracking-widest text-champagne uppercase">Pre-Approved Stay Summary</span>
-        <h3 id="inquiry-modal-title" class="font-display text-2xl font-bold text-ivory">Review Your Reservation</h3>
-        <p class="text-xs text-ivory/70">Please review your stay details below. Once confirmed, your request is logged directly in our central reservations system with guaranteed 15–30 min response.</p>
+    <div class="bg-deep-forest border border-champagne/35 rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden text-ivory shadow-2xl relative my-auto">
+      <!-- Zone 1: Pinned Header (Always Visible) -->
+      <div class="flex items-center justify-between px-5 py-4 border-b border-champagne/20 bg-deep-forest/95 shrink-0">
+        <div>
+          <span class="text-[10px] font-bold tracking-widest text-champagne uppercase block">Step 2 of 2 • Direct Reservation</span>
+          <h3 id="inquiry-modal-title" class="font-display text-lg sm:text-xl font-bold text-ivory leading-tight">Review &amp; Confirm Your Stay</h3>
+        </div>
+        <button type="button" onclick="closeInquiryModal()" 
+                class="w-9 h-9 rounded-full bg-white/10 hover:bg-champagne text-ivory hover:text-deep-forest flex items-center justify-center text-xl font-bold transition shrink-0 cursor-pointer"
+                aria-label="Close booking review modal" title="Close (Esc)">&times;</button>
       </div>
 
-      <div class="bg-canopy/60 rounded-xl p-4 border border-champagne/15 text-xs space-y-2 font-mono">
-        <div class="flex justify-between"><span class="text-ivory/60">Guest Name:</span><span class="font-semibold text-ivory font-sans">${inquirySummary.name}</span></div>
-        <div class="flex justify-between"><span class="text-ivory/60">Contact Phone:</span><span class="font-semibold text-ivory font-sans">${inquirySummary.phone}</span></div>
-        ${inquirySummary.email ? `<div class="flex justify-between"><span class="text-ivory/60">Email:</span><span class="text-ivory font-sans">${inquirySummary.email}</span></div>` : ""}
-        <div class="flex justify-between"><span class="text-ivory/60">Preferred Contact:</span><span class="font-semibold text-champagne font-sans">${channelIcon} ${inquirySummary.preferredContactMethod}</span></div>
-        <div class="flex justify-between"><span class="text-ivory/60">Residence:</span><span class="font-semibold text-champagne font-sans">${inquirySummary.property}</span></div>
-        <div class="flex justify-between"><span class="text-ivory/60">Stay Dates:</span><span class="text-ivory font-sans">${inquirySummary.dates}</span></div>
-        <div class="flex justify-between"><span class="text-ivory/60">Guests:</span><span class="text-ivory font-sans">${inquirySummary.guests}</span></div>
-        ${inquirySummary.estimatedTotal ? `<div class="flex justify-between border-t border-champagne/15 pt-2"><span class="text-ivory/60">Est. Total:</span><span class="font-bold text-champagne text-sm font-sans">${inquirySummary.estimatedTotal}</span></div>` : ""}
+      <!-- Zone 2: Scrollable Summary Body -->
+      <div class="p-5 sm:p-6 space-y-3.5 overflow-y-auto flex-1">
+        <p class="text-xs text-ivory/75 leading-relaxed">
+          Please verify your reservation details below. Confirming logs your request directly with our central reservations desk (<strong class="text-champagne">15–30 min response guarantee</strong>).
+        </p>
+
+        <div class="bg-canopy/60 rounded-xl p-4 border border-champagne/20 text-xs space-y-2 font-mono">
+          <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Guest Name:</span><span class="font-semibold text-ivory font-sans text-right">${inquirySummary.name}</span></div>
+          <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Contact Phone:</span><span class="font-semibold text-ivory font-sans text-right">${inquirySummary.phone}</span></div>
+          ${inquirySummary.email ? `<div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Email:</span><span class="text-ivory font-sans text-right break-all">${inquirySummary.email}</span></div>` : ""}
+          <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Contact Via:</span><span class="font-semibold text-champagne font-sans text-right">${channelIcon} ${inquirySummary.preferredContactMethod}</span></div>
+          <div class="flex justify-between gap-3 pt-1.5 border-t border-champagne/10"><span class="text-ivory/60 shrink-0">Residence:</span><span class="font-semibold text-champagne font-sans text-right">${inquirySummary.property}</span></div>
+          <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Stay Dates:</span><span class="text-ivory font-sans text-right">${inquirySummary.dates}</span></div>
+          <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Guests:</span><span class="text-ivory font-sans text-right">${inquirySummary.guests}</span></div>
+          ${addonsHtml}
+          ${inquirySummary.estimatedTotal ? `<div class="flex justify-between items-center gap-3 border-t border-champagne/20 pt-2.5 mt-1"><span class="text-ivory/70 font-sans font-medium">Estimated Total:</span><span class="font-bold text-champagne text-sm font-sans text-right">${inquirySummary.estimatedTotal}</span></div>` : ""}
+        </div>
       </div>
 
-      <div class="space-y-3">
+      <!-- Zone 3: Pinned Footer Actions (Always Visible) -->
+      <div class="px-5 py-4 border-t border-champagne/20 bg-[#0a1914] space-y-2.5 shrink-0">
         <button type="button" id="confirm-submit-inquiry-btn" onclick="confirmAndSubmitInquiry()"
-                class="w-full bg-champagne hover:bg-champagne/90 text-deep-forest py-4 px-6 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-2 text-xs md:text-sm cursor-pointer">
+                class="w-full bg-champagne hover:bg-champagne/90 text-deep-forest py-3.5 px-5 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer active:scale-[0.99]">
           <span class="text-base">✓</span>
-          <span>CONFIRM &amp; SUBMIT RESERVATION INQUIRY</span>
+          <span>Confirm &amp; Submit Reservation Inquiry</span>
         </button>
 
         <div class="flex gap-2">
           <button type="button" onclick="closeInquiryModal()"
-                  class="flex-1 bg-deep-forest/80 border border-champagne/20 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded text-xs transition">
+                  class="flex-1 bg-deep-forest/80 border border-champagne/25 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded-lg text-xs font-medium transition cursor-pointer">
             ← Edit Details
           </button>
           <a href="${CommunicationService.getTelephoneUrl()}"
-             class="flex-1 text-center bg-deep-forest/80 border border-champagne/20 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded text-xs transition flex items-center justify-center gap-1">
-            📞 Direct Desk Call
+             class="flex-1 text-center bg-deep-forest/80 border border-champagne/25 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded-lg text-xs font-medium transition flex items-center justify-center gap-1">
+            📞 Call Desk Direct
           </a>
         </div>
       </div>
@@ -1288,6 +1307,9 @@ function showInquiryReviewModal(inquirySummary) {
 
   modalElement.classList.remove("hidden");
   modalElement.classList.add("flex");
+  if (typeof document !== "undefined" && document.body) {
+    document.body.style.overflow = "hidden";
+  }
 }
 
 function closeInquiryModal() {
@@ -1295,6 +1317,9 @@ function closeInquiryModal() {
   if (modalElement) {
     modalElement.classList.add("hidden");
     modalElement.classList.remove("flex");
+  }
+  if (typeof document !== "undefined" && document.body) {
+    document.body.style.overflow = "";
   }
 }
 
