@@ -268,4 +268,18 @@ const phoneInquiryText = buildInquiryMessage({
 assert.ok(phoneInquiryText.includes("• Preferred Contact: Phone Call"));
 console.log("   ✅ CrmSyncService correctly maps properties, contact preferences, and constructs immutable API payloads.");
 
-console.log("\n🎉 ALL 10 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 11: Official Property Catalog Data Integrity & Single Source of Truth
+console.log("11. Testing Official Property Catalog Data Integrity...");
+for (const propertyKey in BEAKIM_CATALOG) {
+  const prop = BEAKIM_CATALOG[propertyKey];
+  assert.ok(prop.id, `Property ${propertyKey} must have an ID`);
+  assert.ok(prop.name, `Property ${propertyKey} must have a name`);
+  assert.ok(prop.phone, `Property ${propertyKey} must have a direct phone number`);
+  assert.ok(prop.coordinates && typeof prop.coordinates.latitude === "number", `Property ${propertyKey} must have valid latitude`);
+  assert.ok(prop.coordinates && typeof prop.coordinates.longitude === "number", `Property ${propertyKey} must have valid longitude`);
+  assert.ok(prop.coordinates.latitude < 0, `Property ${propertyKey} latitude should be South of equator in Kenya`);
+  assert.ok(prop.coordinates.longitude > 30, `Property ${propertyKey} longitude should be in East Africa`);
+}
+console.log("   ✅ All properties in BEAKIM_CATALOG have verified phone numbers and GPS coordinates.");
+
+console.log("\n🎉 ALL 11 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
