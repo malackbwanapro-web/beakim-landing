@@ -213,29 +213,34 @@ const CrmSyncService = Object.freeze({
   }
 });
 
+let activeScrollLockCount = 0;
+
 const PageScrollLock = Object.freeze({
-  _lockCount: 0,
+  getLockCount() {
+    return activeScrollLockCount;
+  },
 
   lock() {
     if (typeof document === "undefined" || !document.body) return;
-    this._lockCount += 1;
-    if (this._lockCount === 1) {
+    activeScrollLockCount += 1;
+    if (activeScrollLockCount === 1) {
       document.body.style.overflow = "hidden";
     }
   },
 
   unlock() {
     if (typeof document === "undefined" || !document.body) return;
-    this._lockCount = Math.max(0, this._lockCount - 1);
-    if (this._lockCount === 0) {
+    activeScrollLockCount = Math.max(0, activeScrollLockCount - 1);
+    if (activeScrollLockCount === 0) {
       document.body.style.overflow = "";
     }
   },
 
   reset() {
-    if (typeof document === "undefined" || !document.body) return;
-    this._lockCount = 0;
-    document.body.style.overflow = "";
+    activeScrollLockCount = 0;
+    if (typeof document !== "undefined" && document.body) {
+      document.body.style.overflow = "";
+    }
   }
 });
 

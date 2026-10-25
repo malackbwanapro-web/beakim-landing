@@ -8,6 +8,7 @@ const {
   APP_CONFIG,
   CommunicationService,
   CrmSyncService,
+  PageScrollLock,
   getNairobiDateString,
   calculateDateDifferenceInDays,
   isPastDate,
@@ -282,4 +283,27 @@ for (const propertyKey in BEAKIM_CATALOG) {
 }
 console.log("   ✅ All properties in BEAKIM_CATALOG have verified phone numbers and GPS coordinates.");
 
-console.log("\n🎉 ALL 11 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 12: PageScrollLock Reference Counting & Boundary Safety
+console.log("12. Testing PageScrollLock Reference Counting...");
+// Mock document.body for Node.js test environment
+global.document = { body: { style: { overflow: "" } } };
+PageScrollLock.reset();
+assert.strictEqual(global.document.body.style.overflow, "");
+
+PageScrollLock.lock(); // Lock 1
+assert.strictEqual(global.document.body.style.overflow, "hidden");
+
+PageScrollLock.lock(); // Lock 2 (e.g. nested modal over lightbox)
+assert.strictEqual(global.document.body.style.overflow, "hidden");
+
+PageScrollLock.unlock(); // 1st unlock: still 1 active lock, must remain hidden
+assert.strictEqual(global.document.body.style.overflow, "hidden");
+
+PageScrollLock.unlock(); // 2nd unlock: now 0 locks, must restore normal scroll
+assert.strictEqual(global.document.body.style.overflow, "");
+
+PageScrollLock.unlock(); // Extra unlock: clamped at 0 without negative overflow
+assert.strictEqual(global.document.body.style.overflow, "");
+console.log("   ✅ PageScrollLock correctly tracks nested modal overlays and restores page scrolling.");
+
+console.log("\n🎉 ALL 12 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
