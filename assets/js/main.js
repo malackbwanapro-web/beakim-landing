@@ -213,6 +213,32 @@ const CrmSyncService = Object.freeze({
   }
 });
 
+const PageScrollLock = Object.freeze({
+  _lockCount: 0,
+
+  lock() {
+    if (typeof document === "undefined" || !document.body) return;
+    this._lockCount += 1;
+    if (this._lockCount === 1) {
+      document.body.style.overflow = "hidden";
+    }
+  },
+
+  unlock() {
+    if (typeof document === "undefined" || !document.body) return;
+    this._lockCount = Math.max(0, this._lockCount - 1);
+    if (this._lockCount === 0) {
+      document.body.style.overflow = "";
+    }
+  },
+
+  reset() {
+    if (typeof document === "undefined" || !document.body) return;
+    this._lockCount = 0;
+    document.body.style.overflow = "";
+  }
+});
+
 // ── 3. PURE DOMAIN & UTILITY FUNCTIONS (PORTABLE & TESTABLE) ──
 
 /**
@@ -681,66 +707,80 @@ function validateBookingFormData(data) {
 }
 
 /**
- * Selects an interactive residence card in the 2-column booking form.
+ * Synchronizes the hidden/desktop property dropdown to match residence selection.
+ */
+function syncPropertyDropdown(propertyValue) {
+  const propertySelectElement = document.getElementById("booking-property");
+  if (!propertySelectElement) return;
+
+  const normalizedTarget = propertyValue.toLowerCase();
+  let matchedIndex = -1;
+  for (let i = 0; i < propertySelectElement.options.length; i++) {
+    const optValue = propertySelectElement.options[i].value.toLowerCase();
+    if (optValue === normalizedTarget || optValue.includes(normalizedTarget) || normalizedTarget.includes(optValue)) {
+      matchedIndex = i;
+      break;
+    }
+  }
+
+  if (matchedIndex >= 0) {
+    propertySelectElement.selectedIndex = matchedIndex;
+  } else {
+    propertySelectElement.value = propertyValue;
+  }
+}
+
+/**
+ * Updates visual selection styling on residence radio cards.
+ */
+function syncResidenceCardsStyling(selectedCardElement) {
+  const allCards = document.querySelectorAll(".residence-card");
+  allCards.forEach(card => {
+    const isSelected = card === selectedCardElement;
+    card.classList.toggle("border-2", isSelected);
+    card.classList.toggle("border-champagne", isSelected);
+    card.classList.toggle("bg-champagne/10", isSelected);
+    card.classList.toggle("border", !isSelected);
+    card.classList.toggle("border-deep-forest/15", !isSelected);
+    card.classList.toggle("bg-white", !isSelected);
+    card.setAttribute("aria-checked", isSelected ? "true" : "false");
+
+    const radio = card.querySelector(".residence-radio");
+    if (radio) {
+      radio.classList.toggle("border-champagne", isSelected);
+      radio.classList.toggle("bg-champagne", isSelected);
+      radio.classList.toggle("border-deep-forest/30", !isSelected);
+      radio.classList.toggle("bg-transparent", !isSelected);
+
+      const dot = radio.querySelector("div");
+      if (dot) {
+        dot.classList.toggle("opacity-0", !isSelected);
+      }
+    }
+  });
+}
+
+/**
+ * Toggles breakfast add-on availability depending on property capabilities.
+ */
+function syncBreakfastAddonCard(propertyValue) {
+  const breakfastCard = document.getElementById("addon-card-breakfast");
+  if (!breakfastCard) return;
+
+  const normalized = propertyValue.toLowerCase();
+  const isBreakfastEligible = normalized.includes("darling") || normalized.includes("darad");
+  breakfastCard.classList.toggle("opacity-60", !isBreakfastEligible);
+  breakfastCard.classList.toggle("border-champagne/50", isBreakfastEligible);
+}
+
+/**
+ * Selects an interactive residence card in the 2-column booking form (<10 lines SRP orchestrator).
  */
 function selectResidenceCard(propertyValue, cardElement) {
   if (typeof document === "undefined") return;
-  const propertySelectElement = document.getElementById("booking-property");
-  if (propertySelectElement) {
-    let matchedIndex = -1;
-    for (let i = 0; i < propertySelectElement.options.length; i++) {
-      const opt = propertySelectElement.options[i];
-      if (opt.value === propertyValue || opt.value.toLowerCase().includes(propertyValue.toLowerCase()) || propertyValue.toLowerCase().includes(opt.value.toLowerCase())) {
-        matchedIndex = i;
-        break;
-      }
-    }
-    if (matchedIndex >= 0) {
-      propertySelectElement.selectedIndex = matchedIndex;
-    } else {
-      propertySelectElement.value = propertyValue;
-    }
-  }
-
-  const allCards = document.querySelectorAll(".residence-card");
-  allCards.forEach(card => {
-    card.classList.remove("border-2", "border-champagne", "bg-champagne/10");
-    card.classList.add("border", "border-deep-forest/15", "bg-white");
-    card.setAttribute("aria-checked", "false");
-    const radio = card.querySelector(".residence-radio");
-    if (radio) {
-      radio.classList.remove("border-champagne", "bg-champagne");
-      radio.classList.add("border-deep-forest/30", "bg-transparent");
-      const dot = radio.querySelector("div");
-      if (dot) dot.classList.add("opacity-0");
-    }
-  });
-
-  if (cardElement) {
-    cardElement.classList.remove("border", "border-deep-forest/15", "bg-white");
-    cardElement.classList.add("border-2", "border-champagne", "bg-champagne/10");
-    cardElement.setAttribute("aria-checked", "true");
-    const activeRadio = cardElement.querySelector(".residence-radio");
-    if (activeRadio) {
-      activeRadio.classList.remove("border-deep-forest/30", "bg-transparent");
-      activeRadio.classList.add("border-champagne", "bg-champagne");
-      const dot = activeRadio.querySelector("div");
-      if (dot) dot.classList.remove("opacity-0");
-    }
-  }
-
-  const breakfastCard = document.getElementById("addon-card-breakfast");
-  const isBreakfastEligible = propertyValue.toLowerCase().includes("darling") || propertyValue.toLowerCase().includes("darad");
-  if (breakfastCard) {
-    if (isBreakfastEligible) {
-      breakfastCard.classList.remove("opacity-60");
-      breakfastCard.classList.add("border-champagne/50");
-    } else {
-      breakfastCard.classList.add("opacity-60");
-      breakfastCard.classList.remove("border-champagne/50");
-    }
-  }
-
+  syncPropertyDropdown(propertyValue);
+  syncResidenceCardsStyling(cardElement);
+  syncBreakfastAddonCard(propertyValue);
   handleDateOrAddonChange();
 }
 
@@ -985,7 +1025,7 @@ function openGalleryLightbox(index) {
   modalElement.setAttribute("aria-hidden", "false");
 
   if (closeButton) closeButton.focus();
-  document.body.style.overflow = "hidden";
+  PageScrollLock.lock();
 }
 
 function navigateLightbox(step) {
@@ -1014,7 +1054,7 @@ function openLightbox(sourceUrl, captionText) {
     modalElement.classList.remove("hidden");
     modalElement.classList.add("flex");
     modalElement.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
+    PageScrollLock.lock();
   }
 }
 
@@ -1024,7 +1064,7 @@ function closeLightbox() {
     modalElement.classList.add("hidden");
     modalElement.classList.remove("flex");
     modalElement.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
+    PageScrollLock.unlock();
 
     if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
       lastFocusedElement.focus();
@@ -1307,9 +1347,7 @@ function showInquiryReviewModal(inquirySummary) {
 
   modalElement.classList.remove("hidden");
   modalElement.classList.add("flex");
-  if (typeof document !== "undefined" && document.body) {
-    document.body.style.overflow = "hidden";
-  }
+  PageScrollLock.lock();
 }
 
 function closeInquiryModal() {
@@ -1318,9 +1356,7 @@ function closeInquiryModal() {
     modalElement.classList.add("hidden");
     modalElement.classList.remove("flex");
   }
-  if (typeof document !== "undefined" && document.body) {
-    document.body.style.overflow = "";
-  }
+  PageScrollLock.unlock();
 }
 
 function copyInquiryDetails(encodedMessageText) {
@@ -1723,6 +1759,7 @@ if (typeof module !== "undefined" && module.exports) {
     APP_CONFIG,
     CommunicationService,
     CrmSyncService,
+    PageScrollLock,
     getNairobiDateString,
     calculateDateDifferenceInDays,
     isPastDate,
@@ -1734,6 +1771,9 @@ if (typeof module !== "undefined" && module.exports) {
     extractSelectedAddons,
     extractBookingFormData,
     validateBookingFormData,
+    syncPropertyDropdown,
+    syncResidenceCardsStyling,
+    syncBreakfastAddonCard,
     getCrmPublicEndpoint,
     resolvePropertyIdFromSelection,
     syncInquiryToCrm,
