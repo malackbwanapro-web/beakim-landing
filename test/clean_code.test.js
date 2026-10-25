@@ -18,7 +18,8 @@ const {
   resolveStayPricing,
   buildInquiryMessage,
   validateBookingFormData,
-  handleResidenceCardKeydown
+  handleResidenceCardKeydown,
+  renderInquiryCostBreakdown
 } = require("../assets/js/main.js");
 
 const { BEAKIM_CATALOG, getOfferingById } = require("../assets/js/catalog.js");
@@ -306,4 +307,52 @@ PageScrollLock.unlock(); // Extra unlock: clamped at 0 without negative overflow
 assert.strictEqual(global.document.body.style.overflow, "");
 console.log("   ✅ PageScrollLock correctly tracks nested modal overlays and restores page scrolling.");
 
-console.log("\n🎉 ALL 12 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 13: Transparent Stay Cost Breakdown & Line-Item Integrity
+console.log("13. Testing Transparent Stay Cost Breakdown & Line-Item Integrity...");
+const mockPricing = {
+  rate: 2000,
+  rateBasisText: "KSh 2,000 / night",
+  unitDisplayName: "Beakim Darad - Standard Studio Room (Without AC)",
+  durationDays: 8,
+  durationText: "8 Nights",
+  totalCost: 16000,
+  formattedTotal: "KSh 16,000",
+  isValidRange: true
+};
+
+const mockTotals = calculateReservationTotals({
+  pricingSummary: mockPricing,
+  adultsCount: 2,
+  hasBreakfast: true
+});
+
+assert.strictEqual(mockTotals.baseCost, 16000);
+assert.strictEqual(mockTotals.formattedBaseCost, "KSh 16,000");
+assert.strictEqual(mockTotals.breakfastCost, 16000);
+assert.strictEqual(mockTotals.formattedBreakfastCost, "+KSh 16,000");
+assert.strictEqual(mockTotals.grandTotal, 32000);
+assert.strictEqual(mockTotals.formattedGrandTotal, "KSh 32,000");
+
+const breakdownHtml = renderInquiryCostBreakdown({
+  property: mockPricing.unitDisplayName,
+  pricingSummary: mockPricing,
+  totals: mockTotals,
+  estimatedTotal: mockTotals.formattedGrandTotal,
+  selectedAddons: [
+    "Chef-Prepared Coastal Breakfast: 2 Guest(s) × 8 Night(s) (+KSh 16,000)",
+    "Early SGR / Flight Bag Drop (Complimentary)"
+  ]
+});
+
+assert.ok(breakdownHtml.includes("Itemized Stay Breakdown"));
+assert.ok(breakdownHtml.includes("Standard Studio Room (Without AC)"));
+assert.ok(breakdownHtml.includes("8 Nights × KSh 2,000 / night"));
+assert.ok(breakdownHtml.includes("KSh 16,000"));
+assert.ok(breakdownHtml.includes("Chef-Prepared Coastal Breakfast"));
+assert.ok(breakdownHtml.includes("+KSh 16,000"));
+assert.ok(breakdownHtml.includes("FREE (KSh 0)"));
+assert.ok(breakdownHtml.includes("Zero Extra Fees"));
+assert.ok(breakdownHtml.includes("KSh 32,000"));
+console.log("   ✅ renderInquiryCostBreakdown cleanly formats base room math, meal add-ons, and complimentary perks with 0 anxiety.");
+
+console.log("\n🎉 ALL 13 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");

@@ -302,9 +302,11 @@ function normalizeKenyanPhoneNumber(countryCode, rawPhoneNumber) {
 function calculateReservationTotals({ pricingSummary, adultsCount = 1, hasBreakfast = false }) {
   const durationDays = pricingSummary && pricingSummary.durationDays > 0 ? pricingSummary.durationDays : 0;
   const baseCost = pricingSummary ? pricingSummary.totalCost : 0;
+  const formattedBaseCost = `KSh ${baseCost.toLocaleString()}`;
   const breakfastCost = (hasBreakfast && durationDays > 0)
     ? APP_CONFIG.RATES.BREAKFAST_PER_PERSON_PER_DAY * adultsCount * durationDays
     : 0;
+  const formattedBreakfastCost = breakfastCost > 0 ? `+KSh ${breakfastCost.toLocaleString()}` : "+KSh 0";
   const grandTotal = baseCost + breakfastCost;
   const isValid = Boolean(pricingSummary && pricingSummary.isValidRange);
   const formattedGrandTotal = isValid
@@ -313,10 +315,14 @@ function calculateReservationTotals({ pricingSummary, adultsCount = 1, hasBreakf
 
   return {
     baseCost,
+    formattedBaseCost,
     breakfastCost,
+    formattedBreakfastCost,
     grandTotal,
     formattedGrandTotal,
     durationDays,
+    adultsCount,
+    hasBreakfast,
     isValid
   };
 }
@@ -562,7 +568,9 @@ function processValidBookingSubmission(formData) {
     specialRequests: formData.specialRequests || "",
     preferredContactMethod,
     whatsappUrl,
-    messageText
+    messageText,
+    pricingSummary,
+    totals
   });
 }
 
@@ -1273,6 +1281,83 @@ function renderInquirySuccessReceipt(inquirySummary, inquiryId) {
   `;
 }
 
+/**
+ * Pure presenter function rendering accessible, transparent itemized stay cost breakdown.
+ */
+function renderInquiryCostBreakdown(inquirySummary) {
+  const totals = inquirySummary.totals || {};
+  const pricing = inquirySummary.pricingSummary || {};
+
+  const unitName = pricing.unitDisplayName || inquirySummary.property || "Selected Residence";
+  const durationText = pricing.durationText || "1 Stay";
+  const rateBasisText = pricing.rateBasisText || "";
+  const baseCostFormatted = totals.formattedBaseCost || (pricing.totalCost ? `KSh ${pricing.totalCost.toLocaleString()}` : (inquirySummary.estimatedTotal || "KSh 0"));
+
+  const hasBreakfast = Boolean(totals.breakfastCost && totals.breakfastCost > 0);
+  const adultsCount = totals.adultsCount || (inquirySummary.formData ? inquirySummary.formData.adults : 1);
+  const nightsCount = totals.durationDays || pricing.durationDays || 1;
+  const breakfastCostFormatted = totals.formattedBreakfastCost || `+KSh ${(totals.breakfastCost || 0).toLocaleString()}`;
+
+  // Filter complimentary add-ons (those not breakfast)
+  const complimentaryList = (inquirySummary.selectedAddons || []).filter(item => !item.toLowerCase().includes("breakfast"));
+
+  return `
+    <div class="bg-[#0b1d16] border border-champagne/30 rounded-xl p-3.5 sm:p-4 space-y-2.5 font-sans">
+      <div class="flex items-center justify-between pb-2 border-b border-champagne/20">
+        <span class="text-[11px] font-bold text-champagne uppercase tracking-wider flex items-center gap-1.5">
+          <span>🧾</span> Itemized Stay Breakdown
+        </span>
+        <span class="text-[10px] text-ivory/60 font-sans">Transparent Direct Pricing</span>
+      </div>
+
+      <!-- Line Item 1: Base Accommodation -->
+      <div class="flex justify-between items-start gap-3 text-xs">
+        <div class="space-y-0.5 min-w-0">
+          <span class="font-semibold text-ivory block truncate">${unitName}</span>
+          <span class="text-[11px] text-ivory/60 block">${durationText} ${rateBasisText ? `× ${rateBasisText}` : ""}</span>
+        </div>
+        <span class="font-mono font-bold text-ivory shrink-0">${baseCostFormatted}</span>
+      </div>
+
+      <!-- Line Item 2: Breakfast Add-on (if selected) -->
+      ${hasBreakfast ? `
+      <div class="flex justify-between items-start gap-3 text-xs pt-2 border-t border-champagne/10">
+        <div class="space-y-0.5">
+          <span class="font-semibold text-emerald-400 block">🍳 Chef-Prepared Coastal Breakfast</span>
+          <span class="text-[11px] text-ivory/60 block">${adultsCount} Guest(s) × ${nightsCount} Night(s) @ KSh 1,000 / day</span>
+        </div>
+        <span class="font-mono font-bold text-emerald-400 shrink-0">${breakfastCostFormatted}</span>
+      </div>
+      ` : ""}
+
+      <!-- Line Item 3: Complimentary Amenities (if selected) -->
+      ${complimentaryList.map(item => `
+      <div class="flex justify-between items-center gap-3 text-xs pt-1.5 border-t border-champagne/10">
+        <span class="text-ivory/80 text-[11px] flex items-center gap-1">
+          <span class="text-emerald-400 font-bold">✓</span> ${item.replace(/\s*\(Complimentary\)/i, "")}
+        </span>
+        <span class="text-[9px] font-bold uppercase tracking-wider text-champagne bg-champagne/15 px-2 py-0.5 rounded border border-champagne/30 shrink-0">FREE (KSh 0)</span>
+      </div>
+      `).join("")}
+
+      <!-- Line Item 4: Platform Fee / Commission -->
+      <div class="flex justify-between items-center gap-3 text-xs pt-1.5 border-t border-champagne/10">
+        <span class="text-ivory/60 text-[11px]">Direct Host Rate • Booking Commission</span>
+        <span class="text-[11px] font-semibold text-emerald-400 shrink-0">Zero Extra Fees</span>
+      </div>
+
+      <!-- Total Row -->
+      <div class="flex justify-between items-center gap-3 pt-3 border-t-2 border-champagne/35 mt-1">
+        <div>
+          <span class="font-bold text-ivory text-xs sm:text-sm block">Total Estimated Amount</span>
+          <span class="text-[10px] text-ivory/60 block">🔒 No upfront charge • Pay upon host confirmation</span>
+        </div>
+        <span class="font-display font-bold text-champagne text-base sm:text-lg text-right shrink-0">${inquirySummary.estimatedTotal}</span>
+      </div>
+    </div>
+  `;
+}
+
 function showInquiryReviewModal(inquirySummary) {
   currentActiveInquiry = inquirySummary;
   let modalElement = document.getElementById("inquiry-review-modal");
@@ -1288,13 +1373,6 @@ function showInquiryReviewModal(inquirySummary) {
 
   const channelIcon = inquirySummary.preferredContactMethod.includes("WhatsApp") ? "💬" :
                       inquirySummary.preferredContactMethod.includes("Phone") ? "📞" : "✉️";
-
-  const addonsHtml = (inquirySummary.selectedAddons && inquirySummary.selectedAddons.length > 0)
-    ? `<div class="pt-2 border-t border-champagne/15 space-y-1">
-         <span class="text-ivory/60 block text-[11px]">Selected Preferences:</span>
-         <div class="text-ivory font-sans text-[11px] space-y-0.5">${inquirySummary.selectedAddons.map(item => `<div>• ${item}</div>`).join("")}</div>
-       </div>`
-    : "";
 
   modalElement.innerHTML = `
     <div class="bg-deep-forest border border-champagne/35 rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden text-ivory shadow-2xl relative my-auto">
@@ -1315,6 +1393,7 @@ function showInquiryReviewModal(inquirySummary) {
           Please verify your reservation details below. Confirming logs your request directly with our central reservations desk (<strong class="text-champagne">15–30 min response guarantee</strong>).
         </p>
 
+        <!-- Primary Guest & Stay Itinerary -->
         <div class="bg-canopy/60 rounded-xl p-4 border border-champagne/20 text-xs space-y-2 font-mono">
           <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Guest Name:</span><span class="font-semibold text-ivory font-sans text-right">${inquirySummary.name}</span></div>
           <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Contact Phone:</span><span class="font-semibold text-ivory font-sans text-right">${inquirySummary.phone}</span></div>
@@ -1323,9 +1402,11 @@ function showInquiryReviewModal(inquirySummary) {
           <div class="flex justify-between gap-3 pt-1.5 border-t border-champagne/10"><span class="text-ivory/60 shrink-0">Residence:</span><span class="font-semibold text-champagne font-sans text-right">${inquirySummary.property}</span></div>
           <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Stay Dates:</span><span class="text-ivory font-sans text-right">${inquirySummary.dates}</span></div>
           <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Guests:</span><span class="text-ivory font-sans text-right">${inquirySummary.guests}</span></div>
-          ${addonsHtml}
-          ${inquirySummary.estimatedTotal ? `<div class="flex justify-between items-center gap-3 border-t border-champagne/20 pt-2.5 mt-1"><span class="text-ivory/70 font-sans font-medium">Estimated Total:</span><span class="font-bold text-champagne text-sm font-sans text-right">${inquirySummary.estimatedTotal}</span></div>` : ""}
+          ${inquirySummary.specialRequests ? `<div class="flex justify-between gap-3 pt-1.5 border-t border-champagne/10"><span class="text-ivory/60 shrink-0">Arrival Notes:</span><span class="text-ivory font-sans italic text-right">${inquirySummary.specialRequests}</span></div>` : ""}
         </div>
+
+        <!-- Transparent Itemized Cost Breakdown -->
+        ${renderInquiryCostBreakdown(inquirySummary)}
       </div>
 
       <!-- Zone 3: Pinned Footer Actions (Always Visible) -->
@@ -1787,6 +1868,7 @@ if (typeof module !== "undefined" && module.exports) {
     initializeCleanHashScrolling,
     triggerLiveAvailabilityCheck,
     confirmAndSubmitInquiry,
-    renderInquirySuccessReceipt
+    renderInquirySuccessReceipt,
+    renderInquiryCostBreakdown
   };
 }
