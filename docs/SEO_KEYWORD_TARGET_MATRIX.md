@@ -108,15 +108,15 @@ flowchart LR
   "priceRange": "KES 2,000 - KES 4,000",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Off Diani Beach Road, 5th Row",
+    "streetAddress": "Off Diani Links Rd",
     "addressLocality": "Diani Beach",
     "addressRegion": "Kwale County",
     "addressCountry": "KE"
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": -4.2825,
-    "longitude": 39.5890
+    "latitude": -4.284794,
+    "longitude": 39.577151
   },
   "sameAs": [
     "https://www.instagram.com/beakimhospitalitygroup/",
@@ -197,8 +197,8 @@ flowchart LR
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": -4.2796,
-    "longitude": 39.5936
+    "latitude": -4.288156,
+    "longitude": 39.581767
   },
   "sameAs": [
     "https://www.instagram.com/beakimhospitalitygroup/",
@@ -272,8 +272,8 @@ flowchart LR
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": -4.2880,
-    "longitude": 39.5680
+    "latitude": -4.2874,
+    "longitude": 39.5665
   },
   "sameAs": [
     "https://www.instagram.com/beakimhospitalitygroup/",
