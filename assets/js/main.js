@@ -1187,21 +1187,103 @@ async function confirmAndSubmitInquiry() {
     `;
   }
 
-  let inquiryId = "INQ-" + Math.floor(100000 + Math.random() * 900000);
+  let inquiryId = null;
+  let isSuccess = false;
   try {
     const result = await CrmSyncService.sendInquiry(currentActiveInquiry.inquiryPayload);
     if (result && result.inquiry && result.inquiry.id) {
       inquiryId = result.inquiry.id;
+      isSuccess = true;
     } else if (result && result.id) {
       inquiryId = result.id;
+      isSuccess = true;
     }
   } catch (err) {
     if (typeof console !== "undefined" && typeof console.debug === "function") {
-      console.debug("[CRM Intake] Handled gracefully:", err);
+      console.debug("[CRM Intake] Network or server error:", err);
     }
   }
 
-  renderInquirySuccessReceipt(currentActiveInquiry, inquiryId);
+  // Truthful receipts guarantee (A204): Never show a success receipt without authoritative server acknowledgment
+  if (isSuccess && inquiryId) {
+    renderInquirySuccessReceipt(currentActiveInquiry, inquiryId);
+  } else {
+    renderInquiryNetworkFailure(currentActiveInquiry);
+  }
+}
+
+function renderInquiryNetworkFailure(inquirySummary) {
+  const modalElement = document.getElementById("inquiry-review-modal");
+  if (!modalElement) return;
+
+  const whatsappUrl = CommunicationService.getWhatsAppUrl(inquirySummary.inquiryMessage);
+  const telephoneUrl = CommunicationService.getTelephoneUrl();
+
+  modalElement.innerHTML = `
+    <div class="bg-deep-forest border border-amber-500/40 rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden text-ivory shadow-2xl relative my-auto">
+      <!-- Zone 1: Pinned Header -->
+      <div class="flex items-center justify-between px-5 py-4 border-b border-amber-500/20 bg-deep-forest/95 shrink-0">
+        <div class="flex items-center gap-3 text-left">
+          <div class="w-10 h-10 rounded-full bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-amber-400 text-lg font-bold shrink-0 shadow-md">
+            ⚠️
+          </div>
+          <div>
+            <span class="text-[10px] font-bold tracking-widest text-amber-400 uppercase block">Connection Timeout</span>
+            <h3 class="font-display text-lg sm:text-xl font-bold text-ivory leading-tight">Temporary Network Interruption</h3>
+          </div>
+        </div>
+        <button type="button" onclick="closeInquiryModal()" 
+                class="w-9 h-9 rounded-full bg-white/10 hover:bg-champagne text-ivory hover:text-deep-forest flex items-center justify-center text-xl font-bold transition shrink-0 cursor-pointer"
+                aria-label="Close modal" title="Close (Esc)">&times;</button>
+      </div>
+
+      <!-- Zone 2: Content Body -->
+      <div class="p-5 sm:p-6 space-y-4 overflow-y-auto flex-1 text-left">
+        <div class="bg-canopy/70 rounded-xl p-4 border border-amber-500/25 text-xs space-y-2.5">
+          <p class="text-ivory/90 leading-relaxed text-xs">
+            We experienced a brief connection hiccup reaching our reservation desk server. <strong>Your selected dates and booking inquiry details are completely intact.</strong>
+          </p>
+          <p class="text-amber-300 font-semibold text-xs">
+            You can retry instant submission below, or send your pre-filled inquiry directly to our reservation manager via WhatsApp.
+          </p>
+        </div>
+
+        <div class="bg-deep-forest/80 rounded-xl p-3.5 border border-champagne/20 text-xs space-y-1.5 font-mono text-ivory/80">
+          <div class="text-[11px] text-champagne font-bold uppercase tracking-wider font-sans mb-1">Your Reservation Details:</div>
+          <div>Property: <strong class="text-white">${inquirySummary.property}</strong></div>
+          <div>Dates: <strong class="text-white">${inquirySummary.datesDisplay}</strong> (${inquirySummary.stayDays} Nights)</div>
+          <div>Guests: <strong class="text-white">${inquirySummary.guestsDisplay}</strong></div>
+          <div>Estimated Total: <strong class="text-champagne font-sans font-bold">${inquirySummary.estimatedTotal}</strong></div>
+        </div>
+      </div>
+
+      <!-- Zone 3: Pinned Action Buttons -->
+      <div class="px-5 py-4 border-t border-champagne/20 bg-[#0a1914] space-y-2.5 shrink-0">
+        <button type="button" id="confirm-submit-inquiry-btn" onclick="confirmAndSubmitInquiry()"
+                class="w-full bg-champagne hover:bg-champagne/90 text-deep-forest py-3 px-5 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer active:scale-[0.99]">
+          <span>🔄</span>
+          <span>Retry Server Submission</span>
+        </button>
+
+        <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer"
+           class="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white py-3 px-5 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-lg flex items-center justify-center gap-2 text-xs sm:text-sm">
+          <span>💬</span>
+          <span>Send via WhatsApp Now</span>
+        </a>
+
+        <div class="flex gap-2">
+          <button type="button" onclick="closeInquiryModal()"
+                  class="flex-1 bg-deep-forest/80 border border-champagne/25 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded-lg text-xs font-medium transition cursor-pointer">
+            Edit Details
+          </button>
+          <a href="${telephoneUrl}"
+             class="flex-1 text-center bg-deep-forest/80 border border-champagne/25 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded-lg text-xs font-medium transition flex items-center justify-center gap-1">
+            📞 Call Desk Direct
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function renderInquirySuccessReceipt(inquirySummary, inquiryId) {
@@ -1869,6 +1951,7 @@ if (typeof module !== "undefined" && module.exports) {
     triggerLiveAvailabilityCheck,
     confirmAndSubmitInquiry,
     renderInquirySuccessReceipt,
+    renderInquiryNetworkFailure,
     renderInquiryCostBreakdown
   };
 }

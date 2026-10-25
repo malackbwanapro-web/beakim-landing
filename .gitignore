@@ -16,6 +16,8 @@ node_modules/
 Thumbs.db
 *.log
 data_store.enc
+backups/
+*.enc
 
 # Raw uncompressed source images
 assets/Tower Cottages Images/
