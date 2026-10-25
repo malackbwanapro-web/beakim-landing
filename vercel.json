@@ -63,6 +63,18 @@
   ],
   "rewrites": [
     {
+      "source": "/checkout",
+      "destination": "https://crm.beakimhospitalitygroup.co.ke/checkout"
+    },
+    {
+      "source": "/booking-confirmation",
+      "destination": "https://crm.beakimhospitalitygroup.co.ke/booking-confirmation"
+    },
+    {
+      "source": "/api/public/checkout/:match*",
+      "destination": "https://crm.beakimhospitalitygroup.co.ke/api/public/checkout/:match*"
+    },
+    {
       "source": "/tower-cottages",
       "destination": "/tower-cottages.html"
     },
