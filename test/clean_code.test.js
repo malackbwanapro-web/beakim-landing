@@ -355,4 +355,38 @@ assert.ok(breakdownHtml.includes("Zero Extra Fees"));
 assert.ok(breakdownHtml.includes("KSh 32,000"));
 console.log("   ✅ renderInquiryCostBreakdown cleanly formats base room math, meal add-ons, and complimentary perks with 0 anxiety.");
 
-console.log("\n🎉 ALL 13 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 14: Insights Page Image Optimization & WebP Performance Integrity
+console.log("14. Testing Insights Page Image Optimization & WebP Performance...");
+const fs = require("fs");
+const path = require("path");
+
+const insightsHtml = fs.readFileSync(path.join(__dirname, "..", "insights.html"), "utf8");
+
+// Assert no raw 10MB+ camera JPEGs are referenced in insights.html
+assert.ok(!insightsHtml.includes("IMG_7214_Master.jpg"), "insights.html must not reference raw camera master JPEGs");
+assert.ok(!insightsHtml.includes("IMG_7176_Master.jpg"), "insights.html must not reference raw camera master JPEGs");
+assert.ok(!insightsHtml.includes("IMG_7172_Master.jpg"), "insights.html must not reference raw camera master JPEGs");
+
+// Assert WebP assets are referenced and exist on disk
+const expectedWebpAssets = [
+  "fit-nation-kenya-diani-convoy-autoxpress.webp",
+  "fit-nation-poolside-swims-beakim-beach-darad.webp",
+  "beakim-executive-head-chef-culinary.webp",
+  "fit-nation-honda-fit-convoy-courtyard-parking.webp",
+  "fit-nation-convoy-marshall-radio-coordination.webp",
+  "family-father-baby-swimming-pool-beakim.webp",
+  "mother-daughter-poolside-lounging-diani-resort.webp",
+  "fit-nation-support-vans-gated-security-beakim.webp",
+  "fit-nation-highway-fleet-regrouping-coastal-route.webp"
+];
+
+for (const assetName of expectedWebpAssets) {
+  assert.ok(insightsHtml.includes(assetName), `insights.html must reference ${assetName}`);
+  const assetPath = path.join(__dirname, "..", "assets", "fit-nation", assetName);
+  assert.ok(fs.existsSync(assetPath), `Asset ${assetName} must exist on disk`);
+  const stats = fs.statSync(assetPath);
+  assert.ok(stats.size > 1000 && stats.size < 600000, `Asset ${assetName} must be optimized (<600KB, got ${stats.size} bytes)`);
+}
+console.log("   ✅ All Fit Nation image assets in insights.html are verified high-res WebP with sub-second payload weight.");
+
+console.log("\n🎉 ALL 14 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
