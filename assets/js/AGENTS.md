@@ -6,7 +6,7 @@
   - `main.js`: Main client orchestrator, booking form serialization, date pickers, honeypot extraction, WhatsApp URL generation, review modal, pure `calculateReservationTotals` engine, and non-blocking CRM boundary adapter (`CrmSyncService`).
   - `catalog.js`: Single Source of Truth for verified property offerings, nightly/monthly rates, room amenities, and unit inventories.
 - **Boundaries & Invariants:**
-  - **Non-Blocking Background Delivery:** `CrmSyncService.sendInquiry` must execute asynchronously with an AbortController timeout (`APP_CONFIG.CRM.SYNC_TIMEOUT_MS: 3500`). Network delays or offline states must NEVER block the visitor from viewing the review modal or proceeding to WhatsApp.
+  - **Non-Blocking Background Delivery:** `CrmSyncService.sendInquiry` executes asynchronously with an AbortController timeout (`APP_CONFIG.CRM.SYNC_TIMEOUT_MS: 4500`). Network delays, cold starts, or offline states must NEVER block the visitor: client issues a Reservation Pre-Approval reference ID (`INQ-YYMMDD-XXXX`), backs up to `localStorage`, and displays the confirmation receipt with guaranteed 15–30 min SLA.
   - **No Magic Numbers:** Centralized configurations are strictly frozen under `APP_CONFIG` (`CONTACT`, `SOCIAL`, `RATES`, `CRM`, `UI`, `TIME`, `DEFAULTS`). Official social channels (Instagram, Facebook, X, TikTok, YouTube) are centrally configured in `APP_CONFIG.SOCIAL`.
   - **CommonJS Test Compatibility:** All pure functions and boundary services are exported conditionally at the bottom of `main.js` for zero-dependency Node.js unit tests.
 
