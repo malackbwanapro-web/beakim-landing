@@ -826,13 +826,105 @@ function syncBreakfastAddonCard(propertyValue) {
 }
 
 /**
- * Selects an interactive residence card in the 2-column booking form (<10 lines SRP orchestrator).
+ * Toggles visibility of the Beakim Darad room category sub-selector container.
+ */
+function toggleDaradRoomSelector(isDaradSelected) {
+  if (typeof document === "undefined") return;
+  const container = document.getElementById("darad-room-selector-container");
+  if (!container) return;
+  container.classList.toggle("hidden", !isDaradSelected);
+  container.classList.toggle("block", isDaradSelected);
+}
+
+/**
+ * Updates visual selection styling on Beakim Darad room category cards.
+ */
+function syncDaradRoomTiersStyling(selectedRoomCardElement) {
+  if (typeof document === "undefined") return;
+  const allDaradCards = document.querySelectorAll(".darad-room-card");
+  allDaradCards.forEach(card => {
+    const isSelected = card === selectedRoomCardElement;
+    card.classList.toggle("border-2", isSelected);
+    card.classList.toggle("border-champagne", isSelected);
+    card.classList.toggle("bg-champagne/10", isSelected);
+    card.classList.toggle("border", !isSelected);
+    card.classList.toggle("border-deep-forest/15", !isSelected);
+    card.classList.toggle("bg-white", !isSelected);
+    card.setAttribute("aria-checked", isSelected ? "true" : "false");
+
+    const radio = card.querySelector(".darad-room-radio");
+    if (radio) {
+      radio.classList.toggle("border-champagne", isSelected);
+      radio.classList.toggle("bg-champagne", isSelected);
+      radio.classList.toggle("border-deep-forest/30", !isSelected);
+      radio.classList.toggle("bg-transparent", !isSelected);
+
+      const dot = radio.querySelector("div");
+      if (dot) {
+        dot.classList.toggle("opacity-0", !isSelected);
+      }
+    }
+  });
+}
+
+/**
+ * Selects a specific room category for Beakim Darad.
+ */
+function selectDaradRoomTier(roomValue, roomCardElement) {
+  if (typeof document === "undefined") return;
+  syncDaradRoomTiersStyling(roomCardElement);
+  syncPropertyDropdown(roomValue);
+
+  // Update dynamic subtitle / badge on the Beakim Darad property card if present
+  const daradRateLabel = document.getElementById("darad-property-rate-label");
+  if (daradRateLabel && roomCardElement) {
+    const priceText = roomCardElement.querySelector(".text-champagne")?.textContent || "";
+    const nameText = roomCardElement.querySelector(".font-display")?.textContent || "";
+    daradRateLabel.textContent = `Selected: ${nameText} (${priceText.trim()})`;
+  }
+
+  // Ensure Beakim Darad property card has active card styling if called directly
+  const daradPropertyCard = document.querySelector('.residence-card[data-is-darad="true"]') ||
+                            document.querySelector('.residence-card[data-value*="Darad"]');
+  if (daradPropertyCard) {
+    syncResidenceCardsStyling(daradPropertyCard);
+  }
+
+  syncBreakfastAddonCard(roomValue);
+  handleDateOrAddonChange();
+}
+
+/**
+ * Handles keyboard navigation (Enter / Space) for accessible Darad room cards.
+ */
+function handleDaradRoomKeydown(event, roomValue, roomCardElement) {
+  if (!event) return;
+  if (event.key === "Enter" || event.key === " " || event.key === "Spacebar") {
+    event.preventDefault();
+    selectDaradRoomTier(roomValue, roomCardElement);
+  }
+}
+
+/**
+ * Selects an interactive residence card in the 2-column booking form (<15 lines SRP orchestrator).
  */
 function selectResidenceCard(propertyValue, cardElement) {
   if (typeof document === "undefined") return;
-  syncPropertyDropdown(propertyValue);
+  const isDarad = String(propertyValue || "").toLowerCase().includes("darad");
+  toggleDaradRoomSelector(isDarad);
+
+  let targetValue = propertyValue;
+  if (isDarad) {
+    // If a Darad room was already selected in the sub-selector, sync with that room's value!
+    const activeDaradCard = document.querySelector('.darad-room-card[aria-checked="true"]');
+    if (activeDaradCard && activeDaradCard.getAttribute("data-value")) {
+      targetValue = activeDaradCard.getAttribute("data-value");
+    }
+  }
+
+  syncPropertyDropdown(targetValue);
   syncResidenceCardsStyling(cardElement);
-  syncBreakfastAddonCard(propertyValue);
+  syncBreakfastAddonCard(targetValue);
   handleDateOrAddonChange();
 }
 
@@ -2010,6 +2102,10 @@ if (typeof module !== "undefined" && module.exports) {
     syncPropertyDropdown,
     syncResidenceCardsStyling,
     syncBreakfastAddonCard,
+    selectDaradRoomTier,
+    handleDaradRoomKeydown,
+    toggleDaradRoomSelector,
+    syncDaradRoomTiersStyling,
     getCrmPublicEndpoint,
     resolvePropertyIdFromSelection,
     syncInquiryToCrm,

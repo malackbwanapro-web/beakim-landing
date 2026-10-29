@@ -19,6 +19,9 @@ const {
   buildInquiryMessage,
   validateBookingFormData,
   handleResidenceCardKeydown,
+  selectDaradRoomTier,
+  handleDaradRoomKeydown,
+  toggleDaradRoomSelector,
   renderInquiryCostBreakdown,
   renderInquirySuccessReceipt
 } = require("../assets/js/main.js");
@@ -302,6 +305,8 @@ for (const propertyKey in BEAKIM_CATALOG) {
   assert.ok(prop.coordinates.latitude < 0, `Property ${propertyKey} latitude should be South of equator in Kenya`);
   assert.ok(prop.coordinates.longitude > 30, `Property ${propertyKey} longitude should be in East Africa`);
 }
+assert.strictEqual(BEAKIM_CATALOG["beakim-darad"].phone, "+254 750 864 119", "Beakim Darad must have reception desk phone +254 750 864 119");
+assert.strictEqual(BEAKIM_CATALOG["diani-darling"].phone, "+254 119 237 439", "Diani Darling must have reception desk phone +254 119 237 439");
 console.log("   ✅ All properties in BEAKIM_CATALOG have verified phone numbers and GPS coordinates.");
 
 // TEST 12: PageScrollLock Reference Counting & Boundary Safety
@@ -437,4 +442,29 @@ global.document.getElementById = (id) => {
 assert.strictEqual(typeof renderInquirySuccessReceipt, "function");
 console.log("   ✅ Reservation Pre-Approval engine and CommunicationService aliases assert with 100% resilience.");
 
-console.log("\n🎉 ALL 15 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 16: Homepage Beakim Darad Room Category Sub-Selector & Direct Reception Lines
+console.log("16. Testing Homepage Beakim Darad Room Category Sub-Selector & Direct Reception Lines...");
+assert.strictEqual(typeof selectDaradRoomTier, "function", "selectDaradRoomTier must be exported");
+assert.strictEqual(typeof handleDaradRoomKeydown, "function", "handleDaradRoomKeydown must be exported");
+assert.strictEqual(typeof toggleDaradRoomSelector, "function", "toggleDaradRoomSelector must be exported");
+
+const indexHtml = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+const daradHtml = fs.readFileSync(path.join(__dirname, "..", "beakim-darad.html"), "utf8");
+const darlingHtml = fs.readFileSync(path.join(__dirname, "..", "diani-darling.html"), "utf8");
+
+// Assert index.html contains the dynamic sub-selector and all 5 Darad room tier cards
+assert.ok(indexHtml.includes('id="darad-room-selector-container"'), "index.html must contain #darad-room-selector-container");
+assert.ok(indexHtml.includes('Beakim Darad - Standard Room (Without AC)'), "index.html must include Standard Room (Without AC)");
+assert.ok(indexHtml.includes('Beakim Darad - Standard Room (With AC)'), "index.html must include Standard Room (With AC)");
+assert.ok(indexHtml.includes('Beakim Darad - Superior Room (With AC)'), "index.html must include Superior Room (With AC)");
+assert.ok(indexHtml.includes('Beakim Darad - Ensuite Studio with Kitchenette'), "index.html must include Ensuite Studio with Kitchenette");
+assert.ok(indexHtml.includes('Beakim Darad - Garden View Cottage (1-Bedroom)'), "index.html must include Garden View Cottage");
+
+// Assert direct reception office phone numbers
+assert.ok(daradHtml.includes("0750 864 119") || daradHtml.includes("+254 750 864 119"), "beakim-darad.html must display reception phone 0750 864 119");
+assert.ok(daradHtml.includes("tel:+254750864119"), "beakim-darad.html must have tel link +254750864119");
+assert.ok(darlingHtml.includes("0119 237 439") || darlingHtml.includes("+254 119 237 439"), "diani-darling.html must display reception phone 0119 237 439");
+assert.ok(darlingHtml.includes("tel:+254119237439"), "diani-darling.html must have tel link +254119237439");
+console.log("   ✅ Homepage Beakim Darad 5-tier room category selector and direct reception lines asserted successfully.");
+
+console.log("\n🎉 ALL 16 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");

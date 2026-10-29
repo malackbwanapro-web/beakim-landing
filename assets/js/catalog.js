@@ -10,7 +10,7 @@ const BEAKIM_CATALOG = {
     name: "Beakim Darad",
     locality: "Diani Beach",
     address: "Off Diani Links Road, Diani Beach, Kenya",
-    phone: "+254 746 938 529",
+    phone: "+254 750 864 119",
     coordinates: { latitude: -4.284794, longitude: 39.577151 },
     stayType: "nightly",
     pools: 2,

@@ -940,6 +940,7 @@
               <div onclick="selectResidenceCard('Beakim Darad - Standard Room (Without AC)', this)"
                    onkeydown="handleResidenceCardKeydown(event, 'Beakim Darad - Standard Room (Without AC)', this)"
                    data-value="Beakim Darad - Standard Room (Without AC)"
+                   data-is-darad="true"
                    role="radio" aria-checked="true" tabindex="0"
                    class="residence-card p-4 rounded-xl border-2 border-champagne bg-champagne/10 hover:border-champagne cursor-pointer transition flex items-start justify-between shadow-sm group">
                 <div class="space-y-1">
@@ -947,8 +948,8 @@
                     <span class="text-sm font-bold font-display text-deep-forest">Beakim Darad</span>
                     <span class="text-[10px] uppercase font-semibold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded">45 Units</span>
                   </div>
-                  <p class="text-xs text-driftwood">2 Pools • AC &amp; Fan Options • Beach Rd</p>
-                  <p class="text-xs font-bold text-champagne pt-1">From KSh 1,700 / night</p>
+                  <p class="text-xs text-driftwood">2 Pools • 5 Room Options • Beach Rd</p>
+                  <p id="darad-property-rate-label" class="text-xs font-bold text-champagne pt-1">Selected: Standard Room (No AC) (KSh 1,700 / night)</p>
                 </div>
                 <div class="w-5 h-5 rounded-full border-2 border-champagne bg-champagne residence-radio flex items-center justify-center shrink-0 mt-0.5">
                   <div class="w-2 h-2 rounded-full bg-white"></div>
@@ -1009,6 +1010,121 @@
                 </div>
               </div>
 
+            </div>
+
+            <!-- Dynamic Beakim Darad Room Category Sub-Selector (Visible when Darad is active) -->
+            <div id="darad-room-selector-container" class="space-y-3 pt-3 border-t border-deep-forest/10 transition-all duration-300">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-champagne animate-pulse"></span>
+                  <h5 class="text-xs font-bold uppercase tracking-wider text-deep-forest">Choose Beakim Darad Room Category:</h5>
+                </div>
+                <span class="text-[11px] font-semibold text-driftwood">5 Options Available</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5" role="radiogroup" aria-label="Select Beakim Darad Room Category">
+                
+                <!-- Option 1: Standard Room (No AC) - Default -->
+                <div onclick="selectDaradRoomTier('Beakim Darad - Standard Room (Without AC)', this)"
+                     onkeydown="handleDaradRoomKeydown(event, 'Beakim Darad - Standard Room (Without AC)', this)"
+                     data-value="Beakim Darad - Standard Room (Without AC)"
+                     data-darad-tier="true"
+                     role="radio" aria-checked="true" tabindex="0"
+                     class="darad-room-card p-3 rounded-lg border-2 border-champagne bg-champagne/10 hover:border-champagne cursor-pointer transition flex items-start justify-between shadow-xs group">
+                  <div class="space-y-0.5">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span class="text-xs font-bold font-display text-deep-forest">Standard Room (No AC)</span>
+                      <span class="text-[9px] uppercase font-semibold px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded">14 Units</span>
+                    </div>
+                    <p class="text-[11px] text-driftwood">Ceiling Fan • Shared Kitchen</p>
+                    <p class="text-xs font-bold text-champagne pt-0.5">KSh 1,700 / night</p>
+                  </div>
+                  <div class="w-4 h-4 rounded-full border-2 border-champagne bg-champagne darad-room-radio flex items-center justify-center shrink-0 mt-0.5">
+                    <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+                  </div>
+                </div>
+
+                <!-- Option 2: Standard Room (With AC) -->
+                <div onclick="selectDaradRoomTier('Beakim Darad - Standard Room (With AC)', this)"
+                     onkeydown="handleDaradRoomKeydown(event, 'Beakim Darad - Standard Room (With AC)', this)"
+                     data-value="Beakim Darad - Standard Room (With AC)"
+                     data-darad-tier="true"
+                     role="radio" aria-checked="false" tabindex="0"
+                     class="darad-room-card p-3 rounded-lg border border-deep-forest/15 bg-white hover:border-champagne/60 cursor-pointer transition flex items-start justify-between shadow-xs group">
+                  <div class="space-y-0.5">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span class="text-xs font-bold font-display text-deep-forest">Standard Room (With AC)</span>
+                      <span class="text-[9px] uppercase font-semibold px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded">7 Units</span>
+                    </div>
+                    <p class="text-[11px] text-driftwood">Split AC • Shared Kitchen</p>
+                    <p class="text-xs font-bold text-champagne pt-0.5">KSh 2,300 / night</p>
+                  </div>
+                  <div class="w-4 h-4 rounded-full border-2 border-deep-forest/30 bg-transparent darad-room-radio flex items-center justify-center shrink-0 mt-0.5">
+                    <div class="w-1.5 h-1.5 rounded-full bg-white opacity-0"></div>
+                  </div>
+                </div>
+
+                <!-- Option 3: Superior Room (With AC) -->
+                <div onclick="selectDaradRoomTier('Beakim Darad - Superior Room (With AC)', this)"
+                     onkeydown="handleDaradRoomKeydown(event, 'Beakim Darad - Superior Room (With AC)', this)"
+                     data-value="Beakim Darad - Superior Room (With AC)"
+                     data-darad-tier="true"
+                     role="radio" aria-checked="false" tabindex="0"
+                     class="darad-room-card p-3 rounded-lg border border-deep-forest/15 bg-white hover:border-champagne/60 cursor-pointer transition flex items-start justify-between shadow-xs group">
+                  <div class="space-y-0.5">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span class="text-xs font-bold font-display text-deep-forest">Superior Room (With AC)</span>
+                      <span class="text-[9px] uppercase font-semibold px-1.5 py-0.5 bg-amber-100 text-amber-800 rounded">12 Units</span>
+                    </div>
+                    <p class="text-[11px] text-driftwood">Split AC • Ensuite Washroom</p>
+                    <p class="text-xs font-bold text-champagne pt-0.5">KSh 3,000 / night</p>
+                  </div>
+                  <div class="w-4 h-4 rounded-full border-2 border-deep-forest/30 bg-transparent darad-room-radio flex items-center justify-center shrink-0 mt-0.5">
+                    <div class="w-1.5 h-1.5 rounded-full bg-white opacity-0"></div>
+                  </div>
+                </div>
+
+                <!-- Option 4: Ensuite Studio with Kitchenette -->
+                <div onclick="selectDaradRoomTier('Beakim Darad - Ensuite Studio with Kitchenette', this)"
+                     onkeydown="handleDaradRoomKeydown(event, 'Beakim Darad - Ensuite Studio with Kitchenette', this)"
+                     data-value="Beakim Darad - Ensuite Studio with Kitchenette"
+                     data-darad-tier="true"
+                     role="radio" aria-checked="false" tabindex="0"
+                     class="darad-room-card p-3 rounded-lg border border-deep-forest/15 bg-white hover:border-champagne/60 cursor-pointer transition flex items-start justify-between shadow-xs group">
+                  <div class="space-y-0.5">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span class="text-xs font-bold font-display text-deep-forest">Ensuite Studio (Kitchenette)</span>
+                      <span class="text-[9px] uppercase font-semibold px-1.5 py-0.5 bg-purple-100 text-purple-800 rounded">9 Units</span>
+                    </div>
+                    <p class="text-[11px] text-driftwood">Private Kitchenette • Split AC</p>
+                    <p class="text-xs font-bold text-champagne pt-0.5">KSh 3,000 / night</p>
+                  </div>
+                  <div class="w-4 h-4 rounded-full border-2 border-deep-forest/30 bg-transparent darad-room-radio flex items-center justify-center shrink-0 mt-0.5">
+                    <div class="w-1.5 h-1.5 rounded-full bg-white opacity-0"></div>
+                  </div>
+                </div>
+
+                <!-- Option 5: Garden View Cottage (1-Bedroom With AC) -->
+                <div onclick="selectDaradRoomTier('Beakim Darad - Garden View Cottage (1-Bedroom)', this)"
+                     onkeydown="handleDaradRoomKeydown(event, 'Beakim Darad - Garden View Cottage (1-Bedroom)', this)"
+                     data-value="Beakim Darad - Garden View Cottage (1-Bedroom)"
+                     data-darad-tier="true"
+                     role="radio" aria-checked="false" tabindex="0"
+                     class="darad-room-card p-3 rounded-lg border border-deep-forest/15 bg-white hover:border-champagne/60 cursor-pointer transition flex items-start justify-between shadow-xs group sm:col-span-2 lg:col-span-1">
+                  <div class="space-y-0.5">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span class="text-xs font-bold font-display text-deep-forest">Garden View Cottage (AC)</span>
+                      <span class="text-[9px] uppercase font-semibold px-1.5 py-0.5 bg-rose-100 text-rose-800 rounded">3 Units</span>
+                    </div>
+                    <p class="text-[11px] text-driftwood">Standalone 1-BR • Private Lounge</p>
+                    <p class="text-xs font-bold text-champagne pt-0.5">KSh 4,000 / night</p>
+                  </div>
+                  <div class="w-4 h-4 rounded-full border-2 border-deep-forest/30 bg-transparent darad-room-radio flex items-center justify-center shrink-0 mt-0.5">
+                    <div class="w-1.5 h-1.5 rounded-full bg-white opacity-0"></div>
+                  </div>
+                </div>
+
+              </div>
             </div>
 
             <!-- Stay Dates & Guests Grid -->
