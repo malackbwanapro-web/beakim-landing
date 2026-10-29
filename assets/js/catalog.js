@@ -143,6 +143,49 @@ const BEAKIM_CATALOG = {
         amenities: ["Private Balcony", "Kitchenette", "Swimming Pool", "Air Conditioning", "High-Speed Wi-Fi", "Beach Road Access"],
         description: "Premium deluxe holiday studio featuring a private balcony, equipped kitchenette, swimming pool access, and prime Diani Beach Road location."
       }
+    ],
+    conferencePackages: [
+      {
+        id: "darling-conf-half-day",
+        name: "Half Day Standard Conference Package",
+        rate: 1500,
+        rateBasis: "per person",
+        includesLunch: false,
+        maxOccupants: 60,
+        timing: "Morning (8:00 AM – 12:00 PM) or Afternoon (1:00 PM – 5:00 PM)",
+        inclusions: [
+          "Tea break with fresh hot Kenyan tea/coffee & coastal light snacks",
+          "Executive conference notebook & pen for every delegate",
+          "Chilled bottled mineral water",
+          "Full dual-split air conditioning",
+          "High-output digital projector & projection screen",
+          "Professional PA sound system & wireless microphones",
+          "Dedicated high-speed fiber Wi-Fi",
+          "Free secure solar-canopy parking"
+        ],
+        description: "Half-day executive meeting session with tea break, light snacks, full audiovisual setup, and up to 60 delegate capacity (no lunch)."
+      },
+      {
+        id: "darling-conf-full-day",
+        name: "Full Day Conference Package with Lunch",
+        rate: 3000,
+        rateBasis: "per person",
+        includesLunch: true,
+        maxOccupants: 60,
+        timing: "Full Day Session (8:00 AM – 5:00 PM)",
+        inclusions: [
+          "Chef-prepared coastal buffet lunch served in private group dining hall",
+          "Two tea breaks (morning & afternoon) with hot beverages & fresh snacks",
+          "Executive conference notebook & pen for every delegate",
+          "Chilled bottled mineral water throughout the day",
+          "Full dual-split air conditioning",
+          "High-output digital projector & projection screen",
+          "Professional PA sound system & wireless microphones",
+          "Dedicated high-speed fiber Wi-Fi",
+          "Free secure solar-canopy parking"
+        ],
+        description: "Comprehensive full-day corporate package including chef-prepared lunch, two tea breaks, light snacks, full AV, and stationery for up to 60 delegates."
+      }
     ]
   },
 

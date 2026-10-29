@@ -2059,6 +2059,179 @@ function initializeDemoModeBanner() {
   document.body.appendChild(banner);
 }
 
+/**
+ * Switches between Cottage Stay mode and Conference Booking mode on Diani Darling.
+ */
+function switchBookingMode(mode) {
+  if (typeof document === "undefined") return;
+  const isConference = mode === "conference";
+  
+  const cottageForm = document.getElementById("booking-form");
+  const conferenceContainer = document.getElementById("conference-form-container");
+  const tabBtnCottage = document.getElementById("tab-btn-cottage");
+  const tabBtnConference = document.getElementById("tab-btn-conference");
+
+  if (cottageForm) cottageForm.classList.toggle("hidden", isConference);
+  if (conferenceContainer) conferenceContainer.classList.toggle("hidden", !isConference);
+
+  if (tabBtnCottage) {
+    tabBtnCottage.classList.toggle("bg-deep-forest", !isConference);
+    tabBtnCottage.classList.toggle("text-champagne", !isConference);
+    tabBtnCottage.classList.toggle("shadow-md", !isConference);
+    tabBtnCottage.classList.toggle("text-deep-forest/70", isConference);
+  }
+
+  if (tabBtnConference) {
+    tabBtnConference.classList.toggle("bg-deep-forest", isConference);
+    tabBtnConference.classList.toggle("text-champagne", isConference);
+    tabBtnConference.classList.toggle("shadow-md", isConference);
+    tabBtnConference.classList.toggle("text-deep-forest/70", !isConference);
+  }
+
+  if (isConference) {
+    updateConferenceCalculation();
+  }
+}
+
+/**
+ * Selects a conference package card and switches view to conference booking.
+ */
+function selectConferencePackage(pkgId) {
+  if (typeof document === "undefined") return;
+  switchBookingMode("conference");
+  
+  const halfDayCard = document.getElementById("conf-pkg-card-half-day");
+  const fullDayCard = document.getElementById("conf-pkg-card-full-day");
+  const sessionSelect = document.getElementById("conf-session");
+
+  const isFullDay = pkgId === "full-day";
+
+  if (halfDayCard && fullDayCard) {
+    halfDayCard.classList.toggle("border-2", !isFullDay);
+    halfDayCard.classList.toggle("border-champagne", !isFullDay);
+    halfDayCard.classList.toggle("bg-champagne/10", !isFullDay);
+    halfDayCard.classList.toggle("border-deep-forest/15", isFullDay);
+    halfDayCard.classList.toggle("bg-white", isFullDay);
+    halfDayCard.setAttribute("aria-checked", !isFullDay ? "true" : "false");
+
+    fullDayCard.classList.toggle("border-2", isFullDay);
+    fullDayCard.classList.toggle("border-champagne", isFullDay);
+    fullDayCard.classList.toggle("bg-champagne/10", isFullDay);
+    fullDayCard.classList.toggle("border-deep-forest/15", !isFullDay);
+    fullDayCard.classList.toggle("bg-white", !isFullDay);
+    fullDayCard.setAttribute("aria-checked", isFullDay ? "true" : "false");
+
+    const halfRadio = halfDayCard.querySelector(".conf-radio");
+    const fullRadio = fullDayCard.querySelector(".conf-radio");
+    if (halfRadio) {
+      halfRadio.classList.toggle("border-champagne", !isFullDay);
+      halfRadio.classList.toggle("bg-champagne", !isFullDay);
+      halfRadio.classList.toggle("border-deep-forest/30", isFullDay);
+      halfRadio.classList.toggle("bg-transparent", isFullDay);
+      halfRadio.querySelector("div")?.classList.toggle("opacity-0", isFullDay);
+    }
+    if (fullRadio) {
+      fullRadio.classList.toggle("border-champagne", isFullDay);
+      fullRadio.classList.toggle("bg-champagne", isFullDay);
+      fullRadio.classList.toggle("border-deep-forest/30", !isFullDay);
+      fullRadio.classList.toggle("bg-transparent", !isFullDay);
+      fullRadio.querySelector("div")?.classList.toggle("opacity-0", !isFullDay);
+    }
+  }
+
+  if (sessionSelect) {
+    sessionSelect.value = isFullDay 
+      ? "Full Day (8:00 AM – 5:00 PM)" 
+      : "Half Day Morning (8:00 AM – 12:00 PM)";
+  }
+
+  const bookingAnchor = document.getElementById("booking");
+  if (bookingAnchor) {
+    bookingAnchor.scrollIntoView({ behavior: "smooth" });
+  }
+
+  updateConferenceCalculation();
+}
+
+/**
+ * Calculates dynamic conference package cost based on selected package and delegates count.
+ */
+function updateConferenceCalculation() {
+  if (typeof document === "undefined") return;
+  const fullDayCard = document.getElementById("conf-pkg-card-full-day");
+  const isFullDay = fullDayCard && fullDayCard.getAttribute("aria-checked") === "true";
+  
+  const delegatesInput = document.getElementById("conf-delegates");
+  let delegates = parseInt(delegatesInput?.value || "20", 10);
+  if (isNaN(delegates) || delegates < 1) delegates = 1;
+  if (delegates > 60) delegates = 60;
+
+  const ratePerPerson = isFullDay ? 3000 : 1500;
+  const packageName = isFullDay 
+    ? "Full Day Conference Package with Lunch" 
+    : "Half Day Standard Conference Package (No Lunch)";
+  const totalCost = delegates * ratePerPerson;
+
+  const pkgNameEl = document.getElementById("conf-summary-pkg");
+  const rateEl = document.getElementById("conf-summary-rate");
+  const delegatesEl = document.getElementById("conf-summary-delegates");
+  const totalEl = document.getElementById("conf-summary-total");
+
+  if (pkgNameEl) pkgNameEl.textContent = packageName;
+  if (rateEl) rateEl.textContent = `KSh ${ratePerPerson.toLocaleString()} / person`;
+  if (delegatesEl) delegatesEl.textContent = `${delegates} Delegates`;
+  if (totalEl) totalEl.textContent = `KSh ${totalCost.toLocaleString()}`;
+}
+
+/**
+ * Generates formatted WhatsApp conference RFP link and opens chat with Diani Darling reception.
+ */
+function handleConferenceWhatsAppRFP(e) {
+  if (e) e.preventDefault();
+  if (typeof document === "undefined") return;
+
+  const fullDayCard = document.getElementById("conf-pkg-card-full-day");
+  const isFullDay = fullDayCard && fullDayCard.getAttribute("aria-checked") === "true";
+  const packageName = isFullDay 
+    ? "Full Day Conference Package with Lunch (KSh 3,000/person)" 
+    : "Half Day Standard Conference Package (KSh 1,500/person)";
+
+  const dateInput = document.getElementById("conf-date");
+  const sessionSelect = document.getElementById("conf-session");
+  const delegatesInput = document.getElementById("conf-delegates");
+  const orgInput = document.getElementById("conf-org-name");
+  const coordinatorInput = document.getElementById("conf-coord-name");
+  const notesInput = document.getElementById("conf-notes");
+  const bundleCottages = document.getElementById("conf-bundle-cottages")?.checked;
+
+  const eventDate = dateInput?.value || "To Be Confirmed";
+  const session = sessionSelect?.value || "Full Day (8:00 AM – 5:00 PM)";
+  const delegates = delegatesInput?.value || "20";
+  const orgName = orgInput?.value?.trim() || "Private Group";
+  const coordinator = coordinatorInput?.value?.trim() || "Coordinator";
+  const notes = notesInput?.value?.trim() || "None";
+  const estimatedCost = (parseInt(delegates, 10) * (isFullDay ? 3000 : 1500)).toLocaleString();
+
+  const msg = [
+    `*NEW CONFERENCE RESERVATION INQUIRY*`,
+    `🏢 *Venue:* Beakim Diani Darling (Conference Hall - 60 Pax)`,
+    `📋 *Package:* ${packageName}`,
+    `📅 *Event Date:* ${eventDate}`,
+    `⏰ *Session:* ${session}`,
+    `👥 *Delegates:* ${delegates} People (Max 60)`,
+    `🏛️ *Organization:* ${orgName}`,
+    `👤 *Coordinator:* ${coordinator}`,
+    `💰 *Estimated Total:* KSh ${estimatedCost}`,
+    bundleCottages ? `🛌 *Accommodation:* Also requesting overnight cottages` : ``,
+    notes !== "None" ? `📝 *Special Requests:* ${notes}` : ``,
+    `\n_Sent via Beakim Hospitality Group Direct Portal_`
+  ].filter(Boolean).join("\n");
+
+  const phone = "254119237439";
+  const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+  window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+}
+
 if (typeof window !== "undefined") {
   window.addEventListener("DOMContentLoaded", () => {
     initializeDemoModeBanner();
@@ -2106,6 +2279,10 @@ if (typeof module !== "undefined" && module.exports) {
     handleDaradRoomKeydown,
     toggleDaradRoomSelector,
     syncDaradRoomTiersStyling,
+    switchBookingMode,
+    selectConferencePackage,
+    updateConferenceCalculation,
+    handleConferenceWhatsAppRFP,
     getCrmPublicEndpoint,
     resolvePropertyIdFromSelection,
     syncInquiryToCrm,
