@@ -89,11 +89,11 @@ console.log("   ✅ Kenyan local numbers safely strip leading zeros and whitespa
 
 // TEST 5: Stay Pricing Calculation
 console.log("5. Testing Stay Pricing Calculation...");
-// Beakim Darad Standard with AC: 2500/night
+// Beakim Darad Standard with AC: 2300/night
 const daradPricing = resolveStayPricing("darad-standard-ac", "2026-11-01", "2026-11-04");
-assert.strictEqual(daradPricing.rate, 2500);
+assert.strictEqual(daradPricing.rate, 2300);
 assert.strictEqual(daradPricing.durationDays, 3);
-assert.strictEqual(daradPricing.totalCost, 7500);
+assert.strictEqual(daradPricing.totalCost, 6900);
 assert.strictEqual(daradPricing.durationText, "3 Nights");
 
 // Tower Cottages: 2500/night
@@ -109,11 +109,11 @@ assert.strictEqual(darlingPricing.rate, 5000);
 assert.strictEqual(darlingPricing.durationDays, 2);
 assert.strictEqual(darlingPricing.totalCost, 10000);
 
-// Beakim Apartments: 1-Bedroom Monthly Lease 15000/mo
+// Beakim Apartments: 1-Bedroom Monthly Lease 75,000/mo (renovation negotiable 75k-100k)
 const monthlyApartment = resolveStayPricing("apartments-1br-monthly", "2026-11-01", "2026-12-01");
 assert.strictEqual(monthlyApartment.isMonthly, true);
-assert.strictEqual(monthlyApartment.rate, 15000);
-assert.strictEqual(monthlyApartment.totalCost, 15000); // 30 days ~ 1 month
+assert.strictEqual(monthlyApartment.rate, 75000);
+assert.strictEqual(monthlyApartment.totalCost, 75000); // 30 days ~ 1 month
 console.log("   ✅ Nightly and Monthly stay calculations pass across all property catalog items.");
 
 // TEST 6: Inquiry Message Text Generation
@@ -193,6 +193,25 @@ assert.strictEqual(withBreakfast.breakfastCost, 6000);
 assert.strictEqual(withBreakfast.grandTotal, 21000);
 assert.strictEqual(withBreakfast.formattedGrandTotal, "KSh 21,000");
 
+// Verify Darad dynamic breakfast rate (500 KES/person/day)
+const daradPricingSummary = {
+  rate: 2300,
+  totalCost: 6900,
+  durationDays: 3,
+  durationText: "3 Nights",
+  formattedTotal: "KSh 6,900",
+  isValidRange: true,
+  unitDisplayName: "Beakim Darad - Standard Room With AC"
+};
+const daradWithBreakfast = calculateReservationTotals({
+  pricingSummary: daradPricingSummary,
+  adultsCount: 2,
+  hasBreakfast: true
+});
+assert.strictEqual(daradWithBreakfast.breakfastRate, 500);
+assert.strictEqual(daradWithBreakfast.breakfastCost, 3000); // 500 * 2 adults * 3 nights
+assert.strictEqual(daradWithBreakfast.grandTotal, 9900);
+
 const withoutBreakfast = calculateReservationTotals({
   pricingSummary: standardPricing,
   adultsCount: 2,
@@ -208,7 +227,7 @@ const zeroNightEdgeCase = calculateReservationTotals({
 });
 assert.strictEqual(zeroNightEdgeCase.breakfastCost, 0);
 assert.strictEqual(zeroNightEdgeCase.isValid, false);
-console.log("   ✅ Pure reservation totals and breakfast calculations handle standard and edge cases robustly.");
+console.log("   ✅ Pure reservation totals and dynamic breakfast calculations handle standard and edge cases robustly.");
 
 // TEST 10: CrmSyncService Boundary Adapter & Property ID Resolution
 console.log("10. Testing CrmSyncService Boundary Adapter & Property ID Resolution...");
@@ -311,13 +330,13 @@ console.log("   ✅ PageScrollLock correctly tracks nested modal overlays and re
 // TEST 13: Transparent Stay Cost Breakdown & Line-Item Integrity
 console.log("13. Testing Transparent Stay Cost Breakdown & Line-Item Integrity...");
 const mockPricing = {
-  rate: 2000,
-  rateBasisText: "KSh 2,000 / night",
-  unitDisplayName: "Beakim Darad - Standard Studio Room (Without AC)",
+  rate: 1700,
+  rateBasisText: "KSh 1,700 / night",
+  unitDisplayName: "Beakim Darad - Standard Room (Without AC)",
   durationDays: 8,
   durationText: "8 Nights",
-  totalCost: 16000,
-  formattedTotal: "KSh 16,000",
+  totalCost: 13600,
+  formattedTotal: "KSh 13,600",
   isValidRange: true
 };
 
@@ -327,12 +346,12 @@ const mockTotals = calculateReservationTotals({
   hasBreakfast: true
 });
 
-assert.strictEqual(mockTotals.baseCost, 16000);
-assert.strictEqual(mockTotals.formattedBaseCost, "KSh 16,000");
-assert.strictEqual(mockTotals.breakfastCost, 16000);
-assert.strictEqual(mockTotals.formattedBreakfastCost, "+KSh 16,000");
-assert.strictEqual(mockTotals.grandTotal, 32000);
-assert.strictEqual(mockTotals.formattedGrandTotal, "KSh 32,000");
+assert.strictEqual(mockTotals.baseCost, 13600);
+assert.strictEqual(mockTotals.formattedBaseCost, "KSh 13,600");
+assert.strictEqual(mockTotals.breakfastCost, 8000);
+assert.strictEqual(mockTotals.formattedBreakfastCost, "+KSh 8,000");
+assert.strictEqual(mockTotals.grandTotal, 21600);
+assert.strictEqual(mockTotals.formattedGrandTotal, "KSh 21,600");
 
 const breakdownHtml = renderInquiryCostBreakdown({
   property: mockPricing.unitDisplayName,
@@ -340,20 +359,20 @@ const breakdownHtml = renderInquiryCostBreakdown({
   totals: mockTotals,
   estimatedTotal: mockTotals.formattedGrandTotal,
   selectedAddons: [
-    "Chef-Prepared Coastal Breakfast: 2 Guest(s) × 8 Night(s) (+KSh 16,000)",
+    "Chef-Prepared Coastal Breakfast: 2 Guest(s) × 8 Night(s) (+KSh 8,000)",
     "Early SGR / Flight Bag Drop (Complimentary)"
   ]
 });
 
 assert.ok(breakdownHtml.includes("Itemized Stay Breakdown"));
-assert.ok(breakdownHtml.includes("Standard Studio Room (Without AC)"));
-assert.ok(breakdownHtml.includes("8 Nights × KSh 2,000 / night"));
-assert.ok(breakdownHtml.includes("KSh 16,000"));
+assert.ok(breakdownHtml.includes("Standard Room (Without AC)"));
+assert.ok(breakdownHtml.includes("8 Nights × KSh 1,700 / night"));
+assert.ok(breakdownHtml.includes("KSh 13,600"));
 assert.ok(breakdownHtml.includes("Chef-Prepared Coastal Breakfast"));
-assert.ok(breakdownHtml.includes("+KSh 16,000"));
+assert.ok(breakdownHtml.includes("+KSh 8,000"));
 assert.ok(breakdownHtml.includes("FREE (KSh 0)"));
 assert.ok(breakdownHtml.includes("Zero Extra Fees"));
-assert.ok(breakdownHtml.includes("KSh 32,000"));
+assert.ok(breakdownHtml.includes("KSh 21,600"));
 console.log("   ✅ renderInquiryCostBreakdown cleanly formats base room math, meal add-ons, and complimentary perks with 0 anxiety.");
 
 // TEST 14: Insights Page Image Optimization & WebP Performance Integrity

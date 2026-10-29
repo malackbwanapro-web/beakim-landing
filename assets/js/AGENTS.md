@@ -4,8 +4,9 @@
 - **Scope:** Public client-side JavaScript for interactive UI widgets, dynamic stay pricing computation, gallery lightboxes, WhatsApp inquiry formatting, and background sync to Beakim CRM.
 - **Key Modules Owned:**
   - `main.js`: Main client orchestrator, booking form serialization, date pickers, honeypot extraction, WhatsApp URL generation, review modal, pure `calculateReservationTotals` engine, and non-blocking CRM boundary adapter (`CrmSyncService`).
-  - `catalog.js`: Single Source of Truth for verified property offerings, nightly/monthly rates, room amenities, and unit inventories.
+  - `catalog.js`: Single Source of Truth for verified property offerings, nightly/monthly rates, room amenities, and authoritative 76-unit portfolio inventory (Darad: 45, Darling: 16, Apartments: 12 [Under Renovation], Tower: 3).
 - **Boundaries & Invariants:**
+  - **Dynamic Ancillary Pricing:** Breakfast rates are property-sensitive and resolved via `resolveBreakfastRate(propertyIdentifier)`: KSh 500 / person / day at Beakim Darad, KSh 1,000 / person / day at Diani Darling Cottages, and KSh 0 (self-catering / not offered) at Tower Cottages and Beakim Apartments.
   - **Non-Blocking Background Delivery:** `CrmSyncService.sendInquiry` executes asynchronously with an AbortController timeout (`APP_CONFIG.CRM.SYNC_TIMEOUT_MS: 4500`). Network delays, cold starts, or offline states must NEVER block the visitor: client issues a Reservation Pre-Approval reference ID (`INQ-YYMMDD-XXXX`), backs up to `localStorage`, and displays the confirmation receipt with guaranteed 15–30 min SLA.
   - **No Magic Numbers:** Centralized configurations are strictly frozen under `APP_CONFIG` (`CONTACT`, `SOCIAL`, `RATES`, `CRM`, `UI`, `TIME`, `DEFAULTS`). Official social channels (Instagram, Facebook, X, TikTok, YouTube) are centrally configured in `APP_CONFIG.SOCIAL`.
   - **CommonJS Test Compatibility:** All pure functions and boundary services are exported conditionally at the bottom of `main.js` for zero-dependency Node.js unit tests.

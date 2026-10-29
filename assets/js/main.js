@@ -301,14 +301,29 @@ function normalizeKenyanPhoneNumber(countryCode, rawPhoneNumber) {
 }
 
 /**
+ * Resolves per-person daily breakfast rate based on property capabilities.
+ * Single Source of Truth: Beakim Darad = KSh 500/day, Diani Darling = KSh 1,000/day.
+ */
+function resolveBreakfastRate(propertyIdentifier) {
+  if (!propertyIdentifier) return 1000;
+  const normalized = String(propertyIdentifier).toLowerCase();
+  if (normalized.includes("darad")) return 500;
+  if (normalized.includes("darling")) return 1000;
+  if (normalized.includes("tower") || normalized.includes("apartment")) return 0;
+  return 1000;
+}
+
+/**
  * Pure domain function computing stay pricing plus ancillary add-ons.
  */
-function calculateReservationTotals({ pricingSummary, adultsCount = 1, hasBreakfast = false }) {
+function calculateReservationTotals({ pricingSummary, adultsCount = 1, hasBreakfast = false, propertyIdentifier = null }) {
   const durationDays = pricingSummary && pricingSummary.durationDays > 0 ? pricingSummary.durationDays : 0;
   const baseCost = pricingSummary ? pricingSummary.totalCost : 0;
   const formattedBaseCost = `KSh ${baseCost.toLocaleString()}`;
-  const breakfastCost = (hasBreakfast && durationDays > 0)
-    ? APP_CONFIG.RATES.BREAKFAST_PER_PERSON_PER_DAY * adultsCount * durationDays
+  const propId = propertyIdentifier || (pricingSummary && (pricingSummary.propertyId || pricingSummary.propertyName || pricingSummary.unitDisplayName));
+  const breakfastRate = resolveBreakfastRate(propId);
+  const breakfastCost = (hasBreakfast && durationDays > 0 && breakfastRate > 0)
+    ? breakfastRate * adultsCount * durationDays
     : 0;
   const formattedBreakfastCost = breakfastCost > 0 ? `+KSh ${breakfastCost.toLocaleString()}` : "+KSh 0";
   const grandTotal = baseCost + breakfastCost;
@@ -320,6 +335,7 @@ function calculateReservationTotals({ pricingSummary, adultsCount = 1, hasBreakf
   return {
     baseCost,
     formattedBaseCost,
+    breakfastRate,
     breakfastCost,
     formattedBreakfastCost,
     grandTotal,
@@ -332,13 +348,15 @@ function calculateReservationTotals({ pricingSummary, adultsCount = 1, hasBreakf
 }
 
 const PROPERTY_RATE_CATALOG_FALLBACK = Object.freeze([
-  { matcher: (id) => id.includes("Without AC"), rate: 2000, isMonthly: false },
-  { matcher: (id) => id.includes("Deluxe Studio") && id.includes("Darad"), rate: 3000, isMonthly: false },
-  { matcher: (id) => id.includes("1-Bedroom Cottage") && id.includes("Darad"), rate: 4000, isMonthly: false },
+  { matcher: (id) => id.includes("Standard") && id.includes("Without AC"), rate: 1700, isMonthly: false },
+  { matcher: (id) => id.includes("Standard") && id.includes("With AC"), rate: 2300, isMonthly: false },
+  { matcher: (id) => id.includes("Superior") && id.includes("Darad"), rate: 3000, isMonthly: false },
+  { matcher: (id) => id.includes("Studio") && id.includes("Kitchenette"), rate: 3000, isMonthly: false },
+  { matcher: (id) => id.includes("Cottage") && id.includes("Darad"), rate: 4000, isMonthly: false },
   { matcher: (id) => id.includes("Diani Darling"), rate: 5000, isMonthly: false },
   { matcher: (id) => id.includes("Tower"), rate: 2500, isMonthly: false },
-  { matcher: (id) => id.includes("1-Bedroom") && id.includes("Apartment"), rate: 15000, isMonthly: true },
-  { matcher: (id) => id.includes("2-Bedroom") && id.includes("Apartment"), rate: 25000, isMonthly: true }
+  { matcher: (id) => id.includes("Apartment") && id.includes("Short"), rate: 5000, isMonthly: false },
+  { matcher: (id) => id.includes("Apartment"), rate: 75000, isMonthly: true }
 ]);
 
 /**
@@ -603,10 +621,11 @@ function handleBookingSubmit(event) {
 /**
  * Extracts structured add-ons and complimentary preferences.
  */
-function extractSelectedAddons({ adultsCount, validNights, breakfastChecked }) {
+function extractSelectedAddons({ adultsCount, validNights, breakfastChecked, propertyIdentifier = null }) {
   const selectedAddons = [];
-  if (breakfastChecked) {
-    const breakfastTotal = APP_CONFIG.RATES.BREAKFAST_PER_PERSON_PER_DAY * adultsCount * validNights;
+  const breakfastRate = resolveBreakfastRate(propertyIdentifier);
+  if (breakfastChecked && breakfastRate > 0) {
+    const breakfastTotal = breakfastRate * adultsCount * validNights;
     selectedAddons.push(`Chef-Prepared Coastal Breakfast: ${adultsCount} Guest(s) × ${validNights} Night(s) (+KSh ${breakfastTotal.toLocaleString()})`);
   }
 
@@ -677,7 +696,7 @@ function extractBookingFormData() {
   const durationDays = calculateDateDifferenceInDays(checkInElement ? checkInElement.value : "", checkOutElement ? checkOutElement.value : "");
   const validNights = durationDays > 0 ? durationDays : 1;
 
-  const selectedAddons = extractSelectedAddons({ adultsCount, validNights, breakfastChecked });
+  const selectedAddons = extractSelectedAddons({ adultsCount, validNights, breakfastChecked, propertyIdentifier: propertyValue });
 
   return {
     name: nameElement ? nameElement.value.trim() : "",
@@ -778,16 +797,32 @@ function syncResidenceCardsStyling(selectedCardElement) {
 }
 
 /**
- * Toggles breakfast add-on availability depending on property capabilities.
+ * Toggles breakfast add-on availability and updates dynamic rate per property.
  */
 function syncBreakfastAddonCard(propertyValue) {
   const breakfastCard = document.getElementById("addon-card-breakfast");
   if (!breakfastCard) return;
 
-  const normalized = propertyValue.toLowerCase();
+  const normalized = String(propertyValue || "").toLowerCase();
   const isBreakfastEligible = normalized.includes("darling") || normalized.includes("darad");
   breakfastCard.classList.toggle("opacity-60", !isBreakfastEligible);
   breakfastCard.classList.toggle("border-champagne/50", isBreakfastEligible);
+
+  const priceBadge = breakfastCard.querySelector(".text-champagne");
+  if (priceBadge) {
+    if (normalized.includes("darad")) {
+      priceBadge.textContent = "+KSh 500 / person / day";
+    } else if (normalized.includes("darling")) {
+      priceBadge.textContent = "+KSh 1,000 / person / day";
+    } else {
+      priceBadge.textContent = "Self-Catering";
+    }
+  }
+
+  const breakfastCheckbox = document.getElementById("addon-breakfast");
+  if (breakfastCheckbox && !isBreakfastEligible && breakfastCheckbox.checked) {
+    breakfastCheckbox.checked = false;
+  }
 }
 
 /**
@@ -833,7 +868,8 @@ function handleDateOrAddonChange() {
   const totals = calculateReservationTotals({
     pricingSummary,
     adultsCount,
-    hasBreakfast: Boolean(breakfastCheckbox && breakfastCheckbox.checked)
+    hasBreakfast: Boolean(breakfastCheckbox && breakfastCheckbox.checked),
+    propertyIdentifier: propertyValue
   });
 
   const breakfastRow = document.getElementById("summary-breakfast-row");
@@ -1437,7 +1473,7 @@ function renderInquiryCostBreakdown(inquirySummary) {
       <div class="flex justify-between items-start gap-3 text-xs pt-2 border-t border-champagne/10">
         <div class="space-y-0.5">
           <span class="font-semibold text-emerald-400 block">🍳 Chef-Prepared Coastal Breakfast</span>
-          <span class="text-[11px] text-ivory/60 block">${adultsCount} Guest(s) × ${nightsCount} Night(s) @ KSh 1,000 / day</span>
+          <span class="text-[11px] text-ivory/60 block">${adultsCount} Guest(s) × ${nightsCount} Night(s) @ KSh ${(totals.breakfastRate || resolveBreakfastRate(inquirySummary.property)).toLocaleString()} / day</span>
         </div>
         <span class="font-mono font-bold text-emerald-400 shrink-0">${breakfastCostFormatted}</span>
       </div>
@@ -1964,6 +2000,7 @@ if (typeof module !== "undefined" && module.exports) {
     isPastDate,
     isInvalidDateRange,
     normalizeKenyanPhoneNumber,
+    resolveBreakfastRate,
     calculateReservationTotals,
     resolveStayPricing,
     buildInquiryMessage,

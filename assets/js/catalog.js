@@ -1,7 +1,7 @@
 /**
  * Beakim Hospitality Group - Official Property Catalog
  * Single Source of Truth for verified property offerings, rates, and inventory.
- * Verified: 30 September 2026
+ * Authoritative 76-Unit Portfolio Matrix
  */
 
 const BEAKIM_CATALOG = {
@@ -14,54 +14,13 @@ const BEAKIM_CATALOG = {
     coordinates: { latitude: -4.284794, longitude: 39.577151 },
     stayType: "nightly",
     pools: 2,
-    totalUnits: 28,
+    totalUnits: 45,
+    breakfastRate: 500,
     offerings: [
       {
-        id: "darad-standard-no-ac",
-        name: "Standard Studio Room (Without AC)",
-        dropdownLabel: "Beakim Darad - Standard Studio Room (Without AC)",
-        rate: 2000,
-        rateBasis: "per night",
-        units: 10,
-        maxAdults: 2,
-        maxChildren: 1,
-        maxGuests: 2,
-        hasAc: false,
-        amenities: ["Ceiling Fan", "Ensuite Bathroom", "2 Resort Pools", "High-Speed Wi-Fi", "24/7 Security"],
-        description: "Budget-friendly studio room with cooling ceiling fan, ensuite washroom, and full access to both resort swimming pools."
-      },
-      {
-        id: "darad-standard-ac",
-        name: "Standard Studio Room (With AC)",
-        dropdownLabel: "Beakim Darad - Standard Studio Room (With AC)",
-        rate: 2500,
-        rateBasis: "per night",
-        units: 10,
-        maxAdults: 2,
-        maxChildren: 1,
-        maxGuests: 2,
-        hasAc: true,
-        amenities: ["Air Conditioning", "Ensuite Bathroom", "2 Resort Pools", "High-Speed Wi-Fi", "24/7 Security"],
-        description: "Cozy standard studio room featuring individually controlled air conditioning, fresh coastal linen, and resort pool access."
-      },
-      {
-        id: "darad-deluxe-ac",
-        name: "Deluxe Studio Room (With AC)",
-        dropdownLabel: "Beakim Darad - Deluxe Studio Room (With AC)",
-        rate: 3000,
-        rateBasis: "per night",
-        units: 5,
-        maxAdults: 2,
-        maxChildren: 1,
-        maxGuests: 2,
-        hasAc: true,
-        amenities: ["Air Conditioning", "Private Patio", "2 Resort Pools", "High-Speed Wi-Fi", "Dedicated Desk", "24/7 Security"],
-        description: "Spacious deluxe studio room featuring modern finishes, premium bedding, air conditioning, and garden/pool views."
-      },
-      {
-        id: "darad-1br-cottage",
-        name: "1-Bedroom Cottage (With AC)",
-        dropdownLabel: "Beakim Darad - 1-Bedroom Cottage (With AC)",
+        id: "darad-cottage",
+        name: "Garden View Cottage (1-Bedroom With AC)",
+        dropdownLabel: "Beakim Darad - Garden View Cottage (1-Bedroom)",
         rate: 4000,
         rateBasis: "per night",
         units: 3,
@@ -69,8 +28,64 @@ const BEAKIM_CATALOG = {
         maxChildren: 2,
         maxGuests: 4,
         hasAc: true,
-        amenities: ["Air Conditioning", "Kitchenette", "Living Lounge", "2 Resort Pools", "High-Speed Wi-Fi", "24/7 Security"],
-        description: "Standalone 1-bedroom holiday cottage with private living lounge, air conditioning, kitchenette, and poolside terrace."
+        amenities: ["Air Conditioning", "Private Living Room", "Kitchenette", "Private Patio", "2 Resort Pools", "High-Speed Wi-Fi", "24/7 Security"],
+        description: "Standalone 1-bedroom holiday cottage with private living lounge, air conditioning, kitchenette, and garden terrace."
+      },
+      {
+        id: "darad-std-no-ac",
+        name: "Standard Room (Without AC, Shared Kitchen)",
+        dropdownLabel: "Beakim Darad - Standard Room (Without AC)",
+        rate: 1700,
+        rateBasis: "per night",
+        units: 14,
+        maxAdults: 2,
+        maxChildren: 1,
+        maxGuests: 2,
+        hasAc: false,
+        amenities: ["Ceiling Fan", "Ensuite Washroom", "Shared Kitchen (3 Rooms)", "2 Resort Pools", "High-Speed Wi-Fi", "24/7 Security"],
+        description: "Budget-friendly standard room with cooling ceiling fan, ensuite washroom, and access to a clean kitchen shared with 2 other rooms."
+      },
+      {
+        id: "darad-std-ac",
+        name: "Standard Room (With AC, Shared Kitchen)",
+        dropdownLabel: "Beakim Darad - Standard Room (With AC)",
+        rate: 2300,
+        rateBasis: "per night",
+        units: 7,
+        maxAdults: 2,
+        maxChildren: 1,
+        maxGuests: 2,
+        hasAc: true,
+        amenities: ["Air Conditioning", "Ensuite Washroom", "Shared Kitchen (3 Rooms)", "2 Resort Pools", "High-Speed Wi-Fi", "24/7 Security"],
+        description: "Comfortable standard room with split-unit air conditioning, ensuite bathroom, and access to a shared kitchen with 2 other rooms."
+      },
+      {
+        id: "darad-superior-ac",
+        name: "Superior Room (With AC)",
+        dropdownLabel: "Beakim Darad - Superior Room (With AC)",
+        rate: 3000,
+        rateBasis: "per night",
+        units: 12,
+        maxAdults: 2,
+        maxChildren: 1,
+        maxGuests: 2,
+        hasAc: true,
+        amenities: ["Air Conditioning", "Ensuite Washroom", "Premium Finishes", "2 Resort Pools", "High-Speed Wi-Fi", "24/7 Security"],
+        description: "Spacious ensuite superior room featuring premium coastal finishes, air conditioning, pool access, and tranquil garden ambience."
+      },
+      {
+        id: "darad-studio-kitchenette",
+        name: "Ensuite Studio with Kitchenette (With AC)",
+        dropdownLabel: "Beakim Darad - Ensuite Studio with Kitchenette",
+        rate: 3000,
+        rateBasis: "per night",
+        units: 9,
+        maxAdults: 2,
+        maxChildren: 1,
+        maxGuests: 2,
+        hasAc: true,
+        amenities: ["Air Conditioning", "Private Kitchenette", "Ensuite Washroom", "2 Resort Pools", "High-Speed Wi-Fi", "24/7 Security"],
+        description: "Independent studio suite complete with its own private kitchenette, ensuite bathroom, split AC, and resort amenities."
       }
     ]
   },
@@ -83,6 +98,7 @@ const BEAKIM_CATALOG = {
     phone: "+254 746 938 529",
     coordinates: { latitude: -4.2874, longitude: 39.5665 },
     stayType: "nightly",
+    breakfastRate: 0,
     totalUnits: 3,
     offerings: [
       {
@@ -110,7 +126,8 @@ const BEAKIM_CATALOG = {
     phone: "+254 119 237 439",
     coordinates: { latitude: -4.288156, longitude: 39.581767 },
     stayType: "nightly",
-    totalUnits: 14,
+    breakfastRate: 1000,
+    totalUnits: 16,
     offerings: [
       {
         id: "darling-deluxe-studio",
@@ -118,7 +135,7 @@ const BEAKIM_CATALOG = {
         dropdownLabel: "Diani Darling Cottages - Deluxe Studio Room",
         rate: 5000,
         rateBasis: "per night",
-        units: 14,
+        units: 16,
         maxAdults: 2,
         maxChildren: 1,
         maxGuests: 2,
@@ -136,36 +153,42 @@ const BEAKIM_CATALOG = {
     address: "5th Row, Diani Beach, Kenya",
     phone: "+254 746 938 529",
     coordinates: { latitude: -4.2750, longitude: 39.5880 },
-    stayType: "monthly",
-    totalUnits: 20,
+    stayType: "hybrid",
+    breakfastRate: 0,
+    totalUnits: 12,
+    isUnderRenovation: true,
+    isClosed: true,
+    closureReason: "Under Renovation & Interior Upgrades",
     offerings: [
       {
-        id: "apartments-1br-monthly",
-        name: "1-Bedroom Apartment (Monthly Lease)",
-        dropdownLabel: "Beakim Apartments - 1-Bedroom (Monthly Lease)",
-        rate: 15000,
-        rateBasis: "per month",
-        units: 10,
+        id: "apartments-1br-short",
+        name: "1-Bedroom Apartment (Short-Term Stay)",
+        stayType: "nightly",
+        dropdownLabel: "Beakim Apartments - 1-Bedroom (Short-Term)",
+        rate: 5000,
+        rateBasis: "per night",
+        units: 12,
         maxAdults: 2,
         maxChildren: 1,
         maxGuests: 2,
         hasAc: true,
-        amenities: ["Private Balcony", "Equipped Kitchen", "Swimming Pool", "24/7 Gated Security", "Quiet 5th Row"],
-        description: "Serene 1-bedroom apartment in a peaceful, secure gated compound designed specifically for long-term residential living on a monthly rent basis."
+        amenities: ["Private Kitchen", "Living Room", "Private Balcony", "Swimming Pool", "24/7 Gated Security", "Quiet 5th Row"],
+        description: "Self-catering 1-bedroom apartment with private kitchen, living room, and balcony. Currently under renovation & interior upgrades."
       },
       {
-        id: "apartments-2br-monthly",
-        name: "2-Bedroom Apartment (Monthly Lease)",
-        dropdownLabel: "Beakim Apartments - 2-Bedroom (Monthly Lease)",
-        rate: 25000,
-        rateBasis: "per month",
-        units: 10,
-        maxAdults: 4,
-        maxChildren: 2,
-        maxGuests: 4,
+        id: "apartments-1br-monthly",
+        name: "1-Bedroom Apartment (Monthly Lease)",
+        stayType: "monthly",
+        dropdownLabel: "Beakim Apartments - 1-Bedroom (Monthly Lease)",
+        rate: 75000,
+        rateBasis: "per month (negotiable up to KSh 100,000)",
+        units: 12,
+        maxAdults: 2,
+        maxChildren: 1,
+        maxGuests: 2,
         hasAc: true,
-        amenities: ["Full Kitchen", "Spacious Living Room", "Private Balcony", "Swimming Pool", "24/7 Gated Security", "Parking"],
-        description: "Spacious 2-bedroom residential apartment with modern kitchen and private balcony, ideal for long-term family or professional residency."
+        amenities: ["Private Kitchen", "Living Room", "Private Balcony", "Swimming Pool", "24/7 Gated Security", "Quiet 5th Row"],
+        description: "Long-term residential monthly lease (KSh 75,000 - 100,000 negotiable via direct call to office). Currently under renovation & interior upgrades."
       }
     ]
   }
@@ -173,11 +196,19 @@ const BEAKIM_CATALOG = {
 
 // Helper function to find offering by ID or dropdown value
 function getOfferingById(offeringId) {
+  const normalizedId = offeringId === "darad-standard-ac" ? "darad-std-ac" : (offeringId === "darad-standard-no-ac" ? "darad-std-no-ac" : offeringId);
   for (const propKey in BEAKIM_CATALOG) {
     const prop = BEAKIM_CATALOG[propKey];
     for (const off of prop.offerings) {
-      if (off.id === offeringId || off.dropdownLabel === offeringId || off.name === offeringId) {
-        return { ...off, propertyName: prop.name, propertyId: prop.id, stayType: prop.stayType };
+      if (off.id === offeringId || off.id === normalizedId || off.dropdownLabel === offeringId || off.name === offeringId) {
+        return {
+          ...off,
+          propertyName: prop.name,
+          propertyId: prop.id,
+          stayType: off.stayType || prop.stayType,
+          propertyBreakfastRate: prop.breakfastRate || 0,
+          isUnderRenovation: Boolean(prop.isUnderRenovation)
+        };
       }
     }
   }
