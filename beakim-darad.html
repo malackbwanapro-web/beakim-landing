@@ -148,35 +148,60 @@
 
   <main id="main-content">
   <!-- HERO SECTION -->
-  <section class="relative min-h-[88svh] md:min-h-[calc(100svh-4.5rem)] flex items-center pt-24 overflow-hidden">
-    <div class="absolute inset-0 z-0">
-      <img src="assets/Beakim Darad Images/beakim-darad-resort-swimming-pools-deluxe-building.webp" alt="Beakim Darad Resort Swimming Pools and Deluxe Building View" class="w-full h-full object-cover brightness-[0.7]" decoding="async" fetchpriority="high">
-      <div class="absolute inset-0 bg-gradient-to-t from-deep-forest via-deep-forest/40 to-black/40"></div>
+  <section class="relative bg-deep-forest overflow-hidden md:min-h-[calc(100svh-4.5rem)] md:flex md:items-center md:pt-24">
+    
+    <!-- Mobile: Top Hero Visual Stage (52svh) | Desktop: Fullscreen Absolute Background -->
+    <div class="relative h-[52svh] md:h-auto md:absolute md:inset-0 z-0 flex flex-col justify-end p-6 md:p-0">
+      <img src="assets/Beakim Darad Images/beakim-darad-resort-swimming-pools-deluxe-building.webp" 
+           alt="Beakim Darad Resort Swimming Pools and Deluxe Building View" 
+           class="absolute inset-0 w-full h-full object-cover brightness-[0.88] md:brightness-[0.7]" 
+           decoding="async" fetchpriority="high">
+      <div class="absolute inset-0 bg-gradient-to-t from-deep-forest via-deep-forest/20 to-black/30 md:via-deep-forest/40"></div>
+      
+      <!-- Mobile-Only Hero Overlay Title (Clean, unobtrusive, lets photo shine) -->
+      <div class="relative z-10 md:hidden space-y-2">
+        <div class="inline-flex items-center gap-2 bg-canopy/80 border border-champagne/30 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-widest text-champagne">
+          <span class="w-2 h-2 rounded-full bg-champagne pulse-indicator"></span>
+          <span>Off Diani Links Road • 2 Pools</span>
+        </div>
+        <h1 class="font-display text-3xl sm:text-4xl text-ivory font-bold leading-tight drop-shadow-md">
+          Beakim Darad
+        </h1>
+        <p class="text-champagne font-medium text-xs tracking-wider uppercase">
+          From KSh 1,700 / Night • 5 Stay Options
+        </p>
+      </div>
     </div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-6 py-16 w-full">
+    <!-- Hero Content: Grounded Below Image on Mobile, Elegant Overlay on Desktop -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 py-8 md:py-16 w-full">
       <div class="max-w-3xl space-y-6">
-        <div class="inline-flex items-center gap-2 bg-canopy/80 border border-champagne/30 backdrop-blur-md px-4 py-2 rounded-full">
+        
+        <!-- Desktop-Only Header Elements (hidden on mobile since shown on image) -->
+        <div class="hidden md:inline-flex items-center gap-2 bg-canopy/80 border border-champagne/30 backdrop-blur-md px-4 py-2 rounded-full">
           <span class="w-2 h-2 rounded-full bg-champagne pulse-indicator"></span>
           <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Off Diani Links Road • 2 Swimming Pools</span>
         </div>
 
-        <h1 class="font-display text-4xl md:text-6xl text-ivory font-bold leading-tight">
+        <h1 class="hidden md:block font-display text-4xl md:text-6xl text-ivory font-bold leading-tight">
           Beakim Darad
         </h1>
 
-        <p class="text-base md:text-lg text-ivory/80 leading-relaxed font-light">
+        <!-- Narrative Description: Positioned Under Image on Mobile with High-Contrast Legibility -->
+        <p class="text-sm sm:text-base md:text-lg text-ivory/85 leading-relaxed font-light">
           Experience versatile coastal luxury tailored to your lifestyle. Whether you prefer our budget-friendly <strong class="text-champagne">Standard Rooms</strong> (from KSh 1,700), self-contained <strong class="text-champagne">Spacious Studios</strong> (KSh 3,000), ensuite <strong class="text-champagne">Superior Rooms</strong> (KSh 3,000), or private <strong class="text-champagne">Garden View Cottages</strong> (KSh 4,000), all guests enjoy full access to two resort swimming pools and lush tropical grounds.
         </p>
 
-        <div class="pt-4 flex flex-wrap items-center gap-4">
-          <a href="#units" class="bg-champagne hover:bg-driftwood text-deep-forest px-8 py-4 rounded font-semibold tracking-wider uppercase text-sm text-center transition duration-300 shadow-xl">
+        <!-- CTA Buttons -->
+        <div class="pt-2 md:pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+          <a href="#units" class="bg-champagne hover:bg-driftwood text-deep-forest px-8 py-3.5 md:py-4 rounded font-semibold tracking-wider uppercase text-xs md:text-sm text-center transition duration-300 shadow-xl active:scale-95">
             Explore 5 Stay Options
           </a>
-          <a href="#booking" class="border border-ivory/30 hover:border-champagne text-ivory hover:text-champagne px-8 py-4 rounded font-semibold tracking-wider uppercase text-sm text-center transition duration-300">
+          <a href="#booking" class="border border-champagne/40 hover:border-champagne text-ivory hover:text-champagne px-8 py-3.5 md:py-4 rounded font-semibold tracking-wider uppercase text-xs md:text-sm text-center transition duration-300 active:scale-95">
             Check Availability
           </a>
         </div>
+
       </div>
     </div>
   </section>
