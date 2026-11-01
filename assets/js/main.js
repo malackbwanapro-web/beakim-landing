@@ -2231,6 +2231,42 @@ function handleConferenceWhatsAppRFP(e) {
   window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 }
 
+function initializeConciergeHesitationEngine() {
+  if (typeof window === "undefined" || typeof document === "undefined") return;
+
+  const whatsappBtn = document.querySelector('[data-comm-action="whatsapp"]');
+  const phoneBtn = document.querySelector('[data-comm-action="phone"]');
+  if (!whatsappBtn && !phoneBtn) return;
+
+  const IDLE_HESITATION_MS = 8000;
+  let idleTimer = null;
+  let isPulsing = false;
+
+  function activateGlow() {
+    if (isPulsing) return;
+    isPulsing = true;
+    if (whatsappBtn) whatsappBtn.classList.add("hesitation-pulse-whatsapp");
+    if (phoneBtn) phoneBtn.classList.add("hesitation-pulse-phone");
+  }
+
+  function resetHesitationTimer() {
+    if (isPulsing) {
+      isPulsing = false;
+      if (whatsappBtn) whatsappBtn.classList.remove("hesitation-pulse-whatsapp");
+      if (phoneBtn) phoneBtn.classList.remove("hesitation-pulse-phone");
+    }
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(activateGlow, IDLE_HESITATION_MS);
+  }
+
+  const passiveOpts = { passive: true };
+  ["mousemove", "scroll", "keydown", "touchstart", "pointerdown"].forEach(evt => {
+    window.addEventListener(evt, resetHesitationTimer, passiveOpts);
+  });
+
+  idleTimer = setTimeout(activateGlow, IDLE_HESITATION_MS);
+}
+
 if (typeof window !== "undefined") {
   window.addEventListener("DOMContentLoaded", () => {
     initializeDemoModeBanner();
@@ -2248,6 +2284,7 @@ if (typeof window !== "undefined") {
     collectGalleryImages();
     updatePriceCalculation();
     initializeCleanHashScrolling();
+    initializeConciergeHesitationEngine();
   });
 }
 
@@ -2291,6 +2328,7 @@ if (typeof module !== "undefined" && module.exports) {
     triggerLiveAvailabilityCheck,
     confirmAndSubmitInquiry,
     renderInquirySuccessReceipt,
+    initializeConciergeHesitationEngine,
     renderInquiryNetworkFailure,
     renderInquiryCostBreakdown
   };

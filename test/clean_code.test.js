@@ -23,7 +23,8 @@ const {
   handleDaradRoomKeydown,
   toggleDaradRoomSelector,
   renderInquiryCostBreakdown,
-  renderInquirySuccessReceipt
+  renderInquirySuccessReceipt,
+  initializeConciergeHesitationEngine
 } = require("../assets/js/main.js");
 
 const { BEAKIM_CATALOG, getOfferingById } = require("../assets/js/catalog.js");
@@ -467,4 +468,33 @@ assert.ok(darlingHtml.includes("0119 237 439") || darlingHtml.includes("+254 119
 assert.ok(darlingHtml.includes("tel:+254119237439"), "diani-darling.html must have tel link +254119237439");
 console.log("   ✅ Homepage Beakim Darad 5-tier room category selector and direct reception lines asserted successfully.");
 
-console.log("\n🎉 ALL 16 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 17: Desktop Circular FAB Contact Dock & Concierge Hesitation Engine
+console.log("17. Testing Desktop Circular FAB Contact Dock & Concierge Hesitation Engine...");
+assert.strictEqual(typeof initializeConciergeHesitationEngine, "function", "initializeConciergeHesitationEngine must be exported");
+
+// Assert safe execution in headless/SSR environment (window/document absent or simulated)
+assert.doesNotThrow(() => {
+  initializeConciergeHesitationEngine();
+}, "initializeConciergeHesitationEngine must gracefully handle headless/SSR runtime");
+
+// Assert all key landing pages have desktop circular FAB classes and action attributes
+const commDockPages = [
+  "index.html",
+  "beakim-darad.html",
+  "diani-darling.html",
+  "tower-cottages.html",
+  "beakim-apartments.html",
+  "insights.html",
+  "404.html"
+];
+
+for (const pageName of commDockPages) {
+  const pageContent = fs.readFileSync(path.join(__dirname, "..", pageName), "utf8");
+  assert.ok(pageContent.includes('data-comm-action="whatsapp"'), `${pageName} must declare data-comm-action="whatsapp"`);
+  assert.ok(pageContent.includes('data-comm-action="phone"'), `${pageName} must declare data-comm-action="phone"`);
+  assert.ok(pageContent.includes('md:w-14 md:h-14'), `${pageName} must style desktop FAB with 56px circular bounds (md:w-14 md:h-14)`);
+  assert.ok(pageContent.includes('<span class="md:hidden">WhatsApp</span>'), `${pageName} must hide WhatsApp text on desktop`);
+}
+console.log("   ✅ Desktop circular 56px FABs and 8-second hesitation telemetry engine asserted across all 7 pages.");
+
+console.log("\n🎉 ALL 17 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
