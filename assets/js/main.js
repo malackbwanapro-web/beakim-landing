@@ -657,12 +657,14 @@ function processValidBookingSubmission(formData) {
   const normalizedPhone = normalizeKenyanPhoneNumber(formData.countryCode, formData.phoneNumber);
   const formattedContactPhone = `${formData.countryCode} ${normalizedPhone}`;
   const totalGuests = formData.adults + formData.children;
+  const unitsCount = Math.max(1, parseInt(formData.unitsCount, 10) || 1);
 
   const totals = calculateReservationTotals({
     pricingSummary,
     adultsCount: formData.adults,
     hasBreakfast: formData.hasBreakfast,
-    propertyIdentifier: formData.property
+    propertyIdentifier: formData.property,
+    unitsCount
   });
 
   const preferredContactMethod = formData.preferredContactMethod || "WhatsApp / Text";
@@ -680,19 +682,26 @@ function processValidBookingSubmission(formData) {
     estimatedTotal: totals.formattedGrandTotal,
     selectedAddons: formData.selectedAddons || [],
     specialRequests: formData.specialRequests || "",
-    preferredContactMethod
+    preferredContactMethod,
+    unitsCount
   });
 
   const whatsappUrl = CommunicationService.buildWhatsAppUrl(messageText);
 
   const inquiryPayload = CrmSyncService.buildPayload({
-    formData,
+    formData: {
+      ...formData,
+      unitsCount
+    },
     grandTotal: totals.grandTotal,
     formattedContactPhone
   });
 
   showInquiryReviewModal({
-    formData,
+    formData: {
+      ...formData,
+      unitsCount
+    },
     inquiryPayload,
     name: formData.name,
     phone: formattedContactPhone,
@@ -700,6 +709,7 @@ function processValidBookingSubmission(formData) {
     property: formData.property,
     dates: `${formData.checkIn} to ${formData.checkOut} (${pricingSummary.durationText})`,
     guests: `${totalGuests} (${formData.adults} Adults, ${formData.children} Children)`,
+    unitsCount,
     estimatedTotal: totals.formattedGrandTotal,
     selectedAddons: formData.selectedAddons || [],
     specialRequests: formData.specialRequests || "",
@@ -1483,7 +1493,7 @@ function renderAvailabilityLoading() {
 function renderAvailabilityPreApproved(unitsCount, categoryName, totalGuests = 0, reservedUnits = 1) {
   const unitsText = unitsCount !== undefined && unitsCount > 0 ? ` (${unitsCount} unit${unitsCount === 1 ? '' : 's'} available to request)` : '';
   const categoryLabel = categoryName ? `${categoryName} ` : "Dates ";
-  const multiUnitNotice = reservedUnits > 1 ? ` • ${reservedUnits} units reserved for ${totalGuests} guests` : '';
+  const multiUnitNotice = reservedUnits > 1 ? ` • ${reservedUnits} units selected for ${totalGuests} guests — subject to confirmation` : '';
   return `
     <div class="flex items-center justify-between p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 text-xs shadow-sm">
       <div class="flex items-center gap-2 flex-wrap">
@@ -1837,6 +1847,7 @@ function renderInquiryNetworkFailure(inquirySummary) {
         <div class="bg-deep-forest/80 rounded-xl p-3.5 border border-champagne/20 text-xs space-y-1.5 font-mono text-ivory/80">
           <div class="text-[11px] text-champagne font-bold uppercase tracking-wider font-sans mb-1">Your Reservation Details:</div>
           <div>Property: <strong class="text-white">${inquirySummary.property}</strong></div>
+          ${inquirySummary.unitsCount && inquirySummary.unitsCount > 1 ? `<div>Residences: <strong class="text-champagne">${inquirySummary.unitsCount} Units</strong></div>` : ""}
           <div>Dates: <strong class="text-white">${inquirySummary.dates}</strong></div>
           <div>Guests: <strong class="text-white">${inquirySummary.guests}</strong></div>
           <div>Estimated Total: <strong class="text-champagne font-sans font-bold">${inquirySummary.estimatedTotal}</strong></div>
@@ -1920,6 +1931,7 @@ function renderInquirySuccessReceipt(inquirySummary, inquiryId) {
           <div class="border-t border-champagne/15 pt-2.5 space-y-1 text-[11px] text-ivory/70">
             <div class="flex justify-between gap-2"><span class="text-ivory/50">Stay Dates:</span> <span class="text-ivory font-medium text-right">${inquirySummary.dates}</span></div>
             <div class="flex justify-between gap-2"><span class="text-ivory/50">Guest:</span> <span class="text-ivory font-medium text-right">${inquirySummary.name} (${inquirySummary.phone})</span></div>
+            ${inquirySummary.unitsCount && inquirySummary.unitsCount > 1 ? `<div class="flex justify-between gap-2"><span class="text-ivory/50">Residences:</span> <span class="text-champagne font-bold text-right">${inquirySummary.unitsCount} Units</span></div>` : ""}
             ${inquirySummary.estimatedTotal ? `<div class="flex justify-between gap-2 pt-1 border-t border-champagne/10"><span class="text-ivory/50">Estimated Total:</span> <span class="text-champagne font-bold text-right">${inquirySummary.estimatedTotal}</span></div>` : ""}
           </div>
         </div>
@@ -1958,10 +1970,15 @@ function renderInquirySuccessReceipt(inquirySummary, inquiryId) {
 function renderInquiryCostBreakdown(inquirySummary) {
   const totals = inquirySummary.totals || {};
   const pricing = inquirySummary.pricingSummary || {};
+  const unitsCount = totals.unitsCount || (inquirySummary.formData ? inquirySummary.formData.unitsCount : (inquirySummary.unitsCount || 1)) || 1;
 
-  const unitName = pricing.unitDisplayName || inquirySummary.property || "Selected Residence";
+  const rawUnitName = pricing.unitDisplayName || inquirySummary.property || "Selected Residence";
+  const unitPrefix = unitsCount > 1 ? `${unitsCount} × ` : "";
+  const unitName = `${unitPrefix}${rawUnitName}`;
   const durationText = pricing.durationText || "1 Stay";
   const rateBasisText = pricing.rateBasisText || "";
+  const unitsMultiplierText = unitsCount > 1 ? ` (${unitsCount} Units)` : "";
+  const rateLineSubtitle = rateBasisText ? `${durationText} × ${rateBasisText}${unitsMultiplierText}` : durationText;
   const baseCostFormatted = totals.formattedBaseCost || (pricing.totalCost ? `KSh ${pricing.totalCost.toLocaleString()}` : (inquirySummary.estimatedTotal || "KSh 0"));
 
   const hasBreakfast = Boolean(totals.breakfastCost && totals.breakfastCost > 0);
@@ -1985,7 +2002,7 @@ function renderInquiryCostBreakdown(inquirySummary) {
       <div class="flex justify-between items-start gap-3 text-xs">
         <div class="space-y-0.5 min-w-0">
           <span class="font-semibold text-ivory block truncate">${unitName}</span>
-          <span class="text-[11px] text-ivory/60 block">${durationText} ${rateBasisText ? `× ${rateBasisText}` : ""}</span>
+          <span class="text-[11px] text-ivory/60 block">${rateLineSubtitle}</span>
         </div>
         <span class="font-mono font-bold text-ivory shrink-0">${baseCostFormatted}</span>
       </div>
@@ -2084,6 +2101,7 @@ function showInquiryReviewModal(inquirySummary) {
           <div class="flex justify-between gap-3 pt-1.5 border-t border-champagne/10"><span class="text-ivory/60 shrink-0">Residence:</span><span class="font-semibold text-champagne font-sans text-right">${inquirySummary.property}</span></div>
           <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Stay Dates:</span><span class="text-ivory font-sans text-right">${inquirySummary.dates}</span></div>
           <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Guests:</span><span class="text-ivory font-sans text-right">${inquirySummary.guests}</span></div>
+          ${inquirySummary.unitsCount && inquirySummary.unitsCount > 1 ? `<div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Residences:</span><span class="font-semibold text-champagne font-sans text-right">${inquirySummary.unitsCount} Units</span></div>` : ""}
           ${inquirySummary.specialRequests ? `<div class="flex justify-between gap-3 pt-1.5 border-t border-champagne/10"><span class="text-ivory/60 shrink-0">Arrival Notes:</span><span class="text-ivory font-sans italic text-right">${inquirySummary.specialRequests}</span></div>` : ""}
         </div>
 
@@ -2399,6 +2417,7 @@ const BeakimDateRangePicker = {
     currentMonth: 0,   // 0-11
     currentYear: 2026,
     isOpen: false,
+    isScrollLocked: false,
     step: "check-in"   // "check-in" or "check-out"
   },
 
@@ -2500,9 +2519,49 @@ const BeakimDateRangePicker = {
     // Window resize handler to reposition correctly between mobile viewport modal and desktop dropdown
     window.addEventListener("resize", () => {
       if (this.state.isOpen) {
-        this.open();
+        this.reposition();
       }
     });
+  },
+
+  syncScrollLock(isMobile) {
+    if (this.state.isOpen && isMobile) {
+      if (!this.state.isScrollLocked) {
+        if (typeof PageScrollLock !== "undefined" && typeof PageScrollLock.lock === "function") {
+          PageScrollLock.lock();
+        }
+        this.state.isScrollLocked = true;
+      }
+    } else {
+      if (this.state.isScrollLocked) {
+        if (typeof PageScrollLock !== "undefined" && typeof PageScrollLock.unlock === "function") {
+          PageScrollLock.unlock();
+        }
+        this.state.isScrollLocked = false;
+      }
+    }
+  },
+
+  reposition() {
+    if (!this.state.isOpen) return;
+    const popover = document.getElementById("beakim-calendar-popover");
+    if (!popover) return;
+
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+    if (isMobile) {
+      if (popover.parentElement !== document.body) {
+        document.body.appendChild(popover);
+      }
+      popover.className = "cal-modal-open";
+    } else {
+      if (this.originalParent && popover.parentElement !== this.originalParent) {
+        this.originalParent.appendChild(popover);
+      }
+      popover.className = "cal-inline-open";
+    }
+
+    this.syncScrollLock(isMobile);
+    this.render();
   },
 
   updateTriggerDisplay() {
@@ -2551,15 +2610,14 @@ const BeakimDateRangePicker = {
         document.body.appendChild(popover);
       }
       popover.className = "cal-modal-open";
-      if (typeof PageScrollLock !== "undefined" && typeof PageScrollLock.lock === "function") {
-        PageScrollLock.lock();
-      }
     } else {
       if (this.originalParent && popover.parentElement !== this.originalParent) {
         this.originalParent.appendChild(popover);
       }
       popover.className = "cal-inline-open";
     }
+
+    this.syncScrollLock(isMobile);
 
     popover.setAttribute("role", "dialog");
     popover.setAttribute("aria-modal", "true");
@@ -2582,9 +2640,9 @@ const BeakimDateRangePicker = {
     if (!popover) return;
     this.state.isOpen = false;
     popover.className = "hidden";
-    if (typeof PageScrollLock !== "undefined" && typeof PageScrollLock.unlock === "function") {
-      PageScrollLock.unlock();
-    }
+
+    this.syncScrollLock(false);
+
     const trigger = document.getElementById("booking-date-range-trigger");
     if (trigger) {
       trigger.setAttribute("aria-expanded", "false");
@@ -2606,6 +2664,8 @@ const BeakimDateRangePicker = {
       this.state.currentYear--;
     }
     this.render();
+    const prevBtn = document.getElementById("cal-prev-month-btn");
+    if (prevBtn && typeof prevBtn.focus === "function") prevBtn.focus();
   },
 
   nextMonth() {
@@ -2615,6 +2675,8 @@ const BeakimDateRangePicker = {
       this.state.currentYear++;
     }
     this.render();
+    const nextBtn = document.getElementById("cal-next-month-btn");
+    if (nextBtn && typeof nextBtn.focus === "function") nextBtn.focus();
   },
 
   applyPreset(presetType) {
@@ -2733,11 +2795,11 @@ const BeakimDateRangePicker = {
 
     return `
       <div class="flex items-center justify-between px-1 pt-1">
-        <button type="button" onclick="BeakimDateRangePicker.prevMonth()" ${prevButtonClasses} aria-label="Previous Month">
+        <button type="button" id="cal-prev-month-btn" onclick="BeakimDateRangePicker.prevMonth()" ${prevButtonClasses} aria-label="Previous Month">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         </button>
         <span class="text-sm font-bold text-ivory font-display tracking-wide">${monthName} ${year}</span>
-        <button type="button" onclick="BeakimDateRangePicker.nextMonth()" class="p-1 text-champagne hover:text-ivory transition" aria-label="Next Month">
+        <button type="button" id="cal-next-month-btn" onclick="BeakimDateRangePicker.nextMonth()" class="p-1 text-champagne hover:text-ivory transition" aria-label="Next Month">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </button>
       </div>
@@ -3345,6 +3407,8 @@ if (typeof module !== "undefined" && module.exports) {
     setBookingUnitsCount,
     adjustBookingUnits,
     selectTowerCottages2Br,
+    processValidBookingSubmission,
+    showInquiryReviewModal,
     generateFallbackInquiryId,
     trackBookingFunnelEvent
   };

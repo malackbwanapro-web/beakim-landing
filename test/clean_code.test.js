@@ -34,6 +34,7 @@ const {
   resolveConferencePackage,
   buildConferenceRfpMessage,
   renderAvailabilityUnknown,
+  renderAvailabilityPreApproved,
   renderInquiryNetworkFailure,
   renderAvailabilityCapacityWarning,
   generateFallbackInquiryId
@@ -952,11 +953,11 @@ assert.ok(daradContent.includes('"parentOrganization"'), "Darad schema must link
 assert.ok(darlingContent.includes('"parentOrganization"'), "Darling schema must link parentOrganization");
 
 // Hero preload & cache query strings
-assert.ok(indexContent.includes('rel="preload" as="image" href="assets/hero-bg.webp?v=2.1.0"'), "Homepage must preload hero image with high priority and version tag");
-assert.ok(indexContent.includes('assets/css/styles.css?v=2.1.0'), "Homepage CSS link must have ?v=2.1.0");
-assert.ok(indexContent.includes('assets/js/main.js?v=2.1.0'), "Homepage main.js script must have ?v=2.1.0");
+assert.ok(indexContent.includes('rel="preload" as="image" href="assets/hero-bg.webp?v=2.2.0"'), "Homepage must preload hero image with high priority and version tag");
+assert.ok(indexContent.includes('assets/css/styles.css?v=2.2.0'), "Homepage CSS link must have ?v=2.2.0");
+assert.ok(indexContent.includes('assets/js/main.js?v=2.2.0'), "Homepage main.js script must have ?v=2.2.0");
 assert.ok(towerContent.includes('Sleeps Up to 4 Guests (2 Bedrooms)'), "Tower Cottages must claim sleeps up to 4 guests, not 4+");
-console.log("   ✅ Schema.org parentOrganization linked across properties and assets cache-busted with ?v=2.1.0.");
+console.log("   ✅ Schema.org parentOrganization linked across properties and assets cache-busted with ?v=2.2.0.");
 
 // TEST 31: Dynamic Breakfast Add-On Eligibility & Tower Cottages Hiding
 console.log("31. Testing Dynamic Breakfast Add-On Eligibility & Tower Cottages Hiding...");
@@ -1163,4 +1164,136 @@ assert.ok(towerRawContent.includes('id="booking-units-wrapper"'), "tower-cottage
 
 console.log("   ✅ Unit capacity validation, multi-unit calculation, and capacity warning UI verified 100%.");
 
-console.log("\n🎉 ALL 32 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 33: Multi-Unit Booking Submission Orchestration & Pricing Retention
+console.log("33. Testing Multi-Unit Booking Submission Orchestration & Pricing Retention...");
+
+// 1. Audit reproduction scenario: 2 nights, Darad Std No-AC (1,700/night), 4 adults, 2 units
+const stdNoAcPricing = resolveStayPricing("Beakim Darad - Standard Room (Without AC)", "2026-11-03", "2026-11-05");
+assert.strictEqual(stdNoAcPricing.totalCost, 3400, "1 unit for 2 nights @ 1,700 must be 3,400");
+assert.strictEqual(stdNoAcPricing.durationDays, 2);
+
+const twoUnitsTotals = calculateReservationTotals({
+  pricingSummary: stdNoAcPricing,
+  adultsCount: 4,
+  hasBreakfast: false,
+  propertyIdentifier: "Beakim Darad - Standard Room (Without AC)",
+  unitsCount: 2
+});
+assert.strictEqual(twoUnitsTotals.unitsCount, 2, "Units count must be preserved as 2");
+assert.strictEqual(twoUnitsTotals.baseCost, 6800, "Base cost for 2 units must be exactly KSh 6,800");
+assert.strictEqual(twoUnitsTotals.grandTotal, 6800, "Grand total for 2 units must be exactly KSh 6,800");
+assert.strictEqual(twoUnitsTotals.formattedGrandTotal, "KSh 6,800", "Formatted total must be KSh 6,800");
+
+// 2. WhatsApp inquiry message retention
+const twoUnitsMessage = buildInquiryMessage({
+  guestName: "Audit Test Guest",
+  contactPhone: "+254 700000000",
+  guestEmail: "guest@example.com",
+  propertyName: "Beakim Darad - Standard Room (Without AC)",
+  checkInDate: "2026-11-03",
+  checkOutDate: "2026-11-05",
+  stayDurationText: "2 Nights",
+  adultsCount: 4,
+  childrenCount: 0,
+  estimatedTotal: twoUnitsTotals.formattedGrandTotal,
+  unitsCount: 2
+});
+assert.ok(twoUnitsMessage.includes("• Accommodation: Beakim Darad - Standard Room (Without AC) (2 Units)"), "Message must cite 2 units");
+assert.ok(twoUnitsMessage.includes("• Estimated Rate: KSh 6,800"), "Message must cite KSh 6,800");
+
+// 3. CRM intake payload verification & 50% deposit derivation
+const twoUnitsPayload = CrmSyncService.buildPayload({
+  formData: {
+    name: "Audit Test Guest",
+    email: "guest@example.com",
+    property: "Beakim Darad - Standard Room (Without AC)",
+    checkIn: "2026-11-03",
+    checkOut: "2026-11-05",
+    adults: 4,
+    children: 0,
+    unitsCount: 2
+  },
+  grandTotal: twoUnitsTotals.grandTotal,
+  formattedContactPhone: "+254 700000000"
+});
+assert.strictEqual(twoUnitsPayload.unitsCount, 2, "Payload must retain unitsCount = 2");
+assert.strictEqual(twoUnitsPayload.estimatedTotal, 6800, "Payload estimatedTotal must be exactly 6,800");
+const expected50PctDeposit = Math.round(twoUnitsPayload.estimatedTotal * 0.5);
+assert.strictEqual(expected50PctDeposit, 3400, "50% deposit on KSh 6,800 must be KSh 3,400 (not KSh 1,700)");
+
+// 4. Review dialog itemized breakdown rendering
+const twoUnitsBreakdown = renderInquiryCostBreakdown({
+  totals: twoUnitsTotals,
+  pricingSummary: stdNoAcPricing,
+  property: "Beakim Darad - Standard Room (Without AC)",
+  unitsCount: 2
+});
+assert.ok(twoUnitsBreakdown.includes("2 ×"), "Breakdown must display '2 ×' multiplier prefix");
+assert.ok(twoUnitsBreakdown.includes("KSh 6,800"), "Breakdown must display KSh 6,800 base accommodation");
+
+// 5. 3-unit case with breakfast
+const threeUnitsWithBreakfast = calculateReservationTotals({
+  pricingSummary: stdNoAcPricing,
+  adultsCount: 6,
+  hasBreakfast: true,
+  propertyIdentifier: "Beakim Darad - Standard Room (Without AC)",
+  unitsCount: 3
+});
+assert.strictEqual(threeUnitsWithBreakfast.baseCost, 10200, "3 units base cost must be 10,200");
+assert.strictEqual(threeUnitsWithBreakfast.breakfastCost, 6000, "6 adults x 2 nights x 500 must be 6,000");
+assert.strictEqual(threeUnitsWithBreakfast.grandTotal, 16200, "Grand total with breakfast must be 16,200");
+console.log("   ✅ Multi-unit booking pricing retention verified at KSh 6,800 and 50% deposit KSh 3,400 across all channels.");
+
+// TEST 34: Calendar Scroll-Lock Idempotency & Resize State Preservation
+console.log("34. Testing Calendar Scroll-Lock Idempotency & Resize State Preservation...");
+global.document = global.document || {};
+global.document.body = { style: { overflow: "" } };
+PageScrollLock.reset();
+assert.strictEqual(PageScrollLock.getLockCount(), 0, "Initial lock count must be 0");
+
+BeakimDateRangePicker.state.isOpen = true;
+BeakimDateRangePicker.state.isScrollLocked = false;
+
+// 1. Mobile sync acquires 1 lock
+BeakimDateRangePicker.syncScrollLock(true);
+assert.strictEqual(BeakimDateRangePicker.state.isScrollLocked, true, "isScrollLocked must be true");
+assert.strictEqual(PageScrollLock.getLockCount(), 1, "Lock count must be 1 after mobile open");
+
+// 2. 10 rapid mobile resize events must NOT increment lock count beyond 1
+for (let i = 0; i < 10; i++) {
+  BeakimDateRangePicker.syncScrollLock(true);
+}
+assert.strictEqual(PageScrollLock.getLockCount(), 1, "Repeated mobile resizes must keep lock count strictly at 1");
+
+// 3. Resizing to desktop breakpoint releases scroll lock
+BeakimDateRangePicker.syncScrollLock(false);
+assert.strictEqual(BeakimDateRangePicker.state.isScrollLocked, false, "isScrollLocked must be false on desktop");
+assert.strictEqual(PageScrollLock.getLockCount(), 0, "Lock count must be 0 on desktop breakpoint");
+
+// 4. Resizing back to mobile re-acquires exactly 1 lock
+BeakimDateRangePicker.syncScrollLock(true);
+assert.strictEqual(BeakimDateRangePicker.state.isScrollLocked, true);
+assert.strictEqual(PageScrollLock.getLockCount(), 1);
+
+// 5. Closing releases lock completely
+BeakimDateRangePicker.state.isOpen = false;
+BeakimDateRangePicker.syncScrollLock(false);
+assert.strictEqual(BeakimDateRangePicker.state.isScrollLocked, false);
+assert.strictEqual(PageScrollLock.getLockCount(), 0, "Lock count must return to 0 upon close");
+console.log("   ✅ Calendar scroll-lock is strictly idempotent across resize and breakpoint transitions.");
+
+// TEST 35: Availability Copy & Zero "Direct Lock" Assertion
+console.log("35. Testing Availability Copy & Zero 'Direct Lock' Invariant...");
+const preApprovedMulti = renderAvailabilityPreApproved(14, "Standard Room (Without AC)", 4, 2);
+assert.ok(preApprovedMulti.includes("2 units selected for 4 guests — subject to confirmation"), "Badge must state 'selected — subject to confirmation'");
+assert.ok(!preApprovedMulti.includes("units reserved"), "Badge must NOT claim units are 'reserved' before booking creation");
+
+// Assert 0 occurrences of "Direct Lock" across all HTML files
+const htmlFiles = ["index.html", "beakim-darad.html", "diani-darling.html", "tower-cottages.html", "insights.html", "terms-of-service.html"];
+for (const file of htmlFiles) {
+  const fileContent = fs.readFileSync(path.join(__dirname, "..", file), "utf8");
+  assert.ok(!fileContent.includes("Direct Lock"), `${file} must NOT contain outdated 'Direct Lock' phrasing`);
+}
+console.log("   ✅ Availability copy and detail-page headers verified for 100% truthfulness and precision.");
+
+console.log("\n🎉 ALL 35 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
