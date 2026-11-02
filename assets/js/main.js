@@ -982,7 +982,8 @@ function syncBreakfastAddonCard(propertyValue) {
 
   if (breakfastCard && isBreakfastEligible) {
     const priceBadge = (typeof document !== "undefined" && document.getElementById("addon-breakfast-price-badge")) ||
-                       breakfastCard.querySelector("p.text-champagne") ||
+                       breakfastCard.querySelector("#addon-breakfast-price-badge") ||
+                       breakfastCard.querySelector(".addon-price, .text-champagne, [class*='7A5B20']") ||
                        breakfastCard.querySelector(".text-champagne:not(input)");
     if (priceBadge) {
       if (normalized.includes("darad")) {
@@ -993,7 +994,8 @@ function syncBreakfastAddonCard(propertyValue) {
     }
 
     const descElem = (typeof document !== "undefined" && document.getElementById("addon-breakfast-description")) ||
-                     breakfastCard.querySelector(".text-driftwood");
+                     breakfastCard.querySelector("#addon-breakfast-description") ||
+                     breakfastCard.querySelector(".text-stone-600, .text-driftwood");
     if (descElem) {
       if (normalized.includes("darling")) {
         descElem.textContent = "Fresh tropical fruits, eggs made to order, Swahili mahamri, and hot tea/coffee delivered to your verandah.";
@@ -1057,7 +1059,7 @@ function selectDaradRoomTier(roomValue, roomCardElement) {
   // Update dynamic subtitle / badge on the Beakim Darad property card if present
   const daradRateLabel = document.getElementById("darad-property-rate-label");
   if (daradRateLabel && roomCardElement) {
-    const priceText = roomCardElement.querySelector(".text-champagne")?.textContent || "";
+    const priceText = roomCardElement.querySelector(".darad-room-price, .text-champagne, [class*='7A5B20']")?.textContent || "";
     const nameText = roomCardElement.querySelector(".font-display")?.textContent || "";
     daradRateLabel.textContent = `Selected: ${nameText} (${priceText.trim()})`;
   }
@@ -1280,7 +1282,7 @@ function showToast(messageText, durationMs = APP_CONFIG.UI.DEFAULT_TOAST_DURATIO
   if (!toastElement) {
     toastElement = document.createElement("div");
     toastElement.id = "beakim-toast";
-    toastElement.className = "fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] transition-all duration-300 transform opacity-0 pointer-events-none translate-y-4";
+    toastElement.className = "fixed bottom-8 left-0 right-0 mx-auto w-fit max-w-[90vw] z-[100] transition-all duration-300 transform opacity-0 pointer-events-none translate-y-4";
     toastElement.innerHTML = `
       <div class="bg-deep-forest/95 border border-champagne/40 backdrop-blur-md text-ivory px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 text-xs md:text-sm font-medium">
         <span class="text-champagne text-base font-bold">✓</span>
@@ -1525,7 +1527,7 @@ function renderAvailabilityCapacityWarning({ offering, totalGuests, adults, chil
           <span class="font-bold block text-deep-forest text-xs sm:text-sm">
             Party of ${totalGuests} Exceeds 1-Unit Capacity (${bedType} • Max ${maxGuests} Guests)
           </span>
-          <p class="text-driftwood text-[11px] leading-snug">
+          <p class="text-stone-700 text-[11px] leading-snug">
             <strong>${name}</strong> features ${bedType} and accommodates up to <strong>${maxGuests} guests</strong> per unit. For your party of <strong>${totalGuests} guests</strong> (${adults} Adults${children > 0 ? `, ${children} Children` : ""}), please reserve at least <strong>${unitsNeeded} units</strong>.
           </p>
         </div>
@@ -1539,8 +1541,8 @@ function renderAvailabilityCapacityWarning({ offering, totalGuests, adults, chil
         </button>
       </div>
       ${showTowerSuggestion ? `
-      <div class="pt-1.5 border-t border-amber-200/50 text-[11px] text-driftwood">
-        💡 <strong>Prefer 1 accommodation for everyone?</strong> Explore our <a href="javascript:void(0)" onclick="selectTowerCottages2Br()" class="text-champagne font-bold underline hover:text-champagne-light">Tower Cottages 2-Bedroom Apartment</a> (2 bedrooms, fits 4 guests for KSh 2,500/night).
+      <div class="pt-1.5 border-t border-amber-200/50 text-[11px] text-stone-700">
+        💡 <strong>Prefer 1 accommodation for everyone?</strong> Explore our <a href="javascript:void(0)" onclick="selectTowerCottages2Br()" class="text-[#7A5B20] font-bold underline hover:text-champagne-light">Tower Cottages 2-Bedroom Apartment</a> (2 bedrooms, fits 4 guests for KSh 2,500/night).
       </div>
       ` : ""}
     </div>
@@ -1682,7 +1684,7 @@ async function triggerLiveAvailabilityCheck() {
             <span class="text-amber-600 font-bold">⚠️</span>
             <span class="font-bold">Only ${result.availableUnitsCount || 0} unit${(result.availableUnitsCount || 0) === 1 ? '' : 's'} available (Requested: ${result.requestedUnits || currentUnits})</span>
           </div>
-          <p class="text-[11px] text-driftwood">We cannot accommodate ${currentUnits} separate units for these exact dates. Please adjust unit count or submit inquiry for custom accommodation arrangement.</p>
+          <p class="text-[11px] text-stone-700">We cannot accommodate ${currentUnits} separate units for these exact dates. Please adjust unit count or submit inquiry for custom accommodation arrangement.</p>
         </div>
       `;
       return;

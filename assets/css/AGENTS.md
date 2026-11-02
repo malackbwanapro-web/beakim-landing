@@ -12,19 +12,21 @@
 
 ## 2. Local Contracts & Rules
 - **Color Palette:**
-  - Champagne: `#C5A880` / `#B8965A` (Luxury gold accents)
+  - Champagne: `#C5A880` / `#B8965A` (Luxury gold accents on dark backgrounds)
+  - Accessible Gold: `#7A5B20` (Luxury bronze-gold on light `#FAF8F5` and white surfaces with WCAG AA $\ge 4.8:1$ contrast)
   - Deep Forest: `#0D2318` / `#0B2518` (Primary dark background)
   - Canopy: `#133E2B` / `#1E4331` (Secondary elevated containers)
   - Ivory: `#FDFBF7` / `#F5F0E8` (Crisp reading text)
-  - Driftwood: `#8C827A` (Muted secondary meta text)
+  - Driftwood: `#D4B07A` (Muted secondary meta text on dark backgrounds; use `text-stone-600` on light backgrounds)
 - **Touch Ergonomics:**
   - `touch-action: manipulation;` enforced in `@layer base` for buttons, inputs, links, and cards to eliminate mobile double-tap delays.
 - **Motion & Accessibility:**
   - `@media (prefers-reduced-motion: reduce)` must be declared on smooth-scrolling containers and animation classes (`.btn-sheen`, `.reveal-on-scroll`, `.card-luxury-hover`, `.faq-answer`) to support vestibular accessibility and eliminate motion when requested.
+  - Universal `*` selector MUST NOT declare `transform: none !important` to preserve static structural layout transforms (toast centering, dialog placement, tooltips). Transform suppression is strictly scoped to animated classes.
   - Pure CSS champagne button sheen (`.btn-sheen`) uses GPU-composited `transform: translate3d` and `pointer-events-none`.
   - Subtle luxury card hover depth (`.card-luxury-hover`) elevates borders and shadow smoothly without layout thrashing.
   - FAQ accordion expansion (`.faq-answer`) features gentle keyframed opacity and translateY entrance (`@keyframes faqSlideDown`).
-  - Progressive enhancement scroll reveal (`.reveal-on-scroll` / `html.js-reveal-active .reveal-on-scroll.is-revealed`) reveals below-the-fold content smoothly with staggered offsets (staggers 1–5). Never apply to the hero section (preserves immediate LCP).
+  - Progressive enhancement scroll reveal (`.reveal-on-scroll` / `html.js-reveal-active .reveal-on-scroll.is-revealed`) reveals below-the-fold content smoothly. Stagger delays are managed via `--reveal-delay: 0ms` (60ms–300ms) consumed in the reveal transition shorthand. Never apply to the hero section (preserves immediate LCP).
 
 ---
 

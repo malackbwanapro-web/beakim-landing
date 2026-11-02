@@ -23,7 +23,11 @@
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" />
+  </noscript>
 
   <!-- Favicon & Mobile Theme -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -33,7 +37,7 @@
   <meta name="theme-color" content="#0d2318" />
 
   <!-- Compiled Production CSS -->
-  <link rel="stylesheet" href="assets/css/styles.css?v=2.2.1" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=2.2.3" />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="blog" />
@@ -200,7 +204,7 @@
   <header class="fixed top-0 left-0 right-0 z-40 bg-deep-forest/90 backdrop-blur-md border-b border-champagne/15 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <a class="flex items-center gap-3 group" href="/">
-        <img src="assets/logo-monogram.png?v=2.2.1" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
+        <img src="assets/logo-monogram.png?v=2.2.3" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
         <div class="flex flex-col">
           <span class="font-display text-base tracking-wider text-ivory leading-none font-semibold group-hover:text-champagne transition duration-300">BEAKIM</span>
           <span class="text-[9px] tracking-widest text-champagne uppercase mt-0.5">Hospitality Group</span>
@@ -623,7 +627,7 @@
       <!-- Left side: Brand Identity -->
       <div class="space-y-4 text-center md:text-left">
         <a class="flex items-center gap-3 justify-center md:justify-start group" href="/">
-          <img src="assets/logo-monogram.png?v=2.2.1" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
+          <img src="assets/logo-monogram.png?v=2.2.3" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
           <div>
             <span class="font-display text-base tracking-wider text-ivory group-hover:text-champagne transition duration-300 block">BEAKIM HOSPITALITY INSIGHTS</span>
             <span class="text-[10px] text-champagne uppercase tracking-widest block">Coastal Travel &amp; Host Stories</span>

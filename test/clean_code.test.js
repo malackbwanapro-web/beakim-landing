@@ -954,11 +954,11 @@ assert.ok(daradContent.includes('"parentOrganization"'), "Darad schema must link
 assert.ok(darlingContent.includes('"parentOrganization"'), "Darling schema must link parentOrganization");
 
 // Hero preload & cache query strings
-assert.ok(indexContent.includes('rel="preload" as="image" href="assets/hero-bg.webp?v=2.2.1"'), "Homepage must preload hero image with high priority and version tag");
-assert.ok(indexContent.includes('assets/css/styles.css?v=2.2.1'), "Homepage CSS link must have ?v=2.2.1");
-assert.ok(indexContent.includes('assets/js/main.js?v=2.2.1'), "Homepage main.js script must have ?v=2.2.1");
+assert.ok(/rel="preload" as="image" href="assets\/hero-bg\.webp\?v=2\.2\.[1-9]"/i.test(indexContent), "Homepage must preload hero image with high priority and version tag");
+assert.ok(/assets\/css\/styles\.css\?v=2\.2\.[1-9]/i.test(indexContent), "Homepage CSS link must have valid version tag");
+assert.ok(/assets\/js\/main\.js\?v=2\.2\.[1-9]/i.test(indexContent), "Homepage main.js script must have valid version tag");
 assert.ok(towerContent.includes('Sleeps Up to 4 Guests (2 Bedrooms)'), "Tower Cottages must claim sleeps up to 4 guests, not 4+");
-console.log("   ✅ Schema.org parentOrganization linked across properties and assets cache-busted with ?v=2.2.1.");
+console.log("   ✅ Schema.org parentOrganization linked across properties and assets cache-busted with version tag.");
 
 // TEST 31: Dynamic Breakfast Add-On Eligibility & Tower Cottages Hiding
 console.log("31. Testing Dynamic Breakfast Add-On Eligibility & Tower Cottages Hiding...");
@@ -1325,10 +1325,10 @@ for (const cardPath of cardImagePaths) {
 assert.ok(totalCardsSizeKB < 300, `Total card image weight (${totalCardsSizeKB.toFixed(1)} KB) must be under 300 KB budget`);
 
 const indexRaw = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
-assert.ok(indexRaw.includes('rel="preload" as="image" href="assets/hero-bg-mobile.webp?v=2.2.1" type="image/webp" media="(max-width: 640px)"'), "Must preload mobile hero image with media query");
-assert.ok(indexRaw.includes('rel="preload" as="image" href="assets/hero-bg.webp?v=2.2.1" type="image/webp" media="(min-width: 641px)"'), "Must preload desktop hero image with media query");
+assert.ok(/rel="preload" as="image" href="assets\/hero-bg-mobile\.webp\?v=2\.2\.[1-9]"/i.test(indexRaw) && indexRaw.includes('type="image/webp" media="(max-width: 640px)"'), "Must preload mobile hero image with media query");
+assert.ok(/rel="preload" as="image" href="assets\/hero-bg\.webp\?v=2\.2\.[1-9]"/i.test(indexRaw) && indexRaw.includes('type="image/webp" media="(min-width: 641px)"'), "Must preload desktop hero image with media query");
 assert.ok(indexRaw.includes('<picture>'), "Hero background must use responsive <picture> tag");
-assert.ok(indexRaw.includes('srcset="assets/hero-bg-mobile.webp?v=2.2.1"'), "Picture must contain mobile WebP source");
+assert.ok(/srcset="assets\/hero-bg-mobile\.webp\?v=2\.2\.[1-9]"/i.test(indexRaw), "Picture must contain mobile WebP source");
 assert.ok(indexRaw.includes('width="1024" height="1024"'), "Hero img must define explicit width and height dimensions");
 assert.ok(indexRaw.includes('rel="dns-prefetch" href="https://fonts.googleapis.com"'), "Must prefetch Google Fonts DNS");
 console.log("   ✅ Responsive hero preload, sub-85KB mobile WebP, and LCP chain verified with 100% compliance.");
@@ -1420,4 +1420,55 @@ if (global.document && typeof global.document.getElementById !== "function") {
 
 console.log("   ✅ Luxury animations verified: zero LCP delay, pure CSS sheen, passive scroll-reveal, and 100% WCAG motion safety.");
 
-console.log("\n🎉 ALL 38 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 39: Reduced-Motion Layout Transform Preservation, Stagger Custom Property & Form A11y Contrast
+console.log("39. Testing Reduced-Motion Layout Transform Preservation, Stagger Custom Property & Form A11y Contrast...");
+
+// 1. Verify Reduced-Motion does NOT strip transforms universally from layout elements
+assert.ok(
+  !/@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{\s*\*,?\s*\*::before,?\s*\*::after\s*\{[^}]*transform:\s*none/i.test(stylesCssContent),
+  "styles.css must NEVER apply 'transform: none' to universal selector in prefers-reduced-motion (preserves structural layout centering)"
+);
+assert.ok(
+  stylesCssContent.includes(".reveal-on-scroll") && stylesCssContent.includes("transform:none"),
+  "styles.css must explicitly scope transform: none to animated .reveal-on-scroll under reduced motion"
+);
+
+// 2. Verify CSS custom property --reveal-delay is defined and consumed by reveal-on-scroll
+assert.ok(stylesCssContent.includes("--reveal-delay"), "styles.css must define --reveal-delay custom property for staggers");
+assert.ok(
+  stylesCssContent.includes("var(--reveal-delay") || stylesCssContent.includes("var(--reveal-delay,0ms)"),
+  "styles.css must consume var(--reveal-delay) in transition shorthand"
+);
+
+// 3. Verify showToast() uses block-formatting layout centering
+const mainJsContent = fs.readFileSync(path.join(assetsDir, "js", "main.js"), "utf8");
+assert.ok(
+  mainJsContent.includes("left-0 right-0 mx-auto w-fit"),
+  "showToast() must use block-formatting centering (left-0 right-0 mx-auto w-fit) immune to transform resets"
+);
+
+// 4. Verify light booking form column has ZERO low-contrast text-driftwood
+const freshIndex = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+const lightFormStart = freshIndex.indexOf('bg-[#FAF8F5]');
+assert.ok(lightFormStart !== -1, "index.html must have light booking form column");
+const lightFormEnd = freshIndex.indexOf('</form>', lightFormStart);
+const lightFormContent = freshIndex.slice(lightFormStart, lightFormEnd);
+
+assert.ok(
+  !lightFormContent.includes("text-driftwood"),
+  "Light booking form column (#FAF8F5) must NOT contain low-contrast text-driftwood"
+);
+assert.ok(
+  lightFormContent.includes("text-[#7A5B20]"),
+  "Light booking form column must use high-contrast accessible luxury gold (text-[#7A5B20])"
+);
+
+// 5. Verify non-blocking Google Fonts in <head>
+assert.ok(
+  freshIndex.includes('rel="preload" as="style"') && freshIndex.includes('onload="this.media=\'all\'"'),
+  "index.html must load Google Fonts asynchronously via preload to eliminate render-blocking delay"
+);
+
+console.log("   ✅ Reduced-motion layout preservation, stagger delay custom properties, and WCAG AA form contrast verified 100%.");
+
+console.log("\n🎉 ALL 39 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");

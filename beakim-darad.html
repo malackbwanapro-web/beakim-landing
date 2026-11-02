@@ -24,7 +24,11 @@
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" />
+  </noscript>
 
   <!-- Favicon & Mobile Theme -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -34,7 +38,7 @@
   <meta name="theme-color" content="#0d2b24" />
 
   <!-- Compiled Production CSS -->
-  <link rel="stylesheet" href="assets/css/styles.css?v=2.2.1" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=2.2.3" />
 
   <!-- Verbatim JSON-LD Schema -->
   <script type="application/ld+json">
@@ -81,8 +85,8 @@
   </script>
 
   <!-- Firebase App & Firestore SDKs -->
-  <script src="assets/js/catalog.js?v=2.2.1" defer></script>
-  <script src="assets/js/main.js?v=2.2.1" defer></script>
+  <script src="assets/js/catalog.js?v=2.2.3" defer></script>
+  <script src="assets/js/main.js?v=2.2.3" defer></script>
   <link rel="canonical" href="https://www.beakimhospitalitygroup.co.ke/beakim-darad" />
 
   <!-- Open Graph / Social Meta -->
@@ -139,7 +143,7 @@
   <header class="fixed top-0 left-0 right-0 z-40 bg-deep-forest/90 backdrop-blur-md border-b border-champagne/15 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <a class="flex items-center gap-3 group" href="/">
-        <img src="assets/logo-monogram.png?v=2.2.1" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
+        <img src="assets/logo-monogram.png?v=2.2.3" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
         <div class="flex flex-col">
           <span class="font-display text-base tracking-wider text-ivory leading-none font-semibold group-hover:text-champagne transition duration-300">BEAKIM</span>
           <span class="text-[9px] tracking-widest text-champagne uppercase mt-0.5">Beakim Darad</span>
@@ -723,8 +727,8 @@
                     <span class="text-sm font-bold font-display text-deep-forest">Standard Room (No AC)</span>
                     <span class="text-[10px] uppercase font-semibold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded">14 Units</span>
                   </div>
-                  <p class="text-xs text-driftwood">Ceiling Fan • Ensuite Washroom • Shared Kitchen</p>
-                  <p class="text-xs font-bold text-champagne pt-1">KSh 1,700 / night</p>
+                  <p class="text-xs text-stone-600">Ceiling Fan • Ensuite Washroom • Shared Kitchen</p>
+                  <p class="text-xs font-bold text-[#7A5B20] pt-1">KSh 1,700 / night</p>
                 </div>
                 <div class="w-5 h-5 rounded-full border-2 border-champagne bg-champagne residence-radio flex items-center justify-center shrink-0 mt-0.5">
                   <div class="w-2 h-2 rounded-full bg-white"></div>
@@ -742,8 +746,8 @@
                     <span class="text-sm font-bold font-display text-deep-forest">Standard Room (With AC)</span>
                     <span class="text-[10px] uppercase font-semibold px-2 py-0.5 bg-blue-100 text-blue-800 rounded">7 Units</span>
                   </div>
-                  <p class="text-xs text-driftwood">Air Conditioned • Ensuite Washroom • Shared Kitchen</p>
-                  <p class="text-xs font-bold text-champagne pt-1">KSh 2,300 / night</p>
+                  <p class="text-xs text-stone-600">Air Conditioned • Ensuite Washroom • Shared Kitchen</p>
+                  <p class="text-xs font-bold text-[#7A5B20] pt-1">KSh 2,300 / night</p>
                 </div>
                 <div class="w-5 h-5 rounded-full border-2 border-deep-forest/30 bg-transparent residence-radio flex items-center justify-center shrink-0 mt-0.5">
                   <div class="w-2 h-2 rounded-full bg-white opacity-0"></div>
@@ -761,8 +765,8 @@
                     <span class="text-sm font-bold font-display text-deep-forest">Superior Room (With AC)</span>
                     <span class="text-[10px] uppercase font-semibold px-2 py-0.5 bg-amber-100 text-amber-800 rounded">12 Units</span>
                   </div>
-                  <p class="text-xs text-driftwood">Split AC • Ensuite Washroom • Premium Finishes</p>
-                  <p class="text-xs font-bold text-champagne pt-1">KSh 3,000 / night</p>
+                  <p class="text-xs text-stone-600">Split AC • Ensuite Washroom • Premium Finishes</p>
+                  <p class="text-xs font-bold text-[#7A5B20] pt-1">KSh 3,000 / night</p>
                 </div>
                 <div class="w-5 h-5 rounded-full border-2 border-deep-forest/30 bg-transparent residence-radio flex items-center justify-center shrink-0 mt-0.5">
                   <div class="w-2 h-2 rounded-full bg-white opacity-0"></div>
@@ -780,8 +784,8 @@
                     <span class="text-sm font-bold font-display text-deep-forest">Ensuite Studio (Kitchenette)</span>
                     <span class="text-[10px] uppercase font-semibold px-2 py-0.5 bg-purple-100 text-purple-800 rounded">9 Units</span>
                   </div>
-                  <p class="text-xs text-driftwood">Private Kitchenette • Split AC • Ensuite Bath</p>
-                  <p class="text-xs font-bold text-champagne pt-1">KSh 3,000 / night</p>
+                  <p class="text-xs text-stone-600">Private Kitchenette • Split AC • Ensuite Bath</p>
+                  <p class="text-xs font-bold text-[#7A5B20] pt-1">KSh 3,000 / night</p>
                 </div>
                 <div class="w-5 h-5 rounded-full border-2 border-deep-forest/30 bg-transparent residence-radio flex items-center justify-center shrink-0 mt-0.5">
                   <div class="w-2 h-2 rounded-full bg-white opacity-0"></div>
@@ -799,8 +803,8 @@
                     <span class="text-sm font-bold font-display text-deep-forest">Garden View Cottage (AC)</span>
                     <span class="text-[10px] uppercase font-semibold px-2 py-0.5 bg-rose-100 text-rose-800 rounded">3 Units</span>
                   </div>
-                  <p class="text-xs text-driftwood">Standalone 1-Bedroom • Private Lounge • Patio</p>
-                  <p class="text-xs font-bold text-champagne pt-1">KSh 4,000 / night</p>
+                  <p class="text-xs text-stone-600">Standalone 1-Bedroom • Private Lounge • Patio</p>
+                  <p class="text-xs font-bold text-[#7A5B20] pt-1">KSh 4,000 / night</p>
                 </div>
                 <div class="w-5 h-5 rounded-full border-2 border-deep-forest/30 bg-transparent residence-radio flex items-center justify-center shrink-0 mt-0.5">
                   <div class="w-2 h-2 rounded-full bg-white opacity-0"></div>
@@ -817,10 +821,10 @@
                 <div id="booking-date-range-trigger" role="button" tabindex="0" aria-haspopup="dialog" aria-expanded="false"
                      class="w-full bg-white border border-deep-forest/20 hover:border-champagne focus:border-champagne rounded-lg px-3.5 py-2 text-xs text-deep-forest transition shadow-sm font-medium cursor-pointer flex items-center justify-between gap-2 select-none">
                   <div class="flex items-center gap-2.5 min-w-0">
-                    <span class="text-champagne font-bold text-base shrink-0">📅</span>
+                    <span class="text-[#7A5B20] font-bold text-base shrink-0">📅</span>
                     <div class="flex items-center gap-1.5 truncate text-[11px] sm:text-xs">
                       <span id="display-check-in" class="font-bold text-deep-forest">Loading...</span>
-                      <span class="text-champagne font-bold">→</span>
+                      <span class="text-[#7A5B20] font-bold">→</span>
                       <span id="display-check-out" class="font-bold text-deep-forest">Loading...</span>
                     </div>
                   </div>
@@ -859,7 +863,7 @@
               <div class="flex items-center justify-between">
                 <div>
                   <span class="text-xs font-bold text-deep-forest block">Residences Required</span>
-                  <span class="text-[11px] text-driftwood" id="booking-units-guidance-text">Based on party size</span>
+                  <span class="text-[11px] text-stone-600" id="booking-units-guidance-text">Based on party size</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <button type="button" onclick="adjustBookingUnits(-1)" class="w-7 h-7 rounded-lg bg-white border border-deep-forest/20 text-deep-forest font-bold text-sm flex items-center justify-center hover:bg-champagne/20 transition cursor-pointer" aria-label="Decrease units">−</button>
@@ -881,7 +885,7 @@
                 <span class="w-6 h-6 rounded-full bg-deep-forest text-champagne text-xs font-bold flex items-center justify-center shrink-0">2</span>
                 <h4 class="text-xs font-bold uppercase tracking-wider text-deep-forest">Stay Preferences &amp; Coastal Logistics</h4>
               </div>
-              <span class="text-[11px] text-driftwood hidden sm:inline">Tailor your stay</span>
+              <span class="text-[11px] text-stone-600 hidden sm:inline">Tailor your stay</span>
             </div>
 
             <!-- Preferences Container -->
@@ -890,16 +894,16 @@
               <!-- Card 1: Fresh Coastal Breakfast (Paid Add-On - Active for Beakim Darad) -->
               <label id="addon-card-breakfast" class="relative p-4 rounded-xl border border-champagne/50 bg-white hover:border-champagne cursor-pointer transition shadow-sm flex items-start gap-3.5 group">
                 <input type="checkbox" id="addon-breakfast" onchange="handleDateOrAddonChange()"
-                       class="mt-1 w-4 h-4 text-champagne rounded border-deep-forest/30 focus:ring-champagne accent-champagne cursor-pointer" />
+                       class="mt-1 w-4 h-4 text-[#7A5B20] rounded border-deep-forest/30 focus:ring-champagne accent-champagne cursor-pointer" />
                 <div class="space-y-1">
                   <div class="flex items-center gap-2 flex-wrap">
                     <span class="text-xs font-bold text-deep-forest">🍳 Chef-Prepared Coastal Breakfast</span>
                     <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-champagne/20 text-deep-forest">Available</span>
                   </div>
-                  <p id="addon-breakfast-description" class="text-[11px] text-driftwood leading-snug">
+                  <p id="addon-breakfast-description" class="text-[11px] text-stone-600 leading-snug">
                     Fresh coastal tropical fruits, eggs made to order, Swahili mahamri, and hot tea/coffee served poolside.
                   </p>
-                  <p id="addon-breakfast-price-badge" class="text-xs font-bold text-champagne pt-0.5">+KSh 500 / person / day</p>
+                  <p id="addon-breakfast-price-badge" class="text-xs font-bold text-[#7A5B20] pt-0.5">+KSh 500 / person / day</p>
                 </div>
               </label>
 
@@ -991,15 +995,15 @@
           <!-- ── DYNAMIC LIVE PRICING BREAKDOWN ── -->
           <div class="bg-white border border-champagne/30 rounded-2xl p-5 shadow-sm space-y-3">
             <div class="flex justify-between items-center text-xs">
-              <span class="text-driftwood">Selected Unit &amp; Rate:</span>
+              <span class="text-stone-600">Selected Unit &amp; Rate:</span>
               <span id="summary-unit-name" class="font-bold text-deep-forest">Standard Room (Without AC)</span>
             </div>
             <div class="flex justify-between items-center text-xs">
-              <span class="text-driftwood">Base Nightly Rate:</span>
+              <span class="text-stone-600">Base Nightly Rate:</span>
               <span id="summary-rate" class="font-medium text-deep-forest">KSh 1,700 / night</span>
             </div>
             <div class="flex justify-between items-center text-xs">
-              <span class="text-driftwood">Stay Duration:</span>
+              <span class="text-stone-600">Stay Duration:</span>
               <span id="summary-nights" class="font-medium text-deep-forest">Select dates</span>
             </div>
             <div id="summary-breakfast-row" class="hidden flex justify-between items-center text-xs text-emerald-800 bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-200/60">
@@ -1009,9 +1013,9 @@
             <div class="pt-3 border-t border-deep-forest/10 flex justify-between items-center">
               <div>
                 <span class="text-xs font-bold uppercase tracking-wider text-deep-forest block">Estimated Stay Total</span>
-                <span class="text-[10px] text-driftwood">Direct host rate • Zero booking fees</span>
+                <span class="text-[10px] text-stone-600">Direct host rate • Zero booking fees</span>
               </div>
-              <span id="summary-total" class="text-xl sm:text-2xl font-bold font-display text-champagne">Select dates for total</span>
+              <span id="summary-total" class="text-xl sm:text-2xl font-bold font-display text-[#7A5B20]">Select dates for total</span>
             </div>
           </div>
 
@@ -1022,7 +1026,7 @@
               <span class="text-champagne font-bold text-lg">✓</span>
               <span>PROCEED TO REVIEW &amp; CONFIRM →</span>
             </button>
-            <div class="flex flex-wrap items-center justify-center gap-4 text-[11px] text-driftwood pt-1 text-center">
+            <div class="flex flex-wrap items-center justify-center gap-4 text-[11px] text-stone-600 pt-1 text-center">
               <span class="hidden sm:inline-flex items-center gap-1.5"><span class="text-emerald-600 font-bold">✓</span> Direct Host Rate</span>
               <span class="hidden sm:inline-flex items-center gap-1.5"><span class="text-emerald-600 font-bold">✓</span> Zero Booking Fees</span>
               <span class="inline-flex items-center gap-1.5"><span class="text-emerald-600 font-bold">✓</span> Guaranteed 15–30 Min Response</span>
@@ -1235,7 +1239,7 @@
       <!-- Left side: Brand Identity -->
       <div class="space-y-4 text-center md:text-left">
         <a class="flex items-center gap-3 justify-center md:justify-start group" href="/">
-          <img src="assets/logo-monogram.png?v=2.2.1" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
+          <img src="assets/logo-monogram.png?v=2.2.3" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
           <div>
             <span class="font-display text-base tracking-wider text-ivory group-hover:text-champagne transition duration-300 block">BEAKIM BEACH DARAD</span>
             <span class="text-[10px] text-champagne uppercase tracking-widest block">Beach Road — Diani Beach, Kenya</span>
