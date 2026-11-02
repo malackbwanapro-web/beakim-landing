@@ -24,7 +24,8 @@ const {
   toggleDaradRoomSelector,
   renderInquiryCostBreakdown,
   renderInquirySuccessReceipt,
-  initializeConciergeHesitationEngine
+  initializeConciergeHesitationEngine,
+  BeakimDateRangePicker
 } = require("../assets/js/main.js");
 
 const { BEAKIM_CATALOG, getOfferingById } = require("../assets/js/catalog.js");
@@ -497,4 +498,41 @@ for (const pageName of commDockPages) {
 }
 console.log("   ✅ Desktop circular 56px FABs and 8-second hesitation telemetry engine asserted across all 7 pages.");
 
-console.log("\n🎉 ALL 17 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 18: Beakim Luxury Month Calendar Range Picker Engine & Form Integration
+console.log("18. Testing Beakim Luxury Month Calendar Range Picker Engine & Form Integration...");
+assert.strictEqual(typeof BeakimDateRangePicker, "object", "BeakimDateRangePicker must be exported as an object");
+assert.strictEqual(typeof BeakimDateRangePicker.formatDisplayDate, "function", "formatDisplayDate must be a function");
+assert.strictEqual(typeof BeakimDateRangePicker.formatShortDisplayDate, "function", "formatShortDisplayDate must be a function");
+
+// Test pure date string formatting logic
+assert.strictEqual(BeakimDateRangePicker.formatDisplayDate("2026-11-06"), "Fri, 6 Nov 2026");
+assert.strictEqual(BeakimDateRangePicker.formatShortDisplayDate("2026-11-06"), "Fri, 6 Nov");
+assert.strictEqual(BeakimDateRangePicker.formatShortDisplayDate("2026-12-25"), "Fri, 25 Dec");
+
+// Assert safe execution in headless/SSR environment
+assert.doesNotThrow(() => {
+  BeakimDateRangePicker.init();
+}, "BeakimDateRangePicker.init must handle headless/SSR runtime gracefully");
+
+// Assert all 5 booking forms site-wide contain the luxury date range trigger and calendar popover
+const bookingPages = [
+  "index.html",
+  "beakim-darad.html",
+  "diani-darling.html",
+  "tower-cottages.html",
+  "beakim-apartments.html"
+];
+
+for (const pageName of bookingPages) {
+  const content = fs.readFileSync(path.join(__dirname, "..", pageName), "utf8");
+  assert.ok(content.includes('id="booking-date-range-trigger"'), `${pageName} must contain #booking-date-range-trigger`);
+  assert.ok(content.includes('id="beakim-calendar-popover"'), `${pageName} must contain #beakim-calendar-popover`);
+  assert.ok(content.includes('id="display-check-in"'), `${pageName} must contain #display-check-in`);
+  assert.ok(content.includes('id="display-check-out"'), `${pageName} must contain #display-check-out`);
+  assert.ok(content.includes('id="display-nights-badge"'), `${pageName} must contain #display-nights-badge`);
+  assert.ok(content.includes('id="check-in"'), `${pageName} must retain #check-in for CRM sync`);
+  assert.ok(content.includes('id="check-out"'), `${pageName} must retain #check-out for CRM sync`);
+}
+console.log("   ✅ BeakimDateRangePicker engine and markup asserted with 100% resilience across all 5 booking forms.");
+
+console.log("\n🎉 ALL 18 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");

@@ -84,4 +84,34 @@
   .hesitation-pulse-phone {
     animation: hesitation-glow-phone 2.4s ease-in-out infinite;
   }
+
+  /* Luxury Coastal Calendar Range Ribbon */
+  .cal-range-start {
+    background-color: #D4AF37 !important;
+    color: #0D2318 !important;
+    font-weight: 700 !important;
+    border-radius: 9999px 0 0 9999px !important;
+  }
+  .cal-range-end {
+    background-color: #D4AF37 !important;
+    color: #0D2318 !important;
+    font-weight: 700 !important;
+    border-radius: 0 9999px 9999px 0 !important;
+  }
+  .cal-range-start.cal-range-end {
+    border-radius: 9999px !important;
+  }
+  .cal-range-mid {
+    background-color: rgba(212, 175, 55, 0.18) !important;
+    color: #F5F0E8 !important;
+    border-radius: 0 !important;
+  }
+  .cal-range-hover {
+    background-color: rgba(212, 175, 55, 0.12) !important;
+  }
+  .cal-day-cell {
+    min-height: 40px;
+    min-width: 40px;
+    touch-action: manipulation;
+  }
 }

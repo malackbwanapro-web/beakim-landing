@@ -63,22 +63,52 @@ const APP_CONFIG = Object.freeze({
 // ── 2. BOUNDARY SERVICES (THIRD-PARTY PROTOCOLS) ──
 
 const CommunicationService = Object.freeze({
-  buildWhatsAppUrl(messageText) {
+  buildWhatsAppUrl(messageText, targetPhoneNumber = APP_CONFIG.CONTACT.PHONE_RAW) {
     const searchParams = new URLSearchParams();
     searchParams.set("text", messageText);
-    return `https://wa.me/${APP_CONFIG.CONTACT.PHONE_RAW}?${searchParams.toString()}`;
+    const cleanPhone = String(targetPhoneNumber || "").replace(/[^\d]/g, "") || APP_CONFIG.CONTACT.PHONE_RAW;
+    return `https://wa.me/${cleanPhone}?${searchParams.toString()}`;
   },
 
-  getWhatsAppUrl(messageText) {
-    return this.buildWhatsAppUrl(messageText);
+  getWhatsAppUrl(messageText, targetPhoneNumber = APP_CONFIG.CONTACT.PHONE_RAW) {
+    return this.buildWhatsAppUrl(messageText, targetPhoneNumber);
   },
 
-  getTelephoneUrl() {
-    return `tel:+${APP_CONFIG.CONTACT.PHONE_RAW}`;
+  getTelephoneUrl(targetPhoneNumber = APP_CONFIG.CONTACT.PHONE_RAW) {
+    const cleanPhone = String(targetPhoneNumber || "").replace(/[^\d]/g, "") || APP_CONFIG.CONTACT.PHONE_RAW;
+    return `tel:+${cleanPhone}`;
   },
 
   getEmailUrl(subject = "Stay Inquiry") {
     return `mailto:${APP_CONFIG.CONTACT.CANONICAL_EMAIL}?subject=${encodeURIComponent(subject)}`;
+  }
+});
+
+const SafeStorageService = Object.freeze({
+  getJson(key, defaultValue = null) {
+    if (typeof localStorage === "undefined") return defaultValue;
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : defaultValue;
+    } catch (storageError) {
+      if (typeof console !== "undefined" && typeof console.debug === "function") {
+        console.debug("[SafeStorageService] Read error for key:", key, storageError);
+      }
+      return defaultValue;
+    }
+  },
+
+  setJson(key, value) {
+    if (typeof localStorage === "undefined") return false;
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch (storageError) {
+      if (typeof console !== "undefined" && typeof console.debug === "function") {
+        console.debug("[SafeStorageService] Write error for key:", key, storageError);
+      }
+      return false;
+    }
   }
 });
 
@@ -113,14 +143,7 @@ const CrmSyncService = Object.freeze({
   },
 
   buildPayload({ formData, grandTotal, formattedContactPhone }) {
-    const isTestMode = typeof window !== "undefined" && Boolean(
-      window.location.search && (
-        window.location.search.includes("demo=true") || 
-        window.location.search.includes("test=true") || 
-        window.location.search.includes("demo=1") || 
-        window.location.search.includes("test=1")
-      )
-    );
+    const isTestMode = isDemoModeActive();
 
     return {
       guestName: formData.name,
@@ -249,6 +272,19 @@ const PageScrollLock = Object.freeze({
 });
 
 // ── 3. PURE DOMAIN & UTILITY FUNCTIONS (PORTABLE & TESTABLE) ──
+
+/**
+ * Predicate checking whether demo/testing mode is enabled via URL search parameters.
+ */
+function isDemoModeActive(searchQueryString = (typeof window !== "undefined" && window.location ? window.location.search : "")) {
+  if (!searchQueryString) return false;
+  return (
+    searchQueryString.includes("demo=true") ||
+    searchQueryString.includes("test=true") ||
+    searchQueryString.includes("demo=1") ||
+    searchQueryString.includes("test=1")
+  );
+}
 
 /**
  * Returns an ISO date string (YYYY-MM-DD) computed in the Africa/Nairobi timezone (UTC+3).
@@ -640,8 +676,8 @@ function extractSelectedAddons({ adultsCount, validNights, breakfastChecked, pro
       if (checkbox && checkbox.checked) selectedAddons.push(label);
     });
 
-    document.querySelectorAll('input[type="checkbox"][data-addon-name]:checked').forEach(cb => {
-      const customName = cb.getAttribute("data-addon-name");
+    document.querySelectorAll('input[type="checkbox"][data-addon-name]:checked').forEach(checkboxElement => {
+      const customName = checkboxElement.getAttribute("data-addon-name");
       if (customName && !selectedAddons.includes(customName)) {
         selectedAddons.push(customName);
       }
@@ -1105,32 +1141,32 @@ function ensureLightboxModal() {
 function collectGalleryImages() {
   if (typeof document === "undefined") return;
   const galleryNodes = document.querySelectorAll(".columns-1 img, [data-gallery] img, .gallery-item img");
-  currentGalleryImages = Array.from(galleryNodes).map((img, idx) => {
-    const card = img.closest(".group") || img.parentElement;
-    const titleEl = card ? card.querySelector(".text-champagne.uppercase, h3, h4") : null;
-    const descEl = card ? card.querySelector("p") : null;
+  currentGalleryImages = Array.from(galleryNodes).map((imageElement, galleryIndex) => {
+    const card = imageElement.closest(".group") || imageElement.parentElement;
+    const titleElement = card ? card.querySelector(".text-champagne.uppercase, h3, h4") : null;
+    const descriptionElement = card ? card.querySelector("p") : null;
 
-    img.style.cursor = "zoom-in";
-    img.setAttribute("role", "button");
-    img.setAttribute("tabindex", "0");
-    img.setAttribute("aria-label", `View full photo: ${img.alt || "Gallery image"}`);
+    imageElement.style.cursor = "zoom-in";
+    imageElement.setAttribute("role", "button");
+    imageElement.setAttribute("tabindex", "0");
+    imageElement.setAttribute("aria-label", `View full photo: ${imageElement.alt || "Gallery image"}`);
 
-    if (!img._lightboxBound) {
-      img._lightboxBound = true;
-      img.addEventListener("click", () => openGalleryLightbox(idx));
-      img.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          openGalleryLightbox(idx);
+    if (!imageElement._lightboxBound) {
+      imageElement._lightboxBound = true;
+      imageElement.addEventListener("click", () => openGalleryLightbox(galleryIndex));
+      imageElement.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openGalleryLightbox(galleryIndex);
         }
       });
     }
 
     return {
-      src: img.getAttribute("src") || img.src,
-      alt: img.getAttribute("alt") || "Property photograph",
-      title: titleEl ? titleEl.textContent.trim() : (img.getAttribute("alt") || "Property Photograph"),
-      desc: descEl ? descEl.textContent.trim() : ""
+      src: imageElement.getAttribute("src") || imageElement.src,
+      alt: imageElement.getAttribute("alt") || "Property photograph",
+      title: titleElement ? titleElement.textContent.trim() : (imageElement.getAttribute("alt") || "Property Photograph"),
+      desc: descriptionElement ? descriptionElement.textContent.trim() : ""
     };
   });
 }
@@ -1221,6 +1257,55 @@ let availabilityDebounceTimer = null;
 /**
  * Evaluates live real-time unit availability for selected property and stay dates.
  */
+function renderAvailabilityLoading() {
+  return `
+    <div class="flex items-center gap-2 p-2.5 rounded-xl bg-champagne/10 border border-champagne/30 text-deep-forest text-xs animate-pulse">
+      <span class="w-2 h-2 rounded-full bg-champagne animate-ping"></span>
+      <span class="font-medium">Checking live occupancy for your stay dates...</span>
+    </div>
+  `;
+}
+
+function renderAvailabilityPreApproved(unitsCount) {
+  const unitsText = unitsCount !== undefined && unitsCount > 0 ? ` (${unitsCount} residences available)` : '';
+  return `
+    <div class="flex items-center justify-between p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 text-xs shadow-sm">
+      <div class="flex items-center gap-2">
+        <span class="text-emerald-600 font-bold">✓</span>
+        <span class="font-semibold">Dates Available • Instant Pre-Approval${unitsText}</span>
+        <span class="text-emerald-700/80 hidden sm:inline">• Direct host reservation</span>
+      </div>
+      <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-200/60 px-2 py-0.5 rounded text-emerald-800">Pre-Approved</span>
+    </div>
+  `;
+}
+
+function renderAvailabilityHighDemand(unitsCount) {
+  return `
+    <div class="flex items-center justify-between p-2.5 rounded-xl bg-amber-50 border border-amber-300/80 text-amber-900 text-xs shadow-sm">
+      <div class="flex items-center gap-2">
+        <span class="text-amber-600 font-bold">⚠️</span>
+        <span class="font-bold">High Demand: Only ${unitsCount} residence${unitsCount === 1 ? '' : 's'} available!</span>
+      </div>
+      <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-200/80 px-2 py-0.5 rounded text-amber-900">Reserve Now</span>
+    </div>
+  `;
+}
+
+function renderAvailabilitySoldOut() {
+  return `
+    <div class="flex items-center justify-between p-2.5 rounded-xl bg-rose-50 border border-rose-200/80 text-rose-900 text-xs shadow-sm">
+      <div class="flex items-center gap-2">
+        <span class="text-rose-600 font-bold">⚠️</span>
+        <span class="font-medium">All units booked for these exact dates. Submit inquiry to be placed on priority standby or explore alternative dates.</span>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Evaluates live real-time unit availability for selected property and stay dates.
+ */
 async function triggerLiveAvailabilityCheck() {
   if (typeof document === "undefined") return;
   const container = document.getElementById("availability-status-container");
@@ -1240,131 +1325,99 @@ async function triggerLiveAvailabilityCheck() {
     return;
   }
 
-  container.innerHTML = `
-    <div class="flex items-center gap-2 p-2.5 rounded-xl bg-champagne/10 border border-champagne/30 text-deep-forest text-xs animate-pulse">
-      <span class="w-2 h-2 rounded-full bg-champagne animate-ping"></span>
-      <span class="font-medium">Checking live occupancy for your stay dates...</span>
-    </div>
-  `;
+  container.innerHTML = renderAvailabilityLoading();
 
   if (availabilityDebounceTimer) clearTimeout(availabilityDebounceTimer);
   availabilityDebounceTimer = setTimeout(async () => {
     const result = await CrmSyncService.checkAvailability({ propertyId, checkInDate: checkIn, checkOutDate: checkOut });
     if (!result) {
-      container.innerHTML = `
-        <div class="flex items-center justify-between p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 text-xs shadow-sm">
-          <div class="flex items-center gap-2">
-            <span class="text-emerald-600 font-bold">✓</span>
-            <span class="font-semibold">Instant Inquiry Available</span>
-            <span class="text-emerald-700/80 hidden sm:inline">• Direct host reservation</span>
-          </div>
-          <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-200/60 px-2 py-0.5 rounded text-emerald-800">Pre-Approved</span>
-        </div>
-      `;
+      container.innerHTML = renderAvailabilityPreApproved();
       return;
     }
 
     if (result.isAvailable) {
-      const count = result.availableUnitsCount !== undefined ? result.availableUnitsCount : result.availableCount;
-      const isLimited = (result.status === "limited") || (count !== undefined && count > 0 && count <= 2);
-      if (isLimited) {
-        container.innerHTML = `
-          <div class="flex items-center justify-between p-2.5 rounded-xl bg-amber-50 border border-amber-300/80 text-amber-900 text-xs shadow-sm">
-            <div class="flex items-center gap-2">
-              <span class="text-amber-600 font-bold">⚠️</span>
-              <span class="font-bold">High Demand: Only ${count} residence${count === 1 ? '' : 's'} available!</span>
-            </div>
-            <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-200/80 px-2 py-0.5 rounded text-amber-900">Reserve Now</span>
-          </div>
-        `;
-      } else {
-        const unitsText = count !== undefined && count > 0 ? ` (${count} residences available)` : '';
-        container.innerHTML = `
-          <div class="flex items-center justify-between p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 text-xs shadow-sm">
-            <div class="flex items-center gap-2">
-              <span class="text-emerald-600 font-bold">✓</span>
-              <span class="font-semibold">Dates Available • Instant Pre-Approval${unitsText}</span>
-            </div>
-            <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-200/60 px-2 py-0.5 rounded text-emerald-800">Instant Pre-Approved</span>
-          </div>
-        `;
-      }
+      const unitsCount = result.availableUnitsCount !== undefined ? result.availableUnitsCount : result.availableCount;
+      const isLimited = (result.status === "limited") || (unitsCount !== undefined && unitsCount > 0 && unitsCount <= 2);
+      container.innerHTML = isLimited
+        ? renderAvailabilityHighDemand(unitsCount)
+        : renderAvailabilityPreApproved(unitsCount);
     } else {
-      container.innerHTML = `
-        <div class="flex items-center justify-between p-2.5 rounded-xl bg-rose-50 border border-rose-200/80 text-rose-900 text-xs shadow-sm">
-          <div class="flex items-center gap-2">
-            <span class="text-rose-600 font-bold">⚠️</span>
-            <span class="font-medium">All units booked for these exact dates. Submit inquiry to be placed on priority standby or explore alternative dates.</span>
-          </div>
-        </div>
-      `;
+      container.innerHTML = renderAvailabilitySoldOut();
     }
   }, 250);
 }
 
 let currentActiveInquiry = null;
 
-async function confirmAndSubmitInquiry() {
-  if (!currentActiveInquiry) return;
-  const submitBtn = document.getElementById("confirm-submit-inquiry-btn");
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = `
+function setInquirySubmissionBusy(isBusy) {
+  const submitButton = document.getElementById("confirm-submit-inquiry-btn");
+  if (!submitButton) return;
+  submitButton.disabled = isBusy;
+  if (isBusy) {
+    submitButton.innerHTML = `
       <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-deep-forest inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
       </svg>
       <span>Securing Reservation Inquiry...</span>
     `;
+  } else {
+    submitButton.innerHTML = `<span>✓ Confirm &amp; Submit Reservation Inquiry</span>`;
   }
+}
 
-  let inquiryId = null;
+function generateFallbackInquiryId() {
+  const dateStamp = new Date().toISOString().slice(2, 10).replace(/-/g, "");
+  const randomDigits = Math.floor(1000 + Math.random() * 9000);
+  return `WB-OFFLINE-${dateStamp}-${randomDigits}`;
+}
+
+function persistPendingOfflineInquiry(inquiryId, inquiryPayload) {
+  const OFFLINE_STORAGE_KEY = "beakim_pending_inquiries";
+  const queuedInquiries = SafeStorageService.getJson(OFFLINE_STORAGE_KEY, []);
+  queuedInquiries.push({
+    id: inquiryId,
+    payload: inquiryPayload,
+    timestamp: new Date().toISOString()
+  });
+  SafeStorageService.setJson(OFFLINE_STORAGE_KEY, queuedInquiries);
+}
+
+async function dispatchInquirySubmission(inquiryPayload) {
   try {
-    const result = await CrmSyncService.sendInquiry(currentActiveInquiry.inquiryPayload);
+    const result = await CrmSyncService.sendInquiry(inquiryPayload);
     if (result && result.inquiry && result.inquiry.id) {
-      inquiryId = result.inquiry.id;
-    } else if (result && result.id) {
-      inquiryId = result.id;
+      return result.inquiry.id;
     }
-  } catch (err) {
+    if (result && result.id) {
+      return result.id;
+    }
+  } catch (syncError) {
     if (typeof console !== "undefined" && typeof console.debug === "function") {
-      console.debug("[CRM Intake] Server sync exception:", err);
+      console.debug("[CRM Intake] Server sync exception:", syncError);
     }
   }
+  return null;
+}
 
-  // Failsafe Guarantee: If CRM server is slow, cold-starting, or offline,
-  // generate an authoritative reservation reference ID and queue locally
+async function confirmAndSubmitInquiry() {
+  if (!currentActiveInquiry) return;
+  setInquirySubmissionBusy(true);
+
+  let inquiryId = await dispatchInquirySubmission(currentActiveInquiry.inquiryPayload);
+
   if (!inquiryId) {
-    const dateStamp = new Date().toISOString().slice(2, 10).replace(/-/g, "");
-    const randomDigits = Math.floor(1000 + Math.random() * 9000);
-    inquiryId = `INQ-${dateStamp}-${randomDigits}`;
-
-    try {
-      if (typeof localStorage !== "undefined") {
-        const queued = JSON.parse(localStorage.getItem("beakim_pending_inquiries") || "[]");
-        queued.push({
-          id: inquiryId,
-          payload: currentActiveInquiry.inquiryPayload,
-          timestamp: new Date().toISOString()
-        });
-        localStorage.setItem("beakim_pending_inquiries", JSON.stringify(queued));
-      }
-    } catch (storageErr) {
-      // LocalStorage access restricted in private browsing mode; safe to ignore
-    }
+    inquiryId = generateFallbackInquiryId();
+    persistPendingOfflineInquiry(inquiryId, currentActiveInquiry.inquiryPayload);
   }
 
   try {
     renderInquirySuccessReceipt(currentActiveInquiry, inquiryId);
-  } catch (renderErr) {
+  } catch (renderError) {
     if (typeof console !== "undefined" && typeof console.error === "function") {
-      console.error("[Inquiry Receipt] Render error:", renderErr);
+      console.error("[Inquiry Receipt] Render error:", renderError);
     }
-    // Safety fallback: re-enable submit button if rendering somehow fails
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = `<span>✓ Confirm &amp; Submit Reservation Inquiry</span>`;
-    }
+    setInquirySubmissionBusy(false);
   }
 }
 
@@ -1691,10 +1744,10 @@ function copyInquiryDetails(encodedMessageText) {
     navigator.clipboard.writeText(plainText).then(() => {
       showToast("Inquiry details copied to clipboard!");
     }).catch(() => {
-      prompt("Copy your inquiry details:", plainText);
+      showToast("Reference details: " + plainText);
     });
   } else {
-    prompt("Copy your inquiry details:", plainText);
+    showToast("Reference details: " + plainText);
   }
 }
 
@@ -1767,8 +1820,8 @@ function selectUnit(unitIdentifier) {
   if (propertySelectElement) {
     let matchedIndex = -1;
     for (let i = 0; i < propertySelectElement.options.length; i++) {
-      const opt = propertySelectElement.options[i];
-      if (opt.value === unitIdentifier || opt.value.toLowerCase().includes(unitIdentifier.toLowerCase()) || unitIdentifier.toLowerCase().includes(opt.value.toLowerCase())) {
+      const optionElement = propertySelectElement.options[i];
+      if (optionElement.value === unitIdentifier || optionElement.value.toLowerCase().includes(unitIdentifier.toLowerCase()) || unitIdentifier.toLowerCase().includes(optionElement.value.toLowerCase())) {
         matchedIndex = i;
         break;
       }
@@ -1939,10 +1992,381 @@ if (typeof document !== "undefined") {
 
 // ── 8. DOM INITIALIZATION WORKFLOW ──
 
+/**
+ * BeakimDateRangePicker
+ * High-performance, zero-dependency luxury date range picker.
+ */
+const BeakimDateRangePicker = {
+  state: {
+    checkIn: null,     // "YYYY-MM-DD"
+    checkOut: null,    // "YYYY-MM-DD"
+    hoverDate: null,   // "YYYY-MM-DD"
+    currentMonth: 0,   // 0-11
+    currentYear: 2026,
+    isOpen: false,
+    step: "check-in"   // "check-in" or "check-out"
+  },
+
+  formatDisplayDate(dateStr) {
+    if (!dateStr) return "Select Date";
+    const [y, m, d] = dateStr.split("-").map(Number);
+    const dateObj = new Date(y, m - 1, d);
+    const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return `${weekdays[dateObj.getDay()]}, ${d} ${months[m - 1]} ${y}`;
+  },
+
+  formatShortDisplayDate(dateStr) {
+    if (!dateStr) return "Select Date";
+    const [y, m, d] = dateStr.split("-").map(Number);
+    const dateObj = new Date(y, m - 1, d);
+    const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return `${weekdays[dateObj.getDay()]}, ${d} ${months[m - 1]}`;
+  },
+
+  init() {
+    if (typeof window === "undefined" || typeof document === "undefined") return;
+    const trigger = document.getElementById("booking-date-range-trigger");
+    const checkInInput = document.getElementById("check-in");
+    const checkOutInput = document.getElementById("check-out");
+    if (!trigger || !checkInInput || !checkOutInput) return;
+
+    // Set initial dates if empty
+    const tomorrow = getNairobiDateString(1);
+    const dayAfter = getNairobiDateString(3); // 2 nights default luxury stay
+
+    this.state.checkIn = checkInInput.value || tomorrow;
+    this.state.checkOut = checkOutInput.value || dayAfter;
+    checkInInput.value = this.state.checkIn;
+    checkOutInput.value = this.state.checkOut;
+
+    // Initialize calendar view to check-in date
+    const [initY, initM] = this.state.checkIn.split("-").map(Number);
+    this.state.currentYear = initY;
+    this.state.currentMonth = initM - 1;
+
+    this.updateTriggerDisplay();
+
+    // Trigger click
+    trigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.toggle();
+    });
+
+    // Keyboard navigation on trigger
+    trigger.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        this.toggle();
+      } else if (e.key === "Escape" && this.state.isOpen) {
+        this.close();
+      }
+    });
+
+    // Global click listener to close popover
+    document.addEventListener("click", (e) => {
+      const popover = document.getElementById("beakim-calendar-popover");
+      if (this.state.isOpen && popover && !popover.contains(e.target) && !trigger.contains(e.target)) {
+        this.close();
+      }
+    });
+
+    // Escape listener
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && this.state.isOpen) {
+        this.close();
+      }
+    });
+  },
+
+  updateTriggerDisplay() {
+    const displayIn = document.getElementById("display-check-in");
+    const displayOut = document.getElementById("display-check-out");
+    const nightsBadge = document.getElementById("display-nights-badge");
+    const checkInInput = document.getElementById("check-in");
+    const checkOutInput = document.getElementById("check-out");
+
+    if (checkInInput) checkInInput.value = this.state.checkIn || "";
+    if (checkOutInput) checkOutInput.value = this.state.checkOut || "";
+
+    if (displayIn) {
+      displayIn.textContent = this.formatShortDisplayDate(this.state.checkIn);
+    }
+    if (displayOut) {
+      displayOut.textContent = this.formatShortDisplayDate(this.state.checkOut);
+    }
+
+    if (nightsBadge && this.state.checkIn && this.state.checkOut) {
+      const nights = calculateDateDifferenceInDays(this.state.checkIn, this.state.checkOut);
+      nightsBadge.textContent = nights > 0 ? `${nights} Night${nights > 1 ? "s" : ""}` : "1 Night";
+    }
+  },
+
+  toggle() {
+    if (this.state.isOpen) this.close();
+    else this.open();
+  },
+
+  open() {
+    const popover = document.getElementById("beakim-calendar-popover");
+    if (!popover) return;
+    this.state.isOpen = true;
+    this.state.step = "check-in";
+    popover.classList.remove("hidden");
+    const trigger = document.getElementById("booking-date-range-trigger");
+    if (trigger) trigger.setAttribute("aria-expanded", "true");
+    this.render();
+  },
+
+  close() {
+    const popover = document.getElementById("beakim-calendar-popover");
+    if (!popover) return;
+    this.state.isOpen = false;
+    popover.classList.add("hidden");
+    const trigger = document.getElementById("booking-date-range-trigger");
+    if (trigger) trigger.setAttribute("aria-expanded", "false");
+  },
+
+  prevMonth() {
+    const today = getNairobiDateString(0);
+    const [todayY, todayM] = today.split("-").map(Number);
+    // Disallow navigating before current month
+    if (this.state.currentYear === todayY && this.state.currentMonth <= todayM - 1) return;
+
+    this.state.currentMonth--;
+    if (this.state.currentMonth < 0) {
+      this.state.currentMonth = 11;
+      this.state.currentYear--;
+    }
+    this.render();
+  },
+
+  nextMonth() {
+    this.state.currentMonth++;
+    if (this.state.currentMonth > 11) {
+      this.state.currentMonth = 0;
+      this.state.currentYear++;
+    }
+    this.render();
+  },
+
+  applyPreset(presetType) {
+    const today = getNairobiDateString(0);
+    const [tY, tM, tD] = today.split("-").map(Number);
+    const baseDate = new Date(tY, tM - 1, tD);
+
+    let start = new Date(baseDate);
+    let nights = 2;
+
+    if (presetType === "weekend") {
+      const dayOfWeek = start.getDay(); // 0 is Sun, 5 is Fri
+      const daysUntilFriday = (5 - dayOfWeek + 7) % 7;
+      start.setDate(start.getDate() + (daysUntilFriday === 0 ? 0 : daysUntilFriday));
+      nights = 2; // Fri to Sun
+    } else if (presetType === "5days") {
+      start.setDate(start.getDate() + 1); // tomorrow
+      nights = 5;
+    } else if (presetType === "7days") {
+      start.setDate(start.getDate() + 1); // tomorrow
+      nights = 7;
+    }
+
+    const end = new Date(start);
+    end.setDate(end.getDate() + nights);
+
+    const pad = (n) => String(n).padStart(2, "0");
+    this.state.checkIn = `${start.getFullYear()}-${pad(start.getMonth() + 1)}-${pad(start.getDate())}`;
+    this.state.checkOut = `${end.getFullYear()}-${pad(end.getMonth() + 1)}-${pad(end.getDate())}`;
+    this.state.step = "check-in";
+
+    this.updateTriggerDisplay();
+    this.render();
+    if (typeof handleDateOrAddonChange === "function") handleDateOrAddonChange();
+  },
+
+  selectDate(dateStr) {
+    const today = getNairobiDateString(0);
+    if (dateStr < today) return; // Ignore past dates
+
+    if (this.state.step === "check-in" || !this.state.checkIn) {
+      this.state.checkIn = dateStr;
+      this.state.checkOut = null;
+      this.state.step = "check-out";
+      this.render();
+    } else if (this.state.step === "check-out") {
+      if (dateStr <= this.state.checkIn) {
+        this.state.checkIn = dateStr;
+        this.state.checkOut = null;
+        this.state.step = "check-out";
+      } else {
+        this.state.checkOut = dateStr;
+        this.state.step = "check-in";
+        this.updateTriggerDisplay();
+        if (typeof handleDateOrAddonChange === "function") handleDateOrAddonChange();
+        setTimeout(() => {
+          this.close();
+        }, 350);
+      }
+      this.render();
+    }
+  },
+
+  onHoverDate(dateStr) {
+    if (this.state.step === "check-out" && this.state.checkIn && dateStr > this.state.checkIn) {
+      this.state.hoverDate = dateStr;
+      this.renderRangeHighlights();
+    }
+  },
+
+  renderRangeHighlights() {
+    if (typeof document === "undefined") return;
+    const cells = document.querySelectorAll("[data-cal-date]");
+    cells.forEach(cell => {
+      const d = cell.getAttribute("data-cal-date");
+      if (!d) return;
+      if (this.state.checkIn && this.state.hoverDate && !this.state.checkOut) {
+        if (d > this.state.checkIn && d < this.state.hoverDate) {
+          cell.classList.add("cal-range-hover");
+        } else {
+          cell.classList.remove("cal-range-hover");
+        }
+      }
+    });
+  },
+
+  render() {
+    const popover = document.getElementById("beakim-calendar-popover");
+    if (!popover) return;
+
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const monthName = months[this.state.currentMonth];
+    const year = this.state.currentYear;
+    const today = getNairobiDateString(0);
+    const [todayY, todayM] = today.split("-").map(Number);
+    const isAtMinMonth = (year === todayY && this.state.currentMonth <= todayM - 1);
+
+    const firstDayIndex = new Date(year, this.state.currentMonth, 1).getDay();
+    const daysInMonth = new Date(year, this.state.currentMonth + 1, 0).getDate();
+
+    let daysHtml = "";
+    for (let i = 0; i < firstDayIndex; i++) {
+      daysHtml += `<div class="h-9 w-9 sm:h-10 sm:w-10"></div>`;
+    }
+
+    const pad = (n) => String(n).padStart(2, "0");
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateStr = `${year}-${pad(this.state.currentMonth + 1)}-${pad(day)}`;
+      const isPast = dateStr < today;
+      const isCheckIn = dateStr === this.state.checkIn;
+      const isCheckOut = dateStr === this.state.checkOut;
+      const isMid = this.state.checkIn && this.state.checkOut && dateStr > this.state.checkIn && dateStr < this.state.checkOut;
+
+      let cellClasses = "h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center text-xs sm:text-sm font-medium transition cursor-pointer select-none cal-day-cell ";
+      let extraAttrs = `data-cal-date="${dateStr}" onclick="BeakimDateRangePicker.selectDate('${dateStr}')" onmouseenter="BeakimDateRangePicker.onHoverDate('${dateStr}')"`;
+
+      if (isPast) {
+        cellClasses += "text-ivory/20 cursor-not-allowed ";
+        extraAttrs = `data-cal-date="${dateStr}"`;
+      } else if (isCheckIn && isCheckOut) {
+        cellClasses += "cal-range-start cal-range-end shadow-md scale-105 ";
+      } else if (isCheckIn) {
+        cellClasses += "cal-range-start shadow-md ";
+      } else if (isCheckOut) {
+        cellClasses += "cal-range-end shadow-md ";
+      } else if (isMid) {
+        cellClasses += "cal-range-mid ";
+      } else {
+        cellClasses += "text-ivory hover:bg-champagne/20 rounded-full ";
+      }
+
+      daysHtml += `<div class="${cellClasses}" ${extraAttrs}>${day}</div>`;
+    }
+
+    let statusText = "Select Check-In Date";
+    if (this.state.step === "check-out" && this.state.checkIn) {
+      statusText = `Check-In: <span class="text-champagne font-bold">${this.formatShortDisplayDate(this.state.checkIn)}</span> • Select Check-Out Date`;
+    } else if (this.state.checkIn && this.state.checkOut) {
+      const nights = calculateDateDifferenceInDays(this.state.checkIn, this.state.checkOut);
+      statusText = `<span class="text-champagne font-bold">${nights} Night${nights > 1 ? "s" : ""}</span> (${this.formatShortDisplayDate(this.state.checkIn)} → ${this.formatShortDisplayDate(this.state.checkOut)})`;
+    }
+
+    popover.innerHTML = `
+      <div class="bg-[#0D2318] border border-champagne/30 rounded-2xl shadow-2xl p-4 sm:p-5 w-full max-w-sm sm:max-w-md text-ivory flex flex-col space-y-3">
+        <div class="flex items-center justify-between pb-2 border-b border-champagne/15">
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-champagne flex items-center gap-1.5">
+              <span>📅</span> Dates of Stay
+            </h4>
+            <p class="text-[11px] text-ivory/70 pt-0.5">${statusText}</p>
+          </div>
+          <button type="button" onclick="BeakimDateRangePicker.close()" class="w-7 h-7 rounded-full bg-deep-forest/80 hover:bg-champagne/20 text-ivory/70 hover:text-champagne flex items-center justify-center transition text-sm">✕</button>
+        </div>
+
+        <!-- Quick Presets -->
+        <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
+          <button type="button" onclick="BeakimDateRangePicker.applyPreset('weekend')" class="px-2.5 py-1 rounded-full bg-canopy/80 border border-champagne/25 text-champagne hover:bg-champagne hover:text-deep-forest transition font-medium">Weekend (2 Nights)</button>
+          <button type="button" onclick="BeakimDateRangePicker.applyPreset('5days')" class="px-2.5 py-1 rounded-full bg-canopy/80 border border-champagne/25 text-champagne hover:bg-champagne hover:text-deep-forest transition font-medium">5-Day Stay</button>
+          <button type="button" onclick="BeakimDateRangePicker.applyPreset('7days')" class="px-2.5 py-1 rounded-full bg-canopy/80 border border-champagne/25 text-champagne hover:bg-champagne hover:text-deep-forest transition font-medium">7-Night Holiday</button>
+        </div>
+
+        <!-- Month Navigation -->
+        <div class="flex items-center justify-between px-1 pt-1">
+          <button type="button" onclick="BeakimDateRangePicker.prevMonth()" ${isAtMinMonth ? 'disabled class="p-1 text-ivory/20 cursor-not-allowed"' : 'class="p-1 text-champagne hover:text-ivory transition"'} aria-label="Previous Month">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <span class="text-sm font-bold text-ivory font-display tracking-wide">${monthName} ${year}</span>
+          <button type="button" onclick="BeakimDateRangePicker.nextMonth()" class="p-1 text-champagne hover:text-ivory transition" aria-label="Next Month">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <!-- Days Grid -->
+        <div class="space-y-1">
+          <div class="grid grid-cols-7 text-center text-[11px] font-bold text-champagne/70 pb-1">
+            <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+          </div>
+          <div class="grid grid-cols-7 gap-y-1 text-center items-center justify-items-center">
+            ${daysHtml}
+          </div>
+        </div>
+
+        <!-- Action Footer -->
+        <div class="flex items-center justify-between pt-2 border-t border-champagne/15 text-xs">
+          <button type="button" onclick="BeakimDateRangePicker.reset()" class="text-ivory/60 hover:text-champagne transition underline underline-offset-2 text-[11px]">Clear Dates</button>
+          <button type="button" onclick="BeakimDateRangePicker.applyAndClose()" class="bg-champagne hover:bg-driftwood text-deep-forest font-bold px-4 py-1.5 rounded-lg transition shadow-md text-xs active:scale-95">Apply Dates ✓</button>
+        </div>
+      </div>
+    `;
+  },
+
+  reset() {
+    const tomorrow = getNairobiDateString(1);
+    const dayAfter = getNairobiDateString(3);
+    this.state.checkIn = tomorrow;
+    this.state.checkOut = dayAfter;
+    this.state.step = "check-in";
+    this.updateTriggerDisplay();
+    this.render();
+    if (typeof handleDateOrAddonChange === "function") handleDateOrAddonChange();
+  },
+
+  applyAndClose() {
+    this.updateTriggerDisplay();
+    if (typeof handleDateOrAddonChange === "function") handleDateOrAddonChange();
+    this.close();
+  }
+};
+
+if (typeof window !== "undefined") {
+  window.BeakimDateRangePicker = BeakimDateRangePicker;
+}
+
 function initializeDatePickers(checkInInput, checkOutInput) {
   const todayDateString = getNairobiDateString(0);
   const tomorrowDateString = getNairobiDateString(1);
-  const dayAfterDateString = getNairobiDateString(2);
+  const dayAfterDateString = getNairobiDateString(3); // 2-night default luxury stay
 
   if (checkInInput) {
     checkInInput.min = todayDateString;
@@ -1962,6 +2386,9 @@ function initializeDatePickers(checkInInput, checkOutInput) {
     if (!checkOutInput.value) checkOutInput.value = dayAfterDateString;
     checkOutInput.addEventListener("change", updatePriceCalculation);
   }
+
+  // Initialize luxury date range calendar
+  BeakimDateRangePicker.init();
 }
 
 function initializeBookingPreFill() {
@@ -1973,8 +2400,8 @@ function initializeBookingPreFill() {
   if (requestedProperty && propertySelect) {
     const cleanReq = requestedProperty.toLowerCase();
     for (let i = 0; i < propertySelect.options.length; i++) {
-      const opt = propertySelect.options[i];
-      if (opt.value.toLowerCase().includes(cleanReq)) {
+      const optionElement = propertySelect.options[i];
+      if (optionElement.value.toLowerCase().includes(cleanReq)) {
         propertySelect.selectedIndex = i;
         handlePropertyChange();
         break;
@@ -2043,12 +2470,7 @@ function initializeCleanHashScrolling() {
 }
 
 function initializeDemoModeBanner() {
-  if (typeof window === "undefined" || !window.location || !window.location.search) return;
-  const isDemo = window.location.search.includes("demo=true") || 
-    window.location.search.includes("test=true") || 
-    window.location.search.includes("demo=1") || 
-    window.location.search.includes("test=1");
-  if (!isDemo) return;
+  if (typeof window === "undefined" || !isDemoModeActive()) return;
 
   const banner = document.createElement("div");
   banner.id = "demo-mode-badge";
@@ -2092,10 +2514,42 @@ function switchBookingMode(mode) {
   }
 }
 
+function toggleRadioIndicator(radioElement, isSelected) {
+  if (!radioElement) return;
+  radioElement.classList.toggle("border-champagne", isSelected);
+  radioElement.classList.toggle("bg-champagne", isSelected);
+  radioElement.classList.toggle("border-deep-forest/30", !isSelected);
+  radioElement.classList.toggle("bg-transparent", !isSelected);
+  const dotElement = radioElement.querySelector("div");
+  if (dotElement) {
+    dotElement.classList.toggle("opacity-0", !isSelected);
+  }
+}
+
+/**
+ * Resolves conference package details from the official catalog.
+ */
+function resolveConferencePackage(isFullDay) {
+  const darlingCatalog = (typeof BEAKIM_CATALOG !== "undefined" && BEAKIM_CATALOG["diani-darling"]) ? BEAKIM_CATALOG["diani-darling"] : null;
+  const packages = darlingCatalog && Array.isArray(darlingCatalog.conferencePackages) ? darlingCatalog.conferencePackages : [];
+  if (isFullDay) {
+    return packages.find(pkg => pkg.id === "darling-conf-full-day") || {
+      id: "darling-conf-full-day",
+      name: "Full Day Conference Package with Lunch",
+      rate: 3000
+    };
+  }
+  return packages.find(pkg => pkg.id === "darling-conf-half-day") || {
+    id: "darling-conf-half-day",
+    name: "Half Day Standard Conference Package",
+    rate: 1500
+  };
+}
+
 /**
  * Selects a conference package card and switches view to conference booking.
  */
-function selectConferencePackage(pkgId) {
+function selectConferencePackage(packageIdentifier) {
   if (typeof document === "undefined") return;
   switchBookingMode("conference");
   
@@ -2103,7 +2557,7 @@ function selectConferencePackage(pkgId) {
   const fullDayCard = document.getElementById("conf-pkg-card-full-day");
   const sessionSelect = document.getElementById("conf-session");
 
-  const isFullDay = pkgId === "full-day";
+  const isFullDay = packageIdentifier === "full-day";
 
   if (halfDayCard && fullDayCard) {
     halfDayCard.classList.toggle("border-2", !isFullDay);
@@ -2122,20 +2576,8 @@ function selectConferencePackage(pkgId) {
 
     const halfRadio = halfDayCard.querySelector(".conf-radio");
     const fullRadio = fullDayCard.querySelector(".conf-radio");
-    if (halfRadio) {
-      halfRadio.classList.toggle("border-champagne", !isFullDay);
-      halfRadio.classList.toggle("bg-champagne", !isFullDay);
-      halfRadio.classList.toggle("border-deep-forest/30", isFullDay);
-      halfRadio.classList.toggle("bg-transparent", isFullDay);
-      halfRadio.querySelector("div")?.classList.toggle("opacity-0", isFullDay);
-    }
-    if (fullRadio) {
-      fullRadio.classList.toggle("border-champagne", isFullDay);
-      fullRadio.classList.toggle("bg-champagne", isFullDay);
-      fullRadio.classList.toggle("border-deep-forest/30", !isFullDay);
-      fullRadio.classList.toggle("bg-transparent", !isFullDay);
-      fullRadio.querySelector("div")?.classList.toggle("opacity-0", !isFullDay);
-    }
+    toggleRadioIndicator(halfRadio, !isFullDay);
+    toggleRadioIndicator(fullRadio, isFullDay);
   }
 
   if (sessionSelect) {
@@ -2158,60 +2600,42 @@ function selectConferencePackage(pkgId) {
 function updateConferenceCalculation() {
   if (typeof document === "undefined") return;
   const fullDayCard = document.getElementById("conf-pkg-card-full-day");
-  const isFullDay = fullDayCard && fullDayCard.getAttribute("aria-checked") === "true";
+  const isFullDay = Boolean(fullDayCard && fullDayCard.getAttribute("aria-checked") === "true");
   
   const delegatesInput = document.getElementById("conf-delegates");
   let delegates = parseInt(delegatesInput?.value || "20", 10);
   if (isNaN(delegates) || delegates < 1) delegates = 1;
   if (delegates > 60) delegates = 60;
 
-  const ratePerPerson = isFullDay ? 3000 : 1500;
-  const packageName = isFullDay 
-    ? "Full Day Conference Package with Lunch" 
-    : "Half Day Standard Conference Package (No Lunch)";
+  const selectedPackage = resolveConferencePackage(isFullDay);
+  const ratePerPerson = selectedPackage.rate;
+  const packageName = selectedPackage.name;
   const totalCost = delegates * ratePerPerson;
 
-  const pkgNameEl = document.getElementById("conf-summary-pkg");
-  const rateEl = document.getElementById("conf-summary-rate");
-  const delegatesEl = document.getElementById("conf-summary-delegates");
-  const totalEl = document.getElementById("conf-summary-total");
+  const packageNameElement = document.getElementById("conf-summary-pkg");
+  const rateElement = document.getElementById("conf-summary-rate");
+  const delegatesElement = document.getElementById("conf-summary-delegates");
+  const totalElement = document.getElementById("conf-summary-total");
 
-  if (pkgNameEl) pkgNameEl.textContent = packageName;
-  if (rateEl) rateEl.textContent = `KSh ${ratePerPerson.toLocaleString()} / person`;
-  if (delegatesEl) delegatesEl.textContent = `${delegates} Delegates`;
-  if (totalEl) totalEl.textContent = `KSh ${totalCost.toLocaleString()}`;
+  if (packageNameElement) packageNameElement.textContent = packageName;
+  if (rateElement) rateElement.textContent = `KSh ${ratePerPerson.toLocaleString()} / person`;
+  if (delegatesElement) delegatesElement.textContent = `${delegates} Delegates`;
+  if (totalElement) totalElement.textContent = `KSh ${totalCost.toLocaleString()}`;
+
+  return {
+    isFullDay,
+    delegates,
+    ratePerPerson,
+    packageName,
+    totalCost
+  };
 }
 
 /**
- * Generates formatted WhatsApp conference RFP link and opens chat with Diani Darling reception.
+ * Pure builder function for conference WhatsApp RFP text.
  */
-function handleConferenceWhatsAppRFP(e) {
-  if (e) e.preventDefault();
-  if (typeof document === "undefined") return;
-
-  const fullDayCard = document.getElementById("conf-pkg-card-full-day");
-  const isFullDay = fullDayCard && fullDayCard.getAttribute("aria-checked") === "true";
-  const packageName = isFullDay 
-    ? "Full Day Conference Package with Lunch (KSh 3,000/person)" 
-    : "Half Day Standard Conference Package (KSh 1,500/person)";
-
-  const dateInput = document.getElementById("conf-date");
-  const sessionSelect = document.getElementById("conf-session");
-  const delegatesInput = document.getElementById("conf-delegates");
-  const orgInput = document.getElementById("conf-org-name");
-  const coordinatorInput = document.getElementById("conf-coord-name");
-  const notesInput = document.getElementById("conf-notes");
-  const bundleCottages = document.getElementById("conf-bundle-cottages")?.checked;
-
-  const eventDate = dateInput?.value || "To Be Confirmed";
-  const session = sessionSelect?.value || "Full Day (8:00 AM – 5:00 PM)";
-  const delegates = delegatesInput?.value || "20";
-  const orgName = orgInput?.value?.trim() || "Private Group";
-  const coordinator = coordinatorInput?.value?.trim() || "Coordinator";
-  const notes = notesInput?.value?.trim() || "None";
-  const estimatedCost = (parseInt(delegates, 10) * (isFullDay ? 3000 : 1500)).toLocaleString();
-
-  const msg = [
+function buildConferenceRfpMessage({ packageName, eventDate, session, delegates, orgName, coordinator, estimatedCost, bundleCottages, notes }) {
+  return [
     `*NEW CONFERENCE RESERVATION INQUIRY*`,
     `🏢 *Venue:* Beakim Diani Darling (Conference Hall - 60 Pax)`,
     `📋 *Package:* ${packageName}`,
@@ -2222,13 +2646,57 @@ function handleConferenceWhatsAppRFP(e) {
     `👤 *Coordinator:* ${coordinator}`,
     `💰 *Estimated Total:* KSh ${estimatedCost}`,
     bundleCottages ? `🛌 *Accommodation:* Also requesting overnight cottages` : ``,
-    notes !== "None" ? `📝 *Special Requests:* ${notes}` : ``,
+    notes && notes !== "None" ? `📝 *Special Requests:* ${notes}` : ``,
     `\n_Sent via Beakim Hospitality Group Direct Portal_`
   ].filter(Boolean).join("\n");
+}
 
-  const phone = "254119237439";
-  const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-  window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+/**
+ * Generates formatted WhatsApp conference RFP link and opens chat with Diani Darling reception.
+ */
+function handleConferenceWhatsAppRFP(event) {
+  if (event && typeof event.preventDefault === "function") event.preventDefault();
+  if (typeof document === "undefined") return;
+
+  const fullDayCard = document.getElementById("conf-pkg-card-full-day");
+  const isFullDay = Boolean(fullDayCard && fullDayCard.getAttribute("aria-checked") === "true");
+  const selectedPackage = resolveConferencePackage(isFullDay);
+  const packageName = `${selectedPackage.name} (KSh ${selectedPackage.rate.toLocaleString()}/person)`;
+
+  const dateInput = document.getElementById("conf-date");
+  const sessionSelect = document.getElementById("conf-session");
+  const delegatesInput = document.getElementById("conf-delegates");
+  const orgInput = document.getElementById("conf-org-name");
+  const coordinatorInput = document.getElementById("conf-coord-name");
+  const notesInput = document.getElementById("conf-notes");
+  const bundleCottages = Boolean(document.getElementById("conf-bundle-cottages")?.checked);
+
+  const eventDate = dateInput?.value || "To Be Confirmed";
+  const session = sessionSelect?.value || "Full Day (8:00 AM – 5:00 PM)";
+  const delegates = delegatesInput?.value || "20";
+  const orgName = orgInput?.value?.trim() || "Private Group";
+  const coordinator = coordinatorInput?.value?.trim() || "Coordinator";
+  const notes = notesInput?.value?.trim() || "None";
+  const estimatedCost = (parseInt(delegates, 10) * selectedPackage.rate).toLocaleString();
+
+  const messageText = buildConferenceRfpMessage({
+    packageName,
+    eventDate,
+    session,
+    delegates,
+    orgName,
+    coordinator,
+    estimatedCost,
+    bundleCottages,
+    notes
+  });
+
+  const darlingCatalog = (typeof BEAKIM_CATALOG !== "undefined" && BEAKIM_CATALOG["diani-darling"]) ? BEAKIM_CATALOG["diani-darling"] : null;
+  const darlingPhone = darlingCatalog?.phone || "+254 119 237 439";
+  const whatsappUrl = CommunicationService.buildWhatsAppUrl(messageText, darlingPhone);
+  if (typeof window !== "undefined" && typeof window.open === "function") {
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  }
 }
 
 function initializeConciergeHesitationEngine() {
@@ -2330,6 +2798,16 @@ if (typeof module !== "undefined" && module.exports) {
     renderInquirySuccessReceipt,
     initializeConciergeHesitationEngine,
     renderInquiryNetworkFailure,
-    renderInquiryCostBreakdown
+    renderInquiryCostBreakdown,
+    BeakimDateRangePicker,
+    SafeStorageService,
+    isDemoModeActive,
+    resolveConferencePackage,
+    buildConferenceRfpMessage,
+    renderAvailabilityLoading,
+    renderAvailabilityPreApproved,
+    renderAvailabilityHighDemand,
+    renderAvailabilitySoldOut,
+    generateFallbackInquiryId
   };
 }

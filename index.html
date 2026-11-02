@@ -1159,16 +1159,37 @@
 
             <!-- Stay Dates & Guests Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-2">
-              <div class="flex flex-col gap-1.5">
-                <label for="check-in" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">Check-In Date</label>
-                <input type="date" id="check-in" required onchange="handleDateOrAddonChange()"
-                       class="w-full bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3.5 py-2.5 text-xs text-deep-forest outline-none transition shadow-sm font-medium" />
+              <!-- Luxury Date Range Picker Trigger & Popover -->
+              <div class="col-span-1 sm:col-span-2 relative">
+                <label class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70 block mb-1.5">Dates of Stay (Check-In → Check-Out)</label>
+                <div id="booking-date-range-trigger" role="button" tabindex="0" aria-haspopup="dialog" aria-expanded="false"
+                     class="w-full bg-white border border-deep-forest/20 hover:border-champagne focus:border-champagne rounded-lg px-3.5 py-2 text-xs text-deep-forest transition shadow-sm font-medium cursor-pointer flex items-center justify-between gap-2 select-none">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <span class="text-champagne font-bold text-base shrink-0">📅</span>
+                    <div class="flex items-center gap-1.5 truncate text-[11px] sm:text-xs">
+                      <span id="display-check-in" class="font-bold text-deep-forest">Loading...</span>
+                      <span class="text-champagne font-bold">→</span>
+                      <span id="display-check-out" class="font-bold text-deep-forest">Loading...</span>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-1.5 shrink-0">
+                    <span id="display-nights-badge" class="px-2 py-0.5 rounded-full bg-champagne/20 text-deep-forest font-bold text-[10px] whitespace-nowrap">
+                      ... Nights
+                    </span>
+                    <span class="text-deep-forest/40 text-[10px]">▾</span>
+                  </div>
+                </div>
+
+                <!-- Hidden inputs maintain 100% CRM & Pricing engine compatibility -->
+                <input type="hidden" id="check-in" name="checkIn" required />
+                <input type="hidden" id="check-out" name="checkOut" required />
+
+                <!-- Calendar Popover Modal -->
+                <div id="beakim-calendar-popover" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/80 backdrop-blur-md sm:absolute sm:inset-auto sm:top-full sm:left-0 sm:mt-2 sm:w-[420px] sm:p-0 sm:bg-transparent sm:backdrop-blur-none">
+                  <!-- Rendered dynamically by BeakimDateRangePicker -->
+                </div>
               </div>
-              <div class="flex flex-col gap-1.5">
-                <label for="check-out" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">Check-Out Date</label>
-                <input type="date" id="check-out" required onchange="handleDateOrAddonChange()"
-                       class="w-full bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3.5 py-2.5 text-xs text-deep-forest outline-none transition shadow-sm font-medium" />
-              </div>
+
               <div class="flex flex-col gap-1.5">
                 <label for="guests-adults" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">Adults</label>
                 <input type="number" id="guests-adults" min="1" max="20" value="2" required onchange="handleDateOrAddonChange()"

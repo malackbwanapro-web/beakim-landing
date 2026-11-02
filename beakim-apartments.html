@@ -520,16 +520,35 @@
               </select>
             </div>
 
-            <div class="flex flex-col gap-1.5">
-              <label for="check-in" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Move-In / Start Date</label>
-              <input type="date" id="check-in" required onchange="updatePriceCalculation()"
-                     class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
-            </div>
+            <!-- Luxury Date Range Picker Trigger & Popover -->
+            <div class="col-span-1 md:col-span-2 relative">
+              <label class="text-xs font-semibold uppercase tracking-wider text-ivory/80 block mb-1.5">Lease / Stay Dates (Move-In → End Date)</label>
+              <div id="booking-date-range-trigger" role="button" tabindex="0" aria-haspopup="dialog" aria-expanded="false"
+                   class="w-full bg-deep-forest border border-champagne/20 hover:border-champagne focus:border-champagne rounded-lg px-4 py-3 text-sm text-ivory transition shadow-sm font-medium cursor-pointer flex items-center justify-between gap-2 select-none">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <span class="text-champagne font-bold text-base shrink-0">📅</span>
+                  <div class="flex items-center gap-1.5 truncate text-xs sm:text-sm">
+                    <span id="display-check-in" class="font-bold text-ivory">Loading...</span>
+                    <span class="text-champagne font-bold">→</span>
+                    <span id="display-check-out" class="font-bold text-ivory">Loading...</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <span id="display-nights-badge" class="px-2.5 py-0.5 rounded-full bg-champagne/20 text-champagne font-bold text-xs whitespace-nowrap">
+                    ... Nights
+                  </span>
+                  <span class="text-ivory/40 text-xs">▾</span>
+                </div>
+              </div>
 
-            <div class="flex flex-col gap-1.5">
-              <label for="check-out" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Expected End / Lease Date</label>
-              <input type="date" id="check-out" required onchange="updatePriceCalculation()"
-                     class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+              <!-- Hidden inputs maintain 100% CRM & Pricing engine compatibility -->
+              <input type="hidden" id="check-in" name="checkIn" required />
+              <input type="hidden" id="check-out" name="checkOut" required />
+
+              <!-- Calendar Popover Modal -->
+              <div id="beakim-calendar-popover" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/80 backdrop-blur-md sm:absolute sm:inset-auto sm:top-full sm:left-0 sm:mt-2 sm:w-[420px] sm:p-0 sm:bg-transparent sm:backdrop-blur-none">
+                <!-- Rendered dynamically by BeakimDateRangePicker -->
+              </div>
             </div>
 
             <div class="flex flex-col gap-1.5 col-span-1 md:col-span-2">
