@@ -57,6 +57,19 @@ const APP_CONFIG = Object.freeze({
     CHILDREN_COUNT: 0,
     FALLBACK_PROPERTY_NAME: "Beakim Hospitality",
     FALLBACK_NIGHTLY_RATE: 2500
+  }),
+  CALENDAR: Object.freeze({
+    WEEKDAY_NAMES_SHORT: Object.freeze(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]),
+    WEEKDAY_HEADER_LABELS: Object.freeze(["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]),
+    MONTH_NAMES_SHORT: Object.freeze(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]),
+    MONTH_NAMES_FULL: Object.freeze([
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ]),
+    AUTO_CLOSE_DELAY_MS: 350,
+    DEFAULT_STAY_NIGHTS: 2,
+    LONG_STAY_PRESET_DAYS: 5,
+    HOLIDAY_PRESET_DAYS: 7
   })
 });
 
@@ -322,6 +335,21 @@ function isPastDate(dateString, referenceTodayString = getNairobiDateString(0)) 
 function isInvalidDateRange(startDateString, endDateString) {
   if (!startDateString || !endDateString) return true;
   return new Date(endDateString) <= new Date(startDateString);
+}
+
+/**
+ * Formats a number with leading zero padding for standard two-digit representations (e.g., month or day).
+ */
+function formatTwoDigitNumber(numericValue) {
+  return String(numericValue).padStart(2, "0");
+}
+
+/**
+ * Predicate checking if a target date string falls strictly between start and end dates.
+ */
+function isDateBetween(targetDateString, startDateString, endDateString) {
+  if (!targetDateString || !startDateString || !endDateString) return false;
+  return targetDateString > startDateString && targetDateString < endDateString;
 }
 
 /**
@@ -2007,22 +2035,22 @@ const BeakimDateRangePicker = {
     step: "check-in"   // "check-in" or "check-out"
   },
 
-  formatDisplayDate(dateStr) {
-    if (!dateStr) return "Select Date";
-    const [y, m, d] = dateStr.split("-").map(Number);
-    const dateObj = new Date(y, m - 1, d);
-    const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    return `${weekdays[dateObj.getDay()]}, ${d} ${months[m - 1]} ${y}`;
+  formatDisplayDate(dateString) {
+    if (!dateString) return "Select Date";
+    const [year, month, day] = dateString.split("-").map(Number);
+    const dateObject = new Date(year, month - 1, day);
+    const weekdayName = APP_CONFIG.CALENDAR.WEEKDAY_NAMES_SHORT[dateObject.getDay()];
+    const monthName = APP_CONFIG.CALENDAR.MONTH_NAMES_SHORT[month - 1];
+    return `${weekdayName}, ${day} ${monthName} ${year}`;
   },
 
-  formatShortDisplayDate(dateStr) {
-    if (!dateStr) return "Select Date";
-    const [y, m, d] = dateStr.split("-").map(Number);
-    const dateObj = new Date(y, m - 1, d);
-    const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    return `${weekdays[dateObj.getDay()]}, ${d} ${months[m - 1]}`;
+  formatShortDisplayDate(dateString) {
+    if (!dateString) return "Select Date";
+    const [year, month, day] = dateString.split("-").map(Number);
+    const dateObject = new Date(year, month - 1, day);
+    const weekdayName = APP_CONFIG.CALENDAR.WEEKDAY_NAMES_SHORT[dateObject.getDay()];
+    const monthName = APP_CONFIG.CALENDAR.MONTH_NAMES_SHORT[month - 1];
+    return `${weekdayName}, ${day} ${monthName}`;
   },
 
   init() {
@@ -2042,39 +2070,39 @@ const BeakimDateRangePicker = {
     checkOutInput.value = this.state.checkOut;
 
     // Initialize calendar view to check-in date
-    const [initY, initM] = this.state.checkIn.split("-").map(Number);
-    this.state.currentYear = initY;
-    this.state.currentMonth = initM - 1;
+    const [initialYear, initialMonth] = this.state.checkIn.split("-").map(Number);
+    this.state.currentYear = initialYear;
+    this.state.currentMonth = initialMonth - 1;
 
     this.updateTriggerDisplay();
 
     // Trigger click
-    trigger.addEventListener("click", (e) => {
-      e.stopPropagation();
+    trigger.addEventListener("click", (event) => {
+      event.stopPropagation();
       this.toggle();
     });
 
     // Keyboard navigation on trigger
-    trigger.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
+    trigger.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
         this.toggle();
-      } else if (e.key === "Escape" && this.state.isOpen) {
+      } else if (event.key === "Escape" && this.state.isOpen) {
         this.close();
       }
     });
 
     // Global click listener to close popover
-    document.addEventListener("click", (e) => {
+    document.addEventListener("click", (event) => {
       const popover = document.getElementById("beakim-calendar-popover");
-      if (this.state.isOpen && popover && !popover.contains(e.target) && !trigger.contains(e.target)) {
+      if (this.state.isOpen && popover && !popover.contains(event.target) && !trigger.contains(event.target)) {
         this.close();
       }
     });
 
     // Escape listener
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && this.state.isOpen) {
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && this.state.isOpen) {
         this.close();
       }
     });
@@ -2130,9 +2158,9 @@ const BeakimDateRangePicker = {
 
   prevMonth() {
     const today = getNairobiDateString(0);
-    const [todayY, todayM] = today.split("-").map(Number);
+    const [todayYear, todayMonth] = today.split("-").map(Number);
     // Disallow navigating before current month
-    if (this.state.currentYear === todayY && this.state.currentMonth <= todayM - 1) return;
+    if (this.state.currentYear === todayYear && this.state.currentMonth <= todayMonth - 1) return;
 
     this.state.currentMonth--;
     if (this.state.currentMonth < 0) {
@@ -2153,31 +2181,30 @@ const BeakimDateRangePicker = {
 
   applyPreset(presetType) {
     const today = getNairobiDateString(0);
-    const [tY, tM, tD] = today.split("-").map(Number);
-    const baseDate = new Date(tY, tM - 1, tD);
+    const [currentYear, currentMonth, currentDay] = today.split("-").map(Number);
+    const baseDate = new Date(currentYear, currentMonth - 1, currentDay);
 
-    let start = new Date(baseDate);
-    let nights = 2;
+    const startDate = new Date(baseDate);
+    let stayNights = APP_CONFIG.CALENDAR.DEFAULT_STAY_NIGHTS;
 
     if (presetType === "weekend") {
-      const dayOfWeek = start.getDay(); // 0 is Sun, 5 is Fri
+      const dayOfWeek = startDate.getDay(); // 0 is Sun, 5 is Fri
       const daysUntilFriday = (5 - dayOfWeek + 7) % 7;
-      start.setDate(start.getDate() + (daysUntilFriday === 0 ? 0 : daysUntilFriday));
-      nights = 2; // Fri to Sun
+      startDate.setDate(startDate.getDate() + (daysUntilFriday === 0 ? 0 : daysUntilFriday));
+      stayNights = APP_CONFIG.CALENDAR.DEFAULT_STAY_NIGHTS; // Fri to Sun
     } else if (presetType === "5days") {
-      start.setDate(start.getDate() + 1); // tomorrow
-      nights = 5;
+      startDate.setDate(startDate.getDate() + 1); // tomorrow
+      stayNights = APP_CONFIG.CALENDAR.LONG_STAY_PRESET_DAYS;
     } else if (presetType === "7days") {
-      start.setDate(start.getDate() + 1); // tomorrow
-      nights = 7;
+      startDate.setDate(startDate.getDate() + 1); // tomorrow
+      stayNights = APP_CONFIG.CALENDAR.HOLIDAY_PRESET_DAYS;
     }
 
-    const end = new Date(start);
-    end.setDate(end.getDate() + nights);
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + stayNights);
 
-    const pad = (n) => String(n).padStart(2, "0");
-    this.state.checkIn = `${start.getFullYear()}-${pad(start.getMonth() + 1)}-${pad(start.getDate())}`;
-    this.state.checkOut = `${end.getFullYear()}-${pad(end.getMonth() + 1)}-${pad(end.getDate())}`;
+    this.state.checkIn = `${startDate.getFullYear()}-${formatTwoDigitNumber(startDate.getMonth() + 1)}-${formatTwoDigitNumber(startDate.getDate())}`;
+    this.state.checkOut = `${endDate.getFullYear()}-${formatTwoDigitNumber(endDate.getMonth() + 1)}-${formatTwoDigitNumber(endDate.getDate())}`;
     this.state.step = "check-in";
 
     this.updateTriggerDisplay();
@@ -2185,112 +2212,181 @@ const BeakimDateRangePicker = {
     if (typeof handleDateOrAddonChange === "function") handleDateOrAddonChange();
   },
 
-  selectDate(dateStr) {
+  selectDate(dateString) {
     const today = getNairobiDateString(0);
-    if (dateStr < today) return; // Ignore past dates
+    if (isPastDate(dateString, today)) return; // Ignore past dates
 
     if (this.state.step === "check-in" || !this.state.checkIn) {
-      this.state.checkIn = dateStr;
+      this.state.checkIn = dateString;
       this.state.checkOut = null;
       this.state.step = "check-out";
       this.render();
     } else if (this.state.step === "check-out") {
-      if (dateStr <= this.state.checkIn) {
-        this.state.checkIn = dateStr;
+      if (dateString <= this.state.checkIn) {
+        this.state.checkIn = dateString;
         this.state.checkOut = null;
         this.state.step = "check-out";
       } else {
-        this.state.checkOut = dateStr;
+        this.state.checkOut = dateString;
         this.state.step = "check-in";
         this.updateTriggerDisplay();
         if (typeof handleDateOrAddonChange === "function") handleDateOrAddonChange();
         setTimeout(() => {
           this.close();
-        }, 350);
+        }, APP_CONFIG.CALENDAR.AUTO_CLOSE_DELAY_MS);
       }
       this.render();
     }
   },
 
-  onHoverDate(dateStr) {
-    if (this.state.step === "check-out" && this.state.checkIn && dateStr > this.state.checkIn) {
-      this.state.hoverDate = dateStr;
+  onHoverDate(dateString) {
+    if (this.state.step === "check-out" && this.state.checkIn && dateString > this.state.checkIn) {
+      this.state.hoverDate = dateString;
       this.renderRangeHighlights();
     }
   },
 
   renderRangeHighlights() {
     if (typeof document === "undefined") return;
-    const cells = document.querySelectorAll("[data-cal-date]");
-    cells.forEach(cell => {
-      const d = cell.getAttribute("data-cal-date");
-      if (!d) return;
+    const calendarCells = document.querySelectorAll("[data-cal-date]");
+    calendarCells.forEach(cellElement => {
+      const cellDateString = cellElement.getAttribute("data-cal-date");
+      if (!cellDateString) return;
       if (this.state.checkIn && this.state.hoverDate && !this.state.checkOut) {
-        if (d > this.state.checkIn && d < this.state.hoverDate) {
-          cell.classList.add("cal-range-hover");
+        if (cellDateString > this.state.checkIn && cellDateString < this.state.hoverDate) {
+          cellElement.classList.add("cal-range-hover");
         } else {
-          cell.classList.remove("cal-range-hover");
+          cellElement.classList.remove("cal-range-hover");
         }
       }
     });
+  },
+
+  buildStatusGuidanceHtml() {
+    if (this.state.step === "check-out" && this.state.checkIn) {
+      return `Check-In: <span class="text-champagne font-bold">${this.formatShortDisplayDate(this.state.checkIn)}</span> • Select Check-Out Date`;
+    }
+    if (this.state.checkIn && this.state.checkOut) {
+      const nights = calculateDateDifferenceInDays(this.state.checkIn, this.state.checkOut);
+      return `<span class="text-champagne font-bold">${nights} Night${nights > 1 ? "s" : ""}</span> (${this.formatShortDisplayDate(this.state.checkIn)} → ${this.formatShortDisplayDate(this.state.checkOut)})`;
+    }
+    return "Select Check-In Date";
+  },
+
+  buildCalendarPresetsHtml() {
+    return `
+      <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
+        <button type="button" onclick="BeakimDateRangePicker.applyPreset('weekend')" class="px-2.5 py-1 rounded-full bg-canopy/80 border border-champagne/25 text-champagne hover:bg-champagne hover:text-deep-forest transition font-medium">Weekend (2 Nights)</button>
+        <button type="button" onclick="BeakimDateRangePicker.applyPreset('5days')" class="px-2.5 py-1 rounded-full bg-canopy/80 border border-champagne/25 text-champagne hover:bg-champagne hover:text-deep-forest transition font-medium">5-Day Stay</button>
+        <button type="button" onclick="BeakimDateRangePicker.applyPreset('7days')" class="px-2.5 py-1 rounded-full bg-canopy/80 border border-champagne/25 text-champagne hover:bg-champagne hover:text-deep-forest transition font-medium">7-Night Holiday</button>
+      </div>
+    `;
+  },
+
+  buildCalendarMonthNavHtml(monthName, year, isAtMinMonth) {
+    const prevButtonClasses = isAtMinMonth
+      ? 'disabled class="p-1 text-ivory/20 cursor-not-allowed"'
+      : 'class="p-1 text-champagne hover:text-ivory transition"';
+
+    return `
+      <div class="flex items-center justify-between px-1 pt-1">
+        <button type="button" onclick="BeakimDateRangePicker.prevMonth()" ${prevButtonClasses} aria-label="Previous Month">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <span class="text-sm font-bold text-ivory font-display tracking-wide">${monthName} ${year}</span>
+        <button type="button" onclick="BeakimDateRangePicker.nextMonth()" class="p-1 text-champagne hover:text-ivory transition" aria-label="Next Month">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    `;
+  },
+
+  buildCalendarDayCellHtml({ dayNumber, dateString, isPast, isCheckIn, isCheckOut, isMidRange }) {
+    let cellClasses = "h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center text-xs sm:text-sm font-medium transition cursor-pointer select-none cal-day-cell ";
+    let extraAttrs = `data-cal-date="${dateString}" onclick="BeakimDateRangePicker.selectDate('${dateString}')" onmouseenter="BeakimDateRangePicker.onHoverDate('${dateString}')"`;
+
+    if (isPast) {
+      cellClasses += "text-ivory/20 cursor-not-allowed ";
+      extraAttrs = `data-cal-date="${dateString}"`;
+    } else if (isCheckIn && isCheckOut) {
+      cellClasses += "cal-range-start cal-range-end shadow-md scale-105 ";
+    } else if (isCheckIn) {
+      cellClasses += "cal-range-start shadow-md ";
+    } else if (isCheckOut) {
+      cellClasses += "cal-range-end shadow-md ";
+    } else if (isMidRange) {
+      cellClasses += "cal-range-mid ";
+    } else {
+      cellClasses += "text-ivory hover:bg-champagne/20 rounded-full ";
+    }
+
+    return `<div class="${cellClasses}" ${extraAttrs}>${dayNumber}</div>`;
+  },
+
+  buildCalendarDaysGridHtml(year, monthNumber, checkInDate, checkOutDate, todayDate) {
+    const firstDayIndex = new Date(year, monthNumber, 1).getDay();
+    const daysInMonth = new Date(year, monthNumber + 1, 0).getDate();
+
+    let gridHtml = "";
+    for (let index = 0; index < firstDayIndex; index++) {
+      gridHtml += `<div class="h-9 w-9 sm:h-10 sm:w-10"></div>`;
+    }
+
+    for (let dayNumber = 1; dayNumber <= daysInMonth; dayNumber++) {
+      const dateString = `${year}-${formatTwoDigitNumber(monthNumber + 1)}-${formatTwoDigitNumber(dayNumber)}`;
+      const isPast = isPastDate(dateString, todayDate);
+      const isCheckIn = dateString === checkInDate;
+      const isCheckOut = dateString === checkOutDate;
+      const isMidRange = isDateBetween(dateString, checkInDate, checkOutDate);
+
+      gridHtml += this.buildCalendarDayCellHtml({
+        dayNumber,
+        dateString,
+        isPast,
+        isCheckIn,
+        isCheckOut,
+        isMidRange
+      });
+    }
+
+    const headerCols = APP_CONFIG.CALENDAR.WEEKDAY_HEADER_LABELS.map(label => `<div>${label}</div>`).join("");
+
+    return `
+      <div class="space-y-1">
+        <div class="grid grid-cols-7 text-center text-[11px] font-bold text-champagne/70 pb-1">
+          ${headerCols}
+        </div>
+        <div class="grid grid-cols-7 gap-y-1 text-center items-center justify-items-center">
+          ${gridHtml}
+        </div>
+      </div>
+    `;
+  },
+
+  buildCalendarFooterHtml() {
+    return `
+      <div class="flex items-center justify-between pt-2 border-t border-champagne/15 text-xs">
+        <button type="button" onclick="BeakimDateRangePicker.reset()" class="text-ivory/60 hover:text-champagne transition underline underline-offset-2 text-[11px]">Clear Dates</button>
+        <button type="button" onclick="BeakimDateRangePicker.applyAndClose()" class="bg-champagne hover:bg-driftwood text-deep-forest font-bold px-4 py-1.5 rounded-lg transition shadow-md text-xs active:scale-95">Apply Dates ✓</button>
+      </div>
+    `;
   },
 
   render() {
     const popover = document.getElementById("beakim-calendar-popover");
     if (!popover) return;
 
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const monthName = months[this.state.currentMonth];
+    const monthName = APP_CONFIG.CALENDAR.MONTH_NAMES_FULL[this.state.currentMonth];
     const year = this.state.currentYear;
-    const today = getNairobiDateString(0);
-    const [todayY, todayM] = today.split("-").map(Number);
-    const isAtMinMonth = (year === todayY && this.state.currentMonth <= todayM - 1);
+    const todayDate = getNairobiDateString(0);
+    const [todayYear, todayMonth] = todayDate.split("-").map(Number);
+    const isAtMinMonth = (year === todayYear && this.state.currentMonth <= todayMonth - 1);
 
-    const firstDayIndex = new Date(year, this.state.currentMonth, 1).getDay();
-    const daysInMonth = new Date(year, this.state.currentMonth + 1, 0).getDate();
-
-    let daysHtml = "";
-    for (let i = 0; i < firstDayIndex; i++) {
-      daysHtml += `<div class="h-9 w-9 sm:h-10 sm:w-10"></div>`;
-    }
-
-    const pad = (n) => String(n).padStart(2, "0");
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      const dateStr = `${year}-${pad(this.state.currentMonth + 1)}-${pad(day)}`;
-      const isPast = dateStr < today;
-      const isCheckIn = dateStr === this.state.checkIn;
-      const isCheckOut = dateStr === this.state.checkOut;
-      const isMid = this.state.checkIn && this.state.checkOut && dateStr > this.state.checkIn && dateStr < this.state.checkOut;
-
-      let cellClasses = "h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center text-xs sm:text-sm font-medium transition cursor-pointer select-none cal-day-cell ";
-      let extraAttrs = `data-cal-date="${dateStr}" onclick="BeakimDateRangePicker.selectDate('${dateStr}')" onmouseenter="BeakimDateRangePicker.onHoverDate('${dateStr}')"`;
-
-      if (isPast) {
-        cellClasses += "text-ivory/20 cursor-not-allowed ";
-        extraAttrs = `data-cal-date="${dateStr}"`;
-      } else if (isCheckIn && isCheckOut) {
-        cellClasses += "cal-range-start cal-range-end shadow-md scale-105 ";
-      } else if (isCheckIn) {
-        cellClasses += "cal-range-start shadow-md ";
-      } else if (isCheckOut) {
-        cellClasses += "cal-range-end shadow-md ";
-      } else if (isMid) {
-        cellClasses += "cal-range-mid ";
-      } else {
-        cellClasses += "text-ivory hover:bg-champagne/20 rounded-full ";
-      }
-
-      daysHtml += `<div class="${cellClasses}" ${extraAttrs}>${day}</div>`;
-    }
-
-    let statusText = "Select Check-In Date";
-    if (this.state.step === "check-out" && this.state.checkIn) {
-      statusText = `Check-In: <span class="text-champagne font-bold">${this.formatShortDisplayDate(this.state.checkIn)}</span> • Select Check-Out Date`;
-    } else if (this.state.checkIn && this.state.checkOut) {
-      const nights = calculateDateDifferenceInDays(this.state.checkIn, this.state.checkOut);
-      statusText = `<span class="text-champagne font-bold">${nights} Night${nights > 1 ? "s" : ""}</span> (${this.formatShortDisplayDate(this.state.checkIn)} → ${this.formatShortDisplayDate(this.state.checkOut)})`;
-    }
+    const statusGuidanceHtml = this.buildStatusGuidanceHtml();
+    const presetsHtml = this.buildCalendarPresetsHtml();
+    const monthNavHtml = this.buildCalendarMonthNavHtml(monthName, year, isAtMinMonth);
+    const daysGridHtml = this.buildCalendarDaysGridHtml(year, this.state.currentMonth, this.state.checkIn, this.state.checkOut, todayDate);
+    const footerHtml = this.buildCalendarFooterHtml();
 
     popover.innerHTML = `
       <div class="bg-[#0D2318] border border-champagne/30 rounded-2xl shadow-2xl p-4 sm:p-5 w-full max-w-sm sm:max-w-md text-ivory flex flex-col space-y-3">
@@ -2299,44 +2395,22 @@ const BeakimDateRangePicker = {
             <h4 class="text-xs font-bold uppercase tracking-wider text-champagne flex items-center gap-1.5">
               <span>📅</span> Dates of Stay
             </h4>
-            <p class="text-[11px] text-ivory/70 pt-0.5">${statusText}</p>
+            <p class="text-[11px] text-ivory/70 pt-0.5">${statusGuidanceHtml}</p>
           </div>
           <button type="button" onclick="BeakimDateRangePicker.close()" class="w-7 h-7 rounded-full bg-deep-forest/80 hover:bg-champagne/20 text-ivory/70 hover:text-champagne flex items-center justify-center transition text-sm">✕</button>
         </div>
 
         <!-- Quick Presets -->
-        <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
-          <button type="button" onclick="BeakimDateRangePicker.applyPreset('weekend')" class="px-2.5 py-1 rounded-full bg-canopy/80 border border-champagne/25 text-champagne hover:bg-champagne hover:text-deep-forest transition font-medium">Weekend (2 Nights)</button>
-          <button type="button" onclick="BeakimDateRangePicker.applyPreset('5days')" class="px-2.5 py-1 rounded-full bg-canopy/80 border border-champagne/25 text-champagne hover:bg-champagne hover:text-deep-forest transition font-medium">5-Day Stay</button>
-          <button type="button" onclick="BeakimDateRangePicker.applyPreset('7days')" class="px-2.5 py-1 rounded-full bg-canopy/80 border border-champagne/25 text-champagne hover:bg-champagne hover:text-deep-forest transition font-medium">7-Night Holiday</button>
-        </div>
+        ${presetsHtml}
 
         <!-- Month Navigation -->
-        <div class="flex items-center justify-between px-1 pt-1">
-          <button type="button" onclick="BeakimDateRangePicker.prevMonth()" ${isAtMinMonth ? 'disabled class="p-1 text-ivory/20 cursor-not-allowed"' : 'class="p-1 text-champagne hover:text-ivory transition"'} aria-label="Previous Month">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-          </button>
-          <span class="text-sm font-bold text-ivory font-display tracking-wide">${monthName} ${year}</span>
-          <button type="button" onclick="BeakimDateRangePicker.nextMonth()" class="p-1 text-champagne hover:text-ivory transition" aria-label="Next Month">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </button>
-        </div>
+        ${monthNavHtml}
 
         <!-- Days Grid -->
-        <div class="space-y-1">
-          <div class="grid grid-cols-7 text-center text-[11px] font-bold text-champagne/70 pb-1">
-            <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
-          </div>
-          <div class="grid grid-cols-7 gap-y-1 text-center items-center justify-items-center">
-            ${daysHtml}
-          </div>
-        </div>
+        ${daysGridHtml}
 
         <!-- Action Footer -->
-        <div class="flex items-center justify-between pt-2 border-t border-champagne/15 text-xs">
-          <button type="button" onclick="BeakimDateRangePicker.reset()" class="text-ivory/60 hover:text-champagne transition underline underline-offset-2 text-[11px]">Clear Dates</button>
-          <button type="button" onclick="BeakimDateRangePicker.applyAndClose()" class="bg-champagne hover:bg-driftwood text-deep-forest font-bold px-4 py-1.5 rounded-lg transition shadow-md text-xs active:scale-95">Apply Dates ✓</button>
-        </div>
+        ${footerHtml}
       </div>
     `;
   },
@@ -2768,6 +2842,8 @@ if (typeof module !== "undefined" && module.exports) {
     calculateDateDifferenceInDays,
     isPastDate,
     isInvalidDateRange,
+    formatTwoDigitNumber,
+    isDateBetween,
     normalizeKenyanPhoneNumber,
     resolveBreakfastRate,
     calculateReservationTotals,

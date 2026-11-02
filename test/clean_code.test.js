@@ -13,6 +13,8 @@ const {
   calculateDateDifferenceInDays,
   isPastDate,
   isInvalidDateRange,
+  formatTwoDigitNumber,
+  isDateBetween,
   normalizeKenyanPhoneNumber,
   calculateReservationTotals,
   resolveStayPricing,
@@ -25,7 +27,12 @@ const {
   renderInquiryCostBreakdown,
   renderInquirySuccessReceipt,
   initializeConciergeHesitationEngine,
-  BeakimDateRangePicker
+  BeakimDateRangePicker,
+  SafeStorageService,
+  isDemoModeActive,
+  resolveConferencePackage,
+  buildConferenceRfpMessage,
+  generateFallbackInquiryId
 } = require("../assets/js/main.js");
 
 const { BEAKIM_CATALOG, getOfferingById } = require("../assets/js/catalog.js");
@@ -56,6 +63,11 @@ assert.strictEqual(Object.isFrozen(APP_CONFIG.CRM), true);
 assert.strictEqual(Object.isFrozen(APP_CONFIG.UI), true);
 assert.strictEqual(Object.isFrozen(APP_CONFIG.TIME), true);
 assert.strictEqual(Object.isFrozen(APP_CONFIG.DEFAULTS), true);
+assert.strictEqual(Object.isFrozen(APP_CONFIG.CALENDAR), true);
+assert.strictEqual(APP_CONFIG.CALENDAR.AUTO_CLOSE_DELAY_MS, 350);
+assert.strictEqual(APP_CONFIG.CALENDAR.DEFAULT_STAY_NIGHTS, 2);
+assert.strictEqual(APP_CONFIG.CALENDAR.WEEKDAY_NAMES_SHORT.length, 7);
+assert.strictEqual(APP_CONFIG.CALENDAR.MONTH_NAMES_FULL.length, 12);
 console.log("   ✅ APP_CONFIG and nested dictionaries are strictly frozen.");
 
 // TEST 2: CommunicationService Boundary Adapter
@@ -82,6 +94,20 @@ assert.strictEqual(isPastDate("2026-10-18", "2026-10-17"), false);
 assert.strictEqual(isInvalidDateRange("2026-12-05", "2026-12-01"), true);
 assert.strictEqual(isInvalidDateRange("2026-12-05", "2026-12-05"), true);
 assert.strictEqual(isInvalidDateRange("2026-12-05", "2026-12-06"), false);
+
+// Pure formatTwoDigitNumber unit tests
+assert.strictEqual(formatTwoDigitNumber(1), "01");
+assert.strictEqual(formatTwoDigitNumber(9), "09");
+assert.strictEqual(formatTwoDigitNumber(10), "10");
+assert.strictEqual(formatTwoDigitNumber(12), "12");
+assert.strictEqual(formatTwoDigitNumber(0), "00");
+
+// Pure isDateBetween predicate unit tests
+assert.strictEqual(isDateBetween("2026-11-05", "2026-11-01", "2026-11-10"), true);
+assert.strictEqual(isDateBetween("2026-11-01", "2026-11-01", "2026-11-10"), false);
+assert.strictEqual(isDateBetween("2026-11-10", "2026-11-01", "2026-11-10"), false);
+assert.strictEqual(isDateBetween("2026-11-15", "2026-11-01", "2026-11-10"), false);
+assert.strictEqual(isDateBetween(null, "2026-11-01", "2026-11-10"), false);
 console.log("   ✅ Date differences and chronological predicates assert correctly.");
 
 // TEST 4: Phone Number Normalization
@@ -509,6 +535,14 @@ assert.strictEqual(BeakimDateRangePicker.formatDisplayDate("2026-11-06"), "Fri, 
 assert.strictEqual(BeakimDateRangePicker.formatShortDisplayDate("2026-11-06"), "Fri, 6 Nov");
 assert.strictEqual(BeakimDateRangePicker.formatShortDisplayDate("2026-12-25"), "Fri, 25 Dec");
 
+// Test Clean Code SRP decomposed helper methods
+assert.strictEqual(typeof BeakimDateRangePicker.buildStatusGuidanceHtml, "function", "buildStatusGuidanceHtml must be an SRP helper function");
+assert.strictEqual(typeof BeakimDateRangePicker.buildCalendarPresetsHtml, "function", "buildCalendarPresetsHtml must be an SRP helper function");
+assert.strictEqual(typeof BeakimDateRangePicker.buildCalendarMonthNavHtml, "function", "buildCalendarMonthNavHtml must be an SRP helper function");
+assert.strictEqual(typeof BeakimDateRangePicker.buildCalendarDayCellHtml, "function", "buildCalendarDayCellHtml must be an SRP helper function");
+assert.strictEqual(typeof BeakimDateRangePicker.buildCalendarDaysGridHtml, "function", "buildCalendarDaysGridHtml must be an SRP helper function");
+assert.strictEqual(typeof BeakimDateRangePicker.buildCalendarFooterHtml, "function", "buildCalendarFooterHtml must be an SRP helper function");
+
 // Assert safe execution in headless/SSR environment
 assert.doesNotThrow(() => {
   BeakimDateRangePicker.init();
@@ -535,4 +569,98 @@ for (const pageName of bookingPages) {
 }
 console.log("   ✅ BeakimDateRangePicker engine and markup asserted with 100% resilience across all 5 booking forms.");
 
-console.log("\n🎉 ALL 18 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 19: Conference Package Calculation & Rate Integrity against BEAKIM_CATALOG
+console.log("19. Testing Conference Package Calculation & Rate Integrity...");
+assert.strictEqual(typeof resolveConferencePackage, "function", "resolveConferencePackage must be a function");
+const fullDayPackage = resolveConferencePackage(true);
+const halfDayPackage = resolveConferencePackage(false);
+
+const catalogConfPackages = BEAKIM_CATALOG["diani-darling"].conferencePackages;
+const catalogFull = catalogConfPackages.find(p => p.id === "darling-conf-full-day");
+const catalogHalf = catalogConfPackages.find(p => p.id === "darling-conf-half-day");
+
+assert.strictEqual(fullDayPackage.rate, catalogFull.rate, "Full Day conference rate must match BEAKIM_CATALOG (KES 3,000)");
+assert.strictEqual(halfDayPackage.rate, catalogHalf.rate, "Half Day conference rate must match BEAKIM_CATALOG (KES 1,500)");
+assert.strictEqual(fullDayPackage.name, catalogFull.name, "Full Day package name must match catalog");
+assert.strictEqual(halfDayPackage.name, catalogHalf.name, "Half Day package name must match catalog");
+
+// Test delegate math (20 delegates * 3000 = 60,000; 15 delegates * 1500 = 22,500)
+assert.strictEqual(20 * fullDayPackage.rate, 60000);
+assert.strictEqual(15 * halfDayPackage.rate, 22500);
+console.log("   ✅ Conference package rates assert 100% against single source of truth BEAKIM_CATALOG.");
+
+// TEST 20: Conference WhatsApp RFP Link Generation via CommunicationService
+console.log("20. Testing Conference WhatsApp RFP Link Generation via CommunicationService...");
+assert.strictEqual(typeof buildConferenceRfpMessage, "function", "buildConferenceRfpMessage must be a function");
+const testRfpMessage = buildConferenceRfpMessage({
+  packageName: "Full Day Conference Package with Lunch (KSh 3,000/person)",
+  eventDate: "2026-11-20",
+  session: "Full Day (8:00 AM – 5:00 PM)",
+  delegates: "35",
+  orgName: "Kenya Tech Summit",
+  coordinator: "David Ochieng",
+  estimatedCost: "105,000",
+  bundleCottages: true,
+  notes: "Projector screen and wireless mics needed"
+});
+
+assert.ok(testRfpMessage.includes("NEW CONFERENCE RESERVATION INQUIRY"));
+assert.ok(testRfpMessage.includes("Venue:* Beakim Diani Darling"));
+assert.ok(testRfpMessage.includes("35 People"));
+assert.ok(testRfpMessage.includes("Kenya Tech Summit"));
+assert.ok(testRfpMessage.includes("David Ochieng"));
+assert.ok(testRfpMessage.includes("KSh 105,000"));
+assert.ok(testRfpMessage.includes("Also requesting overnight cottages"));
+assert.ok(testRfpMessage.includes("Projector screen and wireless mics needed"));
+
+// Assert CommunicationService routes to Diani Darling reception (+254 119 237 439)
+const darlingPhone = BEAKIM_CATALOG["diani-darling"].phone;
+const rfpWhatsAppUrl = CommunicationService.buildWhatsAppUrl(testRfpMessage, darlingPhone);
+assert.ok(rfpWhatsAppUrl.startsWith("https://wa.me/254119237439?text="), "WhatsApp link must target Diani Darling reception phone 254119237439");
+const parsedRfpUrl = new URL(rfpWhatsAppUrl);
+assert.strictEqual(parsedRfpUrl.searchParams.get("text"), testRfpMessage);
+console.log("   ✅ Conference RFP link generated through CommunicationService targeting direct reception line.");
+
+// TEST 21: SafeStorageService Boundary & Offline Inquiry Queueing
+console.log("21. Testing SafeStorageService Boundary & Offline Inquiry Queueing...");
+assert.strictEqual(typeof SafeStorageService, "object", "SafeStorageService must be exported");
+assert.strictEqual(typeof SafeStorageService.getJson, "function", "SafeStorageService.getJson must be a function");
+assert.strictEqual(typeof SafeStorageService.setJson, "function", "SafeStorageService.setJson must be a function");
+
+// Test safe fallback when localStorage is undefined or throws (private browsing mode)
+delete global.localStorage;
+assert.deepStrictEqual(SafeStorageService.getJson("non_existent_key", []), []);
+assert.strictEqual(SafeStorageService.setJson("key", { test: 1 }), false);
+
+// Mock working storage
+const mockStore = {};
+global.localStorage = {
+  getItem: (k) => (k in mockStore ? mockStore[k] : null),
+  setItem: (k, v) => { mockStore[k] = String(v); }
+};
+
+assert.strictEqual(SafeStorageService.setJson("test_inquiries", [{ id: "WB-20001" }]), true);
+const retrieved = SafeStorageService.getJson("test_inquiries", []);
+assert.strictEqual(retrieved.length, 1);
+assert.strictEqual(retrieved[0].id, "WB-20001");
+
+// Test fallback inquiry ID minting
+const fallbackId = generateFallbackInquiryId();
+assert.ok(fallbackId.startsWith("WB-OFFLINE-"), `Fallback ID must start with WB-OFFLINE-, got ${fallbackId}`);
+console.log("   ✅ SafeStorageService boundary handles storage access, exceptions, and clean WB-OFFLINE ID generation.");
+
+// TEST 22: Encapsulated isDemoModeActive Predicate & Query String Sanitation
+console.log("22. Testing Encapsulated isDemoModeActive Predicate & Query String Sanitation...");
+assert.strictEqual(typeof isDemoModeActive, "function", "isDemoModeActive must be a function");
+assert.strictEqual(isDemoModeActive("?demo=true"), true);
+assert.strictEqual(isDemoModeActive("?test=true"), true);
+assert.strictEqual(isDemoModeActive("?demo=1"), true);
+assert.strictEqual(isDemoModeActive("?test=1"), true);
+assert.strictEqual(isDemoModeActive("?property=tower&demo=true"), true);
+assert.strictEqual(isDemoModeActive("?normal=stay"), false);
+assert.strictEqual(isDemoModeActive(""), false);
+assert.strictEqual(isDemoModeActive(null), false);
+assert.strictEqual(isDemoModeActive(undefined), false);
+console.log("   ✅ Encapsulated isDemoModeActive predicate reliably asserts across all parameter permutations.");
+
+console.log("\n🎉 ALL 22 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
