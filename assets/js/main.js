@@ -951,12 +951,24 @@ function syncBreakfastAddonCard(propertyValue) {
   }
 
   if (breakfastCard && isBreakfastEligible) {
-    const priceBadge = breakfastCard.querySelector(".text-champagne");
+    const priceBadge = (typeof document !== "undefined" && document.getElementById("addon-breakfast-price-badge")) ||
+                       breakfastCard.querySelector("p.text-champagne") ||
+                       breakfastCard.querySelector(".text-champagne:not(input)");
     if (priceBadge) {
       if (normalized.includes("darad")) {
         priceBadge.textContent = "+KSh 500 / person / day";
       } else if (normalized.includes("darling")) {
         priceBadge.textContent = "+KSh 1,000 / person / day";
+      }
+    }
+
+    const descElem = (typeof document !== "undefined" && document.getElementById("addon-breakfast-description")) ||
+                     breakfastCard.querySelector(".text-driftwood");
+    if (descElem) {
+      if (normalized.includes("darling")) {
+        descElem.textContent = "Fresh tropical fruits, eggs made to order, Swahili mahamri, and hot tea/coffee delivered to your verandah.";
+      } else if (normalized.includes("darad")) {
+        descElem.textContent = "Fresh coastal tropical fruits, eggs made to order, Swahili mahamri, and hot tea/coffee served poolside.";
       }
     }
   }
@@ -1103,10 +1115,14 @@ function handleDateOrAddonChange() {
 
   const breakfastRow = document.getElementById("summary-breakfast-row");
   const breakfastCostElem = document.getElementById("summary-breakfast-cost");
+  const breakfastLabelElem = document.getElementById("summary-breakfast-label");
 
   if (totals.breakfastCost > 0) {
     if (breakfastRow) breakfastRow.classList.remove("hidden");
     if (breakfastCostElem) breakfastCostElem.textContent = `+KSh ${totals.breakfastCost.toLocaleString()}`;
+    if (breakfastLabelElem && totals.breakfastRate > 0) {
+      breakfastLabelElem.textContent = `🍳 Coastal Breakfast Add-on (@ KSh ${totals.breakfastRate.toLocaleString()}/person/day):`;
+    }
   } else {
     if (breakfastRow) breakfastRow.classList.add("hidden");
   }

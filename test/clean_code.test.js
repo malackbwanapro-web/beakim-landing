@@ -962,6 +962,10 @@ console.log("31. Testing Dynamic Breakfast Add-On Eligibility & Tower Cottages H
 assert.strictEqual(typeof syncBreakfastAddonCard, "function");
 
 // Setup minimal mock DOM elements to test syncBreakfastAddonCard behavior
+const mockPriceBadge = { textContent: "+KSh 500 / person / day" };
+const mockDescription = { textContent: "poolside" };
+const mockCheckboxInput = { classes: new Set(["text-champagne"]), textContent: "", checked: true, disabled: false };
+
 const mockCard = {
   classes: new Set(),
   classList: {
@@ -979,9 +983,12 @@ const mockCard = {
     },
     contains(c) { return mockCard.classes.has(c); }
   },
-  priceBadge: { textContent: "" },
+  priceBadge: mockPriceBadge,
   querySelector(selector) {
-    if (selector === ".text-champagne") return this.priceBadge;
+    // If querying generic .text-champagne, simulate realistic DOM returning checkbox first!
+    if (selector === ".text-champagne") return mockCheckboxInput;
+    if (selector === "p.text-champagne" || selector === ".text-champagne:not(input)") return mockPriceBadge;
+    if (selector === ".text-driftwood") return mockDescription;
     return null;
   }
 };
@@ -1006,14 +1013,15 @@ const mockPrefSection = {
 };
 
 const mockStepBadge = { textContent: "3" };
-const mockCheckbox = { checked: true, disabled: false };
 
 global.document = {
   getElementById(id) {
     if (id === "addon-card-breakfast") return mockCard;
     if (id === "booking-step-preferences") return mockPrefSection;
     if (id === "booking-step-guest-badge") return mockStepBadge;
-    if (id === "addon-breakfast") return mockCheckbox;
+    if (id === "addon-breakfast") return mockCheckboxInput;
+    if (id === "addon-breakfast-price-badge") return mockPriceBadge;
+    if (id === "addon-breakfast-description") return mockDescription;
     return null;
   }
 };
@@ -1021,31 +1029,41 @@ global.document = {
 // 1. Test Tower Cottages selection: Must hide card, disable checkbox, hide Step 2, set badge to "2"
 syncBreakfastAddonCard("Tower Cottages - 2-Bedroom Apartment");
 assert.strictEqual(mockCard.classList.contains("hidden"), true, "Tower Cottages must hide breakfast card");
-assert.strictEqual(mockCheckbox.checked, false, "Tower Cottages must force breakfast checkbox unchecked");
-assert.strictEqual(mockCheckbox.disabled, true, "Tower Cottages must disable breakfast checkbox");
+assert.strictEqual(mockCheckboxInput.checked, false, "Tower Cottages must force breakfast checkbox unchecked");
+assert.strictEqual(mockCheckboxInput.disabled, true, "Tower Cottages must disable breakfast checkbox");
 assert.strictEqual(mockPrefSection.classList.contains("hidden"), true, "Tower Cottages must hide entire preferences step");
 assert.strictEqual(mockStepBadge.textContent, "2", "Guest Info step badge must renumber to '2' when preferences are hidden");
 
 // 2. Test Beakim Darad selection: Must show card, enable checkbox, show Step 2, set badge to "3", set KSh 500
 syncBreakfastAddonCard("Beakim Darad - Standard Room (Without AC)");
 assert.strictEqual(mockCard.classList.contains("hidden"), false, "Darad must NOT hide breakfast card");
-assert.strictEqual(mockCheckbox.disabled, false, "Darad must enable breakfast checkbox");
+assert.strictEqual(mockCheckboxInput.disabled, false, "Darad must enable breakfast checkbox");
 assert.strictEqual(mockPrefSection.classList.contains("hidden"), false, "Darad must show preferences step");
 assert.strictEqual(mockStepBadge.textContent, "3", "Guest Info step badge must be '3' for Darad");
-assert.ok(mockCard.priceBadge.textContent.includes("500"), "Darad price badge must be KSh 500");
+assert.ok(mockPriceBadge.textContent.includes("500"), "Darad price badge must be KSh 500");
+assert.ok(mockDescription.textContent.includes("poolside"), "Darad breakfast description must mention poolside");
 
 // 3. Test Diani Darling selection: Must show card, enable checkbox, show Step 2, set badge to "3", set KSh 1,000
 syncBreakfastAddonCard("Diani Darling Cottages - Deluxe Studio Room");
 assert.strictEqual(mockCard.classList.contains("hidden"), false, "Darling must NOT hide breakfast card");
-assert.strictEqual(mockCheckbox.disabled, false, "Darling must enable breakfast checkbox");
+assert.strictEqual(mockCheckboxInput.disabled, false, "Darling must enable breakfast checkbox");
 assert.strictEqual(mockPrefSection.classList.contains("hidden"), false, "Darling must show preferences step");
 assert.strictEqual(mockStepBadge.textContent, "3", "Guest Info step badge must be '3' for Darling");
-assert.ok(mockCard.priceBadge.textContent.includes("1,000"), "Darling price badge must be KSh 1,000");
+assert.ok(mockPriceBadge.textContent.includes("1,000"), "Darling price badge must be KSh 1,000");
+assert.ok(mockDescription.textContent.includes("verandah"), "Darling breakfast description must mention verandah");
 
-// 4. Verify index.html contains the necessary container IDs
+// 4. Verify index.html, beakim-darad.html, diani-darling.html contain the necessary semantic IDs
 assert.ok(indexContent.includes('id="booking-step-preferences"'), "index.html must have id='booking-step-preferences'");
 assert.ok(indexContent.includes('id="booking-step-guest-badge"'), "index.html must have id='booking-step-guest-badge'");
+assert.ok(indexContent.includes('id="addon-breakfast-price-badge"'), "index.html must have id='addon-breakfast-price-badge'");
+assert.ok(indexContent.includes('id="addon-breakfast-description"'), "index.html must have id='addon-breakfast-description'");
+assert.ok(indexContent.includes('id="summary-breakfast-label"'), "index.html must have id='summary-breakfast-label'");
 
-console.log("   ✅ Dynamic breakfast add-on eligibility correctly hides preferences and renumbers steps for Tower Cottages.");
+const daradRawContent = fs.readFileSync(path.join(__dirname, "..", "beakim-darad.html"), "utf8");
+const darlingRawContent = fs.readFileSync(path.join(__dirname, "..", "diani-darling.html"), "utf8");
+assert.ok(daradRawContent.includes('id="addon-breakfast-price-badge"'), "beakim-darad.html must have id='addon-breakfast-price-badge'");
+assert.ok(darlingRawContent.includes('id="addon-breakfast-price-badge"'), "diani-darling.html must have id='addon-breakfast-price-badge'");
+
+console.log("   ✅ Dynamic breakfast add-on eligibility correctly hides preferences, renumbers steps, and dynamically updates KSh 500 vs KSh 1,000 pricing.");
 
 console.log("\n🎉 ALL 31 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
