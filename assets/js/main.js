@@ -2093,11 +2093,28 @@ const BeakimDateRangePicker = {
     });
 
     // Global click listener to close popover
+    const popover = document.getElementById("beakim-calendar-popover");
+    if (popover) {
+      popover.addEventListener("click", (event) => {
+        event.stopPropagation();
+      });
+    }
+
     document.addEventListener("click", (event) => {
-      const popover = document.getElementById("beakim-calendar-popover");
-      if (this.state.isOpen && popover && !popover.contains(event.target) && !trigger.contains(event.target)) {
-        this.close();
-      }
+      if (!this.state.isOpen) return;
+      const currentPopover = document.getElementById("beakim-calendar-popover");
+      if (!currentPopover) return;
+
+      // Ignore clicks on trigger or inside trigger
+      if (trigger && (trigger === event.target || trigger.contains(event.target))) return;
+
+      // Ignore clicks inside popover
+      if (currentPopover === event.target || currentPopover.contains(event.target)) return;
+
+      // Ignore detached nodes from innerHTML re-renders
+      if (!document.body.contains(event.target)) return;
+
+      this.close();
     });
 
     // Escape listener
@@ -2125,9 +2142,15 @@ const BeakimDateRangePicker = {
       displayOut.textContent = this.formatShortDisplayDate(this.state.checkOut);
     }
 
-    if (nightsBadge && this.state.checkIn && this.state.checkOut) {
-      const nights = calculateDateDifferenceInDays(this.state.checkIn, this.state.checkOut);
-      nightsBadge.textContent = nights > 0 ? `${nights} Night${nights > 1 ? "s" : ""}` : "1 Night";
+    if (nightsBadge) {
+      if (this.state.checkIn && this.state.checkOut) {
+        const nights = calculateDateDifferenceInDays(this.state.checkIn, this.state.checkOut);
+        nightsBadge.textContent = nights > 0 ? `${nights} Night${nights > 1 ? "s" : ""}` : "1 Night";
+      } else if (this.state.checkIn) {
+        nightsBadge.textContent = "Select Check-Out";
+      } else {
+        nightsBadge.textContent = "Dates of Stay";
+      }
     }
   },
 
@@ -2212,7 +2235,10 @@ const BeakimDateRangePicker = {
     if (typeof handleDateOrAddonChange === "function") handleDateOrAddonChange();
   },
 
-  selectDate(dateString) {
+  selectDate(dateString, event) {
+    if (event && typeof event.stopPropagation === "function") {
+      event.stopPropagation();
+    }
     const today = getNairobiDateString(0);
     if (isPastDate(dateString, today)) return; // Ignore past dates
 
@@ -2220,12 +2246,14 @@ const BeakimDateRangePicker = {
       this.state.checkIn = dateString;
       this.state.checkOut = null;
       this.state.step = "check-out";
+      this.updateTriggerDisplay();
       this.render();
     } else if (this.state.step === "check-out") {
       if (dateString <= this.state.checkIn) {
         this.state.checkIn = dateString;
         this.state.checkOut = null;
         this.state.step = "check-out";
+        this.updateTriggerDisplay();
       } else {
         this.state.checkOut = dateString;
         this.state.step = "check-in";
@@ -2303,7 +2331,7 @@ const BeakimDateRangePicker = {
 
   buildCalendarDayCellHtml({ dayNumber, dateString, isPast, isCheckIn, isCheckOut, isMidRange }) {
     let cellClasses = "h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center text-xs sm:text-sm font-medium transition cursor-pointer select-none cal-day-cell ";
-    let extraAttrs = `data-cal-date="${dateString}" onclick="BeakimDateRangePicker.selectDate('${dateString}')" onmouseenter="BeakimDateRangePicker.onHoverDate('${dateString}')"`;
+    let extraAttrs = `data-cal-date="${dateString}" onclick="event.stopPropagation(); BeakimDateRangePicker.selectDate('${dateString}', event)" onmouseenter="BeakimDateRangePicker.onHoverDate('${dateString}')"`;
 
     if (isPast) {
       cellClasses += "text-ivory/20 cursor-not-allowed ";
