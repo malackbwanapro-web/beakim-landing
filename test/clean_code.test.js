@@ -32,10 +32,12 @@ const {
   isDemoModeActive,
   resolveConferencePackage,
   buildConferenceRfpMessage,
+  renderAvailabilityUnknown,
+  renderInquiryNetworkFailure,
   generateFallbackInquiryId
 } = require("../assets/js/main.js");
 
-const { BEAKIM_CATALOG, getOfferingById } = require("../assets/js/catalog.js");
+const { BEAKIM_CATALOG, BEAKIM_POLICIES, getOfferingById } = require("../assets/js/catalog.js");
 
 // Mock global catalog lookup for testing environment
 global.getOfferingById = getOfferingById;
@@ -509,7 +511,12 @@ global.document.getElementById = (id) => {
 };
 
 assert.strictEqual(typeof renderInquirySuccessReceipt, "function");
-console.log("   ✅ Reservation Pre-Approval engine and CommunicationService aliases assert with 100% resilience.");
+assert.strictEqual(typeof renderAvailabilityUnknown, "function", "renderAvailabilityUnknown must be exported");
+const unknownAvailabilityHtml = renderAvailabilityUnknown();
+assert.ok(unknownAvailabilityHtml.includes("Live sync unavailable"), "renderAvailabilityUnknown must state live sync is unavailable");
+assert.ok(unknownAvailabilityHtml.includes("within 15–30 mins"), "renderAvailabilityUnknown must state 15-30 min SLA");
+assert.ok(!unknownAvailabilityHtml.includes("Pre-Approved"), "renderAvailabilityUnknown must never falsely claim Pre-Approved");
+console.log("   ✅ Reservation Pre-Approval engine, transparent unknown fallback, and CommunicationService aliases assert with 100% resilience.");
 
 // TEST 16: Homepage Beakim Darad Room Category Sub-Selector & Direct Reception Lines
 console.log("16. Testing Homepage Beakim Darad Room Category Sub-Selector & Direct Reception Lines...");
@@ -729,4 +736,98 @@ assert.strictEqual(isDemoModeActive(null), false);
 assert.strictEqual(isDemoModeActive(undefined), false);
 console.log("   ✅ Encapsulated isDemoModeActive predicate reliably asserts across all parameter permutations.");
 
-console.log("\n🎉 ALL 22 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 23: Reconciled Commercial Policies & Tower Cottages Ground Truth
+console.log("23. Testing Reconciled Commercial Policies & Tower Cottages Ground Truth...");
+assert.strictEqual(typeof BEAKIM_POLICIES, "object", "BEAKIM_POLICIES must be defined");
+assert.strictEqual(BEAKIM_POLICIES.RESERVATION_DEPOSIT_PERCENT, 50, "Deposit requirement must be exactly 50%");
+assert.strictEqual(BEAKIM_POLICIES.CANCELLATION.FULL_REFUND_DAYS, 7);
+assert.strictEqual(BEAKIM_POLICIES.CANCELLATION.PARTIAL_REFUND_DAYS, 2);
+assert.strictEqual(BEAKIM_POLICIES.CANCELLATION.PROCESSING_FEE_PERCENT, 3.5);
+assert.ok(BEAKIM_POLICIES.DESK_HOURS.includes("8:00 AM"));
+assert.ok(BEAKIM_POLICIES.DESK_HOURS.includes("8:00 PM EAT"));
+assert.ok(BEAKIM_POLICIES.DESK_HOURS.includes("24/7 on-call"));
+
+// Tower Cottages verified ground truth
+const towerCottages = BEAKIM_CATALOG["tower-cottages"];
+assert.strictEqual(towerCottages.pools, 0, "Tower Cottages has no pool on-site");
+assert.strictEqual(towerCottages.totalUnits, 3, "Tower Cottages has 3 units");
+assert.strictEqual(towerCottages.offerings[0].rate, 2500, "Tower Cottages rate is KSh 2,500/night");
+assert.strictEqual(towerCottages.offerings[0].bedrooms, 2, "Tower Cottages unit has 2 bedrooms");
+assert.strictEqual(towerCottages.offerings[0].maxGuests, 4, "Tower Cottages accommodates max 4 guests (2 per bedroom)");
+assert.strictEqual(towerCottages.offerings[0].maxAdults, 4, "Tower Cottages max adults is 4");
+console.log("   ✅ Commercial policies, deposit/cancellation tiers, and Tower Cottages 4-guest capacity assert correctly.");
+
+// TEST 24: Accessible Calendar Day Cells & Portaled Modal Architecture
+console.log("24. Testing Accessible Calendar Day Cells & Modal Architecture...");
+assert.strictEqual(typeof BeakimDateRangePicker.buildCalendarDayCellHtml, "function");
+
+// Test past date day cell rendering
+const pastCellHtml = BeakimDateRangePicker.buildCalendarDayCellHtml({
+  dayNumber: 1,
+  dateString: "2026-01-01",
+  isPast: true,
+  isCheckIn: false,
+  isCheckOut: false,
+  isMidRange: false
+});
+assert.ok(pastCellHtml.startsWith("<button type=\"button\""), "Calendar day cell must render as <button type=\"button\">");
+assert.ok(pastCellHtml.includes("disabled"), "Past date must be disabled");
+assert.ok(pastCellHtml.includes("aria-disabled=\"true\""), "Past date must have aria-disabled");
+assert.ok(pastCellHtml.includes("aria-label=\""), "Cell must have descriptive aria-label");
+assert.ok(pastCellHtml.includes("Unavailable, past date"), "Past cell aria-label must denote unavailability");
+
+// Test selectable day cell rendering
+const activeCellHtml = BeakimDateRangePicker.buildCalendarDayCellHtml({
+  dayNumber: 6,
+  dateString: "2026-11-06",
+  isPast: false,
+  isCheckIn: true,
+  isCheckOut: false,
+  isMidRange: false
+});
+assert.ok(activeCellHtml.startsWith("<button type=\"button\""), "Active day cell must be <button type=\"button\">");
+assert.ok(activeCellHtml.includes("aria-pressed=\"true\""), "Selected check-in date must have aria-pressed=\"true\"");
+assert.ok(activeCellHtml.includes("cal-range-start"), "Selected check-in date must include ribbon class cal-range-start");
+assert.ok(activeCellHtml.includes("Friday, 6 November 2026"), "aria-label must include full readable weekday, date, month, and year");
+
+// Test unselected day cell
+const unselectedCellHtml = BeakimDateRangePicker.buildCalendarDayCellHtml({
+  dayNumber: 15,
+  dateString: "2026-11-15",
+  isPast: false,
+  isCheckIn: false,
+  isCheckOut: false,
+  isMidRange: false
+});
+assert.ok(unselectedCellHtml.includes("aria-pressed=\"false\""), "Unselected cell must have aria-pressed=\"false\"");
+console.log("   ✅ Calendar day cells render accessible <button> semantics with WCAG-compliant aria labels.");
+
+// TEST 25: P0 Booking State Honesty & Network Failure Recovery
+console.log("25. Testing P0 Booking State Honesty & Network Failure Recovery...");
+assert.strictEqual(typeof renderAvailabilityUnknown, "function");
+const unknownHtml = renderAvailabilityUnknown("Beakim Beach Darad");
+assert.ok(unknownHtml.includes("We couldn't check live availability"), "Must honestly state live availability could not be verified");
+assert.ok(unknownHtml.includes("Send a request and our team will confirm"), "Must invite manual request without false pre-approval");
+assert.ok(!unknownHtml.includes("Pre-Approved"), "Must NEVER claim pre-approval on network failure");
+
+assert.strictEqual(typeof renderInquiryNetworkFailure, "function");
+const failureHtml = renderInquiryNetworkFailure({
+  reservationNumber: "WB-OFFLINE-TEST",
+  property: "Beakim Darad",
+  dates: "Nov 5 - Nov 8",
+  guests: "2 Guests",
+  estimatedTotal: "KSh 6,900"
+});
+assert.ok(failureHtml.includes("Network Interruption"), "Must honestly notify guest of network interruption");
+assert.ok(failureHtml.includes("Retry Server Submission"), "Must provide instant retry button");
+assert.ok(failureHtml.includes("WhatsApp"), "Must provide direct WhatsApp fallback");
+assert.ok(!failureHtml.includes("Inquiry Received & Pre-Approved!"), "Must NEVER display success receipt on failure");
+
+// Verify .vercelignore exists and protects CRM backend
+const vercelIgnorePath = path.resolve(__dirname, "../.vercelignore");
+assert.ok(fs.existsSync(vercelIgnorePath), ".vercelignore must exist");
+const vercelIgnoreContent = fs.readFileSync(vercelIgnorePath, "utf-8");
+assert.ok(vercelIgnoreContent.includes("Beakim CRM"), ".vercelignore must ignore Beakim CRM");
+console.log("   ✅ Booking honesty states and Vercel deployment protections assert 100%.");
+
+console.log("\n🎉 ALL 25 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");

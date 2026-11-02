@@ -1,0 +1,14 @@
+# Vercel Deployment Ignore Rules for Beakim Landing
+# Prevents internal backend, test suites, KYC documents, and docs from deploying
+
+Beakim CRM
+PesaPal KYC Documents
+docs
+test
+tests
+.git
+.github
+*.test.js
+*.md
+package.json
+package-lock.json

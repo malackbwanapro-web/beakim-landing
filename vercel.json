@@ -25,11 +25,20 @@
       ]
     },
     {
-      "source": "/assets/(.*)",
+      "source": "/assets/(.*\\.(?:webp|jpg|jpeg|png|svg|woff2|woff|ttf|ico))",
       "headers": [
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*\\.(?:js|css))",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
         }
       ]
     }
@@ -71,8 +80,16 @@
       "destination": "https://crm.beakimhospitalitygroup.co.ke/booking-confirmation"
     },
     {
+      "source": "/report-payment",
+      "destination": "https://crm.beakimhospitalitygroup.co.ke/report-payment"
+    },
+    {
       "source": "/api/public/checkout/:match*",
       "destination": "https://crm.beakimhospitalitygroup.co.ke/api/public/checkout/:match*"
+    },
+    {
+      "source": "/api/public/report-payment/:match*",
+      "destination": "https://crm.beakimhospitalitygroup.co.ke/api/public/report-payment/:match*"
     },
     {
       "source": "/tower-cottages",

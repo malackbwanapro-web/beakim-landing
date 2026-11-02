@@ -59,6 +59,7 @@ const APP_CONFIG = Object.freeze({
     FALLBACK_NIGHTLY_RATE: 2500
   }),
   CALENDAR: Object.freeze({
+    WEEKDAY_NAMES_FULL: Object.freeze(["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]),
     WEEKDAY_NAMES_SHORT: Object.freeze(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]),
     WEEKDAY_HEADER_LABELS: Object.freeze(["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]),
     MONTH_NAMES_SHORT: Object.freeze(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]),
@@ -1332,10 +1333,22 @@ function renderAvailabilityPreApproved(unitsCount) {
     <div class="flex items-center justify-between p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 text-xs shadow-sm">
       <div class="flex items-center gap-2">
         <span class="text-emerald-600 font-bold">✓</span>
-        <span class="font-semibold">Dates Available • Instant Pre-Approval${unitsText}</span>
+        <span class="font-semibold">Dates Available to Request${unitsText}</span>
         <span class="text-emerald-700/80 hidden sm:inline">• Direct host reservation</span>
       </div>
-      <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-200/60 px-2 py-0.5 rounded text-emerald-800">Pre-Approved</span>
+      <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-200/60 px-2 py-0.5 rounded text-emerald-800">Available</span>
+    </div>
+  `;
+}
+
+function renderAvailabilityUnknown() {
+  return `
+    <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs shadow-sm">
+      <div class="flex items-center gap-2">
+        <span class="text-champagne font-bold">ℹ️</span>
+        <span class="font-medium">We couldn't check live availability (Live sync unavailable). Send a request and our team will confirm within 15–30 mins.</span>
+      </div>
+      <span class="text-[10px] font-bold uppercase tracking-wider bg-slate-200/80 px-2 py-0.5 rounded text-slate-700">Request to Confirm</span>
     </div>
   `;
 }
@@ -1363,6 +1376,8 @@ function renderAvailabilitySoldOut() {
   `;
 }
 
+let availabilityCheckSequenceId = 0;
+
 /**
  * Evaluates live real-time unit availability for selected property and stay dates.
  */
@@ -1386,12 +1401,16 @@ async function triggerLiveAvailabilityCheck() {
   }
 
   container.innerHTML = renderAvailabilityLoading();
+  const currentSequence = ++availabilityCheckSequenceId;
 
   if (availabilityDebounceTimer) clearTimeout(availabilityDebounceTimer);
   availabilityDebounceTimer = setTimeout(async () => {
     const result = await CrmSyncService.checkAvailability({ propertyId, checkInDate: checkIn, checkOutDate: checkOut });
+    // Guard against stale asynchronous responses
+    if (currentSequence !== availabilityCheckSequenceId) return;
+
     if (!result) {
-      container.innerHTML = renderAvailabilityPreApproved();
+      container.innerHTML = renderAvailabilityUnknown();
       return;
     }
 
@@ -1464,11 +1483,15 @@ async function confirmAndSubmitInquiry() {
   if (!currentActiveInquiry) return;
   setInquirySubmissionBusy(true);
 
-  let inquiryId = await dispatchInquirySubmission(currentActiveInquiry.inquiryPayload);
+  const inquiryId = await dispatchInquirySubmission(currentActiveInquiry.inquiryPayload);
 
   if (!inquiryId) {
-    inquiryId = generateFallbackInquiryId();
-    persistPendingOfflineInquiry(inquiryId, currentActiveInquiry.inquiryPayload);
+    // Dispatch failed or network unreachable. Preserve draft locally with offline marker
+    const draftId = generateFallbackInquiryId();
+    persistPendingOfflineInquiry(draftId, currentActiveInquiry.inquiryPayload);
+    setInquirySubmissionBusy(false);
+    renderInquiryNetworkFailure(currentActiveInquiry);
+    return;
   }
 
   try {
@@ -1554,6 +1577,7 @@ function renderInquiryNetworkFailure(inquirySummary) {
       </div>
     </div>
   `;
+  return modalElement.innerHTML;
 }
 
 function renderInquirySuccessReceipt(inquirySummary, inquiryId) {
@@ -1632,6 +1656,7 @@ function renderInquirySuccessReceipt(inquirySummary, inquiryId) {
       </div>
     </div>
   `;
+  return modalElement.innerHTML;
 }
 
 /**
@@ -1703,9 +1728,20 @@ function renderInquiryCostBreakdown(inquirySummary) {
       <div class="flex justify-between items-center gap-3 pt-3 border-t-2 border-champagne/35 mt-1">
         <div>
           <span class="font-bold text-ivory text-xs sm:text-sm block">Total Estimated Amount</span>
-          <span class="text-[10px] text-ivory/60 block">🔒 No upfront charge • Pay upon host confirmation</span>
+          <span class="text-[10px] text-ivory/60 block">🔒 No payment right now • Pay 50% deposit upon host confirmation</span>
         </div>
         <span class="font-display font-bold text-champagne text-base sm:text-lg text-right shrink-0">${inquirySummary.estimatedTotal}</span>
+      </div>
+
+      <!-- Deposit & Cancellation Policy Notice -->
+      <div class="pt-2 border-t border-champagne/15 text-[11px] text-ivory/70 space-y-1">
+        <div class="flex items-center justify-between text-champagne/90 font-medium">
+          <span>Deposit Policy:</span>
+          <span>50% deposit required to confirm stay</span>
+        </div>
+        <p class="text-[10px] text-ivory/55 leading-relaxed">
+          Cancellation: 100% refund (&gt;7 days before check-in, minus 3.5% fee); 50% refund (2–7 days); non-refundable (&lt;48 hours).
+        </p>
       </div>
     </div>
   `;
@@ -2127,7 +2163,13 @@ const BeakimDateRangePicker = {
     // Global click listener to close popover
     const popover = document.getElementById("beakim-calendar-popover");
     if (popover) {
+      this.originalParent = popover.parentElement;
       popover.addEventListener("click", (event) => {
+        // If clicked on backdrop overlay outside calendar card, close popover
+        if (event.target === popover) {
+          this.close();
+          return;
+        }
         event.stopPropagation();
       });
     }
@@ -2153,6 +2195,13 @@ const BeakimDateRangePicker = {
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && this.state.isOpen) {
         this.close();
+      }
+    });
+
+    // Window resize handler to reposition correctly between mobile viewport modal and desktop dropdown
+    window.addEventListener("resize", () => {
+      if (this.state.isOpen) {
+        this.open();
       }
     });
   },
@@ -2196,7 +2245,20 @@ const BeakimDateRangePicker = {
     if (!popover) return;
     this.state.isOpen = true;
     this.state.step = "check-in";
-    popover.classList.remove("hidden");
+
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+    if (isMobile) {
+      if (popover.parentElement !== document.body) {
+        document.body.appendChild(popover);
+      }
+      popover.className = "fixed inset-0 z-[9999] flex items-center justify-center p-3 bg-black/80 backdrop-blur-md";
+    } else {
+      if (this.originalParent && popover.parentElement !== this.originalParent) {
+        this.originalParent.appendChild(popover);
+      }
+      popover.className = "absolute top-full left-0 mt-2 w-[420px] z-50 p-0 bg-transparent";
+    }
+
     const trigger = document.getElementById("booking-date-range-trigger");
     if (trigger) trigger.setAttribute("aria-expanded", "true");
     this.render();
@@ -2362,25 +2424,37 @@ const BeakimDateRangePicker = {
   },
 
   buildCalendarDayCellHtml({ dayNumber, dateString, isPast, isCheckIn, isCheckOut, isMidRange }) {
-    let cellClasses = "h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center text-xs sm:text-sm font-medium transition cursor-pointer select-none cal-day-cell ";
-    let extraAttrs = `data-cal-date="${dateString}" onclick="event.stopPropagation(); BeakimDateRangePicker.selectDate('${dateString}', event)" onmouseenter="BeakimDateRangePicker.onHoverDate('${dateString}')"`;
+    const [year, month, day] = dateString.split("-").map(Number);
+    const dateObject = new Date(year, month - 1, day);
+    const weekdayName = (APP_CONFIG.CALENDAR.WEEKDAY_NAMES_FULL && APP_CONFIG.CALENDAR.WEEKDAY_NAMES_FULL[dateObject.getDay()]) ||
+                        APP_CONFIG.CALENDAR.WEEKDAY_NAMES_SHORT[dateObject.getDay()];
+    const monthName = APP_CONFIG.CALENDAR.MONTH_NAMES_FULL[month - 1];
+    const fullDateLabel = `${weekdayName}, ${day} ${monthName} ${year}`;
+
+    let cellClasses = "h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center text-xs sm:text-sm font-medium transition cursor-pointer select-none cal-day-cell border-0 bg-transparent p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-champagne ";
+    let extraAttrs = `data-cal-date="${dateString}" aria-label="${fullDateLabel}" onclick="event.stopPropagation(); BeakimDateRangePicker.selectDate('${dateString}', event)" onmouseenter="BeakimDateRangePicker.onHoverDate('${dateString}')"`;
 
     if (isPast) {
       cellClasses += "text-ivory/20 cursor-not-allowed ";
-      extraAttrs = `data-cal-date="${dateString}"`;
+      extraAttrs = `data-cal-date="${dateString}" aria-label="${fullDateLabel} (Unavailable, past date)" disabled aria-disabled="true"`;
     } else if (isCheckIn && isCheckOut) {
       cellClasses += "cal-range-start cal-range-end shadow-md scale-105 ";
+      extraAttrs += ` aria-pressed="true"`;
     } else if (isCheckIn) {
       cellClasses += "cal-range-start shadow-md ";
+      extraAttrs += ` aria-pressed="true"`;
     } else if (isCheckOut) {
       cellClasses += "cal-range-end shadow-md ";
+      extraAttrs += ` aria-pressed="true"`;
     } else if (isMidRange) {
       cellClasses += "cal-range-mid ";
+      extraAttrs += ` aria-pressed="true"`;
     } else {
       cellClasses += "text-ivory hover:bg-champagne/20 rounded-full ";
+      extraAttrs += ` aria-pressed="false"`;
     }
 
-    return `<div class="${cellClasses}" ${extraAttrs}>${dayNumber}</div>`;
+    return `<button type="button" class="${cellClasses}" ${extraAttrs}>${dayNumber}</button>`;
   },
 
   buildCalendarDaysGridHtml(year, monthNumber, checkInDate, checkOutDate, todayDate) {
@@ -2389,7 +2463,7 @@ const BeakimDateRangePicker = {
 
     let gridHtml = "";
     for (let index = 0; index < firstDayIndex; index++) {
-      gridHtml += `<div class="h-9 w-9 sm:h-10 sm:w-10"></div>`;
+      gridHtml += `<div class="h-9 w-9 sm:h-10 sm:w-10" aria-hidden="true"></div>`;
     }
 
     for (let dayNumber = 1; dayNumber <= daysInMonth; dayNumber++) {
@@ -2941,6 +3015,7 @@ if (typeof module !== "undefined" && module.exports) {
     resolveConferencePackage,
     buildConferenceRfpMessage,
     renderAvailabilityLoading,
+    renderAvailabilityUnknown,
     renderAvailabilityPreApproved,
     renderAvailabilityHighDemand,
     renderAvailabilitySoldOut,

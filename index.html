@@ -33,44 +33,60 @@
   <!-- Compiled Production CSS -->
   <link rel="stylesheet" href="assets/css/styles.css" />
 
-  <!-- JSON-LD Structured Data Schema for Local Business SEO -->
-  
-  <!-- JSON-LD Structured Data Schema with GPS Geo Coordinates for Local & AI SEO -->
+  <!-- JSON-LD Structured Data Schema for Local Business & Organization SEO -->
   <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "LodgingBusiness",
-  "name": "Beakim Hospitality Group",
-  "description": "Premium collection of holiday cottages, vacation studios, and long-term residential apartments in Diani Beach, Kenya.",
-  "url": "https://www.beakimhospitalitygroup.co.ke/",
-  "logo": "https://www.beakimhospitalitygroup.co.ke/assets/logo-monogram.png",
-  "image": "https://www.beakimhospitalitygroup.co.ke/assets/hero-bg.webp",
-  "telephone": "+254746938529",
-  "email": "info@beakimhospitalitygroup.co.ke",
-  "priceRange": "KES 1,700 - KES 5,000",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Diani Beach Road",
-    "addressLocality": "Diani Beach",
-    "addressRegion": "Kwale County",
-    "addressCountry": "KE"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": -4.288156,
-    "longitude": 39.581767
-  },
-  "sameAs": [
-    "https://www.instagram.com/beakimhospitalitygroup/",
-    "https://web.facebook.com/beakimhospitalitygroup",
-    "https://x.com/BeakimGroup",
-    "https://www.tiktok.com/@beakimhospitalitygroup",
-    "https://www.youtube.com/@BeakimHospitalityGroup"
-  ]
-}
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://www.beakimhospitalitygroup.co.ke/#organization",
+        "name": "Beakim Hospitality Group",
+        "url": "https://www.beakimhospitalitygroup.co.ke/",
+        "logo": "https://www.beakimhospitalitygroup.co.ke/assets/logo-monogram.png",
+        "image": "https://www.beakimhospitalitygroup.co.ke/assets/hero-bg.webp",
+        "telephone": "+254746938529",
+        "email": "info@beakimhospitalitygroup.co.ke",
+        "sameAs": [
+          "https://www.instagram.com/beakimhospitalitygroup/",
+          "https://web.facebook.com/beakimhospitalitygroup",
+          "https://x.com/BeakimGroup",
+          "https://www.tiktok.com/@beakimhospitalitygroup",
+          "https://www.youtube.com/@BeakimHospitalityGroup"
+        ]
+      },
+      {
+        "@type": "LodgingBusiness",
+        "@id": "https://www.beakimhospitalitygroup.co.ke/#lodging",
+        "name": "Beakim Hospitality Group",
+        "parentOrganization": {
+          "@id": "https://www.beakimhospitalitygroup.co.ke/#organization"
+        },
+        "description": "Premium collection of holiday cottages, vacation studios, and long-term residential apartments in Diani Beach, Kenya.",
+        "url": "https://www.beakimhospitalitygroup.co.ke/",
+        "logo": "https://www.beakimhospitalitygroup.co.ke/assets/logo-monogram.png",
+        "image": "https://www.beakimhospitalitygroup.co.ke/assets/hero-bg.webp",
+        "telephone": "+254746938529",
+        "email": "info@beakimhospitalitygroup.co.ke",
+        "priceRange": "KES 1,700 - KES 5,000",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Diani Beach Road",
+          "addressLocality": "Diani Beach",
+          "addressRegion": "Kwale County",
+          "addressCountry": "KE"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": -4.288156,
+          "longitude": 39.581767
+        }
+      }
+    ]
+  }
   </script>
 
-<!-- FAQPage JSON-LD Schema for SEO Rich Snippets -->
+  <!-- FAQPage JSON-LD Schema for SEO Rich Snippets -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -94,10 +110,10 @@
       },
       {
         "@type": "Question",
-        "name": "Can large groups book an entire apartment block exclusively?",
+        "name": "Can large groups book multi-cottage blocks or clusters exclusively?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes! At Beakim Apartments, groups reserving 10+ units can secure an entire 10-unit block exclusively. This provides private access to communal lawns, zero friction with outside guests, and total privacy for school trips, church retreats, or corporate team building."
+          "text": "Yes! At Beakim Beach Darad and Tower Cottages, large families, church retreats, and corporate groups can book multi-room cottages and adjacent units together. This provides private access to communal living areas, shared grounds, and total privacy for group stays."
         }
       },
       {
@@ -491,9 +507,9 @@
           <div class="space-y-6">
             <div>
               <span class="text-xs font-semibold text-champagne uppercase tracking-widest block">The Smart Coastal Choice</span>
-              <h3 class="font-display text-2xl sm:text-3xl font-bold text-ivory mt-1">Beakim Private Cottage</h3>
+              <h3 class="font-display text-2xl sm:text-3xl font-bold text-ivory mt-1">Beakim Private Cottages &amp; Apartments</h3>
               <p class="text-xs sm:text-sm text-ivory/70 mt-2">
-                2-Bedroom Private Cottage or Luxury Apartment (Sleeping 4 to 6 Guests)
+                2-Bedroom Self-Catering Apartments &amp; Private Cottages (Fitting up to 4 Guests)
               </p>
             </div>
 
@@ -501,12 +517,12 @@
             <div class="p-4 rounded-xl bg-champagne/10 border border-champagne/20 flex items-baseline justify-between">
               <div>
                 <span class="text-xs text-ivory/60 block">Full Unit Total</span>
-                <span class="font-display text-3xl font-bold text-champagne">KSh 4,500 – 7,000</span>
-                <span class="text-xs text-ivory/60"> / night (for all guests)</span>
+                <span class="font-display text-3xl font-bold text-champagne">From KSh 2,500</span>
+                <span class="text-xs text-ivory/60"> / night (KSh 2,500 – 4,000)</span>
               </div>
               <div class="text-right">
                 <span class="text-[11px] text-ivory/50 block">Effective Rate</span>
-                <span class="text-sm font-semibold text-ivory">~KSh 1,200</span>
+                <span class="text-sm font-semibold text-ivory">From ~KSh 625</span>
                 <span class="text-[11px] text-ivory/50 block">per person / night</span>
               </div>
             </div>
@@ -515,15 +531,15 @@
             <ul class="space-y-3 text-xs sm:text-sm text-ivory/80">
               <li class="flex items-start gap-3">
                 <span class="text-champagne font-bold text-base leading-none">✓</span>
-                <span><strong>100% Private Living &amp; Dining Veranda:</strong> Zero crowded hotel corridors or noisy elevator lobbies.</span>
+                <span><strong>100% Private Living &amp; Dining:</strong> Dedicated private kitchen, dining veranda, and zero crowded hotel corridors.</span>
               </li>
               <li class="flex items-start gap-3">
                 <span class="text-champagne font-bold text-base leading-none">✓</span>
-                <span><strong>Fully Equipped Private Kitchen:</strong> Cook what you love, store baby food, or make midnight snacks without restaurant markups.</span>
+                <span><strong>Fully Equipped Kitchen:</strong> Cook family meals, keep cold drinks, or prepare baby food without restaurant surcharges.</span>
               </li>
               <li class="flex items-start gap-3">
                 <span class="text-champagne font-bold text-base leading-none">✓</span>
-                <span><strong>30s Walk to Naivas Supermarket (Tower Cottages):</strong> Buy fresh dairy, drinks, meats, and snacks at regular Kenyan supermarket prices.</span>
+                <span><strong>30s Walk to Naivas Supermarket (Tower Cottages):</strong> Buy fresh groceries and drinks at regular Kenyan supermarket prices.</span>
               </li>
               <li class="flex items-start gap-3">
                 <span class="text-champagne font-bold text-base leading-none">✓</span>
@@ -540,7 +556,7 @@
           <div class="mt-8 pt-6 border-t border-champagne/20 space-y-4">
             <div class="flex items-center justify-between text-xs sm:text-sm">
               <span class="text-ivory/70">Estimated 3-Night Stay Total:</span>
-              <span class="font-bold text-base sm:text-lg text-champagne">KSh 13,500 – 21,000</span>
+              <span class="font-bold text-base sm:text-lg text-champagne">KSh 7,500 – 12,000</span>
             </div>
             <a href="#booking" class="block w-full text-center bg-champagne hover:bg-driftwood text-deep-forest font-semibold py-3.5 px-6 rounded-xl text-xs uppercase tracking-widest transition duration-300 shadow-lg transform active:scale-95">
               Reserve Your Cottage &rarr;
@@ -638,7 +654,7 @@
             <span class="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-champagne/15 text-champagne border border-champagne/20">Nairobi Family Stay</span>
           </div>
           <p class="text-sm text-ivory/80 italic leading-relaxed">
-            "Traveling from Nairobi with 3 kids, having a full kitchen and being literally 30 seconds behind Naivas saved us a fortune. The swimming pool was clean, and gated parking made our road trip completely stress-free."
+            "Traveling from Nairobi with 3 kids, having a full kitchen and being literally 30 seconds behind Naivas saved us a fortune. The apartment was spotless, spacious for our family, and gated parking made our road trip completely stress-free."
           </p>
           <div class="pt-2 border-t border-champagne/10 flex items-center justify-between">
             <div>

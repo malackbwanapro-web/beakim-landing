@@ -98,6 +98,7 @@ const BEAKIM_CATALOG = {
     phone: "+254 746 938 529",
     coordinates: { latitude: -4.2874, longitude: 39.5665 },
     stayType: "nightly",
+    pools: 0,
     breakfastRate: 0,
     totalUnits: 3,
     offerings: [
@@ -108,12 +109,13 @@ const BEAKIM_CATALOG = {
         rate: 2500,
         rateBasis: "per night",
         units: 3,
+        bedrooms: 2,
         maxAdults: 4,
         maxChildren: 2,
-        maxGuests: 5,
+        maxGuests: 4,
         hasAc: true,
         amenities: ["Full Kitchen", "Living Room", "Air Conditioning", "High-Speed Wi-Fi", "Gated Compound", "30s to Naivas"],
-        description: "Fully furnished 2-bedroom self-catering apartment with complete kitchen, secure gated parking, located 30 seconds behind Naivas Supermarket Ukunda."
+        description: "Fully furnished 2-bedroom self-catering apartment with complete kitchen, secure gated parking, located 30 seconds behind Naivas Supermarket Ukunda. Fits up to 4 guests (no pool on site)."
       }
     ]
   },
@@ -237,6 +239,19 @@ const BEAKIM_CATALOG = {
   }
 };
 
+const BEAKIM_POLICIES = Object.freeze({
+  RESERVATION_DEPOSIT_PERCENT: 50,
+  DESK_HOURS: "8:00 AM – 8:00 PM EAT (24/7 on-call dispatch)",
+  TYPICAL_RESPONSE_TIME: "15–30 minutes during desk hours (8:00 AM – 8:00 PM EAT); 24/7 on-call coverage",
+  CANCELLATION: Object.freeze({
+    FULL_REFUND_DAYS: 7, // > 7 days prior to check-in: 100% refund minus 3.5% processing fee
+    PROCESSING_FEE_PERCENT: 3.5,
+    PARTIAL_REFUND_DAYS: 2, // 48h to 7 days: 50% refund
+    PARTIAL_REFUND_PERCENT: 50,
+    NO_REFUND_HOURS: 48 // < 48h: non-refundable
+  })
+});
+
 // Helper function to find offering by ID or dropdown value
 function getOfferingById(offeringId) {
   const normalizedId = offeringId === "darad-standard-ac" ? "darad-std-ac" : (offeringId === "darad-standard-no-ac" ? "darad-std-no-ac" : offeringId);
@@ -259,5 +274,5 @@ function getOfferingById(offeringId) {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { BEAKIM_CATALOG, getOfferingById };
+  module.exports = { BEAKIM_CATALOG, BEAKIM_POLICIES, getOfferingById };
 }
