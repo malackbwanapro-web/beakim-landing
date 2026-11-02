@@ -20,7 +20,11 @@
 - **Touch Ergonomics:**
   - `touch-action: manipulation;` enforced in `@layer base` for buttons, inputs, links, and cards to eliminate mobile double-tap delays.
 - **Motion & Accessibility:**
-  - `@media (prefers-reduced-motion: reduce)` must be declared on smooth-scrolling containers to support vestibular accessibility.
+  - `@media (prefers-reduced-motion: reduce)` must be declared on smooth-scrolling containers and animation classes (`.btn-sheen`, `.reveal-on-scroll`, `.card-luxury-hover`, `.faq-answer`) to support vestibular accessibility and eliminate motion when requested.
+  - Pure CSS champagne button sheen (`.btn-sheen`) uses GPU-composited `transform: translate3d` and `pointer-events-none`.
+  - Subtle luxury card hover depth (`.card-luxury-hover`) elevates borders and shadow smoothly without layout thrashing.
+  - FAQ accordion expansion (`.faq-answer`) features gentle keyframed opacity and translateY entrance (`@keyframes faqSlideDown`).
+  - Progressive enhancement scroll reveal (`.reveal-on-scroll` / `html.js-reveal-active .reveal-on-scroll.is-revealed`) reveals below-the-fold content smoothly with staggered offsets (staggers 1–5). Never apply to the hero section (preserves immediate LCP).
 
 ---
 

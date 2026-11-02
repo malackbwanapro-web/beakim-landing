@@ -3326,6 +3326,50 @@ function initializeConciergeHesitationEngine() {
   idleTimer = setTimeout(activateGlow, IDLE_HESITATION_MS);
 }
 
+/**
+ * Zero-overhead, passive scroll-reveal engine for luxury below-the-fold elements.
+ * Adheres strictly to WCAG 2.1 AAA prefers-reduced-motion.
+ * Never delays above-the-fold hero elements.
+ * Unobserves target immediately upon entry to consume 0 CPU cycles.
+ */
+function initializeScrollRevealEngine() {
+  if (typeof window === "undefined" || typeof document === "undefined") return;
+
+  // 1. Accessibility Guard: if user requests reduced motion, do not activate animations
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  // 2. Browser feature check: fallback gracefully if IntersectionObserver is unsupported
+  if (!("IntersectionObserver" in window)) {
+    return;
+  }
+
+  const revealElements = document.querySelectorAll(".reveal-on-scroll");
+  if (!revealElements || revealElements.length === 0) return;
+
+  // Activate CSS progressive enhancement
+  document.documentElement.classList.add("js-reveal-active");
+
+  const observerOptions = {
+    root: null,
+    rootMargin: "0px 0px -40px 0px",
+    threshold: 0.12
+  };
+
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-revealed");
+        // Immediate unobserve to free resources completely
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  revealElements.forEach(el => revealObserver.observe(el));
+}
+
 if (typeof window !== "undefined") {
   window.addEventListener("DOMContentLoaded", () => {
     initializeDemoModeBanner();
@@ -3344,6 +3388,7 @@ if (typeof window !== "undefined") {
     updatePriceCalculation();
     initializeCleanHashScrolling();
     initializeConciergeHesitationEngine();
+    initializeScrollRevealEngine();
   });
 }
 
@@ -3390,6 +3435,7 @@ if (typeof module !== "undefined" && module.exports) {
     confirmAndSubmitInquiry,
     renderInquirySuccessReceipt,
     initializeConciergeHesitationEngine,
+    initializeScrollRevealEngine,
     renderInquiryNetworkFailure,
     renderInquiryCostBreakdown,
     BeakimDateRangePicker,

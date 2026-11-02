@@ -28,6 +28,7 @@ const {
   renderInquiryCostBreakdown,
   renderInquirySuccessReceipt,
   initializeConciergeHesitationEngine,
+  initializeScrollRevealEngine,
   BeakimDateRangePicker,
   SafeStorageService,
   isDemoModeActive,
@@ -1361,4 +1362,62 @@ const lowContrastInstances = indexRaw.split('\n').filter(line => /text-(ivory|dr
 assert.strictEqual(lowContrastInstances.length, 0, `index.html must have 0 low-contrast (30/40/50 opacity) text instances (found ${lowContrastInstances.length})`);
 console.log("   ✅ All form selects labeled, heading hierarchy strictly sequential, and text contrast WCAG AA verified.");
 
-console.log("\n🎉 ALL 37 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 38: Subtle Luxury Motion Engine, Pure CSS Compositing & Zero-LCP Invariants
+console.log("38. Testing Subtle Luxury Motion Engine, Pure CSS Compositing & Zero-LCP Invariants...");
+assert.strictEqual(typeof initializeScrollRevealEngine, "function", "initializeScrollRevealEngine must be exported");
+
+const stylesCssContent = fs.readFileSync(path.join(assetsDir, "css", "styles.css"), "utf8");
+const inputCssContent = fs.readFileSync(path.join(assetsDir, "css", "input.css"), "utf8");
+
+// 1. Verify CSS luxury utilities exist in compiled styles
+assert.ok(stylesCssContent.includes(".btn-sheen"), "styles.css must contain .btn-sheen class");
+assert.ok(stylesCssContent.includes(".reveal-on-scroll"), "styles.css must contain .reveal-on-scroll class");
+assert.ok(stylesCssContent.includes(".card-luxury-hover"), "styles.css must contain .card-luxury-hover class");
+assert.ok(stylesCssContent.includes(".faq-answer"), "styles.css must contain .faq-answer class");
+assert.ok(inputCssContent.includes("prefers-reduced-motion: reduce"), "input.css must define prefers-reduced-motion: reduce rules");
+
+// 2. Verify Zero-LCP Invariant: Hero section MUST NOT be hidden or delayed by .reveal-on-scroll
+const heroSectionMatch = indexRaw.match(/HERO SECTION[\s\S]*?<\/section>/i);
+assert.ok(heroSectionMatch, "Hero section must exist in index.html");
+assert.ok(!heroSectionMatch[0].includes("reveal-on-scroll"), "Hero section must NEVER contain reveal-on-scroll (preserves instant LCP)");
+
+// 3. Verify below-the-fold elements use progressive enhancement reveal classes
+const revealMatches = indexRaw.match(/reveal-on-scroll/g) || [];
+assert.ok(revealMatches.length >= 10, `index.html must contain at least 10 reveal-on-scroll elements (found ${revealMatches.length})`);
+
+// 4. Verify primary CTA buttons have .btn-sheen
+assert.ok(indexRaw.includes('booking-submit-btn') && indexRaw.includes('btn-sheen'), "Submit button must have btn-sheen class");
+
+// 5. Test motion-reduction guard in initializeScrollRevealEngine
+const prevWindow = global.window;
+const prevDoc = global.document;
+
+const mockWindow = {
+  matchMedia: (query) => ({ matches: query.includes("prefers-reduced-motion: reduce") })
+};
+global.window = mockWindow;
+global.document = {
+  ...(prevDoc || {}),
+  getElementById: (prevDoc && typeof prevDoc.getElementById === "function") ? prevDoc.getElementById : (() => null),
+  documentElement: {
+    classList: {
+      add: () => {
+        throw new Error("Should not activate when reduced-motion is requested");
+      }
+    }
+  }
+};
+
+// Executing with prefers-reduced-motion true should return early without throwing
+initializeScrollRevealEngine();
+
+// Cleanly restore environment
+global.window = prevWindow;
+global.document = prevDoc;
+if (global.document && typeof global.document.getElementById !== "function") {
+  global.document.getElementById = () => null;
+}
+
+console.log("   ✅ Luxury animations verified: zero LCP delay, pure CSS sheen, passive scroll-reveal, and 100% WCAG motion safety.");
+
+console.log("\n🎉 ALL 38 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");

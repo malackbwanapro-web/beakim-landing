@@ -147,3 +147,109 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
+
+/* ── SUBTLE LUXURY MOTION & COMPOSITOR UTILITIES (ZERO-CLS, ZERO-LCP PENALTY) ── */
+
+/* 1. Champagne Button Sheen (GPU-Composited Pure CSS) */
+.btn-sheen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-110%) skewX(-20deg);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+.btn-sheen:hover::after {
+  transform: translateX(110%) skewX(-20deg);
+}
+
+/* 2. Elevated Residence Card Micro-Interactions */
+.card-luxury-hover {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-luxury-hover:hover {
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.12);
+  border-color: rgba(212, 175, 55, 0.35);
+}
+
+/* 3. Progressive-Enhancement Passive Scroll Reveal */
+/* Default state is 100% visible for SEO crawlers and no-JS fallback */
+.reveal-on-scroll {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Activated strictly after JS confirms DOM readiness and no-reduced-motion */
+html.js-reveal-active .reveal-on-scroll:not(.is-revealed) {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+html.js-reveal-active .reveal-on-scroll.is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Child Stagger Timing */
+.reveal-stagger-1 { transition-delay: 60ms; }
+.reveal-stagger-2 { transition-delay: 120ms; }
+.reveal-stagger-3 { transition-delay: 180ms; }
+.reveal-stagger-4 { transition-delay: 240ms; }
+.reveal-stagger-5 { transition-delay: 300ms; }
+
+/* 4. Smooth FAQ Answer Entrance */
+details[open] .faq-answer {
+  animation: faqSlideDown 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes faqSlideDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -6px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* 5. Complete WCAG 2.1 AAA Motion Guard */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    transform: none !important;
+  }
+  .btn-sheen::after {
+    display: none !important;
+  }
+  .reveal-on-scroll,
+  html.js-reveal-active .reveal-on-scroll:not(.is-revealed),
+  html.js-reveal-active .reveal-on-scroll.is-revealed {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
