@@ -32,7 +32,7 @@
   <meta name="theme-color" content="#0d2b24" />
 
   <!-- Compiled Production CSS -->
-  <link rel="stylesheet" href="assets/css/styles.css?v=2.2.0" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=2.2.1" />
 
   <!-- Verbatim JSON-LD Schema -->
   <script type="application/ld+json">
@@ -87,8 +87,8 @@
   ]
 }
   </script>
-  <script src="assets/js/catalog.js?v=2.2.0"></script>
-  <script src="assets/js/main.js?v=2.2.0" defer></script>
+  <script src="assets/js/catalog.js?v=2.2.1"></script>
+  <script src="assets/js/main.js?v=2.2.1" defer></script>
   <link rel="canonical" href="https://www.beakimhospitalitygroup.co.ke/diani-darling" />
 
   <!-- Open Graph / Social Meta -->
@@ -146,7 +146,7 @@
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <!-- Back Link Logo -->
       <a class='flex items-center gap-3 group' href='/'>
-        <img src="assets/logo-monogram.png?v=2.2.0" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
+        <img src="assets/logo-monogram.png?v=2.2.1" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
         <div class="flex flex-col">
           <span class="font-display text-base tracking-wider text-ivory leading-none font-semibold group-hover:text-champagne transition duration-300">BEAKIM</span>
           <span class="text-[9px] tracking-widest text-champagne uppercase mt-0.5">Diani Darling</span>
@@ -1369,7 +1369,8 @@
           <input type="text" name="website_hp" id="website_hp" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
           
           <!-- Hidden Compatibility Select Element -->
-          <select id="booking-property" class="sr-only" aria-hidden="true" tabindex="-1">
+          <label for="booking-property" class="sr-only">Selected Accommodation Unit</label>
+          <select id="booking-property" class="sr-only" aria-label="Selected Accommodation Unit" aria-hidden="true" tabindex="-1">
             <option value="Diani Darling Cottages - Deluxe Studio Room" selected>Diani Darling: Deluxe Studio Room - KSh 5,000/night</option>
           </select>
 
@@ -1529,7 +1530,8 @@
               <div class="flex flex-col gap-1.5 sm:col-span-2">
                 <label for="guest-phone-number" class="text-[11px] font-bold uppercase tracking-wider text-deep-forest/70">WhatsApp / Contact Phone *</label>
                 <div class="flex gap-2">
-                  <select id="guest-phone-code" required
+                  <label for="guest-phone-code" class="sr-only">Country Dial Code</label>
+                  <select id="guest-phone-code" aria-label="Country Dial Code" required
                           class="bg-white border border-deep-forest/20 focus:border-champagne rounded-lg px-3 py-2.5 text-xs text-deep-forest outline-none transition cursor-pointer shadow-sm font-medium flex-shrink-0 w-36">
                     <option value="+254">🇰🇪 +254</option>
                     <option value="+255">🇹🇿 +255</option>
@@ -1835,7 +1837,7 @@
       <!-- Left side: Brand Identity -->
       <div class="space-y-4 text-center md:text-left">
         <a class="flex items-center gap-3 justify-center md:justify-start group" href="/">
-          <img src="assets/logo-monogram.png?v=2.2.0" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
+          <img src="assets/logo-monogram.png?v=2.2.1" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
           <div>
             <span class="font-display text-base tracking-wider text-ivory group-hover:text-champagne transition duration-300 block">DIANI DARLING COTTAGES</span>
             <span class="text-[10px] text-champagne uppercase tracking-widest block">Boutique Poolside Cottages</span>

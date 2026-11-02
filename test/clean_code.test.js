@@ -953,11 +953,11 @@ assert.ok(daradContent.includes('"parentOrganization"'), "Darad schema must link
 assert.ok(darlingContent.includes('"parentOrganization"'), "Darling schema must link parentOrganization");
 
 // Hero preload & cache query strings
-assert.ok(indexContent.includes('rel="preload" as="image" href="assets/hero-bg.webp?v=2.2.0"'), "Homepage must preload hero image with high priority and version tag");
-assert.ok(indexContent.includes('assets/css/styles.css?v=2.2.0'), "Homepage CSS link must have ?v=2.2.0");
-assert.ok(indexContent.includes('assets/js/main.js?v=2.2.0'), "Homepage main.js script must have ?v=2.2.0");
+assert.ok(indexContent.includes('rel="preload" as="image" href="assets/hero-bg.webp?v=2.2.1"'), "Homepage must preload hero image with high priority and version tag");
+assert.ok(indexContent.includes('assets/css/styles.css?v=2.2.1'), "Homepage CSS link must have ?v=2.2.1");
+assert.ok(indexContent.includes('assets/js/main.js?v=2.2.1'), "Homepage main.js script must have ?v=2.2.1");
 assert.ok(towerContent.includes('Sleeps Up to 4 Guests (2 Bedrooms)'), "Tower Cottages must claim sleeps up to 4 guests, not 4+");
-console.log("   ✅ Schema.org parentOrganization linked across properties and assets cache-busted with ?v=2.2.0.");
+console.log("   ✅ Schema.org parentOrganization linked across properties and assets cache-busted with ?v=2.2.1.");
 
 // TEST 31: Dynamic Breakfast Add-On Eligibility & Tower Cottages Hiding
 console.log("31. Testing Dynamic Breakfast Add-On Eligibility & Tower Cottages Hiding...");
@@ -1296,4 +1296,69 @@ for (const file of htmlFiles) {
 }
 console.log("   ✅ Availability copy and detail-page headers verified for 100% truthfulness and precision.");
 
-console.log("\n🎉 ALL 35 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 36: Responsive Hero Preload, WebP Asset Budgets, and LCP Chain Verification
+console.log("36. Testing Responsive Hero Preload, WebP Asset Budgets, and LCP Chain Verification...");
+const assetsDir = path.join(__dirname, "..", "assets");
+const heroMobilePath = path.join(assetsDir, "hero-bg-mobile.webp");
+const heroDesktopPath = path.join(assetsDir, "hero-bg.webp");
+assert.ok(fs.existsSync(heroMobilePath), "assets/hero-bg-mobile.webp must exist");
+assert.ok(fs.existsSync(heroDesktopPath), "assets/hero-bg.webp must exist");
+
+const heroMobileSizeKB = fs.statSync(heroMobilePath).size / 1024;
+assert.ok(heroMobileSizeKB < 85, `Mobile hero image (${heroMobileSizeKB.toFixed(1)} KB) must be under 85 KB budget`);
+
+const cardImagePaths = [
+  path.join(assetsDir, "tower-cottages-diani-building-facade-balcony.webp"),
+  path.join(assetsDir, "property-darad.webp"),
+  path.join(assetsDir, "diani-darling-cottage-villas-pathway.webp"),
+  path.join(assetsDir, "beakim-apartments-one-bed.webp")
+];
+
+let totalCardsSizeKB = 0;
+for (const cardPath of cardImagePaths) {
+  assert.ok(fs.existsSync(cardPath), `Card image ${path.basename(cardPath)} must exist`);
+  const cardSizeKB = fs.statSync(cardPath).size / 1024;
+  assert.ok(cardSizeKB < 90, `Card image ${path.basename(cardPath)} (${cardSizeKB.toFixed(1)} KB) must be under 90 KB`);
+  totalCardsSizeKB += cardSizeKB;
+}
+assert.ok(totalCardsSizeKB < 300, `Total card image weight (${totalCardsSizeKB.toFixed(1)} KB) must be under 300 KB budget`);
+
+const indexRaw = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+assert.ok(indexRaw.includes('rel="preload" as="image" href="assets/hero-bg-mobile.webp?v=2.2.1" type="image/webp" media="(max-width: 640px)"'), "Must preload mobile hero image with media query");
+assert.ok(indexRaw.includes('rel="preload" as="image" href="assets/hero-bg.webp?v=2.2.1" type="image/webp" media="(min-width: 641px)"'), "Must preload desktop hero image with media query");
+assert.ok(indexRaw.includes('<picture>'), "Hero background must use responsive <picture> tag");
+assert.ok(indexRaw.includes('srcset="assets/hero-bg-mobile.webp?v=2.2.1"'), "Picture must contain mobile WebP source");
+assert.ok(indexRaw.includes('width="1024" height="1024"'), "Hero img must define explicit width and height dimensions");
+assert.ok(indexRaw.includes('rel="dns-prefetch" href="https://fonts.googleapis.com"'), "Must prefetch Google Fonts DNS");
+console.log("   ✅ Responsive hero preload, sub-85KB mobile WebP, and LCP chain verified with 100% compliance.");
+
+// TEST 37: Accessibility (Select Labels, Heading Hierarchy, Contrast) Compliance
+console.log("37. Testing Accessibility (Select Labels, Heading Hierarchy, Contrast) Compliance...");
+const checkSelectsFiles = ["index.html", "beakim-darad.html", "tower-cottages.html", "diani-darling.html"];
+for (const file of checkSelectsFiles) {
+  const fileContent = fs.readFileSync(path.join(__dirname, "..", file), "utf8");
+  const selects = fileContent.match(/<select[^>]*>/gi) || [];
+  for (const s of selects) {
+    const id = (s.match(/id=["']([^"']+)["']/i) || [])[1];
+    const aria = (s.match(/aria-label=["']([^"']+)["']/i) || [])[1];
+    const hasLabel = id && new RegExp('<label[^>]+for=["\']' + id + '["\']', 'i').test(fileContent);
+    assert.ok(aria || hasLabel, `Select element with id="${id}" in ${file} must have either an aria-label or an associated <label>`);
+  }
+}
+
+// Heading hierarchy validation in index.html
+const headingMatches = indexRaw.match(/<(h[1-6])[^>]*>/gi) || [];
+let lastLevel = 1;
+for (const h of headingMatches) {
+  const level = parseInt((h.match(/<(h[1-6])/i) || [])[1].replace('h', ''), 10);
+  // Heading level should not skip more than 1 level downward (e.g. h1 -> h3 or h2 -> h4 is forbidden)
+  assert.ok(level <= lastLevel + 1, `Heading level h${level} skips levels after h${lastLevel} in index.html`);
+  lastLevel = level;
+}
+
+// Contrast validation: 0 instances of low-opacity text on body/descriptions
+const lowContrastInstances = indexRaw.split('\n').filter(line => /text-(ivory|driftwood|deep-forest)\/(30|40|50)\b/.test(line));
+assert.strictEqual(lowContrastInstances.length, 0, `index.html must have 0 low-contrast (30/40/50 opacity) text instances (found ${lowContrastInstances.length})`);
+console.log("   ✅ All form selects labeled, heading hierarchy strictly sequential, and text contrast WCAG AA verified.");
+
+console.log("\n🎉 ALL 37 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");

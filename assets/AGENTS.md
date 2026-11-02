@@ -15,7 +15,7 @@
 ---
 
 ## 2. Local Contracts & Rules
-- **Image Optimization:** Keep hero images optimized and properly dimensioned.
+- **Image Optimization:** Keep hero images optimized and properly dimensioned. Maintain dedicated mobile hero variant (`assets/hero-bg-mobile.webp`, 750w, <85 KiB) alongside desktop master (`assets/hero-bg.webp`) with responsive `<picture>` tags. Residence showcase cards are optimized to 800w (<90 KiB each) to ensure mobile LCP < 2.5s and Speed Index compliance.
 - **Styling Rules:** Ensure responsive layout across mobile and desktop breakpoints without layout shift (CLS).
 - **Architectural Storytelling:** On property landing pages (e.g. `diani-darling.html`, `tower-cottages.html`), imagery is organized in a chronological 7-stage arrival arc (`#arrival-story`) followed by a secondary masonry catalog (`#photo-catalog`). Every image card uses `.gallery-item` or `[data-gallery]` for full lightbox zoom accessibility.
 

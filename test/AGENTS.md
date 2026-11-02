@@ -3,7 +3,7 @@
 ## 1. Purpose & Ownership
 - **Scope:** Root integration and clean code verification suites across the workspace.
 - **Key Files Owned:**
-  - `clean_code.test.js`: Root-level clean code audit suite verifying naming, SRP, layer boundaries, commercial policies, accessible calendar elements, and booking failure recovery across 25 automated unit assertions (100% pass rate).
+  - `clean_code.test.js`: Root-level clean code audit suite verifying naming, SRP, layer boundaries, commercial policies, accessible calendar elements, booking failure recovery, responsive hero preloads, image budgets, and form a11y across 37 automated unit assertions (100% pass rate).
 - **Boundaries & Invariants:**
   - Must execute independently without requiring a running server.
 
