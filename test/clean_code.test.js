@@ -144,13 +144,13 @@ console.log("   ✅ Inquiry message formatting contains complete structured deta
 
 // TEST 7: Validation Logic
 console.log("7. Testing Validation Logic...");
-const missingName = validateBookingFormData({ name: "", phoneNumber: "746938529", checkIn: "2026-11-01", checkOut: "2026-11-02" });
+const missingName = validateBookingFormData({ name: "", phoneNumber: "746938529", checkIn: "2028-11-01", checkOut: "2028-11-02" });
 assert.strictEqual(missingName.message, "Please enter your full name.");
 
-const invalidDates = validateBookingFormData({ name: "Bob", phoneNumber: "746938529", checkIn: "2026-11-05", checkOut: "2026-11-02" });
+const invalidDates = validateBookingFormData({ name: "Bob", phoneNumber: "746938529", checkIn: "2028-11-05", checkOut: "2028-11-02" });
 assert.strictEqual(invalidDates.message, "Check-Out date must be strictly after Check-In date.");
 
-const validForm = validateBookingFormData({ name: "Bob", phoneNumber: "746938529", checkIn: "2026-11-01", checkOut: "2026-11-05" });
+const validForm = validateBookingFormData({ name: "Bob", phoneNumber: "746938529", checkIn: "2028-11-01", checkOut: "2028-11-05" });
 assert.strictEqual(validForm, null);
 console.log("   ✅ Form validation guards catch invalid states and approve valid payloads.");
 
