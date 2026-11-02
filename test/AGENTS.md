@@ -21,3 +21,8 @@
 
 ## 4. Child Docs Index
 *(Leaf directory — no further child domains)*
+
+mobile_ux.test.js checks same-page vs cross-page/query URL behavior, reduced-motion scrolling, short-landscape calendar mode and 2-room/2-night review + CRM payload totals (KSh 6,800; KSh 10,800 with breakfast). It sends no inquiries. Run node test/mobile_ux.test.js or npm run test:mobile.
+
+Test 36 now validates actual WOFF2 signatures, source manifest checksums and included SIL licenses; the obsolete Google Fonts DNS assertion was replaced because fonts are self-hosted.
+Test 39 now checks same-origin font delivery and font-display: swap instead of the obsolete external stylesheet preload requirement.

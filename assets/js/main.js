@@ -59,6 +59,8 @@ const APP_CONFIG = Object.freeze({
     FALLBACK_NIGHTLY_RATE: 2500
   }),
   CALENDAR: Object.freeze({
+    MODAL_BREAKPOINT_WIDTH: 640,
+    MODAL_BREAKPOINT_HEIGHT: 600,
     WEEKDAY_NAMES_FULL: Object.freeze(["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]),
     WEEKDAY_NAMES_SHORT: Object.freeze(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]),
     WEEKDAY_HEADER_LABELS: Object.freeze(["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]),
@@ -2259,9 +2261,9 @@ function selectUnit(unitIdentifier) {
     updatePriceCalculation();
   }
 
-  const bookingSection = document.getElementById("booking");
+  const bookingSection = getBookingScrollTarget();
   if (bookingSection) {
-    bookingSection.scrollIntoView({ behavior: "smooth" });
+    scrollToPageTarget(bookingSection);
   }
 }
 
@@ -2299,9 +2301,9 @@ function selectProperty(propertyName) {
     updatePriceCalculation();
   }
 
-  const bookingSection = document.getElementById("booking");
+  const bookingSection = getBookingScrollTarget();
   if (bookingSection) {
-    bookingSection.scrollIntoView({ behavior: "smooth" });
+    scrollToPageTarget(bookingSection);
   }
 }
 
@@ -2549,7 +2551,7 @@ const BeakimDateRangePicker = {
     const popover = document.getElementById("beakim-calendar-popover");
     if (!popover) return;
 
-    const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+    const isMobile = isCalendarModalViewport();
     if (isMobile) {
       if (popover.parentElement !== document.body) {
         document.body.appendChild(popover);
@@ -2606,7 +2608,7 @@ const BeakimDateRangePicker = {
     this.state.isOpen = true;
     this.state.step = "check-in";
 
-    const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+    const isMobile = isCalendarModalViewport();
     if (isMobile) {
       if (popover.parentElement !== document.body) {
         document.body.appendChild(popover);
@@ -3017,14 +3019,85 @@ function bindBookingForms() {
   });
 }
 
+/** Keep native navigation for other pages, queries, origins and modified clicks. */
+function isCalendarModalViewport(width, height) {
+  if (typeof width !== "number") width = typeof window !== "undefined" ? window.innerWidth : Infinity;
+  if (typeof height !== "number") height = typeof window !== "undefined" ? window.innerHeight : Infinity;
+  return width < APP_CONFIG.CALENDAR.MODAL_BREAKPOINT_WIDTH || height < APP_CONFIG.CALENDAR.MODAL_BREAKPOINT_HEIGHT;
+}
+
+function normalizePagePath(pathname) {
+  return pathname.replace(/\/index(?:\.html)?\/?$/, "/").replace(/\.html$/, "").replace(/\/$/, "") || "/";
+}
+
+function resolveLocalAnchor(href, currentHref) {
+  try {
+    const current = new URL(currentHref);
+    const destination = new URL(href, current);
+    if (destination.origin !== current.origin || destination.search !== current.search ||
+        normalizePagePath(destination.pathname) !== normalizePagePath(current.pathname)) return null;
+    return destination.hash ? decodeURIComponent(destination.hash.slice(1)) : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+function getPreferredScrollBehavior() {
+  return typeof window !== "undefined" && typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+}
+
+function getBookingScrollTarget() {
+  return document.getElementById("booking-entry") || document.getElementById("booking-form") || document.getElementById("booking");
+}
+
+function getAnchorTarget(targetId) {
+  return ["booking", "booking-form", "booking-entry"].includes(targetId)
+    ? getBookingScrollTarget() : document.getElementById(targetId);
+}
+
+function scrollToPageTarget(target, behavior = getPreferredScrollBehavior()) {
+  if (typeof document !== "undefined") updateMobileChromeClearance();
+  if (target) target.scrollIntoView({ behavior, block: "start" });
+}
+
+/** Height includes safe-area padding: do not add env(safe-area-inset-bottom) twice. */
+function updateMobileChromeClearance() {
+  const header = document.querySelector(".site-header");
+  const dock = document.querySelector(".site-contact-dock");
+  if (header) document.documentElement.style.setProperty("--site-header-height", `${Math.ceil(header.getBoundingClientRect().height)}px`);
+  if (dock) document.documentElement.style.setProperty("--contact-dock-height", `${Math.ceil(dock.getBoundingClientRect().height)}px`);
+}
+
+function initializeMobileChromeClearance() {
+  const header = document.querySelector(".site-header");
+  const dock = document.querySelector(".site-contact-dock");
+  updateMobileChromeClearance();
+  if (typeof ResizeObserver === "function") {
+    const observer = new ResizeObserver(updateMobileChromeClearance);
+    if (header) observer.observe(header);
+    if (dock) observer.observe(dock);
+  } else {
+    window.addEventListener("resize", updateMobileChromeClearance, { passive: true });
+  }
+}
+
 function cleanHashFromUrl() {
   if (typeof window === "undefined" || !window.location.hash) return;
-  const targetId = window.location.hash.replace(/^#/, "");
-  const targetEl = document.getElementById(targetId);
-  if (targetEl) {
-    setTimeout(() => {
-      targetEl.scrollIntoView({ behavior: "smooth" });
-    }, 100);
+  const targetId = resolveLocalAnchor(window.location.href, window.location.href);
+  const target = targetId && getAnchorTarget(targetId);
+  if (!target) return;
+  // Initial deep links settle instantly; font swaps must not leave a stale offset.
+  scrollToPageTarget(target, "auto");
+  if (document.fonts && document.fonts.ready) {
+    let interrupted = false;
+    const interrupt = () => { interrupted = true; };
+    const events = ["pointerdown", "touchstart", "wheel", "keydown"];
+    events.forEach(type => window.addEventListener(type, interrupt, { once: true, passive: true }));
+    document.fonts.ready.then(() => {
+      events.forEach(type => window.removeEventListener(type, interrupt));
+      if (!interrupted && target.isConnected) scrollToPageTarget(target, "auto");
+    });
   }
   if (typeof history !== "undefined" && history.replaceState) {
     history.replaceState(null, "", window.location.pathname + window.location.search);
@@ -3033,30 +3106,19 @@ function cleanHashFromUrl() {
 
 function initializeCleanHashScrolling() {
   if (typeof document === "undefined") return;
-
   cleanHashFromUrl();
-
-  document.querySelectorAll('a[href^="#"], a[href^="/#"]').forEach(anchor => {
+  document.querySelectorAll('a[href*="#"]').forEach(anchor => {
     anchor.addEventListener("click", function(event) {
-      const href = this.getAttribute("href");
-      if (!href || href === "#" || href === "/#") return;
-
-      const hashIndex = href.indexOf("#");
-      if (hashIndex === -1) return;
-
-      const pathPart = href.substring(0, hashIndex);
-      const targetId = href.substring(hashIndex + 1);
-
-      const isCurrentPage = !pathPart || pathPart === "/" || pathPart === window.location.pathname;
-      if (isCurrentPage && targetId) {
-        const targetEl = document.getElementById(targetId);
-        if (targetEl) {
-          event.preventDefault();
-          targetEl.scrollIntoView({ behavior: "smooth" });
-          if (typeof history !== "undefined" && history.replaceState) {
-            history.replaceState(null, "", window.location.pathname + window.location.search);
-          }
-        }
+      if (event.defaultPrevented || event.button > 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey ||
+          this.hasAttribute("download") || (this.target && this.target !== "_self")) return;
+      const targetId = resolveLocalAnchor(this.getAttribute("href"), window.location.href);
+      if (targetId === "main-content") return; // Keep native skip-link focus navigation.
+      const target = targetId && getAnchorTarget(targetId);
+      if (!target) return;
+      event.preventDefault();
+      scrollToPageTarget(target);
+      if (typeof history !== "undefined" && history.replaceState) {
+        history.replaceState(null, "", window.location.pathname + window.location.search);
       }
     });
   });
@@ -3179,9 +3241,9 @@ function selectConferencePackage(packageIdentifier) {
       : "Half Day Morning (8:00 AM – 12:00 PM)";
   }
 
-  const bookingAnchor = document.getElementById("booking");
+  const bookingAnchor = getBookingScrollTarget();
   if (bookingAnchor) {
-    bookingAnchor.scrollIntoView({ behavior: "smooth" });
+    scrollToPageTarget(bookingAnchor);
   }
 
   updateConferenceCalculation();
@@ -3374,6 +3436,7 @@ function initializeScrollRevealEngine() {
 
 if (typeof window !== "undefined") {
   window.addEventListener("DOMContentLoaded", () => {
+    initializeMobileChromeClearance();
     initializeDemoModeBanner();
     const checkInInput = document.getElementById("check-in");
     const checkOutInput = document.getElementById("check-out");
@@ -3431,6 +3494,12 @@ if (typeof module !== "undefined" && module.exports) {
     resolvePropertyIdFromSelection,
     syncInquiryToCrm,
     handleResidenceCardKeydown,
+    isCalendarModalViewport,
+    normalizePagePath,
+    resolveLocalAnchor,
+    getPreferredScrollBehavior,
+    scrollToPageTarget,
+    initializeMobileChromeClearance,
     cleanHashFromUrl,
     initializeCleanHashScrolling,
     triggerLiveAvailabilityCheck,

@@ -38,3 +38,13 @@
 
 ## 4. Child Docs Index
 *(Leaf directory — no further child domains)*
+
+## Mobile review candidate — 2026-11-02
+Mobile 2.2.4: unlayered mobile ergonomics override utility font sizes to 16px for text controls in booking-entry, 48px minimum field/primary target heights. Calendar cells are excluded. Header/dock heights use CSS fallbacks and measured variables; body clearance replaces footer pb-28. Keep ordinary footer padding and never add safe-area twice.
+
+Brand fonts now use same-origin WOFF2 @font-face rules in input.css with font-display: swap and original unicode subsets. Do not restore Google Fonts head links or duplicate font definitions. Preserve local fonts and licenses when deploying styles.css. Hero filter experiment was reverted after no repeatable gain.
+Fixed-bar blur removal was benchmarked and reverted: no repeatable speed benefit. Existing desktop/mobile glass styling remains.
+
+Unit steppers and contact-method labels have 48px mobile targets. Calendar close/month navigation and FAQ tabs have 44px minimum targets; individual day cells retain their compact 7-column grid.
+
+Base CSS scroll-behavior is auto; click scrolling is controlled by the motion-aware JS helper. Initial deep-link positioning is immediate.

@@ -21,13 +21,6 @@
   <link rel="canonical" href="https://www.beakimhospitalitygroup.co.ke/insights" />
 
   <!-- Fonts & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" media="print" onload="this.media='all'" />
-  <noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" />
-  </noscript>
 
   <!-- Favicon & Mobile Theme -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -37,7 +30,7 @@
   <meta name="theme-color" content="#0d2318" />
 
   <!-- Compiled Production CSS -->
-  <link rel="stylesheet" href="assets/css/styles.css?v=2.2.3" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=2.2.4" />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="blog" />
@@ -167,7 +160,7 @@
   }
   </script>
 </head>
-<body class="font-body font-light antialiased bg-deep-forest text-ivory overflow-x-hidden selection:bg-champagne selection:text-deep-forest">
+<body class="has-contact-dock font-body font-light antialiased bg-deep-forest text-ivory overflow-x-hidden selection:bg-champagne selection:text-deep-forest">
 
   <!-- Skip to Main Content Link (WCAG 2.2 AA) -->
   <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-champagne focus:text-deep-forest focus:font-semibold focus:rounded-md focus:shadow-lg focus:outline-none">
@@ -175,7 +168,7 @@
   </a>
 
   <!-- ── QUICK COMMUNICATION DOCK (ROOTED ON MOBILE, FLOATING ON DESKTOP) ── -->
-  <div class="fixed bottom-0 left-0 right-0 z-40 bg-deep-forest/95 backdrop-blur-md border-t border-champagne/20 px-4 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] shadow-[0_-4px_25px_rgba(0,0,0,0.5)] md:bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] md:right-6 md:left-auto md:w-auto md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0 md:shadow-none flex flex-row md:flex-col gap-3 justify-center items-center">
+  <div class="site-contact-dock fixed bottom-0 left-0 right-0 z-40 bg-deep-forest/95 backdrop-blur-md border-t border-champagne/20 px-4 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] shadow-[0_-4px_25px_rgba(0,0,0,0.5)] md:bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] md:right-6 md:left-auto md:w-auto md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0 md:shadow-none flex flex-row md:flex-col gap-3 justify-center items-center">
     <!-- WhatsApp Action -->
     <a href="https://wa.me/254746938529" target="_blank" rel="noopener noreferrer" 
        data-comm-action="whatsapp"
@@ -201,7 +194,7 @@
   </div>
 
   <!-- ── STICKY HEADER NAVIGATION ── -->
-  <header class="fixed top-0 left-0 right-0 z-40 bg-deep-forest/90 backdrop-blur-md border-b border-champagne/15 transition-all duration-300">
+  <header class="site-header fixed top-0 left-0 right-0 z-40 bg-deep-forest/90 backdrop-blur-md border-b border-champagne/15 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <a class="flex items-center gap-3 group" href="/">
         <img src="assets/logo-monogram.png?v=2.2.3" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
@@ -218,7 +211,7 @@
       </nav>
 
       <div class="flex items-center gap-4">
-        <a href="/#booking" class="hidden sm:inline-block bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 transform active:scale-95 shadow-md">
+        <a href="/#booking-entry" class="hidden sm:inline-block bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 transform active:scale-95 shadow-md">
           Book Your Stay
         </a>
         <button type="button" onclick="toggleMobileMenu()" class="md:hidden text-ivory min-w-[48px] min-h-[48px] flex items-center justify-center p-2.5 rounded-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-champagne" aria-label="Toggle Menu">
@@ -234,7 +227,7 @@
       <a href="/" class="block text-ivory/80 hover:text-champagne">Home</a>
       <a href="/#properties" onclick="toggleMobileMenu()" class="block text-ivory/80 hover:text-champagne">Our Properties</a>
       <a href="/insights" class="block text-champagne">Insights</a>
-      <a href="/#booking" onclick="toggleMobileMenu()" class="block text-champagne pt-2">Book Your Stay &rarr;</a>
+      <a href="/#booking-entry" onclick="toggleMobileMenu()" class="block text-champagne pt-2">Book Your Stay &rarr;</a>
     </div>
   </header>
 
@@ -376,7 +369,7 @@
               <a href="https://wa.me/254746938529?text=Hello%20Beakim%20Concierge,%20I%20saw%20your%20Fit%20Nation%20retreat%20post.%20I'm%20planning%20a%20group%20stay%20in%20Diani." target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition duration-300 shadow-lg active:scale-95">
                 Plan Your Group Stay &rarr;
               </a>
-              <a href="/#booking" class="inline-flex items-center gap-2 border border-champagne text-champagne hover:bg-champagne hover:text-deep-forest px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition duration-300 active:scale-95">
+              <a href="/#booking-entry" class="inline-flex items-center gap-2 border border-champagne text-champagne hover:bg-champagne hover:text-deep-forest px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition duration-300 active:scale-95">
                 Check Rates
               </a>
             </div>
@@ -430,7 +423,7 @@
 
           <div class="pt-6 border-t border-champagne/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <span class="text-xs text-driftwood">Properties Served: <strong>All Beakim Locations</strong></span>
-            <a href="/#booking" class="inline-flex items-center gap-2 bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition duration-300 active:scale-95 shadow-md">
+            <a href="/#booking-entry" class="inline-flex items-center gap-2 bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition duration-300 active:scale-95 shadow-md">
               Book Your Stay &rarr;
             </a>
           </div>
@@ -542,7 +535,7 @@
 
           <div class="pt-6 border-t border-champagne/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <span class="text-xs text-emerald-400 font-medium">✓ Complimentary Gated Parking Included</span>
-            <a href="/#booking" class="inline-flex items-center gap-2 bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition duration-300 active:scale-95 shadow-md">
+            <a href="/#booking-entry" class="inline-flex items-center gap-2 bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition duration-300 active:scale-95 shadow-md">
               Plan Family Stay &rarr;
             </a>
           </div>
@@ -609,7 +602,7 @@
         </p>
 
         <div class="pt-4 flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/#booking" class="bg-champagne hover:bg-driftwood text-deep-forest px-8 py-4 rounded-xl font-bold tracking-wider uppercase text-xs sm:text-sm transition duration-300 shadow-xl active:scale-95">
+          <a href="/#booking-entry" class="bg-champagne hover:bg-driftwood text-deep-forest px-8 py-4 rounded-xl font-bold tracking-wider uppercase text-xs sm:text-sm transition duration-300 shadow-xl active:scale-95">
             Check Availability &amp; Book Direct
           </a>
           <a href="tel:+254746938529" class="border border-ivory/30 hover:border-champagne text-ivory hover:text-champagne px-8 py-4 rounded-xl font-semibold tracking-wider uppercase text-xs sm:text-sm transition duration-300">
@@ -622,7 +615,7 @@
   </main>
 
   <!-- ── SITE FOOTER ── -->
-    <footer class="bg-deep-forest border-t border-champagne/15 py-12 pb-28 md:pb-12">
+    <footer class="bg-deep-forest border-t border-champagne/15 py-12">
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
       <!-- Left side: Brand Identity -->
       <div class="space-y-4 text-center md:text-left">

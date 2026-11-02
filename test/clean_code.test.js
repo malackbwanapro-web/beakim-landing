@@ -1330,7 +1330,18 @@ assert.ok(/rel="preload" as="image" href="assets\/hero-bg\.webp\?v=2\.2\.[1-9]"/
 assert.ok(indexRaw.includes('<picture>'), "Hero background must use responsive <picture> tag");
 assert.ok(/srcset="assets\/hero-bg-mobile\.webp\?v=2\.2\.[1-9]"/i.test(indexRaw), "Picture must contain mobile WebP source");
 assert.ok(indexRaw.includes('width="1024" height="1024"'), "Hero img must define explicit width and height dimensions");
-assert.ok(indexRaw.includes('rel="dns-prefetch" href="https://fonts.googleapis.com"'), "Must prefetch Google Fonts DNS");
+// Font delivery changed from Google-hosted CSS to licensed same-origin WOFF2.
+assert.ok(!indexRaw.includes("fonts.googleapis.com"), "Self-hosted pages must avoid an external font stylesheet dependency");
+const fontRoot = path.join(assetsDir, "fonts");
+const fontManifest = JSON.parse(fs.readFileSync(path.join(fontRoot, "sources.json"), "utf8"));
+for (const font of fontManifest) {
+  const bytes = fs.readFileSync(path.join(fontRoot, font.file));
+  assert.strictEqual(bytes.subarray(0, 4).toString(), "wOF2", "Font asset must be a real WOFF2 file");
+  assert.strictEqual(require("crypto").createHash("sha256").update(bytes).digest("hex"), font.sha256, "Upstream font checksum must match");
+}
+for (const license of ["Inter-OFL.txt", "Playfair-Display-OFL.txt"]) {
+  assert.ok(fs.readFileSync(path.join(fontRoot, license), "utf8").includes("SIL OPEN FONT LICENSE"), "Font licenses must ship with the assets");
+}
 console.log("   ✅ Responsive hero preload, sub-85KB mobile WebP, and LCP chain verified with 100% compliance.");
 
 // TEST 37: Accessibility (Select Labels, Heading Hierarchy, Contrast) Compliance
@@ -1463,12 +1474,11 @@ assert.ok(
   "Light booking form column must use high-contrast accessible luxury gold (text-[#7A5B20])"
 );
 
-// 5. Verify non-blocking Google Fonts in <head>
-assert.ok(
-  freshIndex.includes('rel="preload" as="style"') && freshIndex.includes('onload="this.media=\'all\'"'),
-  "index.html must load Google Fonts asynchronously via preload to eliminate render-blocking delay"
-);
+// 5. Same-origin fonts remain visible during loading and avoid external CSS.
+assert.ok(inputCssContent.includes("font-display: swap"), "Self-hosted fonts must keep fallback text visible");
+assert.ok(!freshIndex.includes("fonts.googleapis.com"), "No external font stylesheet dependency");
 
 console.log("   ✅ Reduced-motion layout preservation, stagger delay custom properties, and WCAG AA form contrast verified 100%.");
 
 console.log("\n🎉 ALL 39 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+

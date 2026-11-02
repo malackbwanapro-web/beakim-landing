@@ -7,7 +7,8 @@
     "build:css": "npx tailwindcss -i ./assets/css/input.css -o ./assets/css/styles.css --minify",
     "watch:css": "npx tailwindcss -i ./assets/css/input.css -o ./assets/css/styles.css --watch",
     "build": "npm run build:css",
-    "test": "node test/clean_code.test.js"
+    "test": "node test/clean_code.test.js",
+    "test:mobile": "node test/mobile_ux.test.js"
   },
   "repository": {
     "type": "git",

@@ -34,3 +34,11 @@
 | [`Beakim CRM/`](./Beakim%20CRM/AGENTS.md) | Multi-property boutique hospitality CRM / PMS application | Next.js 14, React 18, Tailwind CSS, Node.js JSON DB |
 | [`docs/`](./docs/AGENTS.md) | Official client-facing contract deliverables, technical specs & SEO matrices | Markdown, GFM, JSON-LD Schemas |
 | [`test/`](./test/AGENTS.md) | Root clean code verification & regression test scripts | Node.js assertion suites |
+
+## Mobile review candidate — 2026-11-02
+Mobile 2.2.4 review candidate: booking CTAs target booking-entry, the form column including conference tabs. Legacy booking hashes remain supported by JS. Cache versions bumped to 2.2.4. Implementation is isolated and not deployed; see HANDOVER-ANTIGRAVITY.md before applying. Original Desktop source remains untouched.
+
+Self-hosted fonts and licenses are required alongside compiled CSS. Only changed CSS/JS cache queries use 2.2.4; image and catalog cache keys remain unchanged. New test command: npm run test:mobile. CRM test dependencies in this isolated copy are support fixtures, not a deployable CRM.
+
+### Review handover
+- [HANDOVER-ANTIGRAVITY.md](./HANDOVER-ANTIGRAVITY.md): applied behavior, evidence, limitations, safe transfer and rollback instructions for the isolated 2.2.4 review candidate.

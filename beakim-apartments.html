@@ -22,9 +22,6 @@
   <!-- Open Graph / Social Meta -->
 
   <!-- Fonts & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
 
   <!-- Favicon & Mobile Theme -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -34,7 +31,7 @@
   <meta name="theme-color" content="#0d2b24" />
 
   <!-- Compiled Production CSS -->
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=2.2.4" />
 
   <!-- Verbatim JSON-LD Schema -->
   <script type="application/ld+json">
@@ -74,7 +71,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="assets/js/catalog.js" defer></script>
-  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/main.js?v=2.2.4" defer></script>
   <link rel="canonical" href="https://www.beakimhospitalitygroup.co.ke/beakim-apartments" />
 
   <!-- Open Graph / Social Meta -->
@@ -91,7 +88,7 @@
   <meta name="twitter:description" content="Long-term monthly rentals in Diani Beach. 1-bedroom apartments at KSh 15,000/month and 2-bedroom apartments at KSh 25,000/month with pool access and security." />
   <meta name="twitter:image" content="https://www.beakimhospitalitygroup.co.ke/assets/beakim-apartments-hero.webp" />
 </head>
-<body class="font-body font-light antialiased overflow-x-hidden">
+<body class="has-contact-dock font-body font-light antialiased overflow-x-hidden">
 
   <!-- Skip to Main Content Link (WCAG 2.1 AA) -->
   <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-champagne focus:text-deep-forest focus:font-semibold focus:rounded-md focus:shadow-lg focus:outline-none">
@@ -100,7 +97,7 @@
 
 
   <!-- ── QUICK COMMUNICATION DOCK (ROOTED ON MOBILE, FLOATING ON DESKTOP) ── -->
-  <div class="fixed bottom-0 left-0 right-0 z-40 bg-deep-forest/95 backdrop-blur-md border-t border-champagne/20 px-4 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] shadow-[0_-4px_25px_rgba(0,0,0,0.5)] md:bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] md:right-6 md:left-auto md:w-auto md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0 md:shadow-none flex flex-row md:flex-col gap-3 justify-center items-center">
+  <div class="site-contact-dock fixed bottom-0 left-0 right-0 z-40 bg-deep-forest/95 backdrop-blur-md border-t border-champagne/20 px-4 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] shadow-[0_-4px_25px_rgba(0,0,0,0.5)] md:bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] md:right-6 md:left-auto md:w-auto md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0 md:shadow-none flex flex-row md:flex-col gap-3 justify-center items-center">
     <!-- WhatsApp Action -->
     <a href="https://wa.me/254746938529" target="_blank" rel="noopener noreferrer" 
        data-comm-action="whatsapp"
@@ -126,7 +123,7 @@
   </div>
 
   <!-- STICKY HEADER -->
-  <header class="fixed top-0 left-0 right-0 z-40 bg-deep-forest/90 backdrop-blur-md border-b border-champagne/15 transition-all duration-300">
+  <header class="site-header fixed top-0 left-0 right-0 z-40 bg-deep-forest/90 backdrop-blur-md border-b border-champagne/15 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <a class="flex items-center gap-3 group" href="/">
         <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
@@ -141,7 +138,7 @@
         <a class="text-ivory/60 hover:text-champagne transition duration-300 uppercase" href="/insights">Insights</a>
       </div>
 
-      <a href="#booking" class="bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 transform active:scale-95 shadow-md">
+      <a href="#booking-entry" class="bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 transform active:scale-95 shadow-md">
         Book Your Stay
       </a>
     </div>
@@ -230,7 +227,7 @@
         <p class="text-xs text-ivory/70 leading-relaxed">
           Book self-catering stays at <strong class="text-champagne">KSh 5,000 / night</strong> for a private 1-bedroom apartment with own kitchen, living room, and balcony. Swimming pool access, 24/7 security, and peaceful coastal privacy. Stays will reopen shortly following renovations.
         </p>
-        <a href="#booking" class="inline-block text-xs font-semibold uppercase tracking-wider text-champagne hover:text-driftwood transition">
+        <a href="#booking-entry" class="inline-block text-xs font-semibold uppercase tracking-wider text-champagne hover:text-driftwood transition">
           View Short-Term Details &rarr;
         </a>
       </div>
@@ -306,7 +303,7 @@
           </div>
 
           <div class="pt-2 flex flex-wrap gap-4 items-center">
-            <a href="#booking" onclick="selectUnit('Beakim Apartments (1-Bedroom Unit)')" 
+            <a href="#booking-entry" onclick="selectUnit('Beakim Apartments (1-Bedroom Unit)')" 
                class="bg-champagne hover:bg-driftwood text-deep-forest px-8 py-3.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 shadow-md">
               Book Short-Term (KSh 15,000 / month)
             </a>
@@ -396,7 +393,7 @@
           </div>
 
           <div class="pt-2 flex flex-wrap gap-4 items-center">
-            <a href="#booking" onclick="selectUnit('Beakim Apartments (2-Bedroom Unit)')" 
+            <a href="#booking-entry" onclick="selectUnit('Beakim Apartments (2-Bedroom Unit)')" 
                class="bg-champagne hover:bg-driftwood text-deep-forest px-8 py-3.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 shadow-md">
               Book Short-Term (KSh 25,000 / month)
             </a>
@@ -473,7 +470,7 @@
   <!-- BOOKING SECTION -->
   <section id="booking" class="py-20 bg-canopy/40 border-t border-champagne/10 relative scroll-mt-24">
     <div class="max-w-4xl mx-auto px-6">
-      <div class="bg-deep-forest border border-champagne/20 rounded-2xl p-8 md:p-12 shadow-2xl space-y-8">
+      <div id="booking-entry" class="bg-deep-forest border border-champagne/20 rounded-2xl p-8 md:p-12 shadow-2xl space-y-8">
         <div class="text-center space-y-2">
           <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Monthly Lease &amp; Extended Stays</span>
           <h2 class="font-display text-3xl md:text-4xl text-ivory font-semibold">Inquire for Monthly Lease at Beakim Apartments</h2>
@@ -664,7 +661,7 @@
   </main>
 
   <!-- FOOTER -->
-    <footer class="bg-deep-forest border-t border-champagne/15 py-12 pb-28 md:pb-12">
+    <footer class="bg-deep-forest border-t border-champagne/15 py-12">
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
       <!-- Left side: Brand Identity -->
       <div class="space-y-4 text-center md:text-left">

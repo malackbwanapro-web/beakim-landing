@@ -29,8 +29,13 @@
 ## 4. Child Docs Index
 | Child / Domain | Responsibility | Notes / Tech |
 | :--- | :--- | :--- |
+| [`fonts/`](./fonts/AGENTS.md) | Self-hosted Inter / Playfair Display WOFF2 subsets and SIL licenses | Maintain sources.json hashes and unicode ranges |
 | [`css/`](./css/AGENTS.md) | Landing page CSS stylesheets | CSS3 / Tailwind |
 | [`js/`](./js/AGENTS.md) | Client-side interactive scripts | Vanilla JavaScript |
 | [`Beakim Darad Images/`](<./Beakim Darad Images/AGENTS.md>) | Beach resort photography | WebP / JPEG |
 | [`Tower Cottages Images/`](<./Tower Cottages Images/AGENTS.md>) | Serviced apartment photography | WebP / JPEG |
 | [`fit-nation/`](./fit-nation/AGENTS.md) | Fit Nation Kenya convoy case study photography | JPEG Master Photos |
+
+## Mobile review candidate — 2026-11-02
+Mobile 2.2.4: shared scroll/navigation and measured mobile chrome contracts are documented in js/AGENTS.md and css/AGENTS.md; no photography, catalog or CRM modifications.
+

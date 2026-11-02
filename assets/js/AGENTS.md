@@ -48,3 +48,11 @@
 
 ## 4. Child Docs Index
 *(Leaf directory — no further child domains)*
+
+## Mobile review candidate — 2026-11-02
+Mobile 2.2.4: all programmatic scrolling uses scrollToPageTarget and respects reduced motion. resolveLocalAnchor must preserve cross-page/query/modified-click navigation. Legacy booking hashes resolve to booking-entry (form column including mode tabs). initializeMobileChromeClearance measures header/dock with ResizeObserver; never double-add safe-area padding. Booking/pricing/CRM contracts unchanged.
+
+Calendar modal mode now uses isCalendarModalViewport: width < 640px OR height < 600px. This keeps the date selector visible after landscape rotation; reposition still preserves selection and avoids duplicate scroll locks. Navigation helpers do not auto-focus any form field.
+Header/dock heights are refreshed synchronously before anchor scrolling as well as on ResizeObserver, so closing the expanded mobile menu cannot leave a stale header offset. Skip-to-main-content clicks retain native focus navigation.
+
+Incoming deep links settle with auto scrolling, including one correction after document.fonts.ready. Pointer/touch/wheel/key interaction cancels the correction. Click-based scrolling still uses the shared motion-aware helper; do not reintroduce global CSS smooth scrolling or font swaps can leave stale deep-link offsets.
