@@ -243,6 +243,47 @@ assert.strictEqual(daradWithBreakfast.breakfastRate, 500);
 assert.strictEqual(daradWithBreakfast.breakfastCost, 3000); // 500 * 2 adults * 3 nights
 assert.strictEqual(daradWithBreakfast.grandTotal, 9900);
 
+// Specific Regression Test: 6 Nights, 2 Adults, Beakim Darad Superior Room with Breakfast
+const superiorPricing = resolveStayPricing("Beakim Darad - Superior Room (With AC)", "2026-11-01", "2026-11-07");
+assert.strictEqual(superiorPricing.totalCost, 18000); // 3,000 * 6 nights
+assert.strictEqual(superiorPricing.durationDays, 6);
+
+// Test totals with propertyIdentifier passed
+const superiorWithBreakfast = calculateReservationTotals({
+  pricingSummary: superiorPricing,
+  adultsCount: 2,
+  hasBreakfast: true,
+  propertyIdentifier: "Beakim Darad - Superior Room (With AC)"
+});
+assert.strictEqual(superiorWithBreakfast.breakfastRate, 500, "Beakim Darad Superior Room breakfast rate must be KSh 500/day");
+assert.strictEqual(superiorWithBreakfast.breakfastCost, 6000, "2 Adults x 6 Nights @ KSh 500 must equal KSh 6,000 (not KSh 12,000)");
+assert.strictEqual(superiorWithBreakfast.grandTotal, 24000, "18,000 base + 6,000 breakfast must equal KSh 24,000");
+
+// Test totals when only unitDisplayName is present (fallback safety check)
+const superiorStandaloneTotals = calculateReservationTotals({
+  pricingSummary: {
+    unitDisplayName: "Superior Room (With AC)",
+    durationDays: 6,
+    totalCost: 18000,
+    isValidRange: true
+  },
+  adultsCount: 2,
+  hasBreakfast: true
+});
+assert.strictEqual(superiorStandaloneTotals.breakfastRate, 500, "Catalog resolver must resolve KSh 500 from unit title alone");
+assert.strictEqual(superiorStandaloneTotals.breakfastCost, 6000, "Breakfast cost must be KSh 6,000");
+
+// Test itemized breakdown rendering accuracy
+const daradSuperiorBreakdownHtml = renderInquiryCostBreakdown({
+  property: "Beakim Darad - Superior Room (With AC)",
+  pricingSummary: superiorPricing,
+  totals: superiorWithBreakfast,
+  selectedAddons: ["Chef-Prepared Coastal Breakfast: 2 Guest(s) x 6 Night(s) (+KSh 6,000)"]
+});
+assert.ok(daradSuperiorBreakdownHtml.includes("@ KSh 500 / day"), "Breakdown must display KSh 500 / day for Darad");
+assert.ok(daradSuperiorBreakdownHtml.includes("+KSh 6,000"), "Breakdown must display +KSh 6,000 for breakfast add-on");
+assert.ok(!daradSuperiorBreakdownHtml.includes("+KSh 12,000"), "Breakdown must NOT display +KSh 12,000");
+
 const withoutBreakfast = calculateReservationTotals({
   pricingSummary: standardPricing,
   adultsCount: 2,

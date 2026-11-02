@@ -366,7 +366,7 @@ function normalizeKenyanPhoneNumber(countryCode, rawPhoneNumber) {
 
 /**
  * Resolves per-person daily breakfast rate based on property capabilities.
- * Single Source of Truth: Beakim Darad = KSh 500/day, Diani Darling = KSh 1,000/day.
+ * Single Source of Truth: Beakim Darad = KSh 500/day, Diani Darling = KSh 1,000/day, Self-Catering = KSh 0.
  */
 function resolveBreakfastRate(propertyIdentifier) {
   if (!propertyIdentifier) return 1000;
@@ -374,6 +374,28 @@ function resolveBreakfastRate(propertyIdentifier) {
   if (normalized.includes("darad")) return 500;
   if (normalized.includes("darling")) return 1000;
   if (normalized.includes("tower") || normalized.includes("apartment")) return 0;
+
+  // Cross-reference official catalog offerings if catalog helper is loaded
+  if (typeof getOfferingById === "function") {
+    const offering = getOfferingById(propertyIdentifier);
+    if (offering && typeof offering.propertyBreakfastRate === "number") {
+      return offering.propertyBreakfastRate;
+    }
+    if (offering && offering.propertyId) {
+      if (offering.propertyId.includes("darad")) return 500;
+      if (offering.propertyId.includes("darling")) return 1000;
+      if (offering.propertyId.includes("tower") || offering.propertyId.includes("apartment")) return 0;
+    }
+  }
+
+  // Keyword fallback for specific property room titles
+  if (normalized.includes("superior") || normalized.includes("standard") || normalized.includes("kitchenette") || normalized.includes("garden view cottage")) {
+    return 500; // All exclusive to Beakim Beach Darad
+  }
+  if (normalized.includes("deluxe studio")) {
+    return 1000; // Exclusive to Diani Darling Cottages
+  }
+
   return 1000;
 }
 
@@ -451,8 +473,13 @@ function resolveStayPricing(propertyOrOfferingId, checkInDateString, checkOutDat
 
   const rateBasisText = isMonthly ? `KSh ${rate.toLocaleString()} / mo` : `KSh ${rate.toLocaleString()} / night`;
 
+  const propertyId = offering ? (offering.propertyId || offering.id) : String(propertyOrOfferingId);
+  const propertyName = offering ? offering.propertyName : String(propertyOrOfferingId);
+
   if (!checkInDateString || !checkOutDateString) {
     return {
+      propertyId,
+      propertyName,
       rate,
       isMonthly,
       unitDisplayName,
@@ -468,6 +495,8 @@ function resolveStayPricing(propertyOrOfferingId, checkInDateString, checkOutDat
   const durationDays = calculateDateDifferenceInDays(checkInDateString, checkOutDateString);
   if (durationDays <= 0) {
     return {
+      propertyId,
+      propertyName,
       rate,
       isMonthly,
       unitDisplayName,
@@ -493,6 +522,8 @@ function resolveStayPricing(propertyOrOfferingId, checkInDateString, checkOutDat
   }
 
   return {
+    propertyId,
+    propertyName,
     rate,
     isMonthly,
     unitDisplayName,
@@ -611,7 +642,8 @@ function processValidBookingSubmission(formData) {
   const totals = calculateReservationTotals({
     pricingSummary,
     adultsCount: formData.adults,
-    hasBreakfast: formData.hasBreakfast
+    hasBreakfast: formData.hasBreakfast,
+    propertyIdentifier: formData.property
   });
 
   const preferredContactMethod = formData.preferredContactMethod || "WhatsApp / Text";
