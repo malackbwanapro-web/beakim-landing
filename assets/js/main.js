@@ -918,27 +918,47 @@ function syncResidenceCardsStyling(selectedCardElement) {
  */
 function syncBreakfastAddonCard(propertyValue) {
   const breakfastCard = document.getElementById("addon-card-breakfast");
-  if (!breakfastCard) return;
+  const preferencesSection = document.getElementById("booking-step-preferences");
+  const guestStepBadge = document.getElementById("booking-step-guest-badge");
+  const breakfastCheckbox = document.getElementById("addon-breakfast");
 
   const normalized = String(propertyValue || "").toLowerCase();
   const isBreakfastEligible = normalized.includes("darling") || normalized.includes("darad");
-  breakfastCard.classList.toggle("opacity-60", !isBreakfastEligible);
-  breakfastCard.classList.toggle("border-champagne/50", isBreakfastEligible);
 
-  const priceBadge = breakfastCard.querySelector(".text-champagne");
-  if (priceBadge) {
-    if (normalized.includes("darad")) {
-      priceBadge.textContent = "+KSh 500 / person / day";
-    } else if (normalized.includes("darling")) {
-      priceBadge.textContent = "+KSh 1,000 / person / day";
+  if (breakfastCard) {
+    breakfastCard.classList.toggle("hidden", !isBreakfastEligible);
+    breakfastCard.classList.toggle("flex", isBreakfastEligible);
+    breakfastCard.classList.toggle("border-champagne/50", isBreakfastEligible);
+  }
+
+  if (breakfastCheckbox) {
+    if (!isBreakfastEligible) {
+      breakfastCheckbox.checked = false;
+      breakfastCheckbox.disabled = true;
     } else {
-      priceBadge.textContent = "Self-Catering";
+      breakfastCheckbox.disabled = false;
     }
   }
 
-  const breakfastCheckbox = document.getElementById("addon-breakfast");
-  if (breakfastCheckbox && !isBreakfastEligible && breakfastCheckbox.checked) {
-    breakfastCheckbox.checked = false;
+  // If the preferences step only holds breakfast, toggle the entire step container
+  if (preferencesSection) {
+    preferencesSection.classList.toggle("hidden", !isBreakfastEligible);
+  }
+
+  // Dynamically update Step 3 badge to 2 if preferences step is hidden
+  if (guestStepBadge) {
+    guestStepBadge.textContent = isBreakfastEligible ? "3" : "2";
+  }
+
+  if (breakfastCard && isBreakfastEligible) {
+    const priceBadge = breakfastCard.querySelector(".text-champagne");
+    if (priceBadge) {
+      if (normalized.includes("darad")) {
+        priceBadge.textContent = "+KSh 500 / person / day";
+      } else if (normalized.includes("darling")) {
+        priceBadge.textContent = "+KSh 1,000 / person / day";
+      }
+    }
   }
 }
 
@@ -2007,6 +2027,8 @@ function selectUnit(unitIdentifier) {
     }
   });
 
+  syncBreakfastAddonCard(propertyValue);
+
   if (matchedCard && typeof selectResidenceCard === "function") {
     selectResidenceCard(unitIdentifier, matchedCard);
   } else {
@@ -2041,6 +2063,8 @@ function selectProperty(propertyName) {
     }
   });
 
+  syncBreakfastAddonCard(propertyValue);
+
   if (matchedCard && typeof selectResidenceCard === "function") {
     selectResidenceCard(selectedVal, matchedCard);
   } else {
@@ -2070,6 +2094,8 @@ function handlePropertyChange() {
       matchedCard = card;
     }
   });
+
+  syncBreakfastAddonCard(propertyValue);
 
   if (matchedCard && typeof selectResidenceCard === "function") {
     selectResidenceCard(propertyValue, matchedCard);

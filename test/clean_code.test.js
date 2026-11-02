@@ -20,6 +20,7 @@ const {
   resolveStayPricing,
   buildInquiryMessage,
   validateBookingFormData,
+  syncBreakfastAddonCard,
   handleResidenceCardKeydown,
   selectDaradRoomTier,
   handleDaradRoomKeydown,
@@ -956,4 +957,95 @@ assert.ok(indexContent.includes('assets/js/main.js?v=2.1.0'), "Homepage main.js 
 assert.ok(towerContent.includes('Sleeps Up to 4 Guests (2 Bedrooms)'), "Tower Cottages must claim sleeps up to 4 guests, not 4+");
 console.log("   ✅ Schema.org parentOrganization linked across properties and assets cache-busted with ?v=2.1.0.");
 
-console.log("\n🎉 ALL 30 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 31: Dynamic Breakfast Add-On Eligibility & Tower Cottages Hiding
+console.log("31. Testing Dynamic Breakfast Add-On Eligibility & Tower Cottages Hiding...");
+assert.strictEqual(typeof syncBreakfastAddonCard, "function");
+
+// Setup minimal mock DOM elements to test syncBreakfastAddonCard behavior
+const mockCard = {
+  classes: new Set(),
+  classList: {
+    add(c) { mockCard.classes.add(c); },
+    remove(c) { mockCard.classes.delete(c); },
+    toggle(c, force) {
+      if (force === undefined) {
+        if (mockCard.classes.has(c)) mockCard.classes.delete(c);
+        else mockCard.classes.add(c);
+      } else if (force) {
+        mockCard.classes.add(c);
+      } else {
+        mockCard.classes.delete(c);
+      }
+    },
+    contains(c) { return mockCard.classes.has(c); }
+  },
+  priceBadge: { textContent: "" },
+  querySelector(selector) {
+    if (selector === ".text-champagne") return this.priceBadge;
+    return null;
+  }
+};
+
+const mockPrefSection = {
+  classes: new Set(),
+  classList: {
+    add(c) { mockPrefSection.classes.add(c); },
+    remove(c) { mockPrefSection.classes.delete(c); },
+    toggle(c, force) {
+      if (force === undefined) {
+        if (mockPrefSection.classes.has(c)) mockPrefSection.classes.delete(c);
+        else mockPrefSection.classes.add(c);
+      } else if (force) {
+        mockPrefSection.classes.add(c);
+      } else {
+        mockPrefSection.classes.delete(c);
+      }
+    },
+    contains(c) { return mockPrefSection.classes.has(c); }
+  }
+};
+
+const mockStepBadge = { textContent: "3" };
+const mockCheckbox = { checked: true, disabled: false };
+
+global.document = {
+  getElementById(id) {
+    if (id === "addon-card-breakfast") return mockCard;
+    if (id === "booking-step-preferences") return mockPrefSection;
+    if (id === "booking-step-guest-badge") return mockStepBadge;
+    if (id === "addon-breakfast") return mockCheckbox;
+    return null;
+  }
+};
+
+// 1. Test Tower Cottages selection: Must hide card, disable checkbox, hide Step 2, set badge to "2"
+syncBreakfastAddonCard("Tower Cottages - 2-Bedroom Apartment");
+assert.strictEqual(mockCard.classList.contains("hidden"), true, "Tower Cottages must hide breakfast card");
+assert.strictEqual(mockCheckbox.checked, false, "Tower Cottages must force breakfast checkbox unchecked");
+assert.strictEqual(mockCheckbox.disabled, true, "Tower Cottages must disable breakfast checkbox");
+assert.strictEqual(mockPrefSection.classList.contains("hidden"), true, "Tower Cottages must hide entire preferences step");
+assert.strictEqual(mockStepBadge.textContent, "2", "Guest Info step badge must renumber to '2' when preferences are hidden");
+
+// 2. Test Beakim Darad selection: Must show card, enable checkbox, show Step 2, set badge to "3", set KSh 500
+syncBreakfastAddonCard("Beakim Darad - Standard Room (Without AC)");
+assert.strictEqual(mockCard.classList.contains("hidden"), false, "Darad must NOT hide breakfast card");
+assert.strictEqual(mockCheckbox.disabled, false, "Darad must enable breakfast checkbox");
+assert.strictEqual(mockPrefSection.classList.contains("hidden"), false, "Darad must show preferences step");
+assert.strictEqual(mockStepBadge.textContent, "3", "Guest Info step badge must be '3' for Darad");
+assert.ok(mockCard.priceBadge.textContent.includes("500"), "Darad price badge must be KSh 500");
+
+// 3. Test Diani Darling selection: Must show card, enable checkbox, show Step 2, set badge to "3", set KSh 1,000
+syncBreakfastAddonCard("Diani Darling Cottages - Deluxe Studio Room");
+assert.strictEqual(mockCard.classList.contains("hidden"), false, "Darling must NOT hide breakfast card");
+assert.strictEqual(mockCheckbox.disabled, false, "Darling must enable breakfast checkbox");
+assert.strictEqual(mockPrefSection.classList.contains("hidden"), false, "Darling must show preferences step");
+assert.strictEqual(mockStepBadge.textContent, "3", "Guest Info step badge must be '3' for Darling");
+assert.ok(mockCard.priceBadge.textContent.includes("1,000"), "Darling price badge must be KSh 1,000");
+
+// 4. Verify index.html contains the necessary container IDs
+assert.ok(indexContent.includes('id="booking-step-preferences"'), "index.html must have id='booking-step-preferences'");
+assert.ok(indexContent.includes('id="booking-step-guest-badge"'), "index.html must have id='booking-step-guest-badge'");
+
+console.log("   ✅ Dynamic breakfast add-on eligibility correctly hides preferences and renumbers steps for Tower Cottages.");
+
+console.log("\n🎉 ALL 31 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
