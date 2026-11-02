@@ -175,6 +175,7 @@ const CrmSyncService = Object.freeze({
       checkOutDate: formData.checkOut,
       adults: formData.adults,
       children: formData.children,
+      unitsCount: formData.unitsCount || 1,
       estimatedTotal: grandTotal || 0,
       selectedAddons: formData.selectedAddons || [],
       specialRequests: formData.specialRequests || "",
@@ -186,7 +187,7 @@ const CrmSyncService = Object.freeze({
     };
   },
 
-  async checkAvailability({ propertyId, checkInDate, checkOutDate, offeringId, adults, children }) {
+  async checkAvailability({ propertyId, checkInDate, checkOutDate, offeringId, adults, children, unitsCount = 1 }) {
     if (!checkInDate || !checkOutDate) return null;
     try {
       const baseEndpoint = this.resolveAvailabilityEndpoint();
@@ -195,6 +196,7 @@ const CrmSyncService = Object.freeze({
       if (offeringId) url.searchParams.set("offeringId", offeringId);
       if (adults) url.searchParams.set("adults", String(adults));
       if (children) url.searchParams.set("children", String(children));
+      if (unitsCount) url.searchParams.set("units", String(unitsCount));
       url.searchParams.set("checkIn", checkInDate);
       url.searchParams.set("checkOut", checkOutDate);
 
@@ -411,9 +413,15 @@ function resolveBreakfastRate(propertyIdentifier) {
 /**
  * Pure domain function computing stay pricing plus ancillary add-ons.
  */
-function calculateReservationTotals({ pricingSummary, adultsCount = 1, hasBreakfast = false, propertyIdentifier = null }) {
+function calculateReservationTotals({ pricingSummary, adultsCount = 1, hasBreakfast = false, propertyIdentifier = null, unitsCount = 1 }) {
   const durationDays = pricingSummary && pricingSummary.durationDays > 0 ? pricingSummary.durationDays : 0;
-  const baseCost = pricingSummary ? pricingSummary.totalCost : 0;
+  const singleUnitCost = pricingSummary
+    ? (typeof pricingSummary.totalCost === "number"
+        ? pricingSummary.totalCost
+        : ((Number(pricingSummary.basePricePerNight || pricingSummary.rate) || 0) * durationDays))
+    : 0;
+  const units = Math.max(1, parseInt(unitsCount, 10) || 1);
+  const baseCost = singleUnitCost * units;
   const formattedBaseCost = `KSh ${baseCost.toLocaleString()}`;
   const propId = propertyIdentifier || (pricingSummary && (pricingSummary.propertyId || pricingSummary.propertyName || pricingSummary.unitDisplayName));
   const breakfastRate = resolveBreakfastRate(propId);
@@ -437,6 +445,7 @@ function calculateReservationTotals({ pricingSummary, adultsCount = 1, hasBreakf
     formattedGrandTotal,
     durationDays,
     adultsCount,
+    unitsCount: units,
     hasBreakfast,
     isValid
   };
@@ -548,10 +557,11 @@ function resolveStayPricing(propertyOrOfferingId, checkInDateString, checkOutDat
 /**
  * Builds standard plain-text WhatsApp stay inquiry message with structured formatting.
  */
-function buildInquiryMessage({ guestName, contactPhone, guestEmail, propertyName, checkInDate, checkOutDate, stayDurationText, adultsCount, childrenCount, estimatedTotal, selectedAddons = [], specialRequests = "", preferredContactMethod = "" }) {
+function buildInquiryMessage({ guestName, contactPhone, guestEmail, propertyName, checkInDate, checkOutDate, stayDurationText, adultsCount, childrenCount, estimatedTotal, selectedAddons = [], specialRequests = "", preferredContactMethod = "", unitsCount = 1 }) {
   const emailLine = guestEmail ? `• Email: ${guestEmail}\n` : "";
   const preferredChannelLine = preferredContactMethod ? `• Preferred Contact: ${preferredContactMethod}\n` : "";
   const childrenText = childrenCount > 0 ? `, ${childrenCount} Child(ren)` : "";
+  const unitsText = unitsCount > 1 ? ` (${unitsCount} Units)` : "";
   const estimatedRateLine = estimatedTotal ? `• Estimated Rate: ${estimatedTotal}\n` : "";
 
   let addonsBlock = "";
@@ -567,7 +577,7 @@ function buildInquiryMessage({ guestName, contactPhone, guestEmail, propertyName
     `• Contact: ${contactPhone}\n` +
     emailLine +
     preferredChannelLine +
-    `• Accommodation: ${propertyName}\n` +
+    `• Accommodation: ${propertyName}${unitsText}\n` +
     `• Check-In: ${checkInDate}\n` +
     `• Check-Out: ${checkOutDate} (${stayDurationText})\n` +
     `• Guests: ${adultsCount} Adult(s)${childrenText}\n` +
@@ -800,6 +810,7 @@ function extractBookingFormData() {
   const durationDays = calculateDateDifferenceInDays(checkInElement ? checkInElement.value : "", checkOutElement ? checkOutElement.value : "");
   const validNights = durationDays > 0 ? durationDays : 1;
 
+  const unitsCount = typeof getBookingUnitsCount === "function" ? getBookingUnitsCount() : 1;
   const selectedAddons = extractSelectedAddons({ adultsCount, validNights, breakfastChecked, propertyIdentifier: propertyValue });
 
   return {
@@ -812,6 +823,7 @@ function extractBookingFormData() {
     checkOut: checkOutElement ? checkOutElement.value : "",
     adults: adultsCount,
     children: childrenCount,
+    unitsCount,
     specialRequests: specialRequestsElement ? specialRequestsElement.value.trim() : "",
     selectedAddons,
     hasBreakfast: breakfastChecked,
@@ -844,13 +856,21 @@ function validateBookingFormData(data) {
     return { message: "Check-In date cannot be in the past.", fieldElement: data.checkInElement };
   }
 
-  // Combined party-size capacity check against room maximum
+  // Combined party-size capacity check against room maximum and units count
   const offering = typeof getOfferingById === "function" ? getOfferingById(data.property) : null;
-  if (offering && offering.maxGuests) {
+  const unitsCount = Math.max(1, parseInt(data.unitsCount, 10) || 1);
+  if (offering) {
+    const maxGuestsPerUnit = offering.maxGuests || 2;
+    const maxAdultsPerUnit = offering.maxAdults || 2;
     const totalGuests = (Number(data.adults) || 0) + (Number(data.children) || 0);
-    if (totalGuests > offering.maxGuests) {
+    const totalAdults = Number(data.adults) || 0;
+    const totalMaxGuests = maxGuestsPerUnit * unitsCount;
+    const totalMaxAdults = maxAdultsPerUnit * unitsCount;
+
+    if (totalAdults > totalMaxAdults || totalGuests > totalMaxGuests) {
+      const unitsNeeded = Math.max(Math.ceil(totalAdults / maxAdultsPerUnit), Math.ceil(totalGuests / maxGuestsPerUnit));
       return {
-        message: `${offering.name} accommodates up to ${offering.maxGuests} guests (you selected ${totalGuests}). For larger parties, please request multiple cottages or contact our reservation desk for group arrangements.`,
+        message: `${offering.name} accommodates up to ${maxGuestsPerUnit} guests (you selected ${totalGuests}) per unit (${offering.bedType || '1 Bed'}). For your party of ${totalGuests} guests, please reserve at least ${unitsNeeded} units.`,
         fieldElement: document.getElementById("guests-adults") || data.phoneElement
       };
     }
@@ -1089,6 +1109,58 @@ function handleResidenceCardKeydown(event, propertyValue, cardElement) {
 }
 
 /**
+ * Retrieves the current user-requested unit count from the DOM or defaults to 1.
+ */
+function getBookingUnitsCount() {
+  if (typeof document === "undefined") return 1;
+  const input = document.getElementById("booking-units-count");
+  if (!input) return 1;
+  const val = parseInt(input.value, 10);
+  return isNaN(val) || val < 1 ? 1 : val;
+}
+
+/**
+ * Dynamically updates requested units count and triggers stay recalculation.
+ */
+function setBookingUnitsCount(count) {
+  if (typeof document === "undefined") return;
+  const input = document.getElementById("booking-units-count");
+  const wrapper = document.getElementById("booking-units-wrapper");
+  const parsed = Math.max(1, parseInt(count, 10) || 1);
+  if (input) input.value = String(parsed);
+  if (wrapper) {
+    if (parsed > 1) {
+      wrapper.classList.remove("hidden");
+    }
+  }
+  handleDateOrAddonChange();
+}
+
+/**
+ * Increments or decrements requested unit count.
+ */
+function adjustBookingUnits(delta) {
+  const current = getBookingUnitsCount();
+  const next = Math.max(1, Math.min(10, current + delta));
+  setBookingUnitsCount(next);
+}
+
+/**
+ * Convenience helper to switch property to Tower Cottages 2-Bedroom Apartment.
+ */
+function selectTowerCottages2Br() {
+  if (typeof document === "undefined") return;
+  const towerCard = document.querySelector('.residence-card[data-value*="Tower"]');
+  if (towerCard && typeof selectResidenceCard === "function") {
+    selectResidenceCard("Tower Cottages - 2-Bedroom Apartment", towerCard);
+    setBookingUnitsCount(1);
+  } else {
+    syncPropertyDropdown("Tower Cottages - 2-Bedroom Apartment");
+    setBookingUnitsCount(1);
+  }
+}
+
+/**
  * Triggered on date, guest, or add-on checkbox changes to recalculate live totals.
  */
 function handleDateOrAddonChange() {
@@ -1096,6 +1168,7 @@ function handleDateOrAddonChange() {
   const checkInElement = document.getElementById("check-in");
   const checkOutElement = document.getElementById("check-out");
   const adultsElement = document.getElementById("guests-adults") || document.getElementById("num-guests");
+  const childrenElement = document.getElementById("guests-children");
   const breakfastCheckbox = document.getElementById("addon-breakfast");
 
   if (!propertyElement) return;
@@ -1104,13 +1177,32 @@ function handleDateOrAddonChange() {
   const checkInDate = checkInElement ? checkInElement.value : "";
   const checkOutDate = checkOutElement ? checkOutElement.value : "";
   const adultsCount = adultsElement ? parseInt(adultsElement.value, 10) || 2 : 2;
+  const childrenCount = childrenElement ? parseInt(childrenElement.value, 10) || 0 : 0;
+  const totalGuests = adultsCount + childrenCount;
+
+  // Auto-sync units count visibility if total guests exceed single unit capacity
+  const offering = typeof getOfferingById === "function" ? getOfferingById(propertyValue) : null;
+  const maxGuests = offering && offering.maxGuests ? offering.maxGuests : 2;
+  const maxAdults = offering && offering.maxAdults ? offering.maxAdults : 2;
+  const unitsNeeded = Math.max(Math.ceil(adultsCount / maxAdults), Math.ceil(totalGuests / maxGuests));
+  const unitsWrapper = document.getElementById("booking-units-wrapper");
+  const unitsGuidanceText = document.getElementById("booking-units-guidance-text");
+
+  let unitsCount = getBookingUnitsCount();
+  if (unitsNeeded > 1 && unitsWrapper) {
+    unitsWrapper.classList.remove("hidden");
+    if (unitsGuidanceText) {
+      unitsGuidanceText.textContent = `${unitsNeeded} units needed for ${totalGuests} guests (${offering ? offering.bedType || '1 Bed' : '1 Bed'})`;
+    }
+  }
 
   const pricingSummary = resolveStayPricing(propertyValue, checkInDate, checkOutDate);
   const totals = calculateReservationTotals({
     pricingSummary,
     adultsCount,
     hasBreakfast: Boolean(breakfastCheckbox && breakfastCheckbox.checked),
-    propertyIdentifier: propertyValue
+    propertyIdentifier: propertyValue,
+    unitsCount
   });
 
   const breakfastRow = document.getElementById("summary-breakfast-row");
@@ -1152,8 +1244,12 @@ function renderPriceSummary(summary) {
   const summaryNightsElement = document.getElementById("summary-nights");
   const summaryTotalElement = document.getElementById("summary-total");
 
-  if (summaryUnitElement) summaryUnitElement.textContent = summary.unitDisplayName;
-  if (summaryRateElement) summaryRateElement.textContent = summary.rateBasisText;
+  const unitsCount = typeof getBookingUnitsCount === "function" ? getBookingUnitsCount() : 1;
+  const unitPrefix = unitsCount > 1 ? `${unitsCount} x ` : "";
+  const rateSuffix = unitsCount > 1 ? ` (${unitsCount} units)` : "";
+
+  if (summaryUnitElement) summaryUnitElement.textContent = `${unitPrefix}${summary.unitDisplayName}`;
+  if (summaryRateElement) summaryRateElement.textContent = `${summary.rateBasisText}${rateSuffix}`;
   if (summaryNightsElement) summaryNightsElement.textContent = summary.durationText;
   if (summaryTotalElement) summaryTotalElement.textContent = summary.formattedTotal;
 }
@@ -1384,17 +1480,59 @@ function renderAvailabilityLoading() {
   `;
 }
 
-function renderAvailabilityPreApproved(unitsCount, categoryName) {
+function renderAvailabilityPreApproved(unitsCount, categoryName, totalGuests = 0, reservedUnits = 1) {
   const unitsText = unitsCount !== undefined && unitsCount > 0 ? ` (${unitsCount} unit${unitsCount === 1 ? '' : 's'} available to request)` : '';
   const categoryLabel = categoryName ? `${categoryName} ` : "Dates ";
+  const multiUnitNotice = reservedUnits > 1 ? ` • ${reservedUnits} units reserved for ${totalGuests} guests` : '';
   return `
     <div class="flex items-center justify-between p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 text-xs shadow-sm">
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 flex-wrap">
         <span class="text-emerald-600 font-bold">✓</span>
-        <span class="font-semibold">${categoryLabel}Available to Request${unitsText}</span>
+        <span class="font-semibold">${categoryLabel}Available to Request${unitsText}${multiUnitNotice}</span>
         <span class="text-emerald-700/80 hidden sm:inline">• Direct host reservation</span>
       </div>
       <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-200/60 px-2 py-0.5 rounded text-emerald-800">Available</span>
+    </div>
+  `;
+}
+
+function renderAvailabilityCapacityWarning({ offering, totalGuests, adults, children, unitsNeeded, availableUnitsCount, categoryName }) {
+  const name = offering ? offering.name : (categoryName || "Selected Residence");
+  const bedType = offering && offering.bedType ? offering.bedType : "1 Bed";
+  const maxGuests = offering && offering.maxGuests ? offering.maxGuests : 2;
+  const singleRate = offering && offering.rate ? offering.rate : 3000;
+  const unitsText = availableUnitsCount !== undefined ? `• ${availableUnitsCount} unit${availableUnitsCount === 1 ? '' : 's'} available to request` : "";
+  const multiRate = (singleRate * unitsNeeded).toLocaleString();
+
+  const isDaradOrDarling = offering && offering.id && (offering.id.includes("darad") || offering.id.includes("darling"));
+  const showTowerSuggestion = isDaradOrDarling && totalGuests <= 4;
+
+  return `
+    <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-950 text-xs shadow-sm space-y-2.5">
+      <div class="flex items-start gap-2.5">
+        <span class="text-amber-600 text-base font-bold shrink-0">⚠️</span>
+        <div class="space-y-1">
+          <span class="font-bold block text-deep-forest text-xs sm:text-sm">
+            Party of ${totalGuests} Exceeds 1-Unit Capacity (${bedType} • Max ${maxGuests} Guests)
+          </span>
+          <p class="text-driftwood text-[11px] leading-snug">
+            <strong>${name}</strong> features ${bedType} and accommodates up to <strong>${maxGuests} guests</strong> per unit. For your party of <strong>${totalGuests} guests</strong> (${adults} Adults${children > 0 ? `, ${children} Children` : ""}), please reserve at least <strong>${unitsNeeded} units</strong>.
+          </p>
+        </div>
+      </div>
+      <div class="pt-2 border-t border-amber-200/80 flex items-center justify-between flex-wrap gap-2">
+        <span class="text-[11px] font-semibold text-emerald-800">
+          ✓ ${unitsNeeded} units needed ${unitsText}
+        </span>
+        <button type="button" onclick="setBookingUnitsCount(${unitsNeeded})" class="bg-deep-forest hover:bg-forest-dark text-champagne text-[11px] font-bold px-3.5 py-1.5 rounded-lg transition shadow-sm cursor-pointer">
+          Select ${unitsNeeded} Units (KSh ${multiRate} / night)
+        </button>
+      </div>
+      ${showTowerSuggestion ? `
+      <div class="pt-1.5 border-t border-amber-200/50 text-[11px] text-driftwood">
+        💡 <strong>Prefer 1 accommodation for everyone?</strong> Explore our <a href="javascript:void(0)" onclick="selectTowerCottages2Br()" class="text-champagne font-bold underline hover:text-champagne-light">Tower Cottages 2-Bedroom Apartment</a> (2 bedrooms, fits 4 guests for KSh 2,500/night).
+      </div>
+      ` : ""}
     </div>
   `;
 }
@@ -1461,15 +1599,38 @@ async function triggerLiveAvailabilityCheck() {
   const adults = adultsElement ? adultsElement.value : "2";
   const children = childrenElement ? childrenElement.value : "0";
 
-  if (!checkIn || !checkOut || isInvalidDateRange(checkIn, checkOut) || isPastDate(checkIn, getNairobiDateString(0))) {
-    container.innerHTML = "";
-    return;
-  }
+  const parsedAdults = parseInt(adults, 10) || 1;
+  const parsedChildren = parseInt(children, 10) || 0;
+  const totalGuests = parsedAdults + parsedChildren;
 
   const propertyId = CrmSyncService.resolvePropertyId(property);
   const offering = typeof getOfferingById === "function" ? getOfferingById(property) : null;
   const offeringId = offering ? offering.id : "";
   const offeringName = offering ? offering.name : "";
+
+  const maxGuests = offering && offering.maxGuests ? offering.maxGuests : 2;
+  const maxAdults = offering && offering.maxAdults ? offering.maxAdults : 2;
+  const unitsNeeded = Math.max(Math.ceil(parsedAdults / maxAdults), Math.ceil(totalGuests / maxGuests));
+  const currentUnits = typeof getBookingUnitsCount === "function" ? getBookingUnitsCount() : 1;
+
+  // Enforce immediate client-side capacity check: party size exceeds single-unit capacity
+  if (unitsNeeded > 1 && currentUnits < unitsNeeded) {
+    container.innerHTML = renderAvailabilityCapacityWarning({
+      offering,
+      totalGuests,
+      adults: parsedAdults,
+      children: parsedChildren,
+      unitsNeeded,
+      availableUnitsCount: undefined,
+      categoryName: offeringName
+    });
+    return;
+  }
+
+  if (!checkIn || !checkOut || isInvalidDateRange(checkIn, checkOut) || isPastDate(checkIn, getNairobiDateString(0))) {
+    container.innerHTML = "";
+    return;
+  }
 
   container.innerHTML = renderAvailabilityLoading();
 
@@ -1479,8 +1640,9 @@ async function triggerLiveAvailabilityCheck() {
       checkInDate: checkIn,
       checkOutDate: checkOut,
       offeringId,
-      adults,
-      children
+      adults: parsedAdults,
+      children: parsedChildren,
+      unitsCount: currentUnits
     });
     // Guard against stale asynchronous responses
     if (currentSequence !== availabilityCheckSequenceId) return;
@@ -1490,13 +1652,39 @@ async function triggerLiveAvailabilityCheck() {
       return;
     }
 
+    if (result.status === "capacity_exceeded") {
+      container.innerHTML = renderAvailabilityCapacityWarning({
+        offering,
+        totalGuests,
+        adults: parsedAdults,
+        children: parsedChildren,
+        unitsNeeded: result.unitsNeeded || unitsNeeded,
+        availableUnitsCount: result.availableUnitsCount,
+        categoryName: offeringName || result.categoryName
+      });
+      return;
+    }
+
+    if (result.status === "insufficient_units") {
+      container.innerHTML = `
+        <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-amber-950 text-xs shadow-sm space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="text-amber-600 font-bold">⚠️</span>
+            <span class="font-bold">Only ${result.availableUnitsCount || 0} unit${(result.availableUnitsCount || 0) === 1 ? '' : 's'} available (Requested: ${result.requestedUnits || currentUnits})</span>
+          </div>
+          <p class="text-[11px] text-driftwood">We cannot accommodate ${currentUnits} separate units for these exact dates. Please adjust unit count or submit inquiry for custom accommodation arrangement.</p>
+        </div>
+      `;
+      return;
+    }
+
     if (result.isAvailable) {
       const unitsCount = result.availableUnitsCount !== undefined ? result.availableUnitsCount : result.availableCount;
       const categoryLabel = offeringName || result.categoryName || "";
       const isLimited = (result.status === "limited") || (unitsCount !== undefined && unitsCount > 0 && unitsCount <= 2);
       container.innerHTML = isLimited
         ? renderAvailabilityHighDemand(unitsCount, categoryLabel)
-        : renderAvailabilityPreApproved(unitsCount, categoryLabel);
+        : renderAvailabilityPreApproved(unitsCount, categoryLabel, totalGuests, currentUnits);
     } else {
       container.innerHTML = renderAvailabilitySoldOut();
     }
@@ -3152,6 +3340,11 @@ if (typeof module !== "undefined" && module.exports) {
     renderAvailabilityPreApproved,
     renderAvailabilityHighDemand,
     renderAvailabilitySoldOut,
+    renderAvailabilityCapacityWarning,
+    getBookingUnitsCount,
+    setBookingUnitsCount,
+    adjustBookingUnits,
+    selectTowerCottages2Br,
     generateFallbackInquiryId,
     trackBookingFunnelEvent
   };

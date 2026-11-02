@@ -24,12 +24,15 @@ const BEAKIM_CATALOG = {
         rate: 4000,
         rateBasis: "per night",
         units: 3,
-        maxAdults: 3,
-        maxChildren: 2,
-        maxGuests: 4,
+        bedrooms: 1,
+        beds: 1,
+        bedType: "1 King Bed",
+        maxAdults: 2,
+        maxChildren: 1,
+        maxGuests: 3,
         hasAc: true,
         amenities: ["Air Conditioning", "Private Living Room", "Kitchenette", "Private Patio", "2 Resort Pools", "High-Speed Wi-Fi", "24/7 Security"],
-        description: "Standalone 1-bedroom holiday cottage with private living lounge, air conditioning, kitchenette, and garden terrace."
+        description: "Standalone 1-bedroom holiday cottage with private living lounge, 1 king bed, air conditioning, kitchenette, and garden terrace (accommodates 2 adults + 1 child)."
       },
       {
         id: "darad-std-no-ac",
@@ -38,12 +41,14 @@ const BEAKIM_CATALOG = {
         rate: 1700,
         rateBasis: "per night",
         units: 14,
+        beds: 1,
+        bedType: "1 Double Bed",
         maxAdults: 2,
         maxChildren: 1,
         maxGuests: 2,
         hasAc: false,
         amenities: ["Ceiling Fan", "Ensuite Washroom", "Shared Kitchen (3 Rooms)", "2 Resort Pools", "High-Speed Wi-Fi", "24/7 Security"],
-        description: "Budget-friendly standard room with cooling ceiling fan, ensuite washroom, and access to a clean kitchen shared with 2 other rooms."
+        description: "Budget-friendly standard room with 1 double bed, cooling ceiling fan, ensuite washroom, and access to a clean kitchen shared with 2 other rooms (max 2 guests)."
       },
       {
         id: "darad-std-ac",
@@ -52,12 +57,14 @@ const BEAKIM_CATALOG = {
         rate: 2300,
         rateBasis: "per night",
         units: 7,
+        beds: 1,
+        bedType: "1 Double Bed",
         maxAdults: 2,
         maxChildren: 1,
         maxGuests: 2,
         hasAc: true,
         amenities: ["Air Conditioning", "Ensuite Washroom", "Shared Kitchen (3 Rooms)", "2 Resort Pools", "High-Speed Wi-Fi", "24/7 Security"],
-        description: "Comfortable standard room with split-unit air conditioning, ensuite bathroom, and access to a shared kitchen with 2 other rooms."
+        description: "Comfortable standard room with 1 double bed, split-unit air conditioning, ensuite bathroom, and access to a shared kitchen with 2 other rooms (max 2 guests)."
       },
       {
         id: "darad-superior-ac",
@@ -66,12 +73,14 @@ const BEAKIM_CATALOG = {
         rate: 3000,
         rateBasis: "per night",
         units: 12,
+        beds: 1,
+        bedType: "1 King/Queen Bed",
         maxAdults: 2,
         maxChildren: 1,
         maxGuests: 2,
         hasAc: true,
         amenities: ["Air Conditioning", "Ensuite Washroom", "Premium Finishes", "2 Resort Pools", "High-Speed Wi-Fi", "24/7 Security"],
-        description: "Spacious ensuite superior room featuring premium coastal finishes, air conditioning, pool access, and tranquil garden ambience."
+        description: "Spacious ensuite superior room featuring 1 king/queen bed, premium coastal finishes, air conditioning, pool access, and tranquil garden ambience (max 2 guests)."
       },
       {
         id: "darad-studio-kitchenette",
@@ -80,12 +89,14 @@ const BEAKIM_CATALOG = {
         rate: 3000,
         rateBasis: "per night",
         units: 9,
+        beds: 1,
+        bedType: "1 Double Bed",
         maxAdults: 2,
         maxChildren: 1,
         maxGuests: 2,
         hasAc: true,
         amenities: ["Air Conditioning", "Private Kitchenette", "Ensuite Washroom", "2 Resort Pools", "High-Speed Wi-Fi", "24/7 Security"],
-        description: "Independent studio suite complete with its own private kitchenette, ensuite bathroom, split AC, and resort amenities."
+        description: "Independent studio suite complete with 1 double bed, its own private kitchenette, ensuite bathroom, split AC, and resort amenities (max 2 guests)."
       }
     ]
   },
@@ -110,12 +121,14 @@ const BEAKIM_CATALOG = {
         rateBasis: "per night",
         units: 3,
         bedrooms: 2,
+        beds: 2,
+        bedType: "2 Bedrooms (2 Queen Beds)",
         maxAdults: 4,
         maxChildren: 2,
         maxGuests: 4,
         hasAc: true,
         amenities: ["Full Kitchen", "Living Room", "Air Conditioning", "High-Speed Wi-Fi", "Gated Compound", "30s to Naivas"],
-        description: "Fully furnished 2-bedroom self-catering apartment with complete kitchen, secure gated parking, located 30 seconds behind Naivas Supermarket Ukunda. Fits up to 4 guests (no pool on site)."
+        description: "Fully furnished 2-bedroom self-catering apartment with complete kitchen, 2 queen beds, secure gated parking, located 30 seconds behind Naivas Supermarket Ukunda. Fits up to 4 guests (no pool on site)."
       }
     ]
   },
@@ -138,12 +151,14 @@ const BEAKIM_CATALOG = {
         rate: 5000,
         rateBasis: "per night",
         units: 16,
+        beds: 1,
+        bedType: "1 King Bed",
         maxAdults: 2,
         maxChildren: 1,
         maxGuests: 2,
         hasAc: true,
         amenities: ["Private Balcony", "Kitchenette", "Swimming Pool", "Air Conditioning", "High-Speed Wi-Fi", "Beach Road Access"],
-        description: "Premium deluxe holiday studio featuring a private balcony, equipped kitchenette, swimming pool access, and prime Diani Beach Road location."
+        description: "Premium deluxe holiday studio featuring 1 king bed, private balcony, equipped kitchenette, swimming pool access, and prime Diani Beach Road location (max 2 guests)."
       }
     ],
     conferencePackages: [

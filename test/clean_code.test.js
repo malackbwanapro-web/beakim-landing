@@ -35,6 +35,7 @@ const {
   buildConferenceRfpMessage,
   renderAvailabilityUnknown,
   renderInquiryNetworkFailure,
+  renderAvailabilityCapacityWarning,
   generateFallbackInquiryId
 } = require("../assets/js/main.js");
 
@@ -1066,4 +1067,100 @@ assert.ok(darlingRawContent.includes('id="addon-breakfast-price-badge"'), "diani
 
 console.log("   ✅ Dynamic breakfast add-on eligibility correctly hides preferences, renumbers steps, and dynamically updates KSh 500 vs KSh 1,000 pricing.");
 
-console.log("\n🎉 ALL 31 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 32: Unit Capacity Validation & Multi-Unit Availability Guidance
+console.log("32. Testing Unit Capacity Validation & Multi-Unit Availability Guidance...");
+
+// 1. Catalog capacity verification
+const studioOffering = getOfferingById("darad-studio-kitchenette");
+assert.strictEqual(studioOffering.maxGuests, 2, "Ensuite Studio maxGuests must be 2");
+assert.strictEqual(studioOffering.beds, 1, "Ensuite Studio bed count must be 1");
+assert.strictEqual(studioOffering.bedType, "1 Double Bed", "Ensuite Studio bedType must be '1 Double Bed'");
+
+const cottageOffering = getOfferingById("darad-cottage");
+assert.strictEqual(cottageOffering.maxGuests, 3, "Garden View Cottage maxGuests must be 3");
+assert.strictEqual(cottageOffering.maxAdults, 2, "Garden View Cottage maxAdults must be 2");
+assert.strictEqual(cottageOffering.maxChildren, 1, "Garden View Cottage maxChildren must be 1");
+assert.strictEqual(cottageOffering.beds, 1, "Garden View Cottage bed count must be 1");
+
+const towerOffering = getOfferingById("tower-2br");
+assert.strictEqual(towerOffering.maxGuests, 4, "Tower Cottages 2BR maxGuests must be 4");
+assert.strictEqual(towerOffering.beds, 2, "Tower Cottages 2BR beds must be 2");
+
+// 2. Client-side booking form validation
+// 3 adults on 1 studio unit should fail
+const invalidPartySingleStudio = validateBookingFormData({
+  name: "John Doe",
+  phoneNumber: "+254712345678",
+  checkIn: getNairobiDateString(1),
+  checkOut: getNairobiDateString(3),
+  property: "darad-studio-kitchenette",
+  adults: 3,
+  children: 0,
+  unitsCount: 1
+});
+assert.ok(invalidPartySingleStudio, "3 guests on 1 studio unit must fail validation");
+assert.ok(invalidPartySingleStudio.message.includes("please reserve at least 2 units"), "Error message must state units needed");
+
+// 3 adults on 2 studio units should pass
+const validPartyMultiStudio = validateBookingFormData({
+  name: "John Doe",
+  phoneNumber: "+254712345678",
+  checkIn: getNairobiDateString(1),
+  checkOut: getNairobiDateString(3),
+  property: "darad-studio-kitchenette",
+  adults: 3,
+  children: 0,
+  unitsCount: 2
+});
+assert.strictEqual(validPartyMultiStudio, null, "3 guests across 2 studio units must pass validation");
+
+// 2 adults + 1 child on Garden View Cottage should pass
+const validCottageFamily = validateBookingFormData({
+  name: "Jane Doe",
+  phoneNumber: "+254712345678",
+  checkIn: getNairobiDateString(1),
+  checkOut: getNairobiDateString(3),
+  property: "darad-cottage",
+  adults: 2,
+  children: 1,
+  unitsCount: 1
+});
+assert.strictEqual(validCottageFamily, null, "2 adults + 1 child on Garden View Cottage must pass validation");
+
+// 3. Multi-unit reservation totals calculation
+const studioTotalsMulti = calculateReservationTotals({
+  pricingSummary: { rate: 3500, totalCost: 7000, durationDays: 2, isValidRange: true },
+  adultsCount: 3,
+  hasBreakfast: false,
+  propertyIdentifier: "darad-studio-kitchenette",
+  unitsCount: 2
+});
+assert.strictEqual(studioTotalsMulti.unitsCount, 2, "Totals must record unitsCount = 2");
+assert.strictEqual(studioTotalsMulti.baseCost, 14000, "Base cost for 2 units @ 3500 x 2 nights must be 14,000");
+assert.strictEqual(studioTotalsMulti.grandTotal, 14000, "Grand total must be 14,000");
+
+// 4. Capacity warning UI rendering
+const warningHtml = renderAvailabilityCapacityWarning({
+  offering: studioOffering,
+  totalGuests: 3,
+  adults: 3,
+  children: 0,
+  unitsNeeded: 2,
+  availableUnitsCount: 3,
+  categoryName: studioOffering.name
+});
+assert.ok(warningHtml.includes("Party of 3 Exceeds 1-Unit Capacity"), "Warning must state party exceeds 1-unit capacity");
+assert.ok(warningHtml.includes("1 Double Bed • Max 2 Guests"), "Warning must specify bed count and max capacity");
+assert.ok(warningHtml.includes("Select 2 Units"), "Warning must offer button to select 2 units");
+assert.ok(warningHtml.includes("Tower Cottages 2-Bedroom Apartment"), "Warning must suggest Tower Cottages 2-Bedroom for parties <= 4");
+
+// 5. Verify all HTML templates contain #booking-units-wrapper
+const towerRawContent = fs.readFileSync(path.join(__dirname, "..", "tower-cottages.html"), "utf8");
+assert.ok(indexContent.includes('id="booking-units-wrapper"'), "index.html must have id='booking-units-wrapper'");
+assert.ok(daradRawContent.includes('id="booking-units-wrapper"'), "beakim-darad.html must have id='booking-units-wrapper'");
+assert.ok(darlingRawContent.includes('id="booking-units-wrapper"'), "diani-darling.html must have id='booking-units-wrapper'");
+assert.ok(towerRawContent.includes('id="booking-units-wrapper"'), "tower-cottages.html must have id='booking-units-wrapper'");
+
+console.log("   ✅ Unit capacity validation, multi-unit calculation, and capacity warning UI verified 100%.");
+
+console.log("\n🎉 ALL 32 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");

@@ -1064,6 +1064,22 @@
               </div>
             </div>
 
+            <!-- Dynamic Units Count (Auto-expanded when party exceeds single unit capacity) -->
+            <div id="booking-units-wrapper" class="hidden flex flex-col gap-1.5 p-3 rounded-xl bg-champagne/10 border border-champagne/30">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="text-xs font-bold text-deep-forest block">Residences Required</span>
+                  <span class="text-[11px] text-driftwood" id="booking-units-guidance-text">Based on party size</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button type="button" onclick="adjustBookingUnits(-1)" class="w-7 h-7 rounded-lg bg-white border border-deep-forest/20 text-deep-forest font-bold text-sm flex items-center justify-center hover:bg-champagne/20 transition cursor-pointer" aria-label="Decrease units">−</button>
+                  <input type="number" id="booking-units-count" min="1" max="10" value="1" readonly
+                         class="w-10 text-center bg-transparent font-bold text-sm text-deep-forest outline-none" />
+                  <button type="button" onclick="adjustBookingUnits(1)" class="w-7 h-7 rounded-lg bg-white border border-deep-forest/20 text-deep-forest font-bold text-sm flex items-center justify-center hover:bg-champagne/20 transition cursor-pointer" aria-label="Increase units">+</button>
+                </div>
+              </div>
+            </div>
+
             <!-- Live Pre-Submission Availability Badge -->
             <div id="availability-status-container" class="pt-2"></div>
           </div>
