@@ -830,4 +830,130 @@ const vercelIgnoreContent = fs.readFileSync(vercelIgnorePath, "utf-8");
 assert.ok(vercelIgnoreContent.includes("Beakim CRM"), ".vercelignore must ignore Beakim CRM");
 console.log("   ✅ Booking honesty states and Vercel deployment protections assert 100%.");
 
-console.log("\n🎉 ALL 25 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 26: Combined Party-Size Capacity Checks
+console.log("26. Testing Combined Party-Size Capacity Checks...");
+const validTowerParty = {
+  name: "Jane Mwangi",
+  phoneNumber: "0712345678",
+  countryCode: "+254",
+  property: "Tower Cottages - 2-Bedroom Apartment",
+  checkIn: getNairobiDateString(1),
+  checkOut: getNairobiDateString(3),
+  adults: 2,
+  children: 2
+};
+assert.strictEqual(validateBookingFormData(validTowerParty), null, "2 adults + 2 children should be valid for Tower 2-BR (max 4)");
+
+const oversizeTowerParty = {
+  ...validTowerParty,
+  adults: 3,
+  children: 2
+};
+const towerCapacityError = validateBookingFormData(oversizeTowerParty);
+assert.ok(towerCapacityError, "5 total guests must fail capacity check for Tower Cottages");
+assert.ok(towerCapacityError.message.includes("accommodates up to 4 guests (you selected 5)"), "Error must clearly cite max capacity and selected count");
+
+const oversizeDaradParty = {
+  name: "John Kamau",
+  phoneNumber: "0712345678",
+  countryCode: "+254",
+  property: "Beakim Darad - Standard Room (Without AC)",
+  checkIn: getNairobiDateString(1),
+  checkOut: getNairobiDateString(3),
+  adults: 2,
+  children: 1
+};
+const daradCapacityError = validateBookingFormData(oversizeDaradParty);
+assert.ok(daradCapacityError, "3 total guests must fail capacity check for Darad Standard (max 2)");
+assert.ok(daradCapacityError.message.includes("accommodates up to 2 guests (you selected 3)"), "Error must cite 2 guest maximum");
+console.log("   ✅ Combined party-size capacity checks prevent overbooking beyond unit maximums.");
+
+// TEST 27: Idempotency Key & In-Flight Intake Lock Protection
+console.log("27. Testing Idempotency Key & In-Flight Submission Protection...");
+const samplePayload = CrmSyncService.buildPayload({
+  formData: validTowerParty,
+  grandTotal: 5000,
+  formattedContactPhone: "+254 712345678"
+});
+assert.ok(samplePayload.idempotencyKey, "Payload must include an idempotencyKey");
+assert.ok(samplePayload.idempotencyKey.startsWith("IDEMP-"), "idempotencyKey must follow IDEMP- prefix format");
+
+const crmInquiriesLib = require("../Beakim CRM/lib/inquiries");
+const testIdempKey = "IDEMP-TEST-DEDUP-" + Date.now();
+const testInquiryData = {
+  idempotencyKey: testIdempKey,
+  guestName: "Deduplication Tester",
+  guestPhone: "+254 700 000 001",
+  propertyId: "prop-4",
+  propertyName: "Tower Cottages",
+  checkInDate: "2026-11-20",
+  checkOutDate: "2026-11-22",
+  adults: 2,
+  children: 0,
+  estimatedTotal: 5000
+};
+
+const lead1 = crmInquiriesLib.createInquiry(testInquiryData, "TEST_RUNNER");
+const lead2 = crmInquiriesLib.createInquiry(testInquiryData, "TEST_RUNNER");
+assert.strictEqual(lead1.id, lead2.id, "Submitting inquiry with identical idempotencyKey must return existing record without duplicating");
+console.log("   ✅ Idempotency keys generated on client and deduplicated at CRM intake.");
+
+// TEST 28: Offering-Specific Availability Filtering & No Silent Fallback
+console.log("28. Testing Category-Specific Availability Filtering & Zero Silent Fallback...");
+const crmDb = require("../Beakim CRM/lib/db").getDb();
+const allUnits = crmDb.units || [];
+
+// 1. Offering mapping check
+const daradStdNoAcUnits = allUnits.filter(u => u.propertyId === "prop-2" && u.unitType === "Standard Room Without AC (Shared Kitchen)");
+assert.strictEqual(daradStdNoAcUnits.length, 14, "Darad Standard Room Without AC has exactly 14 units");
+
+const towerUnits = allUnits.filter(u => u.propertyId === "prop-4" && u.unitType === "2-Bedroom Apartment");
+assert.strictEqual(towerUnits.length, 3, "Tower Cottages has exactly 3 2-bedroom units");
+
+const darlingUnits = allUnits.filter(u => u.propertyId === "prop-3" && u.unitType === "Deluxe Studio with Kitchenette & Private Balcony");
+assert.strictEqual(darlingUnits.length, 16, "Diani Darling Cottages has exactly 16 deluxe studio units");
+
+// 2. Availability route code inspection to ensure no silent fallback
+const routeJsContent = fs.readFileSync(path.resolve(__dirname, "../Beakim CRM/app/api/public/availability/route.js"), "utf8");
+assert.ok(!routeJsContent.includes("Fallback to Darad if unknown"), "Must NOT silently fall back to Darad if property is unknown");
+assert.ok(routeJsContent.includes("OFFERING_TYPE_MAP"), "Route must contain OFFERING_TYPE_MAP for category filtering");
+assert.ok(routeJsContent.includes("categoryName"), "Route must expose categoryName in JSON response");
+console.log("   ✅ Category-specific unit filtering accurately isolates 14-room inventory and eliminates silent fallbacks.");
+
+// TEST 29: Terms of Service Cancellation Policy & Rate Inclusions Alignment
+console.log("29. Testing Terms of Service Policy Alignment...");
+const tosContent = fs.readFileSync(path.resolve(__dirname, "../terms-of-service.html"), "utf8");
+
+// Verify Section 3 cancellation tiers match BEAKIM_POLICIES
+assert.ok(tosContent.includes("More than 7 days prior to check-in"), "ToS must state >7 days cancellation tier");
+assert.ok(tosContent.includes("3.5% payment processing fee"), "ToS must specify 3.5% payment processing fee deduction");
+assert.ok(tosContent.includes("Between 48 hours and 7 days prior to check-in"), "ToS must state 48h-7d 50% refund tier");
+assert.ok(tosContent.includes("Within 48 hours of check-in:</strong> Deposit is strictly non-refundable"), "ToS must state <48h non-refundable tier");
+assert.ok(!tosContent.includes("14 days prior to arrival"), "ToS must NOT reference outdated 14-day policy");
+
+// Verify swimming pools and cooling amenities
+assert.ok(tosContent.includes("zero pools at Tower Cottages; 2 pools at Darad; 1 pool at Darling"), "ToS must state pool counts accurately per property");
+assert.ok(tosContent.includes("cooling fans in standard rooms"), "ToS must distinguish cooling fans from AC");
+console.log("   ✅ Terms of service perfectly reconciles cancellation tiers and property-specific amenities.");
+
+// TEST 30: Schema.org Entity Linking & Asset Cache Query String Verification
+console.log("30. Testing Schema.org Entity Linking & Asset Cache Busting...");
+const indexContent = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+const towerContent = fs.readFileSync(path.resolve(__dirname, "../tower-cottages.html"), "utf8");
+const daradContent = fs.readFileSync(path.resolve(__dirname, "../beakim-darad.html"), "utf8");
+const darlingContent = fs.readFileSync(path.resolve(__dirname, "../diani-darling.html"), "utf8");
+
+// Schema linking
+assert.ok(indexContent.includes('"@id": "https://www.beakimhospitalitygroup.co.ke/#organization"'), "Homepage must have stable @id for Organization");
+assert.ok(towerContent.includes('"parentOrganization"'), "Tower Cottages schema must link parentOrganization");
+assert.ok(daradContent.includes('"parentOrganization"'), "Darad schema must link parentOrganization");
+assert.ok(darlingContent.includes('"parentOrganization"'), "Darling schema must link parentOrganization");
+
+// Hero preload & cache query strings
+assert.ok(indexContent.includes('rel="preload" as="image" href="assets/hero-bg.webp?v=2.1.0"'), "Homepage must preload hero image with high priority and version tag");
+assert.ok(indexContent.includes('assets/css/styles.css?v=2.1.0'), "Homepage CSS link must have ?v=2.1.0");
+assert.ok(indexContent.includes('assets/js/main.js?v=2.1.0'), "Homepage main.js script must have ?v=2.1.0");
+assert.ok(towerContent.includes('Sleeps Up to 4 Guests (2 Bedrooms)'), "Tower Cottages must claim sleeps up to 4 guests, not 4+");
+console.log("   ✅ Schema.org parentOrganization linked across properties and assets cache-busted with ?v=2.1.0.");
+
+console.log("\n🎉 ALL 30 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");

@@ -84,6 +84,10 @@
       "destination": "https://crm.beakimhospitalitygroup.co.ke/report-payment"
     },
     {
+      "source": "/api/public/:match*",
+      "destination": "https://crm.beakimhospitalitygroup.co.ke/api/public/:match*"
+    },
+    {
       "source": "/api/public/checkout/:match*",
       "destination": "https://crm.beakimhospitalitygroup.co.ke/api/public/checkout/:match*"
     },

@@ -158,13 +158,18 @@ const CrmSyncService = Object.freeze({
 
   buildPayload({ formData, grandTotal, formattedContactPhone }) {
     const isTestMode = isDemoModeActive();
+    const offering = typeof getOfferingById === "function" ? getOfferingById(formData.property) : null;
+    const offeringId = offering ? offering.id : "";
+    const idempotencyKey = "IDEMP-" + Date.now() + "-" + Math.random().toString(36).substring(2, 9);
 
     return {
+      idempotencyKey,
       guestName: formData.name,
       guestPhone: formattedContactPhone,
       guestEmail: formData.email,
       propertyName: formData.property,
       propertyId: this.resolvePropertyId(formData.property),
+      offeringId,
       unitPreference: formData.property,
       checkInDate: formData.checkIn,
       checkOutDate: formData.checkOut,
@@ -181,12 +186,15 @@ const CrmSyncService = Object.freeze({
     };
   },
 
-  async checkAvailability({ propertyId, checkInDate, checkOutDate }) {
+  async checkAvailability({ propertyId, checkInDate, checkOutDate, offeringId, adults, children }) {
     if (!checkInDate || !checkOutDate) return null;
     try {
       const baseEndpoint = this.resolveAvailabilityEndpoint();
       const url = new URL(baseEndpoint);
       if (propertyId) url.searchParams.set("propertyId", propertyId);
+      if (offeringId) url.searchParams.set("offeringId", offeringId);
+      if (adults) url.searchParams.set("adults", String(adults));
+      if (children) url.searchParams.set("children", String(children));
       url.searchParams.set("checkIn", checkInDate);
       url.searchParams.set("checkOut", checkOutDate);
 
@@ -835,6 +843,19 @@ function validateBookingFormData(data) {
   if (isPastDate(data.checkIn, getNairobiDateString(0))) {
     return { message: "Check-In date cannot be in the past.", fieldElement: data.checkInElement };
   }
+
+  // Combined party-size capacity check against room maximum
+  const offering = typeof getOfferingById === "function" ? getOfferingById(data.property) : null;
+  if (offering && offering.maxGuests) {
+    const totalGuests = (Number(data.adults) || 0) + (Number(data.children) || 0);
+    if (totalGuests > offering.maxGuests) {
+      return {
+        message: `${offering.name} accommodates up to ${offering.maxGuests} guests (you selected ${totalGuests}). For larger parties, please request multiple cottages or contact our reservation desk for group arrangements.`,
+        fieldElement: document.getElementById("guests-adults") || data.phoneElement
+      };
+    }
+  }
+
   return null;
 }
 
@@ -1327,13 +1348,14 @@ function renderAvailabilityLoading() {
   `;
 }
 
-function renderAvailabilityPreApproved(unitsCount) {
-  const unitsText = unitsCount !== undefined && unitsCount > 0 ? ` (${unitsCount} residences available)` : '';
+function renderAvailabilityPreApproved(unitsCount, categoryName) {
+  const unitsText = unitsCount !== undefined && unitsCount > 0 ? ` (${unitsCount} unit${unitsCount === 1 ? '' : 's'} available to request)` : '';
+  const categoryLabel = categoryName ? `${categoryName} ` : "Dates ";
   return `
     <div class="flex items-center justify-between p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 text-xs shadow-sm">
       <div class="flex items-center gap-2">
         <span class="text-emerald-600 font-bold">✓</span>
-        <span class="font-semibold">Dates Available to Request${unitsText}</span>
+        <span class="font-semibold">${categoryLabel}Available to Request${unitsText}</span>
         <span class="text-emerald-700/80 hidden sm:inline">• Direct host reservation</span>
       </div>
       <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-200/60 px-2 py-0.5 rounded text-emerald-800">Available</span>
@@ -1353,14 +1375,15 @@ function renderAvailabilityUnknown() {
   `;
 }
 
-function renderAvailabilityHighDemand(unitsCount) {
+function renderAvailabilityHighDemand(unitsCount, categoryName) {
+  const label = categoryName ? `${categoryName} ` : "";
   return `
     <div class="flex items-center justify-between p-2.5 rounded-xl bg-amber-50 border border-amber-300/80 text-amber-900 text-xs shadow-sm">
       <div class="flex items-center gap-2">
         <span class="text-amber-600 font-bold">⚠️</span>
-        <span class="font-bold">High Demand: Only ${unitsCount} residence${unitsCount === 1 ? '' : 's'} available!</span>
+        <span class="font-bold">High Demand: Only ${unitsCount} ${label}unit${unitsCount === 1 ? '' : 's'} remaining!</span>
       </div>
-      <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-200/80 px-2 py-0.5 rounded text-amber-900">Reserve Now</span>
+      <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-200/80 px-2 py-0.5 rounded text-amber-900">Limited Availability</span>
     </div>
   `;
 }
@@ -1386,26 +1409,43 @@ async function triggerLiveAvailabilityCheck() {
   const container = document.getElementById("availability-status-container");
   if (!container) return;
 
+  // Invalidate any pending work and bump sequence ID immediately before any check
+  if (availabilityDebounceTimer) clearTimeout(availabilityDebounceTimer);
+  const currentSequence = ++availabilityCheckSequenceId;
+
   const checkInElement = document.getElementById("check-in");
   const checkOutElement = document.getElementById("check-out");
   const propertyElement = document.getElementById("booking-property");
+  const adultsElement = document.getElementById("guests-adults") || document.getElementById("num-guests");
+  const childrenElement = document.getElementById("guests-children");
 
   const checkIn = checkInElement ? checkInElement.value : "";
   const checkOut = checkOutElement ? checkOutElement.value : "";
   const property = propertyElement ? propertyElement.value : "";
-  const propertyId = CrmSyncService.resolvePropertyId(property);
+  const adults = adultsElement ? adultsElement.value : "2";
+  const children = childrenElement ? childrenElement.value : "0";
 
   if (!checkIn || !checkOut || isInvalidDateRange(checkIn, checkOut) || isPastDate(checkIn, getNairobiDateString(0))) {
     container.innerHTML = "";
     return;
   }
 
-  container.innerHTML = renderAvailabilityLoading();
-  const currentSequence = ++availabilityCheckSequenceId;
+  const propertyId = CrmSyncService.resolvePropertyId(property);
+  const offering = typeof getOfferingById === "function" ? getOfferingById(property) : null;
+  const offeringId = offering ? offering.id : "";
+  const offeringName = offering ? offering.name : "";
 
-  if (availabilityDebounceTimer) clearTimeout(availabilityDebounceTimer);
+  container.innerHTML = renderAvailabilityLoading();
+
   availabilityDebounceTimer = setTimeout(async () => {
-    const result = await CrmSyncService.checkAvailability({ propertyId, checkInDate: checkIn, checkOutDate: checkOut });
+    const result = await CrmSyncService.checkAvailability({
+      propertyId,
+      checkInDate: checkIn,
+      checkOutDate: checkOut,
+      offeringId,
+      adults,
+      children
+    });
     // Guard against stale asynchronous responses
     if (currentSequence !== availabilityCheckSequenceId) return;
 
@@ -1416,10 +1456,11 @@ async function triggerLiveAvailabilityCheck() {
 
     if (result.isAvailable) {
       const unitsCount = result.availableUnitsCount !== undefined ? result.availableUnitsCount : result.availableCount;
+      const categoryLabel = offeringName || result.categoryName || "";
       const isLimited = (result.status === "limited") || (unitsCount !== undefined && unitsCount > 0 && unitsCount <= 2);
       container.innerHTML = isLimited
-        ? renderAvailabilityHighDemand(unitsCount)
-        : renderAvailabilityPreApproved(unitsCount);
+        ? renderAvailabilityHighDemand(unitsCount, categoryLabel)
+        : renderAvailabilityPreApproved(unitsCount, categoryLabel);
     } else {
       container.innerHTML = renderAvailabilitySoldOut();
     }
@@ -1427,6 +1468,24 @@ async function triggerLiveAvailabilityCheck() {
 }
 
 let currentActiveInquiry = null;
+let isInquirySubmissionInFlight = false;
+
+function trackBookingFunnelEvent(eventName, eventParams = {}) {
+  try {
+    if (typeof window !== "undefined" && typeof window.gtag === "function") {
+      const safeParams = { ...eventParams };
+      delete safeParams.guestName;
+      delete safeParams.name;
+      delete safeParams.guestPhone;
+      delete safeParams.phone;
+      delete safeParams.guestEmail;
+      delete safeParams.email;
+      window.gtag("event", eventName, safeParams);
+    }
+  } catch (_) {
+    // Non-blocking telemetry
+  }
+}
 
 function setInquirySubmissionBusy(isBusy) {
   const submitButton = document.getElementById("confirm-submit-inquiry-btn");
@@ -1481,26 +1540,36 @@ async function dispatchInquirySubmission(inquiryPayload) {
 
 async function confirmAndSubmitInquiry() {
   if (!currentActiveInquiry) return;
+  if (isInquirySubmissionInFlight) return;
+  isInquirySubmissionInFlight = true;
   setInquirySubmissionBusy(true);
 
-  const inquiryId = await dispatchInquirySubmission(currentActiveInquiry.inquiryPayload);
-
-  if (!inquiryId) {
-    // Dispatch failed or network unreachable. Preserve draft locally with offline marker
-    const draftId = generateFallbackInquiryId();
-    persistPendingOfflineInquiry(draftId, currentActiveInquiry.inquiryPayload);
-    setInquirySubmissionBusy(false);
-    renderInquiryNetworkFailure(currentActiveInquiry);
-    return;
-  }
-
   try {
-    renderInquirySuccessReceipt(currentActiveInquiry, inquiryId);
-  } catch (renderError) {
-    if (typeof console !== "undefined" && typeof console.error === "function") {
-      console.error("[Inquiry Receipt] Render error:", renderError);
+    const inquiryId = await dispatchInquirySubmission(currentActiveInquiry.inquiryPayload);
+
+    if (!inquiryId) {
+      // Dispatch failed or network unreachable. Preserve draft locally with offline marker
+      const draftId = generateFallbackInquiryId();
+      persistPendingOfflineInquiry(draftId, currentActiveInquiry.inquiryPayload);
+      setInquirySubmissionBusy(false);
+      renderInquiryNetworkFailure(currentActiveInquiry);
+      return;
     }
-    setInquirySubmissionBusy(false);
+
+    try {
+      renderInquirySuccessReceipt(currentActiveInquiry, inquiryId);
+      trackBookingFunnelEvent("inquiry_submitted", {
+        property_name: currentActiveInquiry.property,
+        inquiry_id: inquiryId
+      });
+    } catch (renderError) {
+      if (typeof console !== "undefined" && typeof console.error === "function") {
+        console.error("[Inquiry Receipt] Render error:", renderError);
+      }
+      setInquirySubmissionBusy(false);
+    }
+  } finally {
+    isInquirySubmissionInFlight = false;
   }
 }
 
@@ -1597,8 +1666,8 @@ function renderInquirySuccessReceipt(inquirySummary, inquiryId) {
             ✓
           </div>
           <div>
-            <span class="text-[10px] font-bold tracking-widest text-emerald-400 uppercase block">Step 2 of 2 • Reservation Pre-Approval</span>
-            <h3 class="font-display text-lg sm:text-xl font-bold text-ivory leading-tight">Inquiry Received &amp; Pre-Approved!</h3>
+            <span class="text-[10px] font-bold tracking-widest text-emerald-400 uppercase block">Step 2 of 2 • Reservation Request Submitted</span>
+            <h3 class="font-display text-lg sm:text-xl font-bold text-ivory leading-tight">Inquiry Received — Awaiting Staff Confirmation</h3>
           </div>
         </div>
         <button type="button" onclick="closeInquiryModal()" 
@@ -1613,16 +1682,16 @@ function renderInquirySuccessReceipt(inquirySummary, inquiryId) {
           <button type="button" onclick="copyInquiryDetails('${inquiryId}')" class="hover:text-white transition inline-flex items-center gap-1 text-[11px] font-sans font-semibold bg-deep-forest/60 px-2.5 py-1 rounded border border-champagne/20 cursor-pointer" title="Copy Reference ID">📋 Copy ID</button>
         </div>
 
-        <!-- SLA Guarantee Box -->
+        <!-- SLA Guidance Box -->
         <div class="bg-canopy/70 rounded-xl p-4 border border-champagne/20 text-xs space-y-2.5">
           <div class="flex items-center justify-between flex-wrap gap-2">
             <span class="text-champagne font-bold uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-              ⏱️ Guaranteed 15–30 Min Response
+              ⏱️ Desk Response (8:00 AM – 8:00 PM EAT)
             </span>
             <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-semibold px-2 py-0.5 rounded border border-emerald-500/30">Priority Desk Queue</span>
           </div>
           <p class="text-ivory/90 leading-relaxed text-xs">
-            Our reservation manager is reviewing your dates for <strong class="text-champagne">${inquirySummary.property}</strong> and will reach out via <strong class="text-white">${channelIcon} ${preferredContact}</strong> within <strong class="text-champagne">15–30 minutes</strong> to confirm your booking and provide official payment details (M-Pesa Till / Bank Transfer / Card).
+            Our reservation desk (8:00 AM – 8:00 PM EAT) will review your dates for <strong class="text-champagne">${inquirySummary.property}</strong> and reach out via <strong class="text-white">${channelIcon} ${preferredContact}</strong> within <strong class="text-champagne">15–30 minutes</strong> (24/7 on-call dispatch coverage) to confirm availability and provide your 50% reservation deposit link.
           </p>
           <div class="border-t border-champagne/15 pt-2.5 space-y-1 text-[11px] text-ivory/70">
             <div class="flex justify-between gap-2"><span class="text-ivory/50">Stay Dates:</span> <span class="text-ivory font-medium text-right">${inquirySummary.dates}</span></div>
@@ -1758,7 +1827,7 @@ function showInquiryReviewModal(inquirySummary) {
     modalElement.setAttribute("aria-labelledby", "inquiry-modal-title");
     document.body.appendChild(modalElement);
   }
-  modalElement.className = "fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto overscroll-contain";
+  modalElement.className = "fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto overscroll-contain";
 
   const channelIcon = inquirySummary.preferredContactMethod.includes("WhatsApp") ? "💬" :
                       inquirySummary.preferredContactMethod.includes("Phone") ? "📞" : "✉️";
@@ -1779,7 +1848,7 @@ function showInquiryReviewModal(inquirySummary) {
       <!-- Zone 2: Scrollable Summary Body -->
       <div class="p-5 sm:p-6 space-y-3.5 overflow-y-auto flex-1">
         <p class="text-xs text-ivory/75 leading-relaxed">
-          Please verify your reservation details below. Confirming logs your request directly with our central reservations desk (<strong class="text-champagne">15–30 min response guarantee</strong>).
+          Please verify your reservation details below. Confirming logs your request directly with our central reservations desk (<strong class="text-champagne">15–30 min response time during desk hours</strong>).
         </p>
 
         <!-- Primary Guest & Stay Itinerary -->
@@ -2251,26 +2320,48 @@ const BeakimDateRangePicker = {
       if (popover.parentElement !== document.body) {
         document.body.appendChild(popover);
       }
-      popover.className = "fixed inset-0 z-[9999] flex items-center justify-center p-3 bg-black/80 backdrop-blur-md";
+      popover.className = "cal-modal-open";
+      if (typeof PageScrollLock !== "undefined" && typeof PageScrollLock.lock === "function") {
+        PageScrollLock.lock();
+      }
     } else {
       if (this.originalParent && popover.parentElement !== this.originalParent) {
         this.originalParent.appendChild(popover);
       }
-      popover.className = "absolute top-full left-0 mt-2 w-[420px] z-50 p-0 bg-transparent";
+      popover.className = "cal-inline-open";
     }
+
+    popover.setAttribute("role", "dialog");
+    popover.setAttribute("aria-modal", "true");
+    popover.setAttribute("aria-label", "Dates of Stay Selector");
 
     const trigger = document.getElementById("booking-date-range-trigger");
     if (trigger) trigger.setAttribute("aria-expanded", "true");
     this.render();
+
+    setTimeout(() => {
+      const closeBtn = document.getElementById("cal-close-btn");
+      if (closeBtn && typeof closeBtn.focus === "function") {
+        closeBtn.focus();
+      }
+    }, 50);
   },
 
   close() {
     const popover = document.getElementById("beakim-calendar-popover");
     if (!popover) return;
     this.state.isOpen = false;
-    popover.classList.add("hidden");
+    popover.className = "hidden";
+    if (typeof PageScrollLock !== "undefined" && typeof PageScrollLock.unlock === "function") {
+      PageScrollLock.unlock();
+    }
     const trigger = document.getElementById("booking-date-range-trigger");
-    if (trigger) trigger.setAttribute("aria-expanded", "false");
+    if (trigger) {
+      trigger.setAttribute("aria-expanded", "false");
+      if (typeof trigger.focus === "function") {
+        trigger.focus();
+      }
+    }
   },
 
   prevMonth() {
@@ -2523,7 +2614,7 @@ const BeakimDateRangePicker = {
     const footerHtml = this.buildCalendarFooterHtml();
 
     popover.innerHTML = `
-      <div class="bg-[#0D2318] border border-champagne/30 rounded-2xl shadow-2xl p-4 sm:p-5 w-full max-w-sm sm:max-w-md text-ivory flex flex-col space-y-3">
+      <div class="cal-modal-card bg-[#0D2318] border border-champagne/30 rounded-2xl shadow-2xl p-4 sm:p-5 w-full max-w-sm sm:max-w-md text-ivory flex flex-col space-y-3">
         <div class="flex items-center justify-between pb-2 border-b border-champagne/15">
           <div>
             <h4 class="text-xs font-bold uppercase tracking-wider text-champagne flex items-center gap-1.5">
@@ -2531,7 +2622,7 @@ const BeakimDateRangePicker = {
             </h4>
             <p class="text-[11px] text-ivory/70 pt-0.5">${statusGuidanceHtml}</p>
           </div>
-          <button type="button" onclick="BeakimDateRangePicker.close()" class="w-7 h-7 rounded-full bg-deep-forest/80 hover:bg-champagne/20 text-ivory/70 hover:text-champagne flex items-center justify-center transition text-sm">✕</button>
+          <button type="button" id="cal-close-btn" onclick="BeakimDateRangePicker.close()" class="w-7 h-7 rounded-full bg-deep-forest/80 hover:bg-champagne/20 text-ivory/70 hover:text-champagne flex items-center justify-center transition text-sm cursor-pointer" aria-label="Close date picker">✕</button>
         </div>
 
         <!-- Quick Presets -->
@@ -3019,6 +3110,7 @@ if (typeof module !== "undefined" && module.exports) {
     renderAvailabilityPreApproved,
     renderAvailabilityHighDemand,
     renderAvailabilitySoldOut,
-    generateFallbackInquiryId
+    generateFallbackInquiryId,
+    trackBookingFunnelEvent
   };
 }
