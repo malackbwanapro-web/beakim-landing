@@ -1,5 +1,5 @@
 """
-Optimizes Beakim Beach Darad accommodation images.
+Optimizes Beakim Darad accommodation images.
 Converts high-resolution original JPEGs from 'assets/Beakim Darad New Images'
 into web-optimized, high-performance WebP assets in 'assets/Beakim Darad Images'.
 """

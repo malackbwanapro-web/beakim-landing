@@ -1,7 +1,7 @@
 # Fit Nation Asset Domain
 
 ## 1. Purpose & Scope
-- **Domain:** Curated photographic assets from the official **Fit Nation Kenya** coastal convoy retreat (83+ road trippers hosted across Beakim Beach Darad, Beakim Tower Cottages, and Beakim Apartments).
+- **Domain:** Curated photographic assets from the official **Fit Nation Kenya** coastal convoy retreat (83+ road trippers hosted across Beakim Darad, Beakim Tower Cottages, and Beakim Apartments).
 - **Source:** `C:\Users\Malik\Desktop\output\Beakim Repository\Pictures\Fit Nation\Edited Social Masters\Masters_FullRes\`
 - **Primary Usage:** Featured case study and high-social-proof photography in [`insights.html`](file:///c:/Users/Malik/Desktop/beakim-landing/insights.html#fit-nation-diani-convoy-retreat).
 

@@ -371,7 +371,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center gap-2.5">
           <label for="gsc-url-selector" class="text-sm font-semibold text-champagne">Choose Property to Inspect:</label>
           <select id="gsc-url-selector" aria-label="Select property to inspect traffic" onchange="updateGSCSimulator()" class="min-h-[48px] px-4 py-2.5 bg-deep-forest border border-champagne/50 rounded-xl text-sm font-medium text-ivory focus:outline-none focus:border-champagne cursor-pointer">
-            <option value="darad">1. Beakim Beach Darad (/beakim-darad)</option>
+            <option value="darad">1. Beakim Darad (/beakim-darad)</option>
             <option value="darling">2. Diani Darling Cottages (/diani-darling)</option>
             <option value="tower">3. Tower Cottages Diani (/tower-cottages)</option>
             <option value="apartments">4. Beakim Apartments (/beakim-apartments)</option>
@@ -522,14 +522,14 @@
         </div>
       </div>
 
-      <!-- Card 2: Beakim Beach Darad -->
+      <!-- Card 2: Beakim Darad -->
       <div class="glass-card p-6 rounded-2xl border-champagne/35 glass-card-hover flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between text-xs text-champagne font-semibold mb-2">
             <span>PROPERTY 02 &bull; VACATION STUDIOS</span>
             <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">&check; Google Verified</span>
           </div>
-          <h3 class="font-serif-luxury text-xl font-bold text-ivory">Beakim Beach Darad</h3>
+          <h3 class="font-serif-luxury text-xl font-bold text-ivory">Beakim Darad</h3>
           <p class="text-sm text-ivory/80 mt-2">
             Registered with GPS coordinates (<code class="text-champagne">-4.284794, 39.577151</code>), nightly price range (<code class="text-champagne">KSh 2,000 - 4,000</code>), and swimming pool studio photos.
           </p>
@@ -859,8 +859,8 @@
     const MATRIX_DATA = {
       darad: {
         id: 'darad',
-        name: 'Beakim Beach Darad',
-        shortTitle: 'Beach Darad',
+        name: 'Beakim Darad',
+        shortTitle: 'Darad',
         file: 'beakim-darad.html',
         url: 'https://www.beakimhospitalitygroup.co.ke/beakim-darad',
         units: '28 Studio & 1-Bedroom Units (4 Categories)',
@@ -906,7 +906,7 @@
           { query: 'budget luxury cottages diani', intent: 'transactional', priority: 'tier2', reason: 'Attracts guests who want a beautiful swimming pool resort experience for under KSh 4,000 a night.' },
           { query: 'holiday studio with kitchenette diani', intent: 'transactional', priority: 'tier2', reason: 'Matches guests who want to prepare their own light meals and tea in Darad’s kitchenette units.' },
           { query: 'affordable resort diani beach road', intent: 'transactional', priority: 'tier2', reason: 'Captures travelers looking for value-for-money stays right along the main Diani Beach Road area.' },
-          { query: 'beakim beach darad rates and reviews', intent: 'navigational', priority: 'tier3', reason: 'Meets guests who have heard of Darad and are checking your room categories and nightly prices before calling.' },
+          { query: 'beakim darad rates and reviews', intent: 'navigational', priority: 'tier3', reason: 'Meets guests who have heard of Darad and are checking your room categories and nightly prices before calling.' },
           { query: 'diani beach accommodation under 3000 ksh', intent: 'transactional', priority: 'tier3', reason: 'High-volume search from domestic weekend travelers coming from Nairobi and Mombasa.' },
           { query: 'self catering holiday rentals near ukunda airstrip', intent: 'informational', priority: 'tier3', reason: 'Captures fly-in guests landing at Ukunda Airstrip who want a convenient studio 5 minutes away.' }
         ]
@@ -1450,7 +1450,7 @@
 
     const GSC_STATS = {
       darad: {
-        url: 'Beakim Beach Darad (/beakim-darad)',
+        url: 'Beakim Darad (/beakim-darad)',
         clicks: '1,480',
         impressions: '28,640',
         ctr: '5.16%',

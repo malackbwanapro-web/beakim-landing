@@ -54,7 +54,7 @@ flowchart LR
 
 ## 2. Property-by-Property Keyword Clusters
 
-### 2.1 Property 1: Beakim Beach Darad
+### 2.1 Property 1: Beakim Darad
 - **Page File:** [`beakim-darad.html`](file:///C:/Users/Malik/Desktop/beakim-landing/beakim-darad.html)
 - **Live URL:** `https://www.beakimhospitalitygroup.co.ke/beakim-darad`
 - **Positioning:** Vacation studio rooms and 1-bedroom cottages (28 units across 4 categories: Standard, Deluxe, Superior, Suite) with swimming pool access, air conditioning, and kitchenettes, located 5th Row off Diani Beach Road.
@@ -68,7 +68,7 @@ flowchart LR
 | `budget luxury cottages diani` | `🟢 Transactional` | **Tier 2 (Secondary)** | Targets travelers looking for resort-style pool amenities without 5-star resort prices. |
 | `holiday studio with kitchenette diani` | `🟢 Transactional` | **Tier 2 (Secondary)** | Direct match for Darad's self-catering kitchenette studio offerings. |
 | `affordable resort diani beach road` | `🟢 Transactional` | **Tier 2 (Secondary)** | Geographic alignment along Diani Beach Road corridor with value-focused pricing. |
-| `beakim beach darad rates and reviews` | `🟣 Navigational` | **Tier 3 (Long-Tail)**| In-market booking confirmation query looking for pricing and room categories. |
+| `beakim darad rates and reviews` | `🟣 Navigational` | **Tier 3 (Long-Tail)**| In-market booking confirmation query looking for pricing and room categories. |
 | `diani beach accommodation under 3000 ksh` | `🟢 Transactional` | **Tier 3 (Long-Tail)**| Intercepts price-conscious domestic travelers and weekenders from Nairobi/Mombasa. |
 | `self catering holiday rentals near ukunda airstrip` | `🔵 Informational` | **Tier 3 (Long-Tail)**| Intercepts fly-in travelers arriving at Ukunda Airstrip wanting nearby studio lodging. |
 
@@ -422,7 +422,7 @@ flowchart LR
 <!-- Published Article Topics on Page -->
 <!-- Article 1: The Ultimate Diani Beach Guide: Arriving via the New Dongo Kundu Bypass Highway -->
 <!-- Article 2: Boutique Cottages vs. Serviced Apartments: Choosing Your Ideal Coastal Stay -->
-<!-- Article 3: Why Beakim Beach Darad & Diani Darling Are Ukunda’s Hidden Family Gems -->
+<!-- Article 3: Why Beakim Darad & Diani Darling Are Ukunda’s Hidden Family Gems -->
 <!-- Article 4: Corporate Retreats, Team Building & Group Stays on the South Coast -->
 ```
 
@@ -520,7 +520,7 @@ flowchart LR
     },
     {
       "@type": "BlogPosting",
-      "headline": "Why Beakim Beach Darad & Diani Darling Are Ukunda’s Hidden Family Gems",
+      "headline": "Why Beakim Darad & Diani Darling Are Ukunda’s Hidden Family Gems",
       "description": "Safe, child-friendly gated compounds with 2 swimming pools, kitchens, and fast Wi-Fi starting from KSh 2,000/night.",
       "datePublished": "2026-10-08",
       "dateModified": "2026-10-19",
@@ -566,7 +566,7 @@ The following pre-encoded links allow Peter and Terri Gitahi to execute an insta
 | Web Page Endpoint | Schema Types Embedded | 1-Click Google Test Link |
 | :--- | :--- | :--- |
 | **Parent Homepage** | `LodgingBusiness`, `FAQPage` | [Run Rich Results Test on Homepage](https://search.google.com/test/rich-results?url=https%3A%2F%2Fwww.beakimhospitalitygroup.co.ke%2F) |
-| **Beakim Beach Darad** | `LodgingBusiness` | [Run Rich Results Test on Darad](https://search.google.com/test/rich-results?url=https%3A%2F%2Fwww.beakimhospitalitygroup.co.ke%2Fbeakim-darad) |
+| **Beakim Darad** | `LodgingBusiness` | [Run Rich Results Test on Darad](https://search.google.com/test/rich-results?url=https%3A%2F%2Fwww.beakimhospitalitygroup.co.ke%2Fbeakim-darad) |
 | **Diani Darling Cottages** | `LodgingBusiness` | [Run Rich Results Test on Diani Darling](https://search.google.com/test/rich-results?url=https%3A%2F%2Fwww.beakimhospitalitygroup.co.ke%2Fdiani-darling) |
 | **Tower Cottages Diani** | `LodgingBusiness` | [Run Rich Results Test on Tower Cottages](https://search.google.com/test/rich-results?url=https%3A%2F%2Fwww.beakimhospitalitygroup.co.ke%2Ftower-cottages) |
 | **Beakim Apartments** | `LodgingBusiness` | [Run Rich Results Test on Beakim Apartments](https://search.google.com/test/rich-results?url=https%3A%2F%2Fwww.beakimhospitalitygroup.co.ke%2Fbeakim-apartments) |

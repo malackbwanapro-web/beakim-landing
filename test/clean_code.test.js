@@ -496,7 +496,7 @@ const sampleUrl = CommunicationService.getWhatsAppUrl("Test message");
 assert.ok(sampleUrl.includes("wa.me") && sampleUrl.includes("text=Test+message"), "getWhatsAppUrl must return valid URL");
 
 const testInquiry = {
-  property: "Beakim Beach Darad",
+  property: "Beakim Darad",
   dates: "2026-11-01 to 2026-11-05 (4 Nights)",
   name: "Test Guest",
   phone: "+254 712345678",
@@ -809,7 +809,7 @@ console.log("   ✅ Calendar day cells render accessible <button> semantics with
 // TEST 25: P0 Booking State Honesty & Network Failure Recovery
 console.log("25. Testing P0 Booking State Honesty & Network Failure Recovery...");
 assert.strictEqual(typeof renderAvailabilityUnknown, "function");
-const unknownHtml = renderAvailabilityUnknown("Beakim Beach Darad");
+const unknownHtml = renderAvailabilityUnknown("Beakim Darad");
 assert.ok(unknownHtml.includes("We couldn't check live availability"), "Must honestly state live availability could not be verified");
 assert.ok(unknownHtml.includes("Send a request and our team will confirm"), "Must invite manual request without false pre-approval");
 assert.ok(!unknownHtml.includes("Pre-Approved"), "Must NEVER claim pre-approval on network failure");

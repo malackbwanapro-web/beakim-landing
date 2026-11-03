@@ -1,7 +1,7 @@
 # Beakim Darad Images Domain
 
 ## 1. Purpose & Ownership
-- **Scope:** High-resolution resort photography for Beakim Beach Darad (located off Diani Beach Road, 5th Row, Diani Beach, Kwale County, Kenya).
+- **Scope:** High-resolution resort photography for Beakim Darad (located off Diani Beach Road, 5th Row, Diani Beach, Kwale County, Kenya).
 - **Key Assets:**
   - 43 WebP photographs optimized at quality 83 (Lanczos downsample to max 2048px width/height).
   - EXIF GPS Coordinates: `Latitude: 4° 16' 57.0" S (-4.2825)`, `Longitude: 39° 35' 20.4" E (39.5890)`.

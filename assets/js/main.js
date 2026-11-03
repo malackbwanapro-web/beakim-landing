@@ -403,7 +403,7 @@ function resolveBreakfastRate(propertyIdentifier) {
 
   // Keyword fallback for specific property room titles
   if (normalized.includes("superior") || normalized.includes("standard") || normalized.includes("kitchenette") || normalized.includes("garden view cottage")) {
-    return 500; // All exclusive to Beakim Beach Darad
+    return 500; // All exclusive to Beakim Darad
   }
   if (normalized.includes("deluxe studio")) {
     return 1000; // Exclusive to Diani Darling Cottages
