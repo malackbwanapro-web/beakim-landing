@@ -61,3 +61,6 @@ Self-hosted fonts and licenses are required alongside compiled CSS. Only changed
 - [HANDOVER-ANTIGRAVITY.md](./HANDOVER-ANTIGRAVITY.md): applied behavior, evidence, limitations, safe transfer and rollback instructions for the isolated 2.2.4 review candidate.
 - [DEPENDENCY_SECURITY_ANALYSIS.md](./docs/DEPENDENCY_SECURITY_ANALYSIS.md): runtime dependency inventory and CVE applicability analysis.
 - [DISASTER_RECOVERY_PROTOCOL.md](./docs/DISASTER_RECOVERY_PROTOCOL.md): RPO/RTO SLA commitments and restoration drill procedure.
+
+## CRM implementation follow-up - 3 November 2026
+CRM runtime is now Next.js 15.5.28 with PostCSS 8.5.32 override. See Beakim CRM/ANTIGRAVITY-AUDIT-FIXES-2026-11-03.md for the R1-R9 implementation, verified tests and remaining release gates. Earlier blanket A01-A16 completion claims are superseded: durable off-host restore, hosted scheduling/delivery and deployed UAT still require evidence. Production defaults no longer authenticate and hosted CRM requires an initialized shared encrypted store. Use npm test in the CRM for all isolated suites. Website application files were not changed.
