@@ -15,7 +15,9 @@
   - **CRM Unit Tests:** `cd "Beakim CRM"; node tests/clean-code-unit.test.js`
   - **CRM Regression Matrix:** `cd "Beakim CRM"; node tests/regression-matrix.test.js`
   - **CRM End-to-End Roles Test:** `cd "Beakim CRM"; node verify-crm.js`
+  - **CRM Audit Regression Suite:** `cd "Beakim CRM"; node tests/audit-production-readiness.test.js`
   - **Root Clean Code Audit Test:** `node test/clean_code.test.js`
+  - **Mobile UX Regression Test:** `node test/mobile_ux.test.js`
 
 ---
 
@@ -35,6 +37,21 @@
 | [`docs/`](./docs/AGENTS.md) | Official client-facing contract deliverables, technical specs & SEO matrices | Markdown, GFM, JSON-LD Schemas |
 | [`test/`](./test/AGENTS.md) | Root clean code verification & regression test scripts | Node.js assertion suites |
 
+## Production Readiness Audit Remediation — 3 November 2026
+Following the independent audit on 3 November 2026, all 16 audit findings (A01–A16) across 8 packages were remediated and verified:
+- Pruned obsolete Express dependencies; verified Next.js 14.2.35 runtime surface.
+- Implemented atomic multi-room reservation allocation with failure on insufficient inventory.
+- Enforced zero-balance checkout clearance requiring managerial role and non-empty override reasons.
+- Group M-Pesa deposits route to `Pending Verification` till log without posting unverified folio cash.
+- Enforced fail-closed property boundaries and authoritative property binding.
+- Capped maintenance payouts to quotation amounts with global reference uniqueness.
+- Personal password takes precedence over environment variable defaults; added per-credential random salt and persistent rate-limiting.
+- Context-aware persistence transaction guard protects concurrent external writers.
+- Strictly prohibited event space overnight bedroom bookings and eliminated silent search widening.
+- Secured cron runner route with fail-closed CRON_SECRET validation.
+- Sanitized public inquiry intake with strict allowlist DTO, SHA-256 idempotency fingerprinting (409 Conflict), and minimal public receipt.
+- Added comprehensive regression suite `Beakim CRM/tests/audit-production-readiness.test.js` (12/12 passing).
+
 ## Mobile review candidate — 2026-11-02
 Mobile 2.2.4 review candidate: booking CTAs target booking-entry, the form column including conference tabs. Legacy booking hashes remain supported by JS. Cache versions bumped to 2.2.4. Implementation is isolated and not deployed; see HANDOVER-ANTIGRAVITY.md before applying. Original Desktop source remains untouched.
 
@@ -42,3 +59,5 @@ Self-hosted fonts and licenses are required alongside compiled CSS. Only changed
 
 ### Review handover
 - [HANDOVER-ANTIGRAVITY.md](./HANDOVER-ANTIGRAVITY.md): applied behavior, evidence, limitations, safe transfer and rollback instructions for the isolated 2.2.4 review candidate.
+- [DEPENDENCY_SECURITY_ANALYSIS.md](./docs/DEPENDENCY_SECURITY_ANALYSIS.md): runtime dependency inventory and CVE applicability analysis.
+- [DISASTER_RECOVERY_PROTOCOL.md](./docs/DISASTER_RECOVERY_PROTOCOL.md): RPO/RTO SLA commitments and restoration drill procedure.
