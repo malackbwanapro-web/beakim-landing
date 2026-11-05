@@ -15,6 +15,7 @@
 const APP_CONFIG = Object.freeze({
   CONTACT: Object.freeze({
     PHONE_RAW: "254750864119",
+    DARLING_WHATSAPP_RAW: "254119237439",
     PHONE_FORMATTED: "+254 750 864 119",
     DEFAULT_COUNTRY_CODE: "+254",
     CANONICAL_EMAIL: "info@beakimhospitalitygroup.co.ke",
@@ -78,15 +79,42 @@ const APP_CONFIG = Object.freeze({
 
 // ── 2. BOUNDARY SERVICES (THIRD-PARTY PROTOCOLS) ──
 
+/** WhatsApp follows the current page, never the selected residence. */
+function resolveWhatsAppPhone(pathname) {
+  const path = typeof pathname === "string" ? pathname :
+    (typeof window !== "undefined" && window.location ? window.location.pathname : "/");
+  const page = normalizePagePath(path.split(/[?#]/)[0].toLowerCase());
+  return page === "/diani-darling" ? APP_CONFIG.CONTACT.DARLING_WHATSAPP_RAW : APP_CONFIG.CONTACT.PHONE_RAW;
+}
+
+function initializeWhatsAppRouting() {
+  if (typeof document === "undefined") return;
+  const phone = resolveWhatsAppPhone();
+  document.querySelectorAll('a[href^="https://wa.me/"]').forEach(anchor => {
+    const url = new URL(anchor.href);
+    url.pathname = `/${phone}`;
+    anchor.href = url.toString();
+  });
+}
+
+function getInquiryWhatsAppUrl(inquirySummary) {
+  let message = inquirySummary.messageText || "";
+  if (!message && inquirySummary.whatsappUrl) {
+    try { message = new URL(inquirySummary.whatsappUrl).searchParams.get("text") || ""; }
+    catch (_) { /* Build a safe current-page URL even for an invalid saved link. */ }
+  }
+  return CommunicationService.buildWhatsAppUrl(message);
+}
+
 const CommunicationService = Object.freeze({
-  buildWhatsAppUrl(messageText, targetPhoneNumber = APP_CONFIG.CONTACT.PHONE_RAW) {
+  buildWhatsAppUrl(messageText, targetPhoneNumber = resolveWhatsAppPhone()) {
     const searchParams = new URLSearchParams();
     searchParams.set("text", messageText);
-    const cleanPhone = String(targetPhoneNumber || "").replace(/[^\d]/g, "") || APP_CONFIG.CONTACT.PHONE_RAW;
+    const cleanPhone = String(targetPhoneNumber || "").replace(/[^\d]/g, "") || resolveWhatsAppPhone();
     return `https://wa.me/${cleanPhone}?${searchParams.toString()}`;
   },
 
-  getWhatsAppUrl(messageText, targetPhoneNumber = APP_CONFIG.CONTACT.PHONE_RAW) {
+  getWhatsAppUrl(messageText, targetPhoneNumber = resolveWhatsAppPhone()) {
     return this.buildWhatsAppUrl(messageText, targetPhoneNumber);
   },
 
@@ -923,7 +951,7 @@ function syncResidenceCardsStyling(selectedCardElement) {
   allCards.forEach(card => {
     const isSelected = card === selectedCardElement;
     card.classList.toggle("border-2", isSelected);
-    card.classList.toggle("border-champagne", isSelected);
+    card.classList.toggle("border-line-accent", isSelected);
     card.classList.toggle("bg-champagne/10", isSelected);
     card.classList.toggle("border", !isSelected);
     card.classList.toggle("border-deep-forest/15", !isSelected);
@@ -932,7 +960,7 @@ function syncResidenceCardsStyling(selectedCardElement) {
 
     const radio = card.querySelector(".residence-radio");
     if (radio) {
-      radio.classList.toggle("border-champagne", isSelected);
+      radio.classList.toggle("border-line-accent", isSelected);
       radio.classList.toggle("bg-champagne", isSelected);
       radio.classList.toggle("border-deep-forest/30", !isSelected);
       radio.classList.toggle("bg-transparent", !isSelected);
@@ -960,7 +988,7 @@ function syncBreakfastAddonCard(propertyValue) {
   if (breakfastCard) {
     breakfastCard.classList.toggle("hidden", !isBreakfastEligible);
     breakfastCard.classList.toggle("flex", isBreakfastEligible);
-    breakfastCard.classList.toggle("border-champagne/50", isBreakfastEligible);
+    breakfastCard.classList.toggle("border-line-accent/50", isBreakfastEligible);
   }
 
   if (breakfastCheckbox) {
@@ -985,8 +1013,8 @@ function syncBreakfastAddonCard(propertyValue) {
   if (breakfastCard && isBreakfastEligible) {
     const priceBadge = (typeof document !== "undefined" && document.getElementById("addon-breakfast-price-badge")) ||
                        breakfastCard.querySelector("#addon-breakfast-price-badge") ||
-                       breakfastCard.querySelector(".addon-price, .text-champagne, [class*='7A5B20']") ||
-                       breakfastCard.querySelector(".text-champagne:not(input)");
+                       breakfastCard.querySelector(".addon-price, .text-ink-gold, [class*='7A5B20']") ||
+                       breakfastCard.querySelector(".text-ink-gold:not(input)");
     if (priceBadge) {
       if (normalized.includes("darad")) {
         priceBadge.textContent = "+KSh 500 / person / day";
@@ -997,7 +1025,7 @@ function syncBreakfastAddonCard(propertyValue) {
 
     const descElem = (typeof document !== "undefined" && document.getElementById("addon-breakfast-description")) ||
                      breakfastCard.querySelector("#addon-breakfast-description") ||
-                     breakfastCard.querySelector(".text-stone-600, .text-driftwood");
+                     breakfastCard.querySelector(".text-stone-600, .text-ink-accent");
     if (descElem) {
       if (normalized.includes("darling")) {
         descElem.textContent = "Fresh tropical fruits, eggs made to order, Swahili mahamri, and hot tea/coffee delivered to your verandah.";
@@ -1028,7 +1056,7 @@ function syncDaradRoomTiersStyling(selectedRoomCardElement) {
   allDaradCards.forEach(card => {
     const isSelected = card === selectedRoomCardElement;
     card.classList.toggle("border-2", isSelected);
-    card.classList.toggle("border-champagne", isSelected);
+    card.classList.toggle("border-line-accent", isSelected);
     card.classList.toggle("bg-champagne/10", isSelected);
     card.classList.toggle("border", !isSelected);
     card.classList.toggle("border-deep-forest/15", !isSelected);
@@ -1037,7 +1065,7 @@ function syncDaradRoomTiersStyling(selectedRoomCardElement) {
 
     const radio = card.querySelector(".darad-room-radio");
     if (radio) {
-      radio.classList.toggle("border-champagne", isSelected);
+      radio.classList.toggle("border-line-accent", isSelected);
       radio.classList.toggle("bg-champagne", isSelected);
       radio.classList.toggle("border-deep-forest/30", !isSelected);
       radio.classList.toggle("bg-transparent", !isSelected);
@@ -1061,7 +1089,7 @@ function selectDaradRoomTier(roomValue, roomCardElement) {
   // Update dynamic subtitle / badge on the Beakim Darad property card if present
   const daradRateLabel = document.getElementById("darad-property-rate-label");
   if (daradRateLabel && roomCardElement) {
-    const priceText = roomCardElement.querySelector(".darad-room-price, .text-champagne, [class*='7A5B20']")?.textContent || "";
+    const priceText = roomCardElement.querySelector(".darad-room-price, .text-ink-gold, [class*='7A5B20']")?.textContent || "";
     const nameText = roomCardElement.querySelector(".font-display")?.textContent || "";
     daradRateLabel.textContent = `Selected: ${nameText} (${priceText.trim()})`;
   }
@@ -1177,6 +1205,46 @@ function selectTowerCottages2Br() {
 /**
  * Triggered on date, guest, or add-on checkbox changes to recalculate live totals.
  */
+/** Resolve visible benefits from the same catalog as the booking controls. */
+function resolveBookingBenefits(propertyValue, catalog = typeof BEAKIM_CATALOG !== "undefined" ? BEAKIM_CATALOG : null) {
+  const selection = String(propertyValue || "").toLowerCase();
+  const property = catalog && Object.values(catalog).find(item =>
+    selection.includes(item.id) || selection.includes(item.name.toLowerCase()));
+  if (!property) return {
+    poolTitle: "Property Amenities", poolDescription: "Amenities depend on your selected property and room category.",
+    showBreakfast: false, breakfastDescription: ""
+  };
+  const pools = Number.isFinite(property.pools) ? property.pools : null;
+  const hasPool = pools !== null ? pools > 0 : (property.offerings || []).some(offering =>
+    (offering.amenities || []).some(amenity => /\bpool\b/i.test(amenity)));
+  const poolTitle = hasPool ? (pools ? `${pools} Swimming ${pools === 1 ? "Pool" : "Pools"} & Tropical Gardens` : "Swimming Pool & Tropical Gardens") :
+    (pools === 0 ? "Self-Catering Family Space" : "Property Amenities");
+  return {
+    poolTitle,
+    poolDescription: hasPool ? `Pool access at ${property.name}; air conditioning depends on your selected room category.` :
+      (pools === 0 ? "A private kitchenette and space for your family. No swimming pool at this property." :
+        "Amenities depend on your selected property and room category."),
+    showBreakfast: property.breakfastRate > 0,
+    breakfastDescription: property.breakfastRate > 0 ?
+      `Optional breakfast at ${property.name}: KSh ${property.breakfastRate.toLocaleString()} per person/day.` : ""
+  };
+}
+
+function syncBookingBenefits(propertyValue) {
+  const benefits = resolveBookingBenefits(propertyValue);
+  const textTargets = {
+    "booking-pool-benefit-title": benefits.poolTitle,
+    "booking-pool-benefit-description": benefits.poolDescription,
+    "booking-breakfast-benefit-description": benefits.breakfastDescription
+  };
+  Object.entries(textTargets).forEach(([id, text]) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = text;
+  });
+  const breakfastRow = document.getElementById("booking-breakfast-benefit");
+  if (breakfastRow) breakfastRow.classList.toggle("hidden", !benefits.showBreakfast);
+}
+
 function handleDateOrAddonChange() {
   const propertyElement = document.getElementById("booking-property");
   const checkInElement = document.getElementById("check-in");
@@ -1188,6 +1256,7 @@ function handleDateOrAddonChange() {
   if (!propertyElement) return;
 
   const propertyValue = propertyElement.value;
+  syncBookingBenefits(propertyValue);
   const checkInDate = checkInElement ? checkInElement.value : "";
   const checkOutDate = checkOutElement ? checkOutElement.value : "";
   const adultsCount = adultsElement ? parseInt(adultsElement.value, 10) || 2 : 2;
@@ -1286,8 +1355,8 @@ function showToast(messageText, durationMs = APP_CONFIG.UI.DEFAULT_TOAST_DURATIO
     toastElement.id = "beakim-toast";
     toastElement.className = "fixed bottom-8 left-0 right-0 mx-auto w-fit max-w-[90vw] z-[100] transition-all duration-300 transform opacity-0 pointer-events-none translate-y-4";
     toastElement.innerHTML = `
-      <div class="bg-deep-forest/95 border border-champagne/40 backdrop-blur-md text-ivory px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 text-xs md:text-sm font-medium">
-        <span class="text-champagne text-base font-bold">✓</span>
+      <div class="bg-canvas/95 border border-line-accent/40 backdrop-blur-md text-ink-main px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 text-xs md:text-sm font-medium">
+        <span class="text-ink-gold text-base font-bold">✓</span>
         <span id="beakim-toast-text"></span>
       </div>
     `;
@@ -1319,39 +1388,39 @@ function ensureLightboxModal() {
     modalElement.setAttribute("role", "dialog");
     modalElement.setAttribute("aria-modal", "true");
     modalElement.setAttribute("aria-labelledby", "lightbox-title");
-    modalElement.className = "fixed inset-0 z-50 bg-black/95 backdrop-blur-md hidden items-center justify-center p-4 select-none";
+    modalElement.className = "theme-photo fixed inset-0 z-50 bg-black/95 backdrop-blur-md hidden items-center justify-center p-4 select-none";
     modalElement.innerHTML = `
       <!-- Close Button -->
       <button type="button" id="lightbox-close-btn" onclick="closeLightbox()"
-              class="absolute top-5 right-5 z-20 text-ivory/70 hover:text-champagne bg-black/50 hover:bg-black/80 rounded-full w-12 h-12 flex items-center justify-center text-3xl font-light transition duration-300"
+              class="absolute top-5 right-5 z-20 text-muted-70 hover:text-ink-gold bg-black/50 hover:bg-black/80 rounded-full w-12 h-12 flex items-center justify-center text-3xl font-light transition duration-300"
               aria-label="Close photo gallery">&times;</button>
 
       <!-- Previous Arrow Button -->
       <button type="button" id="lightbox-prev-btn" onclick="navigateLightbox(-1)"
-              class="absolute left-3 md:left-6 z-20 text-ivory/80 hover:text-champagne bg-black/50 hover:bg-deep-forest/90 border border-champagne/20 rounded-full w-12 h-12 flex items-center justify-center text-2xl transition duration-300 transform active:scale-90"
+              class="absolute left-3 md:left-6 z-20 text-ink-main/80 hover:text-ink-gold bg-black/50 hover:bg-canvas/90 border border-line-accent/20 rounded-full w-12 h-12 flex items-center justify-center text-2xl transition duration-300 transform active:scale-90"
               aria-label="Previous photograph">‹</button>
 
       <!-- Next Arrow Button -->
       <button type="button" id="lightbox-next-btn" onclick="navigateLightbox(1)"
-              class="absolute right-3 md:right-6 z-20 text-ivory/80 hover:text-champagne bg-black/50 hover:bg-deep-forest/90 border border-champagne/20 rounded-full w-12 h-12 flex items-center justify-center text-2xl transition duration-300 transform active:scale-90"
+              class="absolute right-3 md:right-6 z-20 text-ink-main/80 hover:text-ink-gold bg-black/50 hover:bg-canvas/90 border border-line-accent/20 rounded-full w-12 h-12 flex items-center justify-center text-2xl transition duration-300 transform active:scale-90"
               aria-label="Next photograph">›</button>
 
       <!-- Photo Display Container -->
       <div class="relative max-w-5xl w-full flex flex-col items-center justify-center max-h-[92vh] space-y-3" onclick="event.stopPropagation()">
         <!-- Counter Badge -->
         <div class="flex items-center gap-2">
-          <span id="lightbox-counter" class="bg-deep-forest/90 border border-champagne/30 text-champagne text-[11px] font-semibold uppercase tracking-widest px-3.5 py-1 rounded-full shadow-lg"></span>
+          <span id="lightbox-counter" class="bg-canvas/90 border border-line-accent/30 text-ink-gold text-[11px] font-semibold uppercase tracking-widest px-3.5 py-1 rounded-full shadow-lg"></span>
         </div>
 
         <!-- Image -->
-        <div class="relative overflow-hidden rounded-xl border border-champagne/20 shadow-2xl bg-deep-forest/50 flex items-center justify-center max-h-[75vh]">
+        <div class="relative overflow-hidden rounded-xl border border-line-accent/20 shadow-2xl bg-canvas/50 flex items-center justify-center max-h-[75vh]">
           <img id="lightbox-img" src="" alt="Property photograph" class="max-h-[75vh] w-auto max-w-full object-contain transition-all duration-300" />
         </div>
 
         <!-- Caption -->
         <div class="text-center px-4 max-w-2xl">
-          <h4 id="lightbox-title" class="font-display text-base md:text-lg text-ivory font-semibold"></h4>
-          <p id="lightbox-desc" class="text-xs text-ivory/70 mt-0.5 line-clamp-2"></p>
+          <h4 id="lightbox-title" class="font-display text-base md:text-lg text-ink-main font-semibold"></h4>
+          <p id="lightbox-desc" class="text-xs text-muted-70 mt-0.5 line-clamp-2"></p>
         </div>
       </div>
     `;
@@ -1371,7 +1440,7 @@ function collectGalleryImages() {
   const galleryNodes = document.querySelectorAll(".columns-1 img, [data-gallery] img, .gallery-item img");
   currentGalleryImages = Array.from(galleryNodes).map((imageElement, galleryIndex) => {
     const card = imageElement.closest(".group") || imageElement.parentElement;
-    const titleElement = card ? card.querySelector(".text-champagne.uppercase, h3, h4") : null;
+    const titleElement = card ? card.querySelector(".text-ink-gold.uppercase, h3, h4") : null;
     const descriptionElement = card ? card.querySelector("p") : null;
 
     imageElement.style.cursor = "zoom-in";
@@ -1487,7 +1556,7 @@ let availabilityDebounceTimer = null;
  */
 function renderAvailabilityLoading() {
   return `
-    <div class="flex items-center gap-2 p-2.5 rounded-xl bg-champagne/10 border border-champagne/30 text-deep-forest text-xs animate-pulse">
+    <div class="flex items-center gap-2 p-2.5 rounded-xl bg-champagne/10 border border-line-accent/30 text-deep-forest text-xs animate-pulse">
       <span class="w-2 h-2 rounded-full bg-champagne animate-ping"></span>
       <span class="font-medium">Checking live occupancy for your stay dates...</span>
     </div>
@@ -1501,7 +1570,7 @@ function renderAvailabilityPreApproved(unitsCount, categoryName, totalGuests = 0
   return `
     <div class="flex items-center justify-between p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 text-xs shadow-sm">
       <div class="flex items-center gap-2 flex-wrap">
-        <span class="text-emerald-600 font-bold">✓</span>
+        <span class="text-status-emerald-600 font-bold">✓</span>
         <span class="font-semibold">${categoryLabel}Available to Request${unitsText}${multiUnitNotice}</span>
         <span class="text-emerald-700/80 hidden sm:inline">• Direct host reservation</span>
       </div>
@@ -1524,7 +1593,7 @@ function renderAvailabilityCapacityWarning({ offering, totalGuests, adults, chil
   return `
     <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-950 text-xs shadow-sm space-y-2.5">
       <div class="flex items-start gap-2.5">
-        <span class="text-amber-600 text-base font-bold shrink-0">⚠️</span>
+        <span class="text-status-amber-600 text-base font-bold shrink-0">⚠️</span>
         <div class="space-y-1">
           <span class="font-bold block text-deep-forest text-xs sm:text-sm">
             Party of ${totalGuests} Exceeds 1-Unit Capacity (${bedType} • Max ${maxGuests} Guests)
@@ -1538,7 +1607,7 @@ function renderAvailabilityCapacityWarning({ offering, totalGuests, adults, chil
         <span class="text-[11px] font-semibold text-emerald-800">
           ✓ ${unitsNeeded} units needed ${unitsText}
         </span>
-        <button type="button" onclick="setBookingUnitsCount(${unitsNeeded})" class="bg-deep-forest hover:bg-forest-dark text-champagne text-[11px] font-bold px-3.5 py-1.5 rounded-lg transition shadow-sm cursor-pointer">
+        <button type="button" onclick="setBookingUnitsCount(${unitsNeeded})" class="bg-canvas hover:bg-forest-dark text-ink-gold text-[11px] font-bold px-3.5 py-1.5 rounded-lg transition shadow-sm cursor-pointer">
           Select ${unitsNeeded} Units (KSh ${multiRate} / night)
         </button>
       </div>
@@ -1555,8 +1624,8 @@ function renderAvailabilityUnknown() {
   return `
     <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs shadow-sm">
       <div class="flex items-center gap-2">
-        <span class="text-champagne font-bold">ℹ️</span>
-        <span class="font-medium">We couldn't check live availability (Live sync unavailable). Send a request and our team will confirm within 15–30 mins.</span>
+        <span class="text-ink-gold font-bold">ℹ️</span>
+        <span class="font-medium">We couldn't check live availability (Live sync unavailable). Send a request and our team typically responds within 15–30 mins during desk hours (8AM–8PM EAT).</span>
       </div>
       <span class="text-[10px] font-bold uppercase tracking-wider bg-slate-200/80 px-2 py-0.5 rounded text-slate-700">Request to Confirm</span>
     </div>
@@ -1568,7 +1637,7 @@ function renderAvailabilityHighDemand(unitsCount, categoryName) {
   return `
     <div class="flex items-center justify-between p-2.5 rounded-xl bg-amber-50 border border-amber-300/80 text-amber-900 text-xs shadow-sm">
       <div class="flex items-center gap-2">
-        <span class="text-amber-600 font-bold">⚠️</span>
+        <span class="text-status-amber-600 font-bold">⚠️</span>
         <span class="font-bold">High Demand: Only ${unitsCount} ${label}unit${unitsCount === 1 ? '' : 's'} remaining!</span>
       </div>
       <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-200/80 px-2 py-0.5 rounded text-amber-900">Limited Availability</span>
@@ -1683,7 +1752,7 @@ async function triggerLiveAvailabilityCheck() {
       container.innerHTML = `
         <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-amber-950 text-xs shadow-sm space-y-1">
           <div class="flex items-center gap-2">
-            <span class="text-amber-600 font-bold">⚠️</span>
+            <span class="text-status-amber-600 font-bold">⚠️</span>
             <span class="font-bold">Only ${result.availableUnitsCount || 0} unit${(result.availableUnitsCount || 0) === 1 ? '' : 's'} available (Requested: ${result.requestedUnits || currentUnits})</span>
           </div>
           <p class="text-[11px] text-stone-700">We cannot accommodate ${currentUnits} separate units for these exact dates. Please adjust unit count or submit inquiry for custom accommodation arrangement.</p>
@@ -1816,50 +1885,50 @@ function renderInquiryNetworkFailure(inquirySummary) {
   if (!modalElement) return;
 
   const messageText = inquirySummary.messageText || "";
-  const whatsappUrl = inquirySummary.whatsappUrl || CommunicationService.buildWhatsAppUrl(messageText);
+  const whatsappUrl = getInquiryWhatsAppUrl(inquirySummary);
   const telephoneUrl = CommunicationService.getTelephoneUrl();
 
   modalElement.innerHTML = `
-    <div class="bg-deep-forest border border-amber-500/40 rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden text-ivory shadow-2xl relative my-auto">
+    <div class="bg-canvas border border-amber-500/40 rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden text-ink-main shadow-2xl relative my-auto">
       <!-- Zone 1: Pinned Header -->
-      <div class="flex items-center justify-between px-5 py-4 border-b border-amber-500/20 bg-deep-forest/95 shrink-0">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-amber-500/20 bg-canvas/95 shrink-0">
         <div class="flex items-center gap-3 text-left">
-          <div class="w-10 h-10 rounded-full bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-amber-400 text-lg font-bold shrink-0 shadow-md">
+          <div class="w-10 h-10 rounded-full bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-status-amber-400 text-lg font-bold shrink-0 shadow-md">
             ⚠️
           </div>
           <div>
-            <span class="text-[10px] font-bold tracking-widest text-amber-400 uppercase block">Connection Timeout</span>
-            <h3 class="font-display text-lg sm:text-xl font-bold text-ivory leading-tight">Temporary Network Interruption</h3>
+            <span class="text-[10px] font-bold tracking-widest text-status-amber-400 uppercase block">Connection Timeout</span>
+            <h3 class="font-display text-lg sm:text-xl font-bold text-ink-main leading-tight">Temporary Network Interruption</h3>
           </div>
         </div>
         <button type="button" onclick="closeInquiryModal()" 
-                class="w-9 h-9 rounded-full bg-white/10 hover:bg-champagne text-ivory hover:text-deep-forest flex items-center justify-center text-xl font-bold transition shrink-0 cursor-pointer"
+                class="w-9 h-9 rounded-full bg-tint/10 hover:bg-champagne text-ink-main hover:text-deep-forest flex items-center justify-center text-xl font-bold transition shrink-0 cursor-pointer"
                 aria-label="Close modal" title="Close (Esc)">&times;</button>
       </div>
 
       <!-- Zone 2: Content Body -->
       <div class="p-5 sm:p-6 space-y-4 overflow-y-auto flex-1 text-left">
-        <div class="bg-canopy/70 rounded-xl p-4 border border-amber-500/25 text-xs space-y-2.5">
-          <p class="text-ivory/90 leading-relaxed text-xs">
+        <div class="bg-raised/70 rounded-xl p-4 border border-amber-500/25 text-xs space-y-2.5">
+          <p class="text-ink-main/90 leading-relaxed text-xs">
             We experienced a brief connection hiccup reaching our reservation desk server. <strong>Your selected dates and booking inquiry details are completely intact.</strong>
           </p>
-          <p class="text-amber-300 font-semibold text-xs">
+          <p class="text-status-amber-300 font-semibold text-xs">
             You can retry instant submission below, or send your pre-filled inquiry directly to our reservation manager via WhatsApp.
           </p>
         </div>
 
-        <div class="bg-deep-forest/80 rounded-xl p-3.5 border border-champagne/20 text-xs space-y-1.5 font-mono text-ivory/80">
-          <div class="text-[11px] text-champagne font-bold uppercase tracking-wider font-sans mb-1">Your Reservation Details:</div>
-          <div>Property: <strong class="text-white">${inquirySummary.property}</strong></div>
-          ${inquirySummary.unitsCount && inquirySummary.unitsCount > 1 ? `<div>Residences: <strong class="text-champagne">${inquirySummary.unitsCount} Units</strong></div>` : ""}
-          <div>Dates: <strong class="text-white">${inquirySummary.dates}</strong></div>
-          <div>Guests: <strong class="text-white">${inquirySummary.guests}</strong></div>
-          <div>Estimated Total: <strong class="text-champagne font-sans font-bold">${inquirySummary.estimatedTotal}</strong></div>
+        <div class="bg-canvas/80 rounded-xl p-3.5 border border-line-accent/20 text-xs space-y-1.5 font-mono text-ink-main/80">
+          <div class="text-[11px] text-ink-gold font-bold uppercase tracking-wider font-sans mb-1">Your Reservation Details:</div>
+          <div>Property: <strong class="text-ink-strong">${inquirySummary.property}</strong></div>
+          ${inquirySummary.unitsCount && inquirySummary.unitsCount > 1 ? `<div>Residences: <strong class="text-ink-gold">${inquirySummary.unitsCount} Units</strong></div>` : ""}
+          <div>Dates: <strong class="text-ink-strong">${inquirySummary.dates}</strong></div>
+          <div>Guests: <strong class="text-ink-strong">${inquirySummary.guests}</strong></div>
+          <div>Estimated Total: <strong class="text-ink-gold font-sans font-bold">${inquirySummary.estimatedTotal}</strong></div>
         </div>
       </div>
 
       <!-- Zone 3: Pinned Action Buttons -->
-      <div class="px-5 py-4 border-t border-champagne/20 bg-[#0a1914] space-y-2.5 shrink-0">
+      <div class="px-5 py-4 border-t border-line-accent/20 bg-dialog-footer space-y-2.5 shrink-0">
         <button type="button" id="confirm-submit-inquiry-btn" onclick="confirmAndSubmitInquiry()"
                 class="w-full bg-champagne hover:bg-champagne/90 text-deep-forest py-3 px-5 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer active:scale-[0.99]">
           <span>🔄</span>
@@ -1867,18 +1936,18 @@ function renderInquiryNetworkFailure(inquirySummary) {
         </button>
 
         <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer"
-           class="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white py-3 px-5 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-lg flex items-center justify-center gap-2 text-xs sm:text-sm">
+           class="w-full whatsapp-action bg-[#25D366] hover:bg-[#20ba5a] text-ink-strong py-3 px-5 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-lg flex items-center justify-center gap-2 text-xs sm:text-sm">
           <span>💬</span>
           <span>Send via WhatsApp Now</span>
         </a>
 
         <div class="flex gap-2">
           <button type="button" onclick="closeInquiryModal()"
-                  class="flex-1 bg-deep-forest/80 border border-champagne/25 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded-lg text-xs font-medium transition cursor-pointer">
+                  class="flex-1 bg-canvas/80 border border-line-accent/25 hover:border-line-accent text-ink-main/80 hover:text-ink-gold py-2.5 rounded-lg text-xs font-medium transition cursor-pointer">
             Edit Details
           </button>
           <a href="${telephoneUrl}"
-             class="flex-1 text-center bg-deep-forest/80 border border-champagne/25 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded-lg text-xs font-medium transition flex items-center justify-center gap-1">
+             class="flex-1 text-center bg-canvas/80 border border-line-accent/25 hover:border-line-accent text-ink-main/80 hover:text-ink-gold py-2.5 rounded-lg text-xs font-medium transition flex items-center justify-center gap-1">
             📞 Call Desk Direct
           </a>
         </div>
@@ -1897,55 +1966,55 @@ function renderInquirySuccessReceipt(inquirySummary, inquiryId) {
                       preferredContact.includes("Phone") ? "📞" : "✉️";
 
   modalElement.innerHTML = `
-    <div class="bg-deep-forest border border-champagne/40 rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden text-ivory shadow-2xl relative my-auto">
+    <div class="bg-canvas border border-line-accent/40 rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden text-ink-main shadow-2xl relative my-auto">
       <!-- Zone 1: Pinned Header (Always Visible) -->
-      <div class="flex items-center justify-between px-5 py-4 border-b border-champagne/20 bg-deep-forest/95 shrink-0">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-line-accent/20 bg-canvas/95 shrink-0">
         <div class="flex items-center gap-3 text-left">
-          <div class="w-10 h-10 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 text-lg font-bold shrink-0 shadow-md">
+          <div class="w-10 h-10 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-status-emerald-400 text-lg font-bold shrink-0 shadow-md">
             ✓
           </div>
           <div>
-            <span class="text-[10px] font-bold tracking-widest text-emerald-400 uppercase block">Step 2 of 2 • Reservation Request Submitted</span>
-            <h3 class="font-display text-lg sm:text-xl font-bold text-ivory leading-tight">Inquiry Received — Awaiting Staff Confirmation</h3>
+            <span class="text-[10px] font-bold tracking-widest text-status-emerald-400 uppercase block">Step 2 of 2 • Reservation Request Submitted</span>
+            <h3 class="font-display text-lg sm:text-xl font-bold text-ink-main leading-tight">Inquiry Received — Awaiting Staff Confirmation</h3>
           </div>
         </div>
         <button type="button" onclick="closeInquiryModal()" 
-                class="w-9 h-9 rounded-full bg-white/10 hover:bg-champagne text-ivory hover:text-deep-forest flex items-center justify-center text-xl font-bold transition shrink-0 cursor-pointer"
+                class="w-9 h-9 rounded-full bg-tint/10 hover:bg-champagne text-ink-main hover:text-deep-forest flex items-center justify-center text-xl font-bold transition shrink-0 cursor-pointer"
                 aria-label="Close booking receipt modal" title="Close (Esc)">&times;</button>
       </div>
 
       <!-- Zone 2: Scrollable Content Body -->
       <div class="p-5 sm:p-6 space-y-4 overflow-y-auto flex-1 text-left">
-        <div class="flex items-center justify-between bg-canopy/80 border border-champagne/30 px-4 py-2 rounded-xl text-xs font-mono text-champagne">
-          <span>Reference ID: <strong class="text-white">${inquiryId}</strong></span>
-          <button type="button" onclick="copyInquiryDetails('${inquiryId}')" class="hover:text-white transition inline-flex items-center gap-1 text-[11px] font-sans font-semibold bg-deep-forest/60 px-2.5 py-1 rounded border border-champagne/20 cursor-pointer" title="Copy Reference ID">📋 Copy ID</button>
+        <div class="flex items-center justify-between bg-raised/80 border border-line-accent/30 px-4 py-2 rounded-xl text-xs font-mono text-ink-gold">
+          <span>Reference ID: <strong class="text-ink-strong">${inquiryId}</strong></span>
+          <button type="button" onclick="copyInquiryDetails('${inquiryId}')" class="hover:text-ink-strong transition inline-flex items-center gap-1 text-[11px] font-sans font-semibold bg-canvas/60 px-2.5 py-1 rounded border border-line-accent/20 cursor-pointer" title="Copy Reference ID">📋 Copy ID</button>
         </div>
 
         <!-- SLA Guidance Box -->
-        <div class="bg-canopy/70 rounded-xl p-4 border border-champagne/20 text-xs space-y-2.5">
+        <div class="bg-raised/70 rounded-xl p-4 border border-line-accent/20 text-xs space-y-2.5">
           <div class="flex items-center justify-between flex-wrap gap-2">
-            <span class="text-champagne font-bold uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+            <span class="text-ink-gold font-bold uppercase tracking-wider text-[11px] flex items-center gap-1.5">
               ⏱️ Desk Response (8:00 AM – 8:00 PM EAT)
             </span>
-            <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-semibold px-2 py-0.5 rounded border border-emerald-500/30">Priority Desk Queue</span>
+            <span class="text-[10px] bg-success-panel/60 text-status-emerald-300 font-semibold px-2 py-0.5 rounded border border-emerald-500/30">Priority Desk Queue</span>
           </div>
-          <p class="text-ivory/90 leading-relaxed text-xs">
-            Our reservation desk (8:00 AM – 8:00 PM EAT) will review your dates for <strong class="text-champagne">${inquirySummary.property}</strong> and reach out via <strong class="text-white">${channelIcon} ${preferredContact}</strong> within <strong class="text-champagne">15–30 minutes</strong> (24/7 on-call dispatch coverage) to confirm availability and provide your 50% reservation deposit link.
+          <p class="text-ink-main/90 leading-relaxed text-xs">
+            Our reservation desk (8:00 AM – 8:00 PM EAT) will review your dates for <strong class="text-ink-gold">${inquirySummary.property}</strong> and reach out via <strong class="text-ink-strong">${channelIcon} ${preferredContact}</strong> typically within <strong class="text-ink-gold">15–30 minutes during desk hours</strong> (8AM–8PM EAT; 24/7 on-call dispatch coverage) to confirm availability and provide your 50% reservation deposit link.
           </p>
-          <div class="border-t border-champagne/15 pt-2.5 space-y-1 text-[11px] text-ivory/70">
-            <div class="flex justify-between gap-2"><span class="text-ivory/50">Stay Dates:</span> <span class="text-ivory font-medium text-right">${inquirySummary.dates}</span></div>
-            <div class="flex justify-between gap-2"><span class="text-ivory/50">Guest:</span> <span class="text-ivory font-medium text-right">${inquirySummary.name} (${inquirySummary.phone})</span></div>
-            ${inquirySummary.unitsCount && inquirySummary.unitsCount > 1 ? `<div class="flex justify-between gap-2"><span class="text-ivory/50">Residences:</span> <span class="text-champagne font-bold text-right">${inquirySummary.unitsCount} Units</span></div>` : ""}
-            ${inquirySummary.estimatedTotal ? `<div class="flex justify-between gap-2 pt-1 border-t border-champagne/10"><span class="text-ivory/50">Estimated Total:</span> <span class="text-champagne font-bold text-right">${inquirySummary.estimatedTotal}</span></div>` : ""}
+          <div class="border-t border-line-accent/15 pt-2.5 space-y-1 text-[11px] text-muted-70">
+            <div class="flex justify-between gap-2"><span class="text-muted-50">Stay Dates:</span> <span class="text-ink-main font-medium text-right">${inquirySummary.dates}</span></div>
+            <div class="flex justify-between gap-2"><span class="text-muted-50">Guest:</span> <span class="text-ink-main font-medium text-right">${inquirySummary.name} (${inquirySummary.phone})</span></div>
+            ${inquirySummary.unitsCount && inquirySummary.unitsCount > 1 ? `<div class="flex justify-between gap-2"><span class="text-muted-50">Residences:</span> <span class="text-ink-gold font-bold text-right">${inquirySummary.unitsCount} Units</span></div>` : ""}
+            ${inquirySummary.estimatedTotal ? `<div class="flex justify-between gap-2 pt-1 border-t border-line-accent/10"><span class="text-muted-50">Estimated Total:</span> <span class="text-ink-gold font-bold text-right">${inquirySummary.estimatedTotal}</span></div>` : ""}
           </div>
         </div>
       </div>
 
       <!-- Zone 3: Pinned Footer Actions (Always Visible) -->
-      <div class="px-5 py-4 border-t border-champagne/20 bg-[#0a1914] space-y-2.5 shrink-0">
+      <div class="px-5 py-4 border-t border-line-accent/20 bg-dialog-footer space-y-2.5 shrink-0">
         <!-- Direct Instant WhatsApp Send Action -->
-        <a href="${inquirySummary.whatsappUrl}" target="_blank" rel="noopener noreferrer"
-           class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-3.5 px-5 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-lg flex items-center justify-center gap-2 text-xs sm:text-sm active:scale-[0.99]">
+        <a href="${getInquiryWhatsAppUrl(inquirySummary)}" target="_blank" rel="noopener noreferrer"
+           class="w-full whatsapp-action bg-[#25D366] hover:bg-[#128C7E] text-ink-strong py-3.5 px-5 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-lg flex items-center justify-center gap-2 text-xs sm:text-sm active:scale-[0.99]">
           <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
             <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436.002 9.858-4.384 9.86-9.768.001-2.61-1.013-5.064-2.855-6.909C16.438 2.083 13.99 1.07 11.4 1.07 5.969 1.07 1.547 5.456 1.545 10.842c-.001 1.597.424 3.156 1.233 4.544L1.78 20.58l5.228-1.378c-.138-.077-.257-.15-.361-.208z" />
           </svg>
@@ -1954,7 +2023,7 @@ function renderInquirySuccessReceipt(inquirySummary, inquiryId) {
 
         <div class="flex gap-2">
           <button type="button" onclick="copyInquiryDetails('${encodeURIComponent(inquirySummary.messageText)}')"
-                  class="flex-1 bg-deep-forest/80 border border-champagne/25 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded-lg text-xs font-medium transition cursor-pointer">
+                  class="flex-1 bg-canvas/80 border border-line-accent/25 hover:border-line-accent text-ink-main/80 hover:text-ink-gold py-2.5 rounded-lg text-xs font-medium transition cursor-pointer">
             📋 Copy Details
           </button>
           <button type="button" onclick="closeInquiryModal()"
@@ -1994,66 +2063,66 @@ function renderInquiryCostBreakdown(inquirySummary) {
   const complimentaryList = (inquirySummary.selectedAddons || []).filter(item => !item.toLowerCase().includes("breakfast"));
 
   return `
-    <div class="bg-[#0b1d16] border border-champagne/30 rounded-xl p-3.5 sm:p-4 space-y-2.5 font-sans">
-      <div class="flex items-center justify-between pb-2 border-b border-champagne/20">
-        <span class="text-[11px] font-bold text-champagne uppercase tracking-wider flex items-center gap-1.5">
+    <div class="bg-dialog-inset border border-line-accent/30 rounded-xl p-3.5 sm:p-4 space-y-2.5 font-sans">
+      <div class="flex items-center justify-between pb-2 border-b border-line-accent/20">
+        <span class="text-[11px] font-bold text-ink-gold uppercase tracking-wider flex items-center gap-1.5">
           <span>🧾</span> Itemized Stay Breakdown
         </span>
-        <span class="text-[10px] text-ivory/60 font-sans">Transparent Direct Pricing</span>
+        <span class="text-[10px] text-muted-60 font-sans">Transparent Direct Pricing</span>
       </div>
 
       <!-- Line Item 1: Base Accommodation -->
       <div class="flex justify-between items-start gap-3 text-xs">
         <div class="space-y-0.5 min-w-0">
-          <span class="font-semibold text-ivory block truncate">${unitName}</span>
-          <span class="text-[11px] text-ivory/60 block">${rateLineSubtitle}</span>
+          <span class="font-semibold text-ink-main block truncate">${unitName}</span>
+          <span class="text-[11px] text-muted-60 block">${rateLineSubtitle}</span>
         </div>
-        <span class="font-mono font-bold text-ivory shrink-0">${baseCostFormatted}</span>
+        <span class="font-mono font-bold text-ink-main shrink-0">${baseCostFormatted}</span>
       </div>
 
       <!-- Line Item 2: Breakfast Add-on (if selected) -->
       ${hasBreakfast ? `
-      <div class="flex justify-between items-start gap-3 text-xs pt-2 border-t border-champagne/10">
+      <div class="flex justify-between items-start gap-3 text-xs pt-2 border-t border-line-accent/10">
         <div class="space-y-0.5">
-          <span class="font-semibold text-emerald-400 block">🍳 Chef-Prepared Coastal Breakfast</span>
-          <span class="text-[11px] text-ivory/60 block">${adultsCount} Guest(s) × ${nightsCount} Night(s) @ KSh ${(totals.breakfastRate || resolveBreakfastRate(inquirySummary.property)).toLocaleString()} / day</span>
+          <span class="font-semibold text-status-emerald-400 block">🍳 Chef-Prepared Coastal Breakfast</span>
+          <span class="text-[11px] text-muted-60 block">${adultsCount} Guest(s) × ${nightsCount} Night(s) @ KSh ${(totals.breakfastRate || resolveBreakfastRate(inquirySummary.property)).toLocaleString()} / day</span>
         </div>
-        <span class="font-mono font-bold text-emerald-400 shrink-0">${breakfastCostFormatted}</span>
+        <span class="font-mono font-bold text-status-emerald-400 shrink-0">${breakfastCostFormatted}</span>
       </div>
       ` : ""}
 
       <!-- Line Item 3: Complimentary Amenities (if selected) -->
       ${complimentaryList.map(item => `
-      <div class="flex justify-between items-center gap-3 text-xs pt-1.5 border-t border-champagne/10">
-        <span class="text-ivory/80 text-[11px] flex items-center gap-1">
-          <span class="text-emerald-400 font-bold">✓</span> ${item.replace(/\s*\(Complimentary\)/i, "")}
+      <div class="flex justify-between items-center gap-3 text-xs pt-1.5 border-t border-line-accent/10">
+        <span class="text-ink-main/80 text-[11px] flex items-center gap-1">
+          <span class="text-status-emerald-400 font-bold">✓</span> ${item.replace(/\s*\(Complimentary\)/i, "")}
         </span>
-        <span class="text-[9px] font-bold uppercase tracking-wider text-champagne bg-champagne/15 px-2 py-0.5 rounded border border-champagne/30 shrink-0">FREE (KSh 0)</span>
+        <span class="text-[9px] font-bold uppercase tracking-wider text-ink-gold bg-champagne/15 px-2 py-0.5 rounded border border-line-accent/30 shrink-0">FREE (KSh 0)</span>
       </div>
       `).join("")}
 
       <!-- Line Item 4: Platform Fee / Commission -->
-      <div class="flex justify-between items-center gap-3 text-xs pt-1.5 border-t border-champagne/10">
-        <span class="text-ivory/60 text-[11px]">Direct Host Rate • Booking Commission</span>
-        <span class="text-[11px] font-semibold text-emerald-400 shrink-0">Zero Extra Fees</span>
+      <div class="flex justify-between items-center gap-3 text-xs pt-1.5 border-t border-line-accent/10">
+        <span class="text-muted-60 text-[11px]">Direct Host Rate • Booking Commission</span>
+        <span class="text-[11px] font-semibold text-status-emerald-400 shrink-0">Zero Extra Fees</span>
       </div>
 
       <!-- Total Row -->
-      <div class="flex justify-between items-center gap-3 pt-3 border-t-2 border-champagne/35 mt-1">
+      <div class="flex justify-between items-center gap-3 pt-3 border-t-2 border-line-accent/35 mt-1">
         <div>
-          <span class="font-bold text-ivory text-xs sm:text-sm block">Total Estimated Amount</span>
-          <span class="text-[10px] text-ivory/60 block">🔒 No payment right now • Pay 50% deposit upon host confirmation</span>
+          <span class="font-bold text-ink-main text-xs sm:text-sm block">Total Estimated Amount</span>
+          <span class="text-[10px] text-muted-60 block">🔒 No payment right now • Pay 50% deposit upon host confirmation</span>
         </div>
-        <span class="font-display font-bold text-champagne text-base sm:text-lg text-right shrink-0">${inquirySummary.estimatedTotal}</span>
+        <span class="font-display font-bold text-ink-gold text-base sm:text-lg text-right shrink-0">${inquirySummary.estimatedTotal}</span>
       </div>
 
       <!-- Deposit & Cancellation Policy Notice -->
-      <div class="pt-2 border-t border-champagne/15 text-[11px] text-ivory/70 space-y-1">
-        <div class="flex items-center justify-between text-champagne/90 font-medium">
+      <div class="pt-2 border-t border-line-accent/15 text-[11px] text-muted-70 space-y-1">
+        <div class="flex items-center justify-between text-ink-gold/90 font-medium">
           <span>Deposit Policy:</span>
           <span>50% deposit required to confirm stay</span>
         </div>
-        <p class="text-[10px] text-ivory/55 leading-relaxed">
+        <p class="text-[10px] text-ink-main/55 leading-relaxed">
           Cancellation: 100% refund (&gt;7 days before check-in, minus 3.5% fee); 50% refund (2–7 days); non-refundable (&lt;48 hours).
         </p>
       </div>
@@ -2078,35 +2147,35 @@ function showInquiryReviewModal(inquirySummary) {
                       inquirySummary.preferredContactMethod.includes("Phone") ? "📞" : "✉️";
 
   modalElement.innerHTML = `
-    <div class="bg-deep-forest border border-champagne/35 rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden text-ivory shadow-2xl relative my-auto">
+    <div class="bg-canvas border border-line-accent/35 rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden text-ink-main shadow-2xl relative my-auto">
       <!-- Zone 1: Pinned Header (Always Visible) -->
-      <div class="flex items-center justify-between px-5 py-4 border-b border-champagne/20 bg-deep-forest/95 shrink-0">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-line-accent/20 bg-canvas/95 shrink-0">
         <div>
-          <span class="text-[10px] font-bold tracking-widest text-champagne uppercase block">Step 2 of 2 • Direct Reservation</span>
-          <h3 id="inquiry-modal-title" class="font-display text-lg sm:text-xl font-bold text-ivory leading-tight">Review &amp; Confirm Your Stay</h3>
+          <span class="text-[10px] font-bold tracking-widest text-ink-gold uppercase block">Step 2 of 2 • Direct Reservation</span>
+          <h3 id="inquiry-modal-title" class="font-display text-lg sm:text-xl font-bold text-ink-main leading-tight">Review &amp; Confirm Your Stay</h3>
         </div>
         <button type="button" onclick="closeInquiryModal()" 
-                class="w-9 h-9 rounded-full bg-white/10 hover:bg-champagne text-ivory hover:text-deep-forest flex items-center justify-center text-xl font-bold transition shrink-0 cursor-pointer"
+                class="w-9 h-9 rounded-full bg-tint/10 hover:bg-champagne text-ink-main hover:text-deep-forest flex items-center justify-center text-xl font-bold transition shrink-0 cursor-pointer"
                 aria-label="Close booking review modal" title="Close (Esc)">&times;</button>
       </div>
 
       <!-- Zone 2: Scrollable Summary Body -->
       <div class="p-5 sm:p-6 space-y-3.5 overflow-y-auto flex-1">
-        <p class="text-xs text-ivory/75 leading-relaxed">
-          Please verify your reservation details below. Confirming logs your request directly with our central reservations desk (<strong class="text-champagne">15–30 min response time during desk hours</strong>).
+        <p class="text-xs text-ink-main/75 leading-relaxed">
+          Please verify your reservation details below. Confirming logs your request directly with our central reservations desk (<strong class="text-ink-gold">typically 15–30 min during desk hours, 8AM–8PM EAT</strong>).
         </p>
 
         <!-- Primary Guest & Stay Itinerary -->
-        <div class="bg-canopy/60 rounded-xl p-4 border border-champagne/20 text-xs space-y-2 font-mono">
-          <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Guest Name:</span><span class="font-semibold text-ivory font-sans text-right">${inquirySummary.name}</span></div>
-          <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Contact Phone:</span><span class="font-semibold text-ivory font-sans text-right">${inquirySummary.phone}</span></div>
-          ${inquirySummary.email ? `<div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Email:</span><span class="text-ivory font-sans text-right break-all">${inquirySummary.email}</span></div>` : ""}
-          <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Contact Via:</span><span class="font-semibold text-champagne font-sans text-right">${channelIcon} ${inquirySummary.preferredContactMethod}</span></div>
-          <div class="flex justify-between gap-3 pt-1.5 border-t border-champagne/10"><span class="text-ivory/60 shrink-0">Residence:</span><span class="font-semibold text-champagne font-sans text-right">${inquirySummary.property}</span></div>
-          <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Stay Dates:</span><span class="text-ivory font-sans text-right">${inquirySummary.dates}</span></div>
-          <div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Guests:</span><span class="text-ivory font-sans text-right">${inquirySummary.guests}</span></div>
-          ${inquirySummary.unitsCount && inquirySummary.unitsCount > 1 ? `<div class="flex justify-between gap-3"><span class="text-ivory/60 shrink-0">Residences:</span><span class="font-semibold text-champagne font-sans text-right">${inquirySummary.unitsCount} Units</span></div>` : ""}
-          ${inquirySummary.specialRequests ? `<div class="flex justify-between gap-3 pt-1.5 border-t border-champagne/10"><span class="text-ivory/60 shrink-0">Arrival Notes:</span><span class="text-ivory font-sans italic text-right">${inquirySummary.specialRequests}</span></div>` : ""}
+        <div class="bg-raised/60 rounded-xl p-4 border border-line-accent/20 text-xs space-y-2 font-mono">
+          <div class="flex justify-between gap-3"><span class="text-muted-60 shrink-0">Guest Name:</span><span class="font-semibold text-ink-main font-sans text-right">${inquirySummary.name}</span></div>
+          <div class="flex justify-between gap-3"><span class="text-muted-60 shrink-0">Contact Phone:</span><span class="font-semibold text-ink-main font-sans text-right">${inquirySummary.phone}</span></div>
+          ${inquirySummary.email ? `<div class="flex justify-between gap-3"><span class="text-muted-60 shrink-0">Email:</span><span class="text-ink-main font-sans text-right break-all">${inquirySummary.email}</span></div>` : ""}
+          <div class="flex justify-between gap-3"><span class="text-muted-60 shrink-0">Contact Via:</span><span class="font-semibold text-ink-gold font-sans text-right">${channelIcon} ${inquirySummary.preferredContactMethod}</span></div>
+          <div class="flex justify-between gap-3 pt-1.5 border-t border-line-accent/10"><span class="text-muted-60 shrink-0">Residence:</span><span class="font-semibold text-ink-gold font-sans text-right">${inquirySummary.property}</span></div>
+          <div class="flex justify-between gap-3"><span class="text-muted-60 shrink-0">Stay Dates:</span><span class="text-ink-main font-sans text-right">${inquirySummary.dates}</span></div>
+          <div class="flex justify-between gap-3"><span class="text-muted-60 shrink-0">Guests:</span><span class="text-ink-main font-sans text-right">${inquirySummary.guests}</span></div>
+          ${inquirySummary.unitsCount && inquirySummary.unitsCount > 1 ? `<div class="flex justify-between gap-3"><span class="text-muted-60 shrink-0">Residences:</span><span class="font-semibold text-ink-gold font-sans text-right">${inquirySummary.unitsCount} Units</span></div>` : ""}
+          ${inquirySummary.specialRequests ? `<div class="flex justify-between gap-3 pt-1.5 border-t border-line-accent/10"><span class="text-muted-60 shrink-0">Arrival Notes:</span><span class="text-ink-main font-sans italic text-right">${inquirySummary.specialRequests}</span></div>` : ""}
         </div>
 
         <!-- Transparent Itemized Cost Breakdown -->
@@ -2114,7 +2183,7 @@ function showInquiryReviewModal(inquirySummary) {
       </div>
 
       <!-- Zone 3: Pinned Footer Actions (Always Visible) -->
-      <div class="px-5 py-4 border-t border-champagne/20 bg-[#0a1914] space-y-2.5 shrink-0">
+      <div class="px-5 py-4 border-t border-line-accent/20 bg-dialog-footer space-y-2.5 shrink-0">
         <button type="button" id="confirm-submit-inquiry-btn" onclick="confirmAndSubmitInquiry()"
                 class="w-full bg-champagne hover:bg-champagne/90 text-deep-forest py-3.5 px-5 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer active:scale-[0.99]">
           <span class="text-base">✓</span>
@@ -2123,11 +2192,11 @@ function showInquiryReviewModal(inquirySummary) {
 
         <div class="flex gap-2">
           <button type="button" onclick="closeInquiryModal()"
-                  class="flex-1 bg-deep-forest/80 border border-champagne/25 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded-lg text-xs font-medium transition cursor-pointer">
+                  class="flex-1 bg-canvas/80 border border-line-accent/25 hover:border-line-accent text-ink-main/80 hover:text-ink-gold py-2.5 rounded-lg text-xs font-medium transition cursor-pointer">
             ← Edit Details
           </button>
           <a href="${CommunicationService.getTelephoneUrl()}"
-             class="flex-1 text-center bg-deep-forest/80 border border-champagne/25 hover:border-champagne text-ivory/80 hover:text-champagne py-2.5 rounded-lg text-xs font-medium transition flex items-center justify-center gap-1">
+             class="flex-1 text-center bg-canvas/80 border border-line-accent/25 hover:border-line-accent text-ink-main/80 hover:text-ink-gold py-2.5 rounded-lg text-xs font-medium transition flex items-center justify-center gap-1">
             📞 Call Desk Direct
           </a>
         </div>
@@ -2192,7 +2261,7 @@ function switchFaqTab(selectedTabId) {
   document.querySelectorAll(".faq-panel").forEach(panel => panel.classList.add("hidden"));
   document.querySelectorAll(".faq-tab-btn").forEach(button => {
     button.classList.remove("bg-champagne", "text-deep-forest", "shadow-lg");
-    button.classList.add("bg-deep-forest/60", "text-ivory/70", "border", "border-champagne/20");
+    button.classList.add("bg-canvas/60", "text-muted-70", "border", "border-line-accent/20");
     button.setAttribute("aria-selected", "false");
   });
 
@@ -2201,7 +2270,7 @@ function switchFaqTab(selectedTabId) {
 
   const targetButton = document.getElementById("btn-" + selectedTabId);
   if (targetButton) {
-    targetButton.classList.remove("bg-deep-forest/60", "text-ivory/70", "border", "border-champagne/20");
+    targetButton.classList.remove("bg-canvas/60", "text-muted-70", "border", "border-line-accent/20");
     targetButton.classList.add("bg-champagne", "text-deep-forest", "shadow-lg");
     targetButton.setAttribute("aria-selected", "true");
   }
@@ -2213,15 +2282,15 @@ function switchTab(selectedTabId) {
   if (targetPanel) targetPanel.classList.remove("hidden");
 
   document.querySelectorAll(".tab-btn").forEach(button => {
-    button.classList.remove("bg-deep-forest", "text-champagne", "border-champagne/30");
-    button.classList.add("bg-deep-forest/40", "text-ivory/60", "border-transparent");
+    button.classList.remove("bg-canvas", "text-ink-gold", "border-line-accent/30");
+    button.classList.add("bg-canvas/40", "text-muted-60", "border-transparent");
     button.setAttribute("aria-selected", "false");
   });
 
   const targetButton = document.getElementById("btn-" + selectedTabId);
   if (targetButton) {
-    targetButton.classList.remove("bg-deep-forest/40", "text-ivory/60", "border-transparent");
-    targetButton.classList.add("bg-deep-forest", "text-champagne", "border-champagne/30");
+    targetButton.classList.remove("bg-canvas/40", "text-muted-60", "border-transparent");
+    targetButton.classList.add("bg-canvas", "text-ink-gold", "border-line-accent/30");
     targetButton.setAttribute("aria-selected", "true");
   }
 }
@@ -2773,11 +2842,11 @@ const BeakimDateRangePicker = {
 
   buildStatusGuidanceHtml() {
     if (this.state.step === "check-out" && this.state.checkIn) {
-      return `Check-In: <span class="text-champagne font-bold">${this.formatShortDisplayDate(this.state.checkIn)}</span> • Select Check-Out Date`;
+      return `Check-In: <span class="text-ink-gold font-bold">${this.formatShortDisplayDate(this.state.checkIn)}</span> • Select Check-Out Date`;
     }
     if (this.state.checkIn && this.state.checkOut) {
       const nights = calculateDateDifferenceInDays(this.state.checkIn, this.state.checkOut);
-      return `<span class="text-champagne font-bold">${nights} Night${nights > 1 ? "s" : ""}</span> (${this.formatShortDisplayDate(this.state.checkIn)} → ${this.formatShortDisplayDate(this.state.checkOut)})`;
+      return `<span class="text-ink-gold font-bold">${nights} Night${nights > 1 ? "s" : ""}</span> (${this.formatShortDisplayDate(this.state.checkIn)} → ${this.formatShortDisplayDate(this.state.checkOut)})`;
     }
     return "Select Check-In Date";
   },
@@ -2785,25 +2854,25 @@ const BeakimDateRangePicker = {
   buildCalendarPresetsHtml() {
     return `
       <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
-        <button type="button" onclick="BeakimDateRangePicker.applyPreset('weekend')" class="px-2.5 py-1 rounded-full bg-canopy/80 border border-champagne/25 text-champagne hover:bg-champagne hover:text-deep-forest transition font-medium">Weekend (2 Nights)</button>
-        <button type="button" onclick="BeakimDateRangePicker.applyPreset('5days')" class="px-2.5 py-1 rounded-full bg-canopy/80 border border-champagne/25 text-champagne hover:bg-champagne hover:text-deep-forest transition font-medium">5-Day Stay</button>
-        <button type="button" onclick="BeakimDateRangePicker.applyPreset('7days')" class="px-2.5 py-1 rounded-full bg-canopy/80 border border-champagne/25 text-champagne hover:bg-champagne hover:text-deep-forest transition font-medium">7-Night Holiday</button>
+        <button type="button" onclick="BeakimDateRangePicker.applyPreset('weekend')" class="px-2.5 py-1 rounded-full bg-raised/80 border border-line-accent/25 text-ink-gold hover:bg-champagne hover:text-deep-forest transition font-medium">Weekend (2 Nights)</button>
+        <button type="button" onclick="BeakimDateRangePicker.applyPreset('5days')" class="px-2.5 py-1 rounded-full bg-raised/80 border border-line-accent/25 text-ink-gold hover:bg-champagne hover:text-deep-forest transition font-medium">5-Day Stay</button>
+        <button type="button" onclick="BeakimDateRangePicker.applyPreset('7days')" class="px-2.5 py-1 rounded-full bg-raised/80 border border-line-accent/25 text-ink-gold hover:bg-champagne hover:text-deep-forest transition font-medium">7-Night Holiday</button>
       </div>
     `;
   },
 
   buildCalendarMonthNavHtml(monthName, year, isAtMinMonth) {
     const prevButtonClasses = isAtMinMonth
-      ? 'disabled class="p-1 text-ivory/20 cursor-not-allowed"'
-      : 'class="p-1 text-champagne hover:text-ivory transition"';
+      ? 'disabled class="p-1 text-ink-main/20 cursor-not-allowed"'
+      : 'class="p-1 text-ink-gold hover:text-ink-main transition"';
 
     return `
       <div class="flex items-center justify-between px-1 pt-1">
         <button type="button" id="cal-prev-month-btn" onclick="BeakimDateRangePicker.prevMonth()" ${prevButtonClasses} aria-label="Previous Month">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         </button>
-        <span class="text-sm font-bold text-ivory font-display tracking-wide">${monthName} ${year}</span>
-        <button type="button" id="cal-next-month-btn" onclick="BeakimDateRangePicker.nextMonth()" class="p-1 text-champagne hover:text-ivory transition" aria-label="Next Month">
+        <span class="text-sm font-bold text-ink-main font-display tracking-wide">${monthName} ${year}</span>
+        <button type="button" id="cal-next-month-btn" onclick="BeakimDateRangePicker.nextMonth()" class="p-1 text-ink-gold hover:text-ink-main transition" aria-label="Next Month">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </button>
       </div>
@@ -2822,7 +2891,7 @@ const BeakimDateRangePicker = {
     let extraAttrs = `data-cal-date="${dateString}" aria-label="${fullDateLabel}" onclick="event.stopPropagation(); BeakimDateRangePicker.selectDate('${dateString}', event)" onmouseenter="BeakimDateRangePicker.onHoverDate('${dateString}')"`;
 
     if (isPast) {
-      cellClasses += "text-ivory/20 cursor-not-allowed ";
+      cellClasses += "text-ink-main/20 cursor-not-allowed ";
       extraAttrs = `data-cal-date="${dateString}" aria-label="${fullDateLabel} (Unavailable, past date)" disabled aria-disabled="true"`;
     } else if (isCheckIn && isCheckOut) {
       cellClasses += "cal-range-start cal-range-end shadow-md scale-105 ";
@@ -2837,7 +2906,7 @@ const BeakimDateRangePicker = {
       cellClasses += "cal-range-mid ";
       extraAttrs += ` aria-pressed="true"`;
     } else {
-      cellClasses += "text-ivory hover:bg-champagne/20 rounded-full ";
+      cellClasses += "text-ink-main hover:bg-champagne/20 rounded-full ";
       extraAttrs += ` aria-pressed="false"`;
     }
 
@@ -2874,7 +2943,7 @@ const BeakimDateRangePicker = {
 
     return `
       <div class="space-y-1">
-        <div class="grid grid-cols-7 text-center text-[11px] font-bold text-champagne/70 pb-1">
+        <div class="grid grid-cols-7 text-center text-[11px] font-bold text-ink-gold/70 pb-1">
           ${headerCols}
         </div>
         <div class="grid grid-cols-7 gap-y-1 text-center items-center justify-items-center">
@@ -2886,8 +2955,8 @@ const BeakimDateRangePicker = {
 
   buildCalendarFooterHtml() {
     return `
-      <div class="flex items-center justify-between pt-2 border-t border-champagne/15 text-xs">
-        <button type="button" onclick="BeakimDateRangePicker.reset()" class="text-ivory/60 hover:text-champagne transition underline underline-offset-2 text-[11px]">Clear Dates</button>
+      <div class="flex items-center justify-between pt-2 border-t border-line-accent/15 text-xs">
+        <button type="button" onclick="BeakimDateRangePicker.reset()" class="text-muted-60 hover:text-ink-gold transition underline underline-offset-2 text-[11px]">Clear Dates</button>
         <button type="button" onclick="BeakimDateRangePicker.applyAndClose()" class="bg-champagne hover:bg-driftwood text-deep-forest font-bold px-4 py-1.5 rounded-lg transition shadow-md text-xs active:scale-95">Apply Dates ✓</button>
       </div>
     `;
@@ -2910,15 +2979,15 @@ const BeakimDateRangePicker = {
     const footerHtml = this.buildCalendarFooterHtml();
 
     popover.innerHTML = `
-      <div class="cal-modal-card bg-[#0D2318] border border-champagne/30 rounded-2xl shadow-2xl p-4 sm:p-5 w-full max-w-sm sm:max-w-md text-ivory flex flex-col space-y-3">
-        <div class="flex items-center justify-between pb-2 border-b border-champagne/15">
+      <div class="cal-modal-card bg-canvas border border-line-accent/30 rounded-2xl shadow-2xl p-4 sm:p-5 w-full max-w-sm sm:max-w-md text-ink-main flex flex-col space-y-3">
+        <div class="flex items-center justify-between pb-2 border-b border-line-accent/15">
           <div>
-            <h4 class="text-xs font-bold uppercase tracking-wider text-champagne flex items-center gap-1.5">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-ink-gold flex items-center gap-1.5">
               <span>📅</span> Dates of Stay
             </h4>
-            <p class="text-[11px] text-ivory/70 pt-0.5">${statusGuidanceHtml}</p>
+            <p class="text-[11px] text-muted-70 pt-0.5">${statusGuidanceHtml}</p>
           </div>
-          <button type="button" id="cal-close-btn" onclick="BeakimDateRangePicker.close()" class="w-7 h-7 rounded-full bg-deep-forest/80 hover:bg-champagne/20 text-ivory/70 hover:text-champagne flex items-center justify-center transition text-sm cursor-pointer" aria-label="Close date picker">✕</button>
+          <button type="button" id="cal-close-btn" onclick="BeakimDateRangePicker.close()" class="w-7 h-7 rounded-full bg-canvas/80 hover:bg-champagne/20 text-muted-70 hover:text-ink-gold flex items-center justify-center transition text-sm cursor-pointer" aria-label="Close date picker">✕</button>
         </div>
 
         <!-- Quick Presets -->
@@ -3151,15 +3220,15 @@ function switchBookingMode(mode) {
   if (conferenceContainer) conferenceContainer.classList.toggle("hidden", !isConference);
 
   if (tabBtnCottage) {
-    tabBtnCottage.classList.toggle("bg-deep-forest", !isConference);
-    tabBtnCottage.classList.toggle("text-champagne", !isConference);
+    tabBtnCottage.classList.toggle("bg-canvas", !isConference);
+    tabBtnCottage.classList.toggle("text-ink-gold", !isConference);
     tabBtnCottage.classList.toggle("shadow-md", !isConference);
     tabBtnCottage.classList.toggle("text-deep-forest/70", isConference);
   }
 
   if (tabBtnConference) {
-    tabBtnConference.classList.toggle("bg-deep-forest", isConference);
-    tabBtnConference.classList.toggle("text-champagne", isConference);
+    tabBtnConference.classList.toggle("bg-canvas", isConference);
+    tabBtnConference.classList.toggle("text-ink-gold", isConference);
     tabBtnConference.classList.toggle("shadow-md", isConference);
     tabBtnConference.classList.toggle("text-deep-forest/70", !isConference);
   }
@@ -3171,7 +3240,7 @@ function switchBookingMode(mode) {
 
 function toggleRadioIndicator(radioElement, isSelected) {
   if (!radioElement) return;
-  radioElement.classList.toggle("border-champagne", isSelected);
+  radioElement.classList.toggle("border-line-accent", isSelected);
   radioElement.classList.toggle("bg-champagne", isSelected);
   radioElement.classList.toggle("border-deep-forest/30", !isSelected);
   radioElement.classList.toggle("bg-transparent", !isSelected);
@@ -3216,14 +3285,14 @@ function selectConferencePackage(packageIdentifier) {
 
   if (halfDayCard && fullDayCard) {
     halfDayCard.classList.toggle("border-2", !isFullDay);
-    halfDayCard.classList.toggle("border-champagne", !isFullDay);
+    halfDayCard.classList.toggle("border-line-accent", !isFullDay);
     halfDayCard.classList.toggle("bg-champagne/10", !isFullDay);
     halfDayCard.classList.toggle("border-deep-forest/15", isFullDay);
     halfDayCard.classList.toggle("bg-white", isFullDay);
     halfDayCard.setAttribute("aria-checked", !isFullDay ? "true" : "false");
 
     fullDayCard.classList.toggle("border-2", isFullDay);
-    fullDayCard.classList.toggle("border-champagne", isFullDay);
+    fullDayCard.classList.toggle("border-line-accent", isFullDay);
     fullDayCard.classList.toggle("bg-champagne/10", isFullDay);
     fullDayCard.classList.toggle("border-deep-forest/15", !isFullDay);
     fullDayCard.classList.toggle("bg-white", !isFullDay);
@@ -3346,9 +3415,7 @@ function handleConferenceWhatsAppRFP(event) {
     notes
   });
 
-  const darlingCatalog = (typeof BEAKIM_CATALOG !== "undefined" && BEAKIM_CATALOG["diani-darling"]) ? BEAKIM_CATALOG["diani-darling"] : null;
-  const darlingPhone = darlingCatalog?.phone || "+254 119 237 439";
-  const whatsappUrl = CommunicationService.buildWhatsAppUrl(messageText, darlingPhone);
+  const whatsappUrl = CommunicationService.buildWhatsAppUrl(messageText);
   if (typeof window !== "undefined" && typeof window.open === "function") {
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   }
@@ -3437,6 +3504,7 @@ function initializeScrollRevealEngine() {
 if (typeof window !== "undefined") {
   window.addEventListener("DOMContentLoaded", () => {
     initializeMobileChromeClearance();
+    initializeWhatsAppRouting();
     initializeDemoModeBanner();
     const checkInInput = document.getElementById("check-in");
     const checkOutInput = document.getElementById("check-out");
@@ -3463,6 +3531,10 @@ if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     APP_CONFIG,
     CommunicationService,
+    resolveWhatsAppPhone,
+    getInquiryWhatsAppUrl,
+    resolveBookingBenefits,
+    syncBookingBenefits,
     CrmSyncService,
     PageScrollLock,
     getNairobiDateString,

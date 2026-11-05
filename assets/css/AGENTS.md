@@ -48,3 +48,13 @@ Fixed-bar blur removal was benchmarked and reverted: no repeatable speed benefit
 Unit steppers and contact-method labels have 48px mobile targets. Calendar close/month navigation and FAQ tabs have 44px minimum targets; individual day cells retain their compact 7-column grid.
 
 Base CSS scroll-behavior is auto; click scrolling is controlled by the motion-aware JS helper. Initial deep-link positioning is immediate.
+
+## Approved corrective patch — 5 November 2026
+Corrective 2.2.5: phone-contact-row uses a 104px dial-code column below 768px, then stacks below 360px. preferred-contact-options also stacks below 360px. Retain 16px/48px input sizing. whatsapp-action uses forest text on green (8.33:1 default / 6.75:1 hover), with explicit hover/focus colors. Do not apply this green-button class to text-only footer links.
+
+Diani hero keeps its primary rate prominent and optional breakfast in smaller body text to preserve mobile CTA visibility. Telephone dock accessible names include their visible Call Us/Call Reception wording for voice input.
+
+## Public themes — 5 November 2026
+2.3.0 semantic surfaces/inks/borders/status variables supply both themes. Fixed brand forest text on gold/white buttons remains fixed. theme-photo restores dark tokens for photographic overlays/gallery; theme-form-paper retains native light controls. The reserved toggle slot prevents loading CLS. Change input.css and rebuild, never edit styles.css.
+
+Calendar range text now uses theme ink rather than fixed ivory; light weekday labels use opaque bronze. Light hover shadows use a softer forest tint.

@@ -106,7 +106,7 @@ const BEAKIM_CATALOG = {
     name: "Tower Cottages",
     locality: "Ukunda",
     address: "Likoni-Lunga Lunga Rd, Behind Naivas Supermarket, Ukunda, Kenya",
-    phone: "+254 746 938 529",
+    phone: "+254 750 864 119",
     coordinates: { latitude: -4.2874, longitude: 39.5665 },
     stayType: "nightly",
     pools: 0,

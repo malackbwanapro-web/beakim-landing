@@ -39,3 +39,8 @@
 ## Mobile review candidate — 2026-11-02
 Mobile 2.2.4: shared scroll/navigation and measured mobile chrome contracts are documented in js/AGENTS.md and css/AGENTS.md; no photography, catalog or CRM modifications.
 
+## Approved corrective patch — 5 November 2026
+Corrective release 2.2.5 changes HTML/client CSS/JS only. The routing, benefits and narrow-screen contracts are documented in js/AGENTS.md and css/AGENTS.md. Public photography and fonts are unchanged.
+
+## Public themes — 5 November 2026
+Public themes use semantic Tailwind variables, a small early preference bootstrap and js/theme.js. No fonts, photography or UI dependencies were added. Read CSS/JS contracts before changing appearance.

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html data-theme="dark" lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T5E3SNGQZC"></script>
@@ -31,7 +31,9 @@
   <meta name="theme-color" content="#0d2b24" />
 
   <!-- Compiled Production CSS -->
-  <link rel="stylesheet" href="assets/css/styles.css?v=2.2.4" />
+  <script data-theme-bootstrap>(function(){var t='dark';try{var s=localStorage.getItem('beakim-theme');if(s==='light'||s==='dark')t=s}catch(e){}document.documentElement.dataset.theme=t;var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==='light'?'#F7F4EE':'#0D2318'})();</script>
+  <script src="assets/js/theme.js?v=2.3.0" defer></script>
+  <link rel="stylesheet" href="assets/css/styles.css?v=2.3.0" />
 
   <!-- Verbatim JSON-LD Schema -->
   <script type="application/ld+json">
@@ -71,7 +73,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="assets/js/catalog.js" defer></script>
-  <script src="assets/js/main.js?v=2.2.4" defer></script>
+  <script src="assets/js/main.js?v=2.3.0" defer></script>
   <link rel="canonical" href="https://www.beakimhospitalitygroup.co.ke/beakim-apartments" />
 
   <!-- Open Graph / Social Meta -->
@@ -97,11 +99,11 @@
 
 
   <!-- ── QUICK COMMUNICATION DOCK (ROOTED ON MOBILE, FLOATING ON DESKTOP) ── -->
-  <div class="site-contact-dock fixed bottom-0 left-0 right-0 z-40 bg-deep-forest/95 backdrop-blur-md border-t border-champagne/20 px-4 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] shadow-[0_-4px_25px_rgba(0,0,0,0.5)] md:bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] md:right-6 md:left-auto md:w-auto md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0 md:shadow-none flex flex-row md:flex-col gap-3 justify-center items-center">
+  <div class="site-contact-dock fixed bottom-0 left-0 right-0 z-40 bg-canvas/95 backdrop-blur-md border-t border-line-accent/20 px-4 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] shadow-[0_-4px_25px_rgba(0,0,0,0.5)] md:bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] md:right-6 md:left-auto md:w-auto md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0 md:shadow-none flex flex-row md:flex-col gap-3 justify-center items-center">
     <!-- WhatsApp Action -->
     <a href="https://wa.me/254750864119" target="_blank" rel="noopener noreferrer" 
        data-comm-action="whatsapp"
-       class="flex-1 md:flex-initial w-full md:w-14 md:h-14 flex items-center justify-center gap-2 md:gap-0 bg-[#25D366] hover:bg-[#128C7E] text-white px-4 md:px-0 py-2.5 md:py-0 rounded-lg md:rounded-full shadow-md md:shadow-2xl transition duration-300 transform md:hover:-translate-y-1 active:scale-95 text-xs md:text-sm font-semibold tracking-wide"
+       class="flex-1 md:flex-initial w-full md:w-14 md:h-14 flex items-center justify-center gap-2 md:gap-0 whatsapp-action bg-[#25D366] hover:bg-[#128C7E] text-ink-strong px-4 md:px-0 py-2.5 md:py-0 rounded-lg md:rounded-full shadow-md md:shadow-2xl transition duration-300 transform md:hover:-translate-y-1 active:scale-95 text-xs md:text-sm font-semibold tracking-wide"
        title="Chat with Beakim Apartments on WhatsApp"
        aria-label="Chat with Beakim Apartments on WhatsApp">
       <svg class="w-5 h-5 md:w-6 md:h-6 fill-current shrink-0" viewBox="0 0 24 24" aria-hidden="true">
@@ -114,7 +116,7 @@
        data-comm-action="phone"
        class="flex-1 md:flex-initial w-full md:w-14 md:h-14 flex items-center justify-center gap-2 md:gap-0 bg-champagne hover:bg-driftwood text-deep-forest px-4 md:px-0 py-2.5 md:py-0 rounded-lg md:rounded-full shadow-md md:shadow-2xl transition duration-300 transform md:hover:-translate-y-1 active:scale-95 text-xs md:text-sm font-semibold tracking-wider uppercase md:capitalize"
        title="Call Beakim Apartments directly"
-       aria-label="Call Beakim Apartments directly">
+       aria-label="Call Desk — Beakim Apartments directly">
       <svg class="w-5 h-5 md:w-6 md:h-6 stroke-current fill-none shrink-0" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.824-1.802-5.14-4.117-6.942-6.942l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
       </svg>
@@ -123,68 +125,75 @@
   </div>
 
   <!-- STICKY HEADER -->
-  <header class="site-header fixed top-0 left-0 right-0 z-40 bg-deep-forest/90 backdrop-blur-md border-b border-champagne/15 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+  <header class="site-header fixed top-0 left-0 right-0 z-40 bg-canvas/90 backdrop-blur-md border-b border-line-accent/15 transition-all duration-300">
+    <div class="theme-header-row max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <a class="flex items-center gap-3 group" href="/">
         <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
         <div class="flex flex-col">
-          <span class="font-display text-base tracking-wider text-ivory leading-none font-semibold group-hover:text-champagne transition duration-300">BEAKIM</span>
-          <span class="text-[9px] tracking-widest text-champagne uppercase mt-0.5">Beakim Apartments</span>
+          <span class="font-display text-base tracking-wider text-ink-main leading-none font-semibold group-hover:text-ink-gold transition duration-300">BEAKIM</span>
+          <span class="text-[9px] tracking-widest text-ink-gold uppercase mt-0.5">Beakim Apartments</span>
         </div>
       </a>
       
       <div class="hidden md:inline-flex items-center gap-6 text-xs font-semibold tracking-widest">
-        <a class="text-ivory/60 hover:text-champagne transition duration-300" href="/">&larr; <span class="uppercase">Home</span></a>
-        <a class="text-ivory/60 hover:text-champagne transition duration-300 uppercase" href="/insights">Insights</a>
+        <a class="text-muted-60 hover:text-ink-gold transition duration-300" href="/">&larr; <span class="uppercase">Home</span></a>
+        <a class="text-muted-60 hover:text-ink-gold transition duration-300 uppercase" href="/insights">Insights</a>
       </div>
 
-      <a href="#booking-entry" class="bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 transform active:scale-95 shadow-md">
+      <span class="theme-toggle-slot">
+        <button type="button" class="theme-toggle" data-theme-toggle role="switch" aria-label="Dark theme" aria-checked="true" title="Switch to Ivory Light" hidden>
+          <span class="theme-toggle-thumb" aria-hidden="true"></span>
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20.5 14.1A8.5 8.5 0 019.9 3.5a8.5 8.5 0 1010.6 10.6z"/></svg>
+        </button>
+      </span>
+      <a href="#booking-entry" class="theme-header-link bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 transform active:scale-95 shadow-md" aria-label="Book Your Stay"><span class="theme-label-full">
         Book Your Stay
-      </a>
+      </span><span class="theme-label-short" aria-hidden="true">Book</span></a>
     </div>
   </header>
 
   <main id="main-content">
   <!-- PROPERTY STATUS ALERT: UNDER RENOVATION -->
-  <div class="bg-amber-500/20 border-b border-amber-400/40 text-amber-200 py-3.5 px-6 pt-24 md:pt-28">
+  <div class="bg-amber-500/20 border-b border-amber-400/40 text-status-amber-200 py-3.5 px-6 pt-24 md:pt-28">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
       <div class="flex items-center gap-2.5">
         <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-deep-forest font-bold uppercase text-[10px] tracking-wider shadow">Under Renovation</span>
         <span><strong>Property Notice:</strong> Beakim Apartments is currently undergoing comprehensive interior renovations & upgrades.</span>
       </div>
-      <div class="text-xs text-amber-200/90 font-medium">
+      <div class="text-xs text-status-amber-200/90 font-medium">
         Reopening soon with 12 1-Bedroom units (KSh 5,000/night short-term; monthly leases KSh 75,000–100,000 negotiable via direct call to +254 750 864 119).
       </div>
     </div>
   </div>
 
   <!-- HERO SECTION -->
-  <section class="relative min-h-[88svh] md:min-h-[calc(100svh-4.5rem)] flex items-center pt-12 md:pt-16 overflow-hidden">
-    <div class="absolute inset-0 z-0">
+  <section class="theme-photo relative min-h-[88svh] md:min-h-[calc(100svh-4.5rem)] flex items-center pt-12 md:pt-16 overflow-hidden">
+    <div class="theme-photo absolute inset-0 z-0">
       <img src="assets/beakim-apartments-hero.webp" alt="Beakim Apartments Hero" class="w-full h-full object-cover brightness-[0.7]" decoding="async" fetchpriority="high">
-      <div class="absolute inset-0 bg-gradient-to-t from-deep-forest via-deep-forest/40 to-black/40"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-canvas via-canvas/40 to-black/40"></div>
     </div>
 
     <div class="relative z-10 max-w-7xl mx-auto px-6 py-16 w-full">
       <div class="max-w-3xl space-y-6">
-        <div class="inline-flex items-center gap-2 bg-canopy/80 border border-champagne/30 backdrop-blur-md px-4 py-2 rounded-full">
+        <div class="inline-flex items-center gap-2 bg-raised/80 border border-line-accent/30 backdrop-blur-md px-4 py-2 rounded-full">
           <span class="w-2 h-2 rounded-full bg-champagne pulse-indicator"></span>
-          <span class="text-xs font-semibold uppercase tracking-widest text-champagne">5th Row Diani Beach Road • 12 Units Total • 1-Bedroom Self-Catering</span>
+          <span class="text-xs font-semibold uppercase tracking-widest text-ink-gold">5th Row Diani Beach Road • 12 Units Total • 1-Bedroom Self-Catering</span>
         </div>
 
-        <h1 class="font-display text-4xl md:text-6xl text-ivory font-bold leading-tight">
+        <h1 class="font-display text-4xl md:text-6xl text-ink-main font-bold leading-tight">
           Beakim Apartments
         </h1>
 
-        <p class="text-base md:text-lg text-ivory/80 leading-relaxed font-light">
-          Welcome to modern coastal living in Diani Beach. Featuring <strong class="text-champagne">12 spacious 1-Bedroom units</strong> with private kitchens, living lounges, and balconies, our gated compound offers <strong class="text-champagne">short-term holiday stays (KSh 5,000/night)</strong> and <strong class="text-champagne">monthly residential leases (KSh 75,000 – KSh 100,000 negotiable)</strong> with swimming pool access, 24/7 security, and serene 5th-row coastal privacy. Currently closed for interior upgrades.
+        <p class="text-base md:text-lg text-ink-main/80 leading-relaxed font-light">
+          Welcome to modern coastal living in Diani Beach. Featuring <strong class="text-ink-gold">12 spacious 1-Bedroom units</strong> with private kitchens, living lounges, and balconies, our gated compound offers <strong class="text-ink-gold">short-term holiday stays (KSh 5,000/night)</strong> and <strong class="text-ink-gold">monthly residential leases (KSh 75,000 – KSh 100,000 negotiable)</strong> with swimming pool access, 24/7 security, and serene 5th-row coastal privacy. Currently closed for interior upgrades.
         </p>
 
         <div class="pt-4 flex flex-wrap items-center gap-4">
           <a href="#units" class="bg-champagne hover:bg-driftwood text-deep-forest px-8 py-4 rounded font-semibold tracking-wider uppercase text-sm text-center transition duration-300 shadow-xl">
             View 1-Bedroom Units
           </a>
-          <a href="tel:+254750864119" class="border border-ivory/30 hover:border-champagne text-ivory hover:text-champagne px-8 py-4 rounded font-semibold tracking-wider uppercase text-sm text-center transition duration-300">
+          <a href="tel:+254750864119" class="border border-line-contrast/30 hover:border-line-accent text-ink-main hover:text-ink-gold px-8 py-4 rounded font-semibold tracking-wider uppercase text-sm text-center transition duration-300">
             Call Office for Inquiries
           </a>
         </div>
@@ -193,52 +202,52 @@
   </section>
 
   <!-- QUICK HIGHLIGHTS -->
-  <section class="bg-canopy/30 border-y border-champagne/10 py-10">
+  <section class="bg-raised/30 border-y border-line-accent/10 py-10">
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
-      <div class="p-4 rounded-lg bg-deep-forest/40 border border-champagne/10">
-        <div class="text-champagne font-display text-2xl font-bold mb-1">12 Units</div>
-        <div class="text-xs text-ivory/70 uppercase tracking-wider">All 1-Bedroom Units</div>
+      <div class="p-4 rounded-lg bg-canvas/40 border border-line-accent/10">
+        <div class="text-ink-gold font-display text-2xl font-bold mb-1">12 Units</div>
+        <div class="text-xs text-muted-70 uppercase tracking-wider">All 1-Bedroom Units</div>
       </div>
-      <div class="p-4 rounded-lg bg-deep-forest/40 border border-champagne/10">
-        <div class="text-champagne font-display text-2xl font-bold mb-1">Own Kitchen</div>
-        <div class="text-xs text-ivory/70 uppercase tracking-wider">Self-Catering Cooking</div>
+      <div class="p-4 rounded-lg bg-canvas/40 border border-line-accent/10">
+        <div class="text-ink-gold font-display text-2xl font-bold mb-1">Own Kitchen</div>
+        <div class="text-xs text-muted-70 uppercase tracking-wider">Self-Catering Cooking</div>
       </div>
-      <div class="p-4 rounded-lg bg-deep-forest/40 border border-champagne/10">
-        <div class="text-champagne font-display text-2xl font-bold mb-1">KSh 5,000</div>
-        <div class="text-xs text-ivory/70 uppercase tracking-wider">Short-Term / Night</div>
+      <div class="p-4 rounded-lg bg-canvas/40 border border-line-accent/10">
+        <div class="text-ink-gold font-display text-2xl font-bold mb-1">KSh 5,000</div>
+        <div class="text-xs text-muted-70 uppercase tracking-wider">Short-Term / Night</div>
       </div>
-      <div class="p-4 rounded-lg bg-deep-forest/40 border border-champagne/10">
-        <div class="text-champagne font-display text-2xl font-bold mb-1">KSh 75k - 100k</div>
-        <div class="text-xs text-ivory/70 uppercase tracking-wider">Monthly (Negotiable)</div>
+      <div class="p-4 rounded-lg bg-canvas/40 border border-line-accent/10">
+        <div class="text-ink-gold font-display text-2xl font-bold mb-1">KSh 75k - 100k</div>
+        <div class="text-xs text-muted-70 uppercase tracking-wider">Monthly (Negotiable)</div>
       </div>
-      <div class="p-4 rounded-lg bg-deep-forest/40 border border-champagne/10 col-span-2 md:col-span-1">
-        <div class="text-amber-400 font-display text-2xl font-bold mb-1">Under Renovation</div>
-        <div class="text-xs text-ivory/70 uppercase tracking-wider">Interior Upgrades</div>
+      <div class="p-4 rounded-lg bg-canvas/40 border border-line-accent/10 col-span-2 md:col-span-1">
+        <div class="text-status-amber-400 font-display text-2xl font-bold mb-1">Under Renovation</div>
+        <div class="text-xs text-muted-70 uppercase tracking-wider">Interior Upgrades</div>
       </div>
     </div>
   </section>
 
   <!-- SHORT & LONG TERM STAY BANNER -->
-  <section class="py-12 bg-deep-forest/80 border-b border-champagne/10">
+  <section class="py-12 bg-canvas/80 border-b border-line-accent/10">
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="bg-canopy/40 border border-champagne/20 rounded-xl p-8 space-y-4">
-        <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Option A • Short-Term Stays</span>
-        <h3 class="font-display text-2xl text-ivory font-bold">Holiday & Short-Term Rentals</h3>
-        <p class="text-xs text-ivory/70 leading-relaxed">
-          Book self-catering stays at <strong class="text-champagne">KSh 5,000 / night</strong> for a private 1-bedroom apartment with own kitchen, living room, and balcony. Swimming pool access, 24/7 security, and peaceful coastal privacy. Stays will reopen shortly following renovations.
+      <div class="bg-raised/40 border border-line-accent/20 rounded-xl p-8 space-y-4">
+        <span class="text-xs font-semibold uppercase tracking-widest text-ink-gold">Option A • Short-Term Stays</span>
+        <h3 class="font-display text-2xl text-ink-main font-bold">Holiday & Short-Term Rentals</h3>
+        <p class="text-xs text-muted-70 leading-relaxed">
+          Book self-catering stays at <strong class="text-ink-gold">KSh 5,000 / night</strong> for a private 1-bedroom apartment with own kitchen, living room, and balcony. Swimming pool access, 24/7 security, and peaceful coastal privacy. Stays will reopen shortly following renovations.
         </p>
-        <a href="#booking-entry" class="inline-block text-xs font-semibold uppercase tracking-wider text-champagne hover:text-driftwood transition">
+        <a href="#booking-entry" class="inline-block text-xs font-semibold uppercase tracking-wider text-ink-gold hover:text-ink-accent transition">
           View Short-Term Details &rarr;
         </a>
       </div>
 
-      <div class="bg-canopy/40 border border-champagne/20 rounded-xl p-8 space-y-4">
-        <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Option B • Long-Term Leases</span>
-        <h3 class="font-display text-2xl text-ivory font-bold">Monthly & Long-Term Rentals</h3>
-        <p class="text-xs text-ivory/70 leading-relaxed">
-          Looking for a monthly residence in Diani Beach? Monthly lease rates range between <strong class="text-champagne">KSh 75,000 – KSh 100,000 / month</strong>, negotiable based on lease duration and agreed upon directly by calling the management office.
+      <div class="bg-raised/40 border border-line-accent/20 rounded-xl p-8 space-y-4">
+        <span class="text-xs font-semibold uppercase tracking-widest text-ink-gold">Option B • Long-Term Leases</span>
+        <h3 class="font-display text-2xl text-ink-main font-bold">Monthly & Long-Term Rentals</h3>
+        <p class="text-xs text-muted-70 leading-relaxed">
+          Looking for a monthly residence in Diani Beach? Monthly lease rates range between <strong class="text-ink-gold">KSh 75,000 – KSh 100,000 / month</strong>, negotiable based on lease duration and agreed upon directly by calling the management office.
         </p>
-        <a href="tel:+254750864119" class="inline-block text-xs font-semibold uppercase tracking-wider text-champagne hover:text-driftwood transition">
+        <a href="tel:+254750864119" class="inline-block text-xs font-semibold uppercase tracking-wider text-ink-gold hover:text-ink-accent transition">
           Call Management to Negotiate Rates &rarr;
         </a>
       </div>
@@ -249,56 +258,56 @@
   <section id="units" class="py-20 max-w-7xl mx-auto px-6 space-y-24 scroll-mt-24">
 
     <div class="text-center space-y-4 max-w-2xl mx-auto">
-      <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Apartment Offerings</span>
-      <h2 class="font-display text-3xl md:text-4xl text-ivory font-semibold">12 Self-Catering 1-Bedroom Units</h2>
-      <p class="text-sm text-ivory/70">All 12 units feature their own private kitchen, living room, ensuite bathroom, and balcony.</p>
+      <span class="text-xs font-semibold uppercase tracking-widest text-ink-gold">Apartment Offerings</span>
+      <h2 class="font-display text-3xl md:text-4xl text-ink-main font-semibold">12 Self-Catering 1-Bedroom Units</h2>
+      <p class="text-sm text-muted-70">All 12 units feature their own private kitchen, living room, ensuite bathroom, and balcony.</p>
       
       <div class="pt-4 flex flex-wrap justify-center gap-3">
-        <span class="px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase bg-canopy border border-champagne/30 text-champagne">
+        <span class="px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase bg-raised border border-line-accent/30 text-ink-gold">
           12 One-Bedroom Units (Private Kitchen)
         </span>
       </div>
     </div>
 
     <!-- SECTION 1: 1-BEDROOM APARTMENTS -->
-    <div id="unit-one-bedroom" class="scroll-mt-32 bg-canopy/20 border border-champagne/15 rounded-2xl p-6 md:p-10 space-y-8 shadow-2xl">
+    <div id="unit-one-bedroom" class="scroll-mt-32 bg-raised/20 border border-line-accent/15 rounded-2xl p-6 md:p-10 space-y-8 shadow-2xl">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         <div class="lg:col-span-7 space-y-6">
-          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-champagne/10 pb-4">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-line-accent/10 pb-4">
             <div>
-              <span class="text-xs font-semibold uppercase tracking-widest text-champagne">12 Units Total • Private Kitchen</span>
-              <h3 class="font-display text-3xl text-ivory font-bold">1-Bedroom Apartments</h3>
+              <span class="text-xs font-semibold uppercase tracking-widest text-ink-gold">12 Units Total • Private Kitchen</span>
+              <h3 class="font-display text-3xl text-ink-main font-bold">1-Bedroom Apartments</h3>
             </div>
             <div class="text-right">
-              <div class="bg-deep-forest border border-champagne/30 text-champagne px-4 py-1.5 rounded-lg text-sm font-semibold tracking-wider">
+              <div class="bg-canvas border border-line-accent/30 text-ink-gold px-4 py-1.5 rounded-lg text-sm font-semibold tracking-wider">
                 KSh 5,000 / NIGHT
               </div>
-              <span class="text-[10px] text-ivory/60 uppercase tracking-widest block pt-1">Monthly: KSh 75k - 100k (Negotiable)</span>
+              <span class="text-[10px] text-muted-60 uppercase tracking-widest block pt-1">Monthly: KSh 75k - 100k (Negotiable)</span>
             </div>
           </div>
 
-          <p class="text-sm md:text-base text-ivory/80 leading-relaxed">
-            Our <strong class="text-ivory">1-Bedroom Apartments</strong> feature a master bedroom suite, open-plan living lounge, fully equipped kitchen, en-suite bathroom, and private balcony. Ideal for couples, digital nomads, and single professionals seeking short-term comfort or long-term coastal living.
+          <p class="text-sm md:text-base text-ink-main/80 leading-relaxed">
+            Our <strong class="text-ink-main">1-Bedroom Apartments</strong> feature a master bedroom suite, open-plan living lounge, fully equipped kitchen, en-suite bathroom, and private balcony. Ideal for couples, digital nomads, and single professionals seeking short-term comfort or long-term coastal living.
           </p>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs text-ivory/70">
-            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
-              <strong class="block text-champagne text-sm">Inventory</strong> 10 Total Units
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs text-muted-70">
+            <div class="bg-canvas/60 p-3 rounded border border-line-accent/10">
+              <strong class="block text-ink-gold text-sm">Inventory</strong> 10 Total Units
             </div>
-            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
-              <strong class="block text-champagne text-sm">Capacity</strong> Max 2 Guests
+            <div class="bg-canvas/60 p-3 rounded border border-line-accent/10">
+              <strong class="block text-ink-gold text-sm">Capacity</strong> Max 2 Guests
             </div>
-            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
-              <strong class="block text-champagne text-sm">Kitchen</strong> Full Kitchenette
+            <div class="bg-canvas/60 p-3 rounded border border-line-accent/10">
+              <strong class="block text-ink-gold text-sm">Kitchen</strong> Full Kitchenette
             </div>
-            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
-              <strong class="block text-champagne text-sm">Balcony</strong> Private Outdoor Balcony
+            <div class="bg-canvas/60 p-3 rounded border border-line-accent/10">
+              <strong class="block text-ink-gold text-sm">Balcony</strong> Private Outdoor Balcony
             </div>
-            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
-              <strong class="block text-champagne text-sm">Climate</strong> Full Air Conditioning
+            <div class="bg-canvas/60 p-3 rounded border border-line-accent/10">
+              <strong class="block text-ink-gold text-sm">Climate</strong> Full Air Conditioning
             </div>
-            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
-              <strong class="block text-champagne text-sm">Amenities</strong> Wi-Fi, Pool & Parking
+            <div class="bg-canvas/60 p-3 rounded border border-line-accent/10">
+              <strong class="block text-ink-gold text-sm">Amenities</strong> Wi-Fi, Pool & Parking
             </div>
           </div>
 
@@ -308,40 +317,40 @@
               Book Short-Term (KSh 15,000 / month)
             </a>
             <a href="tel:+254750864119" 
-               class="border border-ivory/30 hover:border-champagne text-ivory hover:text-champagne px-6 py-3.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300">
+               class="border border-line-contrast/30 hover:border-line-accent text-ink-main hover:text-ink-gold px-6 py-3.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300">
               Call For Long-Term Rates
             </a>
           </div>
         </div>
 
         <div class="lg:col-span-5">
-          <div class="relative h-72 md:h-96 rounded-xl overflow-hidden shadow-xl group border border-champagne/20 cursor-pointer"
+          <div class="theme-photo relative h-72 md:h-96 rounded-xl overflow-hidden shadow-xl group border border-line-accent/20 cursor-pointer"
                onclick="openLightbox('assets/beakim-apartments-one-bed.webp', '1-Bedroom Apartment Interior & Balcony')">
             <img src="assets/beakim-apartments-one-bed.webp" alt="1-Bedroom Apartment" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" decoding="async" loading="lazy">
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
-              <span class="text-xs text-ivory font-medium">Click to view full photo</span>
+              <span class="text-xs text-ink-main font-medium">Click to view full photo</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- 1-Bedroom Gallery -->
-      <div class="space-y-4 pt-4 border-t border-champagne/10">
-        <h4 class="text-xs font-semibold uppercase tracking-widest text-driftwood">1-Bedroom Apartments Gallery</h4>
+      <div class="space-y-4 pt-4 border-t border-line-accent/10">
+        <h4 class="text-xs font-semibold uppercase tracking-widest text-ink-accent">1-Bedroom Apartments Gallery</h4>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+          <div class="relative h-36 rounded-lg overflow-hidden border border-line-accent/15 cursor-pointer group"
                onclick="openLightbox('assets/beakim-apartments-one-bed.webp', '1-Bedroom Living Lounge & Balcony')">
             <img src="assets/beakim-apartments-one-bed.webp" alt="1-Bedroom Living Lounge" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" decoding="async" loading="lazy">
           </div>
-          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+          <div class="relative h-36 rounded-lg overflow-hidden border border-line-accent/15 cursor-pointer group"
                onclick="openLightbox('assets/beakim-apartments-hero.webp', 'Apartment Block Compound')">
             <img src="assets/beakim-apartments-hero.webp" alt="Apartment Block Compound" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" decoding="async" loading="lazy">
           </div>
-          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+          <div class="relative h-36 rounded-lg overflow-hidden border border-line-accent/15 cursor-pointer group"
                onclick="openLightbox('assets/beakim-apartments-pool.webp', 'Resort Swimming Pool Access')">
             <img src="assets/beakim-apartments-pool.webp" alt="Resort Swimming Pool Access" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" decoding="async" loading="lazy">
           </div>
-          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+          <div class="relative h-36 rounded-lg overflow-hidden border border-line-accent/15 cursor-pointer group"
                onclick="openLightbox('assets/beakim-apartments-two-bed.webp', 'Modern Open Plan Kitchen & Dining')">
             <img src="assets/beakim-apartments-two-bed.webp" alt="Modern Open Plan Kitchen" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" decoding="async" loading="lazy">
           </div>
@@ -351,44 +360,44 @@
 
 
     <!-- SECTION 2: 2-BEDROOM APARTMENTS -->
-    <div id="unit-two-bedroom" class="scroll-mt-32 bg-canopy/20 border border-champagne/15 rounded-2xl p-6 md:p-10 space-y-8 shadow-2xl">
+    <div id="unit-two-bedroom" class="scroll-mt-32 bg-raised/20 border border-line-accent/15 rounded-2xl p-6 md:p-10 space-y-8 shadow-2xl">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         <div class="lg:col-span-7 space-y-6">
-          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-champagne/10 pb-4">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-line-accent/10 pb-4">
             <div>
-              <span class="text-xs font-semibold uppercase tracking-widest text-champagne">10 Units Available</span>
-              <h3 class="font-display text-3xl text-ivory font-bold">2-Bedroom Apartments</h3>
+              <span class="text-xs font-semibold uppercase tracking-widest text-ink-gold">10 Units Available</span>
+              <h3 class="font-display text-3xl text-ink-main font-bold">2-Bedroom Apartments</h3>
             </div>
             <div class="text-right">
-              <div class="bg-deep-forest border border-champagne/30 text-champagne px-4 py-1.5 rounded-lg text-sm font-semibold tracking-wider">
+              <div class="bg-canvas border border-line-accent/30 text-ink-gold px-4 py-1.5 rounded-lg text-sm font-semibold tracking-wider">
                 KSh 3,500 / NIGHT
               </div>
-              <span class="text-[10px] text-ivory/60 uppercase tracking-widest block pt-1">Long-term: Call Management</span>
+              <span class="text-[10px] text-muted-60 uppercase tracking-widest block pt-1">Long-term: Call Management</span>
             </div>
           </div>
 
-          <p class="text-sm md:text-base text-ivory/80 leading-relaxed">
-            Our expansive <strong class="text-ivory">2-Bedroom Apartments</strong> provide multi-room luxury featuring two bedrooms (en-suite master), large family living lounge, dining counter, full kitchen, and private verandah balcony. Excellent for families, groups, or long-term residents wanting maximum space.
+          <p class="text-sm md:text-base text-ink-main/80 leading-relaxed">
+            Our expansive <strong class="text-ink-main">2-Bedroom Apartments</strong> provide multi-room luxury featuring two bedrooms (en-suite master), large family living lounge, dining counter, full kitchen, and private verandah balcony. Excellent for families, groups, or long-term residents wanting maximum space.
           </p>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs text-ivory/70">
-            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
-              <strong class="block text-champagne text-sm">Inventory</strong> 10 Total Units
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs text-muted-70">
+            <div class="bg-canvas/60 p-3 rounded border border-line-accent/10">
+              <strong class="block text-ink-gold text-sm">Inventory</strong> 10 Total Units
             </div>
-            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
-              <strong class="block text-champagne text-sm">Capacity</strong> Max 4-5 Guests
+            <div class="bg-canvas/60 p-3 rounded border border-line-accent/10">
+              <strong class="block text-ink-gold text-sm">Capacity</strong> Max 4-5 Guests
             </div>
-            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
-              <strong class="block text-champagne text-sm">Bedrooms</strong> 2 Bedrooms (Master En-Suite)
+            <div class="bg-canvas/60 p-3 rounded border border-line-accent/10">
+              <strong class="block text-ink-gold text-sm">Bedrooms</strong> 2 Bedrooms (Master En-Suite)
             </div>
-            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
-              <strong class="block text-champagne text-sm">Kitchen & Dining</strong> Full Kitchen & Dining Bar
+            <div class="bg-canvas/60 p-3 rounded border border-line-accent/10">
+              <strong class="block text-ink-gold text-sm">Kitchen & Dining</strong> Full Kitchen & Dining Bar
             </div>
-            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
-              <strong class="block text-champagne text-sm">Balcony</strong> Expansive Private Verandah
+            <div class="bg-canvas/60 p-3 rounded border border-line-accent/10">
+              <strong class="block text-ink-gold text-sm">Balcony</strong> Expansive Private Verandah
             </div>
-            <div class="bg-deep-forest/60 p-3 rounded border border-champagne/10">
-              <strong class="block text-champagne text-sm">Amenities</strong> AC, Wi-Fi, Pool & Parking
+            <div class="bg-canvas/60 p-3 rounded border border-line-accent/10">
+              <strong class="block text-ink-gold text-sm">Amenities</strong> AC, Wi-Fi, Pool & Parking
             </div>
           </div>
 
@@ -398,40 +407,40 @@
               Book Short-Term (KSh 25,000 / month)
             </a>
             <a href="tel:+254750864119" 
-               class="border border-ivory/30 hover:border-champagne text-ivory hover:text-champagne px-6 py-3.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300">
+               class="border border-line-contrast/30 hover:border-line-accent text-ink-main hover:text-ink-gold px-6 py-3.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300">
               Call For Long-Term Rates
             </a>
           </div>
         </div>
 
         <div class="lg:col-span-5">
-          <div class="relative h-72 md:h-96 rounded-xl overflow-hidden shadow-xl group border border-champagne/20 cursor-pointer"
+          <div class="theme-photo relative h-72 md:h-96 rounded-xl overflow-hidden shadow-xl group border border-line-accent/20 cursor-pointer"
                onclick="openLightbox('assets/beakim-apartments-two-bed.webp', '2-Bedroom Living Lounge & Dining')">
             <img src="assets/beakim-apartments-two-bed.webp" alt="2-Bedroom Apartment" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" decoding="async" loading="lazy">
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
-              <span class="text-xs text-ivory font-medium">Click to view full photo</span>
+              <span class="text-xs text-ink-main font-medium">Click to view full photo</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- 2-Bedroom Gallery -->
-      <div class="space-y-4 pt-4 border-t border-champagne/10">
-        <h4 class="text-xs font-semibold uppercase tracking-widest text-driftwood">2-Bedroom Apartments Gallery</h4>
+      <div class="space-y-4 pt-4 border-t border-line-accent/10">
+        <h4 class="text-xs font-semibold uppercase tracking-widest text-ink-accent">2-Bedroom Apartments Gallery</h4>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+          <div class="relative h-36 rounded-lg overflow-hidden border border-line-accent/15 cursor-pointer group"
                onclick="openLightbox('assets/beakim-apartments-two-bed.webp', '2-Bedroom Living & Dining Suite')">
             <img src="assets/beakim-apartments-two-bed.webp" alt="2-Bedroom Living Suite" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" decoding="async" loading="lazy">
           </div>
-          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+          <div class="relative h-36 rounded-lg overflow-hidden border border-line-accent/15 cursor-pointer group"
                onclick="openLightbox('assets/beakim-apartments-hero.webp', 'Apartment Building Exterior')">
             <img src="assets/beakim-apartments-hero.webp" alt="Apartment Building Exterior" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" decoding="async" loading="lazy">
           </div>
-          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+          <div class="relative h-36 rounded-lg overflow-hidden border border-line-accent/15 cursor-pointer group"
                onclick="openLightbox('assets/beakim-apartments-one-bed.webp', 'Master Bedroom Suite')">
             <img src="assets/beakim-apartments-one-bed.webp" alt="Master Bedroom Suite" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" decoding="async" loading="lazy">
           </div>
-          <div class="relative h-36 rounded-lg overflow-hidden border border-champagne/15 cursor-pointer group"
+          <div class="relative h-36 rounded-lg overflow-hidden border border-line-accent/15 cursor-pointer group"
                onclick="openLightbox('assets/beakim-apartments-pool.webp', 'Resort Swimming Pool & Sun Loungers')">
             <img src="assets/beakim-apartments-pool.webp" alt="Resort Swimming Pool" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" decoding="async" loading="lazy">
           </div>
@@ -443,12 +452,12 @@
 
   <!-- LONG-TERM LEASE SPOTLIGHT -->
   <section id="long-term-info" class="py-16 max-w-7xl mx-auto px-6">
-    <div class="bg-canopy/40 border border-champagne/30 rounded-2xl p-8 md:p-12 space-y-6 shadow-2xl">
-      <div class="inline-flex items-center gap-2 bg-deep-forest px-4 py-1.5 rounded-full border border-champagne/20 text-xs font-semibold uppercase tracking-widest text-champagne">
+    <div class="bg-raised/40 border border-line-accent/30 rounded-2xl p-8 md:p-12 space-y-6 shadow-2xl">
+      <div class="inline-flex items-center gap-2 bg-canvas px-4 py-1.5 rounded-full border border-line-accent/20 text-xs font-semibold uppercase tracking-widest text-ink-gold">
         Monthly & Extended Stay Leases
       </div>
-      <h2 class="font-display text-3xl md:text-4xl text-ivory font-semibold">Interested in Long-Term Rental at Beakim Apartments?</h2>
-      <p class="text-sm md:text-base text-ivory/80 leading-relaxed max-w-3xl">
+      <h2 class="font-display text-3xl md:text-4xl text-ink-main font-semibold">Interested in Long-Term Rental at Beakim Apartments?</h2>
+      <p class="text-sm md:text-base text-ink-main/80 leading-relaxed max-w-3xl">
         Whether you are relocating to Diani Beach, working remotely, or seeking a quiet multi-month coastal retreat, we offer custom long-term leases for both our 1-Bedroom and 2-Bedroom units. Long-term rates are negotiated directly with management based on lease duration and payment terms.
       </p>
       
@@ -458,7 +467,7 @@
         </a>
         <a href="https://wa.me/254750864119?text=Hello%20Beakim%20Hospitality!%20I%20am%20interested%20in%20a%20long-term%20rental%20lease%20at%20Beakim%20Apartments." 
            target="_blank" rel="noopener noreferrer"
-           class="bg-[#25D366] hover:bg-[#128C7E] text-white px-8 py-4 rounded font-semibold tracking-wider uppercase text-xs transition duration-300 shadow-xl">
+           class="whatsapp-action bg-[#25D366] hover:bg-[#128C7E] text-ink-strong px-8 py-4 rounded font-semibold tracking-wider uppercase text-xs transition duration-300 shadow-xl">
           Inquire via WhatsApp
         </a>
       </div>
@@ -468,34 +477,34 @@
   <!-- Lightbox modal dynamically instantiated by assets/js/main.js -->
 
   <!-- BOOKING SECTION -->
-  <section id="booking" class="py-20 bg-canopy/40 border-t border-champagne/10 relative scroll-mt-24">
+  <section id="booking" class="py-20 bg-raised/40 border-t border-line-accent/10 relative scroll-mt-24">
     <div class="max-w-4xl mx-auto px-6">
-      <div id="booking-entry" class="bg-deep-forest border border-champagne/20 rounded-2xl p-8 md:p-12 shadow-2xl space-y-8">
+      <div id="booking-entry" class="bg-canvas border border-line-accent/20 rounded-2xl p-8 md:p-12 shadow-2xl space-y-8">
         <div class="text-center space-y-2">
-          <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Monthly Lease &amp; Extended Stays</span>
-          <h2 class="font-display text-3xl md:text-4xl text-ivory font-semibold">Inquire for Monthly Lease at Beakim Apartments</h2>
-          <p class="text-xs text-ivory/70">Select your apartment unit, lease dates, and submit your inquiry for direct host verification.</p>
+          <span class="text-xs font-semibold uppercase tracking-widest text-ink-gold">Monthly Lease &amp; Extended Stays</span>
+          <h2 class="font-display text-3xl md:text-4xl text-ink-main font-semibold">Inquire for Monthly Lease at Beakim Apartments</h2>
+          <p class="text-xs text-muted-70">Select your apartment unit, lease dates, and submit your inquiry for direct host verification.</p>
         </div>
 
         <form id="booking-form" onsubmit="handleBookingSubmit(event)" class="space-y-6">
           <input type="text" name="website_hp" id="website_hp" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="flex flex-col gap-1.5">
-              <label for="guest-name" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Full Name</label>
+              <label for="guest-name" class="text-xs font-semibold uppercase tracking-wider text-ink-main/80">Full Name</label>
               <input type="text" id="guest-name" required placeholder="e.g. Jane Doe"
-                     class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+                     class="w-full bg-canvas border border-line-accent/20 focus:border-line-accent rounded px-4 py-3 text-ink-main outline-none transition" />
             </div>
 
             <div class="flex flex-col gap-1.5">
-              <label for="guest-email" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Email Address</label>
+              <label for="guest-email" class="text-xs font-semibold uppercase tracking-wider text-ink-main/80">Email Address</label>
               <input type="email" id="guest-email" required placeholder="jane@example.com"
-                     class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+                     class="w-full bg-canvas border border-line-accent/20 focus:border-line-accent rounded px-4 py-3 text-ink-main outline-none transition" />
             </div>
 
             <div class="flex flex-col gap-1.5 col-span-1 md:col-span-2">
-              <label for="guest-phone-number" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Phone Number (WhatsApp)</label>
+              <label for="guest-phone-number" class="text-xs font-semibold uppercase tracking-wider text-ink-main/80">Phone Number (WhatsApp)</label>
               <div class="flex gap-2">
-                <select id="country-code" class="bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-3 py-3 text-ivory outline-none transition">
+                <select id="country-code" class="bg-canvas border border-line-accent/20 focus:border-line-accent rounded px-3 py-3 text-ink-main outline-none transition">
                   <option value="+254">🇰🇪 +254</option>
                   <option value="+255">🇹🇿 +255</option>
                   <option value="+256">🇺🇬 +256</option>
@@ -504,14 +513,14 @@
                   <option value="+49">🇩🇪 +49</option>
                 </select>
                 <input type="tel" id="guest-phone-number" required autocomplete="tel" inputmode="tel" placeholder="712 345 678"
-                       class="flex-1 min-w-0 bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+                       class="flex-1 min-w-0 bg-canvas border border-line-accent/20 focus:border-line-accent rounded px-4 py-3 text-ink-main outline-none transition" />
               </div>
             </div>
 
             <div class="flex flex-col gap-1.5 col-span-1 md:col-span-2">
-              <label for="booking-property" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Select Apartment Unit</label>
+              <label for="booking-property" class="text-xs font-semibold uppercase tracking-wider text-ink-main/80">Select Apartment Unit</label>
               <select id="booking-property" required onchange="updatePriceCalculation()"
-                      class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition cursor-pointer">
+                      class="w-full bg-canvas border border-line-accent/20 focus:border-line-accent rounded px-4 py-3 text-ink-main outline-none transition cursor-pointer">
                 <option value="Beakim Apartments - 1-Bedroom (Short-Term)">1-Bedroom Apartment (Short-Term) - KSh 5,000 / night (Under Renovation)</option>
                 <option value="Beakim Apartments - 1-Bedroom (Monthly Lease)" selected>1-Bedroom Apartment (Monthly Lease) - KSh 75,000 - 100,000 / month (Negotiable)</option>
               </select>
@@ -519,22 +528,22 @@
 
             <!-- Luxury Date Range Picker Trigger & Popover -->
             <div class="col-span-1 md:col-span-2 relative">
-              <label class="text-xs font-semibold uppercase tracking-wider text-ivory/80 block mb-1.5">Lease / Stay Dates (Move-In → End Date)</label>
+              <label class="text-xs font-semibold uppercase tracking-wider text-ink-main/80 block mb-1.5">Lease / Stay Dates (Move-In → End Date)</label>
               <div id="booking-date-range-trigger" role="button" tabindex="0" aria-haspopup="dialog" aria-expanded="false"
-                   class="w-full bg-deep-forest border border-champagne/20 hover:border-champagne focus:border-champagne rounded-lg px-4 py-3 text-sm text-ivory transition shadow-sm font-medium cursor-pointer flex items-center justify-between gap-2 select-none">
+                   class="w-full bg-canvas border border-line-accent/20 hover:border-line-accent focus:border-line-accent rounded-lg px-4 py-3 text-sm text-ink-main transition shadow-sm font-medium cursor-pointer flex items-center justify-between gap-2 select-none">
                 <div class="flex items-center gap-2.5 min-w-0">
-                  <span class="text-champagne font-bold text-base shrink-0">📅</span>
+                  <span class="text-ink-gold font-bold text-base shrink-0">📅</span>
                   <div class="flex items-center gap-1.5 truncate text-xs sm:text-sm">
-                    <span id="display-check-in" class="font-bold text-ivory">Loading...</span>
-                    <span class="text-champagne font-bold">→</span>
-                    <span id="display-check-out" class="font-bold text-ivory">Loading...</span>
+                    <span id="display-check-in" class="font-bold text-ink-main">Loading...</span>
+                    <span class="text-ink-gold font-bold">→</span>
+                    <span id="display-check-out" class="font-bold text-ink-main">Loading...</span>
                   </div>
                 </div>
                 <div class="flex items-center gap-1.5 shrink-0">
-                  <span id="display-nights-badge" class="px-2.5 py-0.5 rounded-full bg-champagne/20 text-champagne font-bold text-xs whitespace-nowrap">
+                  <span id="display-nights-badge" class="px-2.5 py-0.5 rounded-full bg-champagne/20 text-ink-gold font-bold text-xs whitespace-nowrap">
                     ... Nights
                   </span>
-                  <span class="text-ivory/40 text-xs">▾</span>
+                  <span class="text-muted-40 text-xs">▾</span>
                 </div>
               </div>
 
@@ -549,24 +558,24 @@
             </div>
 
             <div class="flex flex-col gap-1.5 col-span-1 md:col-span-2">
-              <label for="num-guests" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Number of Occupants</label>
+              <label for="num-guests" class="text-xs font-semibold uppercase tracking-wider text-ink-main/80">Number of Occupants</label>
               <input type="number" id="num-guests" min="1" max="6" value="2" required
-                     class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-ivory outline-none transition" />
+                     class="w-full bg-canvas border border-line-accent/20 focus:border-line-accent rounded px-4 py-3 text-ink-main outline-none transition" />
             </div>
 
             <!-- Preferred Contact Method -->
             <div class="flex flex-col gap-1.5 col-span-1 md:col-span-2">
-              <label class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Preferred Contact Method</label>
+              <label class="text-xs font-semibold uppercase tracking-wider text-ink-main/80">Preferred Contact Method</label>
               <div class="grid grid-cols-3 gap-2">
-                <label class="relative flex items-center justify-center gap-1.5 p-2.5 rounded-lg border border-champagne/20 bg-deep-forest hover:border-champagne cursor-pointer transition text-xs font-semibold text-ivory has-[:checked]:border-champagne has-[:checked]:bg-champagne/20">
+                <label class="relative flex items-center justify-center gap-1.5 p-2.5 rounded-lg border border-line-accent/20 bg-canvas hover:border-line-accent cursor-pointer transition text-xs font-semibold text-ink-main has-[:checked]:border-line-accent has-[:checked]:bg-champagne/20">
                   <input type="radio" name="preferred-contact" value="WhatsApp / Text" checked class="accent-champagne" />
                   <span>💬 WhatsApp</span>
                 </label>
-                <label class="relative flex items-center justify-center gap-1.5 p-2.5 rounded-lg border border-champagne/20 bg-deep-forest hover:border-champagne cursor-pointer transition text-xs font-semibold text-ivory has-[:checked]:border-champagne has-[:checked]:bg-champagne/20">
+                <label class="relative flex items-center justify-center gap-1.5 p-2.5 rounded-lg border border-line-accent/20 bg-canvas hover:border-line-accent cursor-pointer transition text-xs font-semibold text-ink-main has-[:checked]:border-line-accent has-[:checked]:bg-champagne/20">
                   <input type="radio" name="preferred-contact" value="Phone Call" class="accent-champagne" />
                   <span>📞 Phone</span>
                 </label>
-                <label class="relative flex items-center justify-center gap-1.5 p-2.5 rounded-lg border border-champagne/20 bg-deep-forest hover:border-champagne cursor-pointer transition text-xs font-semibold text-ivory has-[:checked]:border-champagne has-[:checked]:bg-champagne/20">
+                <label class="relative flex items-center justify-center gap-1.5 p-2.5 rounded-lg border border-line-accent/20 bg-canvas hover:border-line-accent cursor-pointer transition text-xs font-semibold text-ink-main has-[:checked]:border-line-accent has-[:checked]:bg-champagne/20">
                   <input type="radio" name="preferred-contact" value="Email" class="accent-champagne" />
                   <span>✉️ Email</span>
                 </label>
@@ -575,32 +584,32 @@
 
             <!-- Special Requests / Notes -->
             <div class="flex flex-col gap-1.5 col-span-1 md:col-span-2">
-              <label for="guest-special-requests" class="text-xs font-semibold uppercase tracking-wider text-ivory/80">Special Requests / Lease Notes</label>
+              <label for="guest-special-requests" class="text-xs font-semibold uppercase tracking-wider text-ink-main/80">Special Requests / Lease Notes</label>
               <textarea id="guest-special-requests" rows="2" placeholder="e.g., Target move-in date, 6-month lease inquiry, ground-floor preference..."
-                        class="w-full bg-deep-forest border border-champagne/20 focus:border-champagne rounded px-4 py-3 text-xs text-ivory outline-none transition shadow-sm font-medium resize-none"></textarea>
+                        class="w-full bg-canvas border border-line-accent/20 focus:border-line-accent rounded px-4 py-3 text-xs text-ink-main outline-none transition shadow-sm font-medium resize-none"></textarea>
             </div>
           </div>
 
           <!-- Price Calculation Box -->
-          <div class="bg-canopy/60 border border-champagne/20 rounded-xl p-5 space-y-3">
-            <div class="flex justify-between items-center text-xs text-ivory/80">
+          <div class="bg-raised/60 border border-line-accent/20 rounded-xl p-5 space-y-3">
+            <div class="flex justify-between items-center text-xs text-ink-main/80">
               <span>Selected Unit:</span>
-              <strong id="summary-unit-name" class="text-champagne">1-Bedroom Apartment (Monthly Lease)</strong>
+              <strong id="summary-unit-name" class="text-ink-gold">1-Bedroom Apartment (Monthly Lease)</strong>
             </div>
-            <div class="flex justify-between items-center text-xs text-ivory/80">
+            <div class="flex justify-between items-center text-xs text-ink-main/80">
               <span>Base Monthly Rate:</span>
-              <strong id="summary-rate" class="text-ivory">KSh 15,000 / mo</strong>
+              <strong id="summary-rate" class="text-ink-main">KSh 15,000 / mo</strong>
             </div>
-            <div class="flex justify-between items-center text-xs text-ivory/80">
+            <div class="flex justify-between items-center text-xs text-ink-main/80">
               <span>Lease Duration:</span>
-              <strong id="summary-nights" class="text-ivory">Select move-in dates</strong>
+              <strong id="summary-nights" class="text-ink-main">Select move-in dates</strong>
             </div>
-            <div class="border-t border-champagne/20 pt-3 flex justify-between items-center">
+            <div class="border-t border-line-accent/20 pt-3 flex justify-between items-center">
               <div>
-                <span class="text-xs font-bold uppercase tracking-wider text-ivory block">Estimated Total</span>
-                <span class="text-[10px] text-ivory/60">Direct host rate • Zero tenant placement fees</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-ink-main block">Estimated Total</span>
+                <span class="text-[10px] text-muted-60">Direct host rate • Zero tenant placement fees</span>
               </div>
-              <span id="summary-total" class="font-display text-xl sm:text-2xl font-bold text-champagne">KSh 15,000</span>
+              <span id="summary-total" class="font-display text-xl sm:text-2xl font-bold text-ink-gold">KSh 15,000</span>
             </div>
           </div>
 
@@ -609,14 +618,14 @@
           <!-- Submit CTA Button -->
           <div class="space-y-3 pt-2">
             <button type="submit" id="booking-submit-btn"
-                    class="w-full bg-[#1b4332] hover:bg-[#122f23] active:scale-[0.98] text-champagne border border-champagne/40 hover:border-champagne py-4 px-6 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-3 text-sm md:text-base group cursor-pointer">
-              <span class="text-champagne font-bold text-lg">✓</span>
+                    class="w-full bg-green-panel hover:bg-deep-panel active:scale-[0.98] text-ink-gold border border-line-accent/40 hover:border-line-accent py-4 px-6 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-3 text-sm md:text-base group cursor-pointer">
+              <span class="text-ink-gold font-bold text-lg">✓</span>
               <span>PROCEED TO REVIEW &amp; CONFIRM →</span>
             </button>
-            <div class="flex flex-wrap items-center justify-center gap-4 text-[11px] text-ivory/70 pt-1 text-center">
-              <span class="hidden sm:inline-flex items-center gap-1.5"><span class="text-emerald-400 font-bold">✓</span> Direct Host Rate</span>
-              <span class="hidden sm:inline-flex items-center gap-1.5"><span class="text-emerald-400 font-bold">✓</span> Zero Booking Fees</span>
-              <span class="inline-flex items-center gap-1.5"><span class="text-emerald-400 font-bold">✓</span> Guaranteed 15–30 Min Response</span>
+            <div class="flex flex-wrap items-center justify-center gap-4 text-[11px] text-muted-70 pt-1 text-center">
+              <span class="hidden sm:inline-flex items-center gap-1.5"><span class="text-status-emerald-400 font-bold">✓</span> Direct Host Rate</span>
+              <span class="hidden sm:inline-flex items-center gap-1.5"><span class="text-status-emerald-400 font-bold">✓</span> Zero Booking Fees</span>
+              <span class="inline-flex items-center gap-1.5"><span class="text-status-emerald-400 font-bold">✓</span> Typically 15–30 min during desk hours (8AM–8PM EAT)</span>
             </div>
           </div>
         </form>
@@ -625,14 +634,14 @@
   </section>
 
   <!-- LOCATION & FAQ -->
-  <section class="py-20 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-champagne/10">
+  <section class="py-20 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-line-accent/10">
     <div class="space-y-6">
-      <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Location & Neighborhood</span>
-      <h3 class="font-display text-3xl text-ivory font-semibold">5th Row Ukunda-Diani Beach Road</h3>
-      <p class="text-sm text-ivory/70 leading-relaxed">
+      <span class="text-xs font-semibold uppercase tracking-widest text-ink-gold">Location & Neighborhood</span>
+      <h3 class="font-display text-3xl text-ink-main font-semibold">5th Row Ukunda-Diani Beach Road</h3>
+      <p class="text-sm text-muted-70 leading-relaxed">
         Beakim Apartments is located in a quiet, serene 5th-row coastal neighborhood along the main Ukunda-Diani Beach Road corridor. Enjoy high privacy, gated compound security, and quick access to shopping centers and beach access points.
       </p>
-      <div class="space-y-2 text-xs text-ivory/80">
+      <div class="space-y-2 text-xs text-ink-main/80">
         <p>• <strong>Diani Beach Access:</strong> ~4 Minutes Drive</p>
         <p>• <strong>Ukunda Airstrip:</strong> ~8 Minutes Drive</p>
         <p>• <strong>Supermarkets & Banks:</strong> ~5 Minutes Drive</p>
@@ -640,19 +649,19 @@
     </div>
 
     <div class="space-y-6">
-      <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Frequently Asked Questions</span>
+      <span class="text-xs font-semibold uppercase tracking-widest text-ink-gold">Frequently Asked Questions</span>
       <div class="space-y-4">
-        <details class="bg-canopy/30 border border-champagne/15 rounded-lg p-4 cursor-pointer">
-          <summary class="font-semibold text-sm text-ivory">How do long-term lease rates work?</summary>
-          <p class="text-xs text-ivory/70 pt-2 leading-relaxed">Long-term rates depend on lease duration (e.g. 1 month, 6 months, 1 year). Please call or WhatsApp management directly to negotiate rates.</p>
+        <details class="bg-raised/30 border border-line-accent/15 rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold text-sm text-ink-main">How do long-term lease rates work?</summary>
+          <p class="text-xs text-muted-70 pt-2 leading-relaxed">Long-term rates depend on lease duration (e.g. 1 month, 6 months, 1 year). Please call or WhatsApp management directly to negotiate rates.</p>
         </details>
-        <details class="bg-canopy/30 border border-champagne/15 rounded-lg p-4 cursor-pointer">
-          <summary class="font-semibold text-sm text-ivory">Is the swimming pool open to residents?</summary>
-          <p class="text-xs text-ivory/70 pt-2 leading-relaxed">Yes, all residents in our 20 apartments have full complimentary access to the resort swimming pool and sun lounges.</p>
+        <details class="bg-raised/30 border border-line-accent/15 rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold text-sm text-ink-main">Is the swimming pool open to residents?</summary>
+          <p class="text-xs text-muted-70 pt-2 leading-relaxed">Yes, all residents in our 20 apartments have full complimentary access to the resort swimming pool and sun lounges.</p>
         </details>
-        <details class="bg-canopy/30 border border-champagne/15 rounded-lg p-4 cursor-pointer">
-          <summary class="font-semibold text-sm text-ivory">Are utilities included in short-term stays?</summary>
-          <p class="text-xs text-ivory/70 pt-2 leading-relaxed">For short-term nightly bookings, all utilities (electricity, AC, Wi-Fi, water, security) are fully included in the nightly rate.</p>
+        <details class="bg-raised/30 border border-line-accent/15 rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold text-sm text-ink-main">Are utilities included in short-term stays?</summary>
+          <p class="text-xs text-muted-70 pt-2 leading-relaxed">For short-term nightly bookings, all utilities (electricity, AC, Wi-Fi, water, security) are fully included in the nightly rate.</p>
         </details>
       </div>
     </div>
@@ -661,18 +670,18 @@
   </main>
 
   <!-- FOOTER -->
-    <footer class="bg-deep-forest border-t border-champagne/15 py-12">
+    <footer class="bg-canvas border-t border-line-accent/15 py-12">
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
       <!-- Left side: Brand Identity -->
       <div class="space-y-4 text-center md:text-left">
         <a class="flex items-center gap-3 justify-center md:justify-start group" href="/">
           <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain transition duration-300 group-hover:scale-105" decoding="async" loading="lazy">
           <div>
-            <span class="font-display text-base tracking-wider text-ivory group-hover:text-champagne transition duration-300 block">BEAKIM APARTMENTS</span>
-            <span class="text-[10px] text-champagne uppercase tracking-widest block">5th Row — Diani Beach, Kenya</span>
+            <span class="font-display text-base tracking-wider text-ink-main group-hover:text-ink-gold transition duration-300 block">BEAKIM APARTMENTS</span>
+            <span class="text-[10px] text-ink-gold uppercase tracking-widest block">5th Row — Diani Beach, Kenya</span>
           </div>
         </a>
-        <p class="text-xs text-ivory/50 leading-relaxed max-w-sm mx-auto md:mx-0">
+        <p class="text-xs text-muted-50 leading-relaxed max-w-sm mx-auto md:mx-0">
           Affordable Luxury Accommodations in Diani Beach, Kenya.<br />
           Experience a warm coastal welcome with 24/7 gated security.
         </p>
@@ -680,61 +689,61 @@
 
       <!-- Center: Premium Social Icon Suite -->
       <div class="flex flex-col items-center justify-center space-y-3 text-center">
-        <span class="text-[11px] font-semibold uppercase tracking-widest text-champagne">Connect With Us</span>
+        <span class="text-[11px] font-semibold uppercase tracking-widest text-ink-gold">Connect With Us</span>
         <div class="flex items-center justify-center gap-2.5 sm:gap-3">
           <!-- Instagram -->
           <a href="https://www.instagram.com/beakimhospitalitygroup/" target="_blank" rel="noopener noreferrer"
-             class="w-10 h-10 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest hover:border-champagne hover:-translate-y-1 hover:shadow-lg hover:shadow-champagne/20 transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-champagne/50"
+             class="w-10 h-10 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest hover:border-line-accent hover:-translate-y-1 hover:shadow-lg hover:shadow-champagne/20 transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-champagne/50"
              aria-label="Follow Beakim Hospitality Group on Instagram" title="Instagram - @beakimhospitalitygroup">
             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
           </a>
           <!-- Facebook -->
           <a href="https://web.facebook.com/beakimhospitalitygroup" target="_blank" rel="noopener noreferrer"
-             class="w-10 h-10 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest hover:border-champagne hover:-translate-y-1 hover:shadow-lg hover:shadow-champagne/20 transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-champagne/50"
+             class="w-10 h-10 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest hover:border-line-accent hover:-translate-y-1 hover:shadow-lg hover:shadow-champagne/20 transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-champagne/50"
              aria-label="Follow Beakim Hospitality Group on Facebook" title="Facebook - @beakimhospitalitygroup">
             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           </a>
           <!-- X (Twitter) -->
           <a href="https://x.com/BeakimGroup" target="_blank" rel="noopener noreferrer"
-             class="w-10 h-10 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest hover:border-champagne hover:-translate-y-1 hover:shadow-lg hover:shadow-champagne/20 transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-champagne/50"
+             class="w-10 h-10 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest hover:border-line-accent hover:-translate-y-1 hover:shadow-lg hover:shadow-champagne/20 transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-champagne/50"
              aria-label="Follow Beakim Hospitality Group on X" title="X (Twitter) - @BeakimGroup">
             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </a>
           <!-- TikTok -->
           <a href="https://www.tiktok.com/@beakimhospitalitygroup" target="_blank" rel="noopener noreferrer"
-             class="w-10 h-10 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest hover:border-champagne hover:-translate-y-1 hover:shadow-lg hover:shadow-champagne/20 transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-champagne/50"
+             class="w-10 h-10 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest hover:border-line-accent hover:-translate-y-1 hover:shadow-lg hover:shadow-champagne/20 transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-champagne/50"
              aria-label="Follow Beakim Hospitality Group on TikTok" title="TikTok - @beakimhospitalitygroup">
             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.27 1.76-.23 1.04.14 2.19.92 2.93.81.81 2.05 1.09 3.16.71.71-.23 1.33-.76 1.67-1.41.34-.65.45-1.41.45-2.14V.02z"/></svg>
           </a>
           <!-- YouTube -->
           <a href="https://www.youtube.com/@BeakimHospitalityGroup" target="_blank" rel="noopener noreferrer"
-             class="w-10 h-10 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest hover:border-champagne hover:-translate-y-1 hover:shadow-lg hover:shadow-champagne/20 transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-champagne/50"
+             class="w-10 h-10 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest hover:border-line-accent hover:-translate-y-1 hover:shadow-lg hover:shadow-champagne/20 transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-champagne/50"
              aria-label="Subscribe to Beakim Hospitality Group on YouTube" title="YouTube - @BeakimHospitalityGroup">
             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
           </a>
         </div>
-        <a href="https://www.instagram.com/beakimhospitalitygroup/" target="_blank" rel="noopener noreferrer" class="text-[11px] text-ivory/50 hover:text-champagne transition tracking-wider">@beakimhospitalitygroup</a>
+        <a href="https://www.instagram.com/beakimhospitalitygroup/" target="_blank" rel="noopener noreferrer" class="text-[11px] text-muted-50 hover:text-ink-gold transition tracking-wider">@beakimhospitalitygroup</a>
       </div>
 
       <!-- Right side: Direct Reservations & Concierge -->
-      <div class="space-y-3 text-center md:text-right text-xs text-ivory/60">
-        <p class="text-champagne font-semibold tracking-wider uppercase text-[11px]">Direct Reservations</p>
-        <p><strong>Tel / WhatsApp:</strong> <a href="tel:+254750864119" class="hover:text-champagne transition">+254 750 864 119</a></p>
-        <p><strong>Concierge:</strong> <a href="mailto:info@beakimhospitalitygroup.co.ke" class="hover:text-champagne transition">info@beakimhospitalitygroup.co.ke</a></p>
-        <p class="text-[11px] text-ivory/40">Ukunda &amp; Beach Road, Diani Beach, Kenya</p>
+      <div class="space-y-3 text-center md:text-right text-xs text-muted-60">
+        <p class="text-ink-gold font-semibold tracking-wider uppercase text-[11px]">Direct Reservations</p>
+        <p><strong>Tel / WhatsApp:</strong> <a href="tel:+254750864119" class="hover:text-ink-gold transition">+254 750 864 119</a></p>
+        <p><strong>Concierge:</strong> <a href="mailto:info@beakimhospitalitygroup.co.ke" class="hover:text-ink-gold transition">info@beakimhospitalitygroup.co.ke</a></p>
+        <p class="text-[11px] text-muted-40">Ukunda &amp; Beach Road, Diani Beach, Kenya</p>
       </div>
     </div>
 
     <!-- Sub-Footer / Copyright & Legal Navigation -->
-    <div class="max-w-7xl mx-auto px-6 pt-8 mt-8 border-t border-champagne/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ivory/60">
+    <div class="max-w-7xl mx-auto px-6 pt-8 mt-8 border-t border-line-accent/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-60">
       <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">
-        <a href="/insights" class="hover:text-champagne transition">Insights &amp; Guides</a>
+        <a href="/insights" class="hover:text-ink-gold transition">Insights &amp; Guides</a>
         <span>•</span>
-        <a href="/privacy-policy" class="hover:text-champagne transition">Privacy Policy</a>
+        <a href="/privacy-policy" class="hover:text-ink-gold transition">Privacy Policy</a>
         <span>•</span>
-        <a href="/terms-of-service" class="hover:text-champagne transition">Terms of Service</a>
+        <a href="/terms-of-service" class="hover:text-ink-gold transition">Terms of Service</a>
       </div>
-      <p class="text-center sm:text-right text-ivory/40 text-[11px]">&copy; 2026 Beakim Hospitality Group. All rights reserved.</p>
+      <p class="text-center sm:text-right text-muted-40 text-[11px]">&copy; 2026 Beakim Hospitality Group. All rights reserved.</p>
     </div>
   </footer>
 

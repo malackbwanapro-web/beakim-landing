@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html data-theme="dark" lang="en" class="scroll-smooth">
 <head>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T5E3SNGQZC"></script>
@@ -26,37 +26,46 @@
   <meta name="theme-color" content="#0d2b24" />
 
   <!-- Compiled Production CSS -->
-  <link rel="stylesheet" href="assets/css/styles.css?v=2.2.4" />
-  <script src="assets/js/main.js?v=2.2.4" defer></script>
+  <script data-theme-bootstrap>(function(){var t='dark';try{var s=localStorage.getItem('beakim-theme');if(s==='light'||s==='dark')t=s}catch(e){}document.documentElement.dataset.theme=t;var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==='light'?'#F7F4EE':'#0D2318'})();</script>
+  <script src="assets/js/theme.js?v=2.3.0" defer></script>
+  <link rel="stylesheet" href="assets/css/styles.css?v=2.3.0" />
+  <script src="assets/js/main.js?v=2.3.0" defer></script>
 </head>
-<body class="has-contact-dock bg-deep-forest text-ivory font-body font-light antialiased min-h-screen flex flex-col justify-between selection:bg-champagne selection:text-deep-forest">
+<body class="has-contact-dock bg-canvas text-ink-main font-body font-light antialiased min-h-screen flex flex-col justify-between selection:bg-champagne selection:text-deep-forest">
 
   <!-- Header -->
-  <header class="site-header w-full bg-deep-forest/90 backdrop-blur-md border-b border-champagne/15 py-4 px-6 fixed top-0 left-0 right-0 z-40">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
+  <header class="site-header w-full bg-canvas/90 backdrop-blur-md border-b border-line-accent/15 py-4 px-6 fixed top-0 left-0 right-0 z-40">
+    <div class="theme-header-row max-w-7xl mx-auto flex items-center justify-between">
       <a class="flex items-center gap-3 group" href="/">
         <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-9 h-9 object-contain transition duration-300 group-hover:scale-105" />
         <div class="flex flex-col">
-          <span class="font-display text-base tracking-wider text-ivory font-semibold group-hover:text-champagne transition duration-300">BEAKIM</span>
-          <span class="text-[9px] tracking-widest text-champagne uppercase">Hospitality Group</span>
+          <span class="font-display text-base tracking-wider text-ink-main font-semibold group-hover:text-ink-gold transition duration-300">BEAKIM</span>
+          <span class="text-[9px] tracking-widest text-ink-gold uppercase">Hospitality Group</span>
         </div>
       </a>
-      <a class="text-xs font-semibold tracking-widest text-ivory/70 hover:text-champagne transition uppercase flex items-center gap-1.5" href="/">
+      <span class="theme-toggle-slot">
+        <button type="button" class="theme-toggle" data-theme-toggle role="switch" aria-label="Dark theme" aria-checked="true" title="Switch to Ivory Light" hidden>
+          <span class="theme-toggle-thumb" aria-hidden="true"></span>
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20.5 14.1A8.5 8.5 0 019.9 3.5a8.5 8.5 0 1010.6 10.6z"/></svg>
+        </button>
+      </span>
+      <a class="theme-header-link text-xs font-semibold tracking-widest text-muted-70 hover:text-ink-gold transition uppercase flex items-center gap-1.5" href="/" aria-label="← Return Home"><span class="theme-label-full">
         <span>&larr;</span> Return Home
-      </a>
+      </span><span class="theme-label-short" aria-hidden="true">Home</span></a>
     </div>
   </header>
 
   <!-- Main 404 Hero Content -->
   <main class="flex-1 flex flex-col items-center justify-center pt-32 pb-20 px-6 max-w-4xl mx-auto w-full text-center space-y-10">
     <div class="space-y-4">
-      <span class="inline-block bg-champagne/10 border border-champagne/30 text-champagne text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full">
+      <span class="inline-block bg-champagne/10 border border-line-accent/30 text-ink-gold text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full">
         404 • Destination Not Found
       </span>
-      <h1 class="font-display text-4xl md:text-6xl text-ivory font-bold leading-tight">
+      <h1 class="font-display text-4xl md:text-6xl text-ink-main font-bold leading-tight">
         Lost in Paradise?
       </h1>
-      <p class="text-sm md:text-base text-ivory/70 max-w-xl mx-auto leading-relaxed">
+      <p class="text-sm md:text-base text-muted-70 max-w-xl mx-auto leading-relaxed">
         The page or retreat you are looking for has been moved or does not exist. Let us guide you back to our serene coastal accommodations.
       </p>
       <div class="pt-2">
@@ -67,50 +76,50 @@
     </div>
 
     <!-- Quick Property Directory -->
-    <div class="w-full space-y-4 pt-6 border-t border-champagne/15 text-left">
+    <div class="w-full space-y-4 pt-6 border-t border-line-accent/15 text-left">
       <div class="text-center">
-        <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Direct Property Links</span>
+        <span class="text-xs font-semibold uppercase tracking-widest text-ink-gold">Direct Property Links</span>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         
         <!-- Property 1: Beakim Darad -->
-        <a href="/beakim-darad" class="group bg-canopy/40 hover:bg-canopy/80 border border-champagne/10 hover:border-champagne/30 p-4 rounded-xl transition duration-300 flex flex-col justify-between space-y-2">
+        <a href="/beakim-darad" class="group bg-raised/40 hover:bg-raised/80 border border-line-accent/10 hover:border-line-accent/30 p-4 rounded-xl transition duration-300 flex flex-col justify-between space-y-2">
           <div>
-            <span class="text-[10px] text-champagne font-semibold uppercase tracking-wider block">Beach Road</span>
-            <h3 class="font-display text-base font-semibold text-ivory group-hover:text-champagne transition">Beakim Darad</h3>
-            <p class="text-xs text-ivory/60 mt-1">2 Pools • Studios &amp; 1-Bed Cottages</p>
+            <span class="text-[10px] text-ink-gold font-semibold uppercase tracking-wider block">Beach Road</span>
+            <h3 class="font-display text-base font-semibold text-ink-main group-hover:text-ink-gold transition">Beakim Darad</h3>
+            <p class="text-xs text-muted-60 mt-1">2 Pools • Studios &amp; 1-Bed Cottages</p>
           </div>
-          <span class="text-xs text-champagne font-semibold flex items-center gap-1 group-hover:translate-x-1 transition duration-300">View &rarr;</span>
+          <span class="text-xs text-ink-gold font-semibold flex items-center gap-1 group-hover:translate-x-1 transition duration-300">View &rarr;</span>
         </a>
 
         <!-- Property 2: Tower Cottages -->
-        <a href="/tower-cottages" class="group bg-canopy/40 hover:bg-canopy/80 border border-champagne/10 hover:border-champagne/30 p-4 rounded-xl transition duration-300 flex flex-col justify-between space-y-2">
+        <a href="/tower-cottages" class="group bg-raised/40 hover:bg-raised/80 border border-line-accent/10 hover:border-line-accent/30 p-4 rounded-xl transition duration-300 flex flex-col justify-between space-y-2">
           <div>
-            <span class="text-[10px] text-champagne font-semibold uppercase tracking-wider block">Near Naivas Ukunda</span>
-            <h3 class="font-display text-base font-semibold text-ivory group-hover:text-champagne transition">Tower Cottages</h3>
-            <p class="text-xs text-ivory/60 mt-1">Spacious 2-Bedroom Apartments</p>
+            <span class="text-[10px] text-ink-gold font-semibold uppercase tracking-wider block">Near Naivas Ukunda</span>
+            <h3 class="font-display text-base font-semibold text-ink-main group-hover:text-ink-gold transition">Tower Cottages</h3>
+            <p class="text-xs text-muted-60 mt-1">Spacious 2-Bedroom Apartments</p>
           </div>
-          <span class="text-xs text-champagne font-semibold flex items-center gap-1 group-hover:translate-x-1 transition duration-300">View &rarr;</span>
+          <span class="text-xs text-ink-gold font-semibold flex items-center gap-1 group-hover:translate-x-1 transition duration-300">View &rarr;</span>
         </a>
 
         <!-- Property 3: Diani Darling -->
-        <a href="/diani-darling" class="group bg-canopy/40 hover:bg-canopy/80 border border-champagne/10 hover:border-champagne/30 p-4 rounded-xl transition duration-300 flex flex-col justify-between space-y-2">
+        <a href="/diani-darling" class="group bg-raised/40 hover:bg-raised/80 border border-line-accent/10 hover:border-line-accent/30 p-4 rounded-xl transition duration-300 flex flex-col justify-between space-y-2">
           <div>
-            <span class="text-[10px] text-champagne font-semibold uppercase tracking-wider block">Beach Road</span>
-            <h3 class="font-display text-base font-semibold text-ivory group-hover:text-champagne transition">Diani Darling</h3>
-            <p class="text-xs text-ivory/60 mt-1">Boutique Poolside Studio Cottages</p>
+            <span class="text-[10px] text-ink-gold font-semibold uppercase tracking-wider block">Beach Road</span>
+            <h3 class="font-display text-base font-semibold text-ink-main group-hover:text-ink-gold transition">Diani Darling</h3>
+            <p class="text-xs text-muted-60 mt-1">Boutique Poolside Studio Cottages</p>
           </div>
-          <span class="text-xs text-champagne font-semibold flex items-center gap-1 group-hover:translate-x-1 transition duration-300">View &rarr;</span>
+          <span class="text-xs text-ink-gold font-semibold flex items-center gap-1 group-hover:translate-x-1 transition duration-300">View &rarr;</span>
         </a>
 
         <!-- Property 4: Beakim Apartments (Under Renovation) -->
-        <div aria-disabled="true" class="bg-canopy/25 border border-champagne/10 p-4 rounded-xl flex flex-col justify-between space-y-2 opacity-65 cursor-not-allowed select-none">
+        <div aria-disabled="true" class="bg-raised/25 border border-line-accent/10 p-4 rounded-xl flex flex-col justify-between space-y-2 opacity-65 cursor-not-allowed select-none">
           <div>
-            <span class="text-[10px] text-amber-300 font-semibold uppercase tracking-wider block">🛠️ Under Renovation</span>
-            <h3 class="font-display text-base font-semibold text-ivory/75">Beakim Apartments</h3>
-            <p class="text-xs text-ivory/50 mt-1">Long-Term 1 &amp; 2-Bed Rentals</p>
+            <span class="text-[10px] text-status-amber-300 font-semibold uppercase tracking-wider block">🛠️ Under Renovation</span>
+            <h3 class="font-display text-base font-semibold text-ink-main/75">Beakim Apartments</h3>
+            <p class="text-xs text-muted-50 mt-1">Long-Term 1 &amp; 2-Bed Rentals</p>
           </div>
-          <span class="text-xs text-amber-300/80 font-semibold flex items-center gap-1">Bookings Paused</span>
+          <span class="text-xs text-status-amber-300/80 font-semibold flex items-center gap-1">Bookings Paused</span>
         </div>
 
       </div>
@@ -118,30 +127,30 @@
   </main>
 
   <!-- Footer -->
-  <footer class="w-full bg-deep-forest border-t border-champagne/15 py-8 px-6 text-center text-xs text-ivory/50 space-y-4">
+  <footer class="w-full bg-canvas border-t border-line-accent/15 py-8 px-6 text-center text-xs text-muted-50 space-y-4">
     <div class="flex items-center justify-center gap-3">
       <a href="https://www.instagram.com/beakimhospitalitygroup/" target="_blank" rel="noopener noreferrer"
-         class="w-9 h-9 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest transition duration-300"
+         class="w-9 h-9 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest transition duration-300"
          aria-label="Instagram" title="Instagram">
         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
       </a>
       <a href="https://web.facebook.com/beakimhospitalitygroup" target="_blank" rel="noopener noreferrer"
-         class="w-9 h-9 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest transition duration-300"
+         class="w-9 h-9 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest transition duration-300"
          aria-label="Facebook" title="Facebook">
         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
       </a>
       <a href="https://x.com/BeakimGroup" target="_blank" rel="noopener noreferrer"
-         class="w-9 h-9 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest transition duration-300"
+         class="w-9 h-9 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest transition duration-300"
          aria-label="X (Twitter)" title="X (Twitter)">
         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
       </a>
       <a href="https://www.tiktok.com/@beakimhospitalitygroup" target="_blank" rel="noopener noreferrer"
-         class="w-9 h-9 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest transition duration-300"
+         class="w-9 h-9 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest transition duration-300"
          aria-label="TikTok" title="TikTok">
         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.27 1.76-.23 1.04.14 2.19.92 2.93.81.81 2.05 1.09 3.16.71.71-.23 1.33-.76 1.67-1.41.34-.65.45-1.41.45-2.14V.02z"/></svg>
       </a>
       <a href="https://www.youtube.com/@BeakimHospitalityGroup" target="_blank" rel="noopener noreferrer"
-         class="w-9 h-9 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest transition duration-300"
+         class="w-9 h-9 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest transition duration-300"
          aria-label="YouTube" title="YouTube">
         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
       </a>
@@ -150,11 +159,11 @@
   </footer>
 
   <!-- ── QUICK COMMUNICATION DOCK (ROOTED ON MOBILE, FLOATING ON DESKTOP) ── -->
-  <div class="site-contact-dock fixed bottom-0 left-0 right-0 z-40 bg-deep-forest/95 backdrop-blur-md border-t border-champagne/20 px-4 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] shadow-[0_-4px_25px_rgba(0,0,0,0.5)] md:bottom-6 md:right-6 md:left-auto md:w-auto md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0 md:shadow-none flex flex-row md:flex-col gap-3 justify-center items-center">
+  <div class="site-contact-dock fixed bottom-0 left-0 right-0 z-40 bg-canvas/95 backdrop-blur-md border-t border-line-accent/20 px-4 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] shadow-[0_-4px_25px_rgba(0,0,0,0.5)] md:bottom-6 md:right-6 md:left-auto md:w-auto md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0 md:shadow-none flex flex-row md:flex-col gap-3 justify-center items-center">
     <!-- WhatsApp Action -->
-    <a href="https://wa.me/254746938529" target="_blank" rel="noopener noreferrer" 
+    <a href="https://wa.me/254750864119" target="_blank" rel="noopener noreferrer"
        data-comm-action="whatsapp"
-       class="flex-1 md:flex-initial w-full md:w-14 md:h-14 flex items-center justify-center gap-2 md:gap-0 bg-[#25D366] hover:bg-[#128C7E] text-white px-4 md:px-0 py-2.5 md:py-0 rounded-lg md:rounded-full shadow-md md:shadow-2xl transition duration-300 transform md:hover:-translate-y-1 active:scale-95 text-xs md:text-sm font-semibold tracking-wide"
+       class="flex-1 md:flex-initial w-full md:w-14 md:h-14 flex items-center justify-center gap-2 md:gap-0 whatsapp-action bg-[#25D366] hover:bg-[#128C7E] text-ink-strong px-4 md:px-0 py-2.5 md:py-0 rounded-lg md:rounded-full shadow-md md:shadow-2xl transition duration-300 transform md:hover:-translate-y-1 active:scale-95 text-xs md:text-sm font-semibold tracking-wide"
        title="Chat with Beakim Hospitality on WhatsApp"
        aria-label="Chat with Beakim Hospitality on WhatsApp">
       <svg class="w-5 h-5 md:w-6 md:h-6 fill-current shrink-0" viewBox="0 0 24 24" aria-hidden="true">
@@ -163,11 +172,11 @@
       <span class="md:hidden">WhatsApp</span>
     </a>
     <!-- Phone Floating Action -->
-    <a href="tel:+254746938529" 
+    <a href="tel:+254750864119" 
        data-comm-action="phone"
        class="flex-1 md:flex-initial w-full md:w-14 md:h-14 flex items-center justify-center gap-2 md:gap-0 bg-champagne hover:bg-driftwood text-deep-forest px-4 md:px-0 py-2.5 md:py-0 rounded-lg md:rounded-full shadow-md md:shadow-2xl transition duration-300 transform md:hover:-translate-y-1 active:scale-95 text-xs md:text-sm font-semibold tracking-wider uppercase md:capitalize"
        title="Call Beakim Hospitality directly"
-       aria-label="Call Beakim Hospitality directly">
+       aria-label="Call Us — Beakim Hospitality directly">
       <svg class="w-5 h-5 md:w-6 md:h-6 stroke-current fill-none shrink-0" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.824-1.802-5.14-4.117-6.942-6.942l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
       </svg>

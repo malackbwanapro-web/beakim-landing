@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html data-theme="dark" lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T5E3SNGQZC"></script>
@@ -24,8 +24,10 @@
   <meta name="theme-color" content="#0d2b24" />
 
   <!-- Compiled Production CSS -->
-  <link rel="stylesheet" href="assets/css/styles.css?v=2.2.4" />
-  <script src="assets/js/main.js?v=2.2.4" defer></script>
+  <script data-theme-bootstrap>(function(){var t='dark';try{var s=localStorage.getItem('beakim-theme');if(s==='light'||s==='dark')t=s}catch(e){}document.documentElement.dataset.theme=t;var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==='light'?'#F7F4EE':'#0D2318'})();</script>
+  <script src="assets/js/theme.js?v=2.3.0" defer></script>
+  <link rel="stylesheet" href="assets/css/styles.css?v=2.3.0" />
+  <script src="assets/js/main.js?v=2.3.0" defer></script>
   <link rel="canonical" href="https://www.beakimhospitalitygroup.co.ke/terms-of-service" />
 </head>
 <body class="font-body font-light antialiased">
@@ -36,32 +38,39 @@
   </a>
 
 
-  <header class="site-header fixed top-0 left-0 right-0 z-40 bg-deep-forest/90 backdrop-blur-md border-b border-champagne/15 py-4 px-6">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
+  <header class="site-header fixed top-0 left-0 right-0 z-40 bg-canvas/90 backdrop-blur-md border-b border-line-accent/15 py-4 px-6">
+    <div class="theme-header-row max-w-7xl mx-auto flex items-center justify-between">
       <a class="flex items-center gap-3" href="/">
         <img src="assets/logo-monogram.png?v=2.2.3" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain" />
-        <span class="font-display text-base tracking-wider text-ivory font-semibold">BEAKIM HOSPITALITY</span>
+        <span class="font-display text-base tracking-wider text-ink-main font-semibold"><span class="theme-brand-full">BEAKIM HOSPITALITY</span><span class="theme-brand-short" aria-hidden="true">BEAKIM</span></span>
       </a>
-      <a class="text-xs font-semibold tracking-widest text-ivory/60 hover:text-champagne transition uppercase" href="/">
+      <span class="theme-toggle-slot">
+        <button type="button" class="theme-toggle" data-theme-toggle role="switch" aria-label="Dark theme" aria-checked="true" title="Switch to Ivory Light" hidden>
+          <span class="theme-toggle-thumb" aria-hidden="true"></span>
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20.5 14.1A8.5 8.5 0 019.9 3.5a8.5 8.5 0 1010.6 10.6z"/></svg>
+        </button>
+      </span>
+      <a class="theme-header-link text-xs font-semibold tracking-widest text-muted-60 hover:text-ink-gold transition uppercase" href="/" aria-label="← Back to Home"><span class="theme-label-full">
         &larr; Back to Home
-      </a>
+      </span><span class="theme-label-short" aria-hidden="true">Home</span></a>
     </div>
   </header>
 
   <main id="main-content" class="pt-32 pb-24 max-w-4xl mx-auto px-6 space-y-10">
-    <div class="space-y-3 border-b border-champagne/15 pb-8 text-center md:text-left">
-      <span class="text-xs font-semibold uppercase tracking-widest text-champagne">Booking Terms &amp; Conditions</span>
-      <h1 class="font-display text-4xl font-bold text-ivory">Terms of Service</h1>
-      <p class="text-xs text-ivory/60">Effective Date: January 1, 2026 | Governing Law: Republic of Kenya</p>
+    <div class="space-y-3 border-b border-line-accent/15 pb-8 text-center md:text-left">
+      <span class="text-xs font-semibold uppercase tracking-widest text-ink-gold">Booking Terms &amp; Conditions</span>
+      <h1 class="font-display text-4xl font-bold text-ink-main">Terms of Service</h1>
+      <p class="text-xs text-muted-60">Effective Date: January 1, 2026 | Governing Law: Republic of Kenya</p>
     </div>
 
-    <div class="space-y-8 text-sm text-ivory/80 leading-relaxed">
+    <div class="space-y-8 text-sm text-ink-main/80 leading-relaxed">
       <section class="space-y-3">
-        <h2 class="font-display text-xl text-champagne font-semibold">1. Booking &amp; Reservation Policy</h2>
+        <h2 class="font-display text-xl text-ink-gold font-semibold">1. Booking &amp; Reservation Policy</h2>
         <p>
           By reserving a room, apartment, or cottage with <strong>Beakim Hospitality Group</strong> (via our website, WhatsApp, phone, or corporate LPO), you agree to these Terms of Service.
         </p>
-        <ul class="list-disc pl-5 space-y-1.5 text-xs text-ivory/70">
+        <ul class="list-disc pl-5 space-y-1.5 text-xs text-muted-70">
           <li><strong>Deposit Requirement:</strong> A 50% advance deposit via M-Pesa Buy Goods Till, Bank Wire, or Card is required to lock reservation dates.</li>
           <li><strong>Balance Payment:</strong> The remaining 50% balance must be settled upon check-in prior to key issuance.</li>
           <li><strong>Transparent Rates:</strong> Nightly rates cover accommodation, high-speed Wi-Fi, utilities, compound security, and parking. Air conditioning and swimming pool access are included where property/category amenities specify (e.g., cooling fans in standard rooms; zero pools at Tower Cottages; 2 pools at Darad; 1 pool at Darling). Zero hidden fees.</li>
@@ -69,19 +78,19 @@
       </section>
 
       <section class="space-y-3">
-        <h2 class="font-display text-xl text-champagne font-semibold">2. Check-In &amp; Check-Out Hours</h2>
-        <ul class="list-disc pl-5 space-y-1.5 text-xs text-ivory/70">
+        <h2 class="font-display text-xl text-ink-gold font-semibold">2. Check-In &amp; Check-Out Hours</h2>
+        <ul class="list-disc pl-5 space-y-1.5 text-xs text-muted-70">
           <li><strong>Standard Check-In:</strong> 2:00 PM – 9:00 PM. (Early check-in for morning SGR/flight arrivals is subject to room availability; luggage holding is complimentary).</li>
           <li><strong>Standard Check-Out:</strong> 10:00 AM. (Late check-out requests should be communicated 24 hours in advance and may incur nominal half-day fees).</li>
         </ul>
       </section>
 
       <section class="space-y-3">
-        <h2 class="font-display text-xl text-champagne font-semibold">3. Cancellation &amp; Rescheduling Terms</h2>
+        <h2 class="font-display text-xl text-ink-gold font-semibold">3. Cancellation &amp; Rescheduling Terms</h2>
         <p>
           We understand travel plans can change. Our cancellation and refund terms apply to all direct reservations:
         </p>
-        <ul class="list-disc pl-5 space-y-1.5 text-xs text-ivory/70">
+        <ul class="list-disc pl-5 space-y-1.5 text-xs text-muted-70">
           <li><strong>More than 7 days prior to check-in:</strong> Full refund of deposit minus a 3.5% payment processing fee (or 100% transfer credit to future travel dates within 6 months).</li>
           <li><strong>Between 48 hours and 7 days prior to check-in:</strong> 50% refund of the deposit paid (or 50% transfer credit toward rescheduled dates).</li>
           <li><strong>Within 48 hours of check-in:</strong> Deposit is strictly non-refundable due to reserved room inventory holding.</li>
@@ -89,8 +98,8 @@
       </section>
 
       <section class="space-y-3">
-        <h2 class="font-display text-xl text-champagne font-semibold">4. Compound Rules &amp; Swimming Pool Guidelines</h2>
-        <ul class="list-disc pl-5 space-y-1.5 text-xs text-ivory/70">
+        <h2 class="font-display text-xl text-ink-gold font-semibold">4. Compound Rules &amp; Swimming Pool Guidelines</h2>
+        <ul class="list-disc pl-5 space-y-1.5 text-xs text-muted-70">
           <li><strong>Quiet Hours:</strong> Standard quiet hours begin at 10:00 PM to respect all guests. (Exclusive compound block bookings enjoy custom evening event flexibility).</li>
           <li><strong>Swimming Pools:</strong> Available at Beakim Darad (2 resort pools) and Diani Darling Cottages (1 pool). Pool hours are 7:00 AM – 9:00 PM. Children must be supervised by adult chaperones at all times. Glassware is strictly prohibited on pool decks. (Note: Tower Cottages does not feature a swimming pool on site).</li>
           <li><strong>Occupancy Limits:</strong> Guests must adhere to maximum room occupancy limits (e.g. 2 guests for 1-Bed, 4-5 guests for 2-Bed). Unregistered overnight visitors are not permitted without front desk registration.</li>
@@ -98,14 +107,14 @@
       </section>
 
       <section class="space-y-3">
-        <h2 class="font-display text-xl text-champagne font-semibold">5. Long-Term Leases &amp; Group Contracts</h2>
+        <h2 class="font-display text-xl text-ink-gold font-semibold">5. Long-Term Leases &amp; Group Contracts</h2>
         <p>
           Long-term lease agreements (for monthly residency at Beakim Apartments) and institutional group contracts (schools, corporates, NGOs) are governed by specific written agreements incorporating formal LPOs, pro-forma invoices, and customized lease schedules.
         </p>
       </section>
 
       <section class="space-y-3">
-        <h2 class="font-display text-xl text-champagne font-semibold">6. Limitation of Liability &amp; Jurisdiction</h2>
+        <h2 class="font-display text-xl text-ink-gold font-semibold">6. Limitation of Liability &amp; Jurisdiction</h2>
         <p>
           Beakim Hospitality Group is not liable for indirect damages, loss of personal valuables left unmonitored, or travel disruptions caused by severe weather or external transport delays. These terms are governed by the laws of the Republic of Kenya under the jurisdiction of the courts of Kwale County / High Court of Kenya.
         </p>
@@ -113,49 +122,49 @@
     </div>
   </main>
 
-    <footer class="bg-deep-forest border-t border-champagne/15 py-12 text-xs text-ivory/60">
+    <footer class="bg-canvas border-t border-line-accent/15 py-12 text-xs text-muted-60">
     <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
       <div class="flex items-center gap-3">
         <img src="assets/logo-monogram.png" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain" />
         <div>
-          <span class="font-display text-sm text-ivory font-semibold block">BEAKIM HOSPITALITY GROUP</span>
-          <span class="text-[10px] text-champagne uppercase tracking-widest block">Diani Beach, Kenya</span>
+          <span class="font-display text-sm text-ink-main font-semibold block">BEAKIM HOSPITALITY GROUP</span>
+          <span class="text-[10px] text-ink-gold uppercase tracking-widest block">Diani Beach, Kenya</span>
         </div>
       </div>
 
       <!-- Social Links Row -->
       <div class="flex items-center justify-center gap-2.5">
         <a href="https://www.instagram.com/beakimhospitalitygroup/" target="_blank" rel="noopener noreferrer"
-           class="w-8 h-8 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest transition duration-300"
+           class="w-8 h-8 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest transition duration-300"
            aria-label="Follow Beakim Hospitality Group on Instagram" title="Instagram">
           <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         </a>
         <a href="https://web.facebook.com/beakimhospitalitygroup" target="_blank" rel="noopener noreferrer"
-           class="w-8 h-8 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest transition duration-300"
+           class="w-8 h-8 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest transition duration-300"
            aria-label="Follow Beakim Hospitality Group on Facebook" title="Facebook">
           <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
         </a>
         <a href="https://x.com/BeakimGroup" target="_blank" rel="noopener noreferrer"
-           class="w-8 h-8 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest transition duration-300"
+           class="w-8 h-8 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest transition duration-300"
            aria-label="Follow Beakim Hospitality Group on X" title="X (Twitter)">
           <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
         </a>
         <a href="https://www.tiktok.com/@beakimhospitalitygroup" target="_blank" rel="noopener noreferrer"
-           class="w-8 h-8 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest transition duration-300"
+           class="w-8 h-8 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest transition duration-300"
            aria-label="Follow Beakim Hospitality Group on TikTok" title="TikTok">
           <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.27 1.76-.23 1.04.14 2.19.92 2.93.81.81 2.05 1.09 3.16.71.71-.23 1.33-.76 1.67-1.41.34-.65.45-1.41.45-2.14V.02z"/></svg>
         </a>
         <a href="https://www.youtube.com/@BeakimHospitalityGroup" target="_blank" rel="noopener noreferrer"
-           class="w-8 h-8 rounded-full flex items-center justify-center border border-champagne/30 bg-canopy/40 text-champagne hover:bg-champagne hover:text-deep-forest transition duration-300"
+           class="w-8 h-8 rounded-full flex items-center justify-center border border-line-accent/30 bg-raised/40 text-ink-gold hover:bg-champagne hover:text-deep-forest transition duration-300"
            aria-label="Subscribe to Beakim Hospitality Group on YouTube" title="YouTube">
           <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
         </a>
       </div>
 
       <div class="flex items-center gap-6">
-        <a href="/privacy-policy" class="hover:text-champagne transition">Privacy Policy</a>
-        <a href="/terms-of-service" class="hover:text-champagne transition">Terms of Service</a>
-        <a href="/" class="hover:text-champagne transition">Home</a>
+        <a href="/privacy-policy" class="hover:text-ink-gold transition">Privacy Policy</a>
+        <a href="/terms-of-service" class="hover:text-ink-gold transition">Terms of Service</a>
+        <a href="/" class="hover:text-ink-gold transition">Home</a>
       </div>
     </div>
   </footer>

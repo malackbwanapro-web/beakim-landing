@@ -36,7 +36,7 @@
   - **Intake Honesty (Zero False Confirmation):** On network failure, offline state, or server error, `confirmAndSubmitInquiry` NEVER displays a false confirmation receipt. Instead, it renders `renderInquiryNetworkFailure` providing transparent error messaging, an instant retry button (`Retry Reservation Submission`), direct call assistance, and pre-formatted WhatsApp direct fallback with client inquiry details intact (A204).
 - **Anti-Spam:** Honeypot field (`website_hp`) must be submitted alongside form values.
 - **2-Column Reservation Command Center & Progressive Disclosure:** Interactive residence cards (`.residence-card`), curated stay preferences (early SGR bag drop, self-catering kitchen setup, ground-floor preference), dynamic 5-tier room category sub-selector for Beakim Darad (`selectDaradRoomTier()`, `toggleDaradRoomSelector()`, `syncDaradRoomTiersStyling()`, `#darad-room-selector-container`), and authentic property-sensitive breakfast add-on (KSh 500 at Darad, KSh 1,000 at Darling) with real-time live price recalculation decomposed into SRP sub-handlers (`selectResidenceCard()`, `syncPropertyDropdown()`, `syncResidenceCardsStyling()`, `syncBreakfastAddonCard()`, `handleDateOrAddonChange()`). Deployed site-wide across `index.html`, `tower-cottages.html`, `diani-darling.html`, and `beakim-darad.html` with property-specific tailoring.
-- **Reception Desk Direct Lines:** Beakim Darad Reception & Main Office: `+254 750 864 119` (`0750 864 119`); Beakim Apartments: `+254 750 864 119` (`0750 864 119`); Diani Darling Reception: `+254 119 237 439` (`0119 237 439`); Tower Cottages: `+254 746 938 529`.
+- **Reception Desk Direct Lines:** Beakim Darad Reception & Main Office: `+254 750 864 119` (`0750 864 119`); Beakim Apartments: `+254 750 864 119` (`0750 864 119`); Diani Darling Reception: `+254 119 237 439` (`0119 237 439`); Tower Cottages (call + WhatsApp): `+254 750 864 119` (updated 5 Nov 2026). The retired `+254 746 938 529` line no longer appears on any page; Insights, 404, Privacy, SEO matrix and admincrm all use `+254 750 864 119`.
 - **Ergonomics & A11y:** Full keyboard navigation support for residence radio cards via `handleResidenceCardKeydown()` (`Enter` and `Space`), and async submission locking on `#booking-submit-btn` with `aria-busy="true"` and `active:scale-[0.98]` tactile press feedback.
 
 ---
@@ -56,3 +56,11 @@ Calendar modal mode now uses isCalendarModalViewport: width < 640px OR height < 
 Header/dock heights are refreshed synchronously before anchor scrolling as well as on ResizeObserver, so closing the expanded mobile menu cannot leave a stale header offset. Skip-to-main-content clicks retain native focus navigation.
 
 Incoming deep links settle with auto scrolling, including one correction after document.fonts.ready. Pointer/touch/wheel/key interaction cancels the correction. Click-based scrolling still uses the shared motion-aware helper; do not reintroduce global CSS smooth scrolling or font swaps can leave stale deep-link offsets.
+
+## Approved corrective patch — 5 November 2026
+WhatsApp routes by current URL page, not selected residence: home/Tower/Darad/general pages use homepage office 254750864119; Diani Darling uses 254119237439. resolveWhatsAppPhone handles clean/.html/trailing-slash paths. Static anchors and initialization follow this policy; saved inquiry links are rebuilt with their message preserved. Telephone routing remains independent. Homepage benefits use resolveBookingBenefits/syncBookingBenefits and the catalog; Tower must not promise a pool or breakfast. Response copy is typical during 8AM–8PM EAT desk hours, not an unconditional guarantee.
+
+## Public themes — 5 November 2026
+theme.js owns only data-theme, toggle accessibility, theme-color metadata and the beakim-theme storage key. It never rewrites form DOM or booking values. Early HTML bootstrap sets the preference before CSS; dark is the default if storage is absent/blocked. Dynamic main.js UI uses semantic colors. Lightboxes retain theme-photo dark context.
+
+- theme.js: public appearance controller; owns the beakim-theme preference and accessible switch only.

@@ -12,8 +12,8 @@
     }
   }
   body {
-    background-color: #0D2318;
-    color: #F5F0E8;
+    background-color: rgb(var(--canvas));
+    color: rgb(var(--ink-main));
   }
   /* Eliminate 300ms mobile touch delay across interactive controls */
   a, button, input, select, textarea, [role="button"], [role="radio"] {
@@ -25,10 +25,10 @@
     height: 8px;
   }
   ::-webkit-scrollbar-track {
-    background: #0D2318;
+    background: rgb(var(--canvas));
   }
   ::-webkit-scrollbar-thumb {
-    background: #2C5A3A;
+    background: rgb(var(--moss-surface));
     border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
@@ -103,7 +103,7 @@
   }
   .cal-range-mid {
     background-color: rgba(212, 175, 55, 0.18) !important;
-    color: #F5F0E8 !important;
+    color: rgb(var(--ink-main)) !important;
     border-radius: 0 !important;
   }
   .cal-range-hover {
@@ -431,4 +431,248 @@ html { scroll-padding-top: calc(var(--site-header-height) + 16px); }
   #booking-entry .contact-method-label { min-height: 48px; }
   #cal-close-btn, #cal-prev-month-btn, #cal-next-month-btn { min-width: 44px; min-height: 44px; }
   button[id^="btn-faq-"] { min-height: 44px; }
+}
+
+/* Approved corrective patch: phone entry, contact choices and WhatsApp contrast. */
+.whatsapp-action { color: #0D2318; }
+.whatsapp-action:hover, .whatsapp-action:focus-visible {
+  color: #0D2318;
+  background-color: #1EBE5D;
+}
+@media (max-width: 767px) {
+  #booking-entry .phone-contact-row {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+  #booking-entry .phone-contact-row #guest-phone-code {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 8px;
+  }
+  #booking-entry .phone-contact-row #guest-phone-number { width: 100%; min-width: 0; }
+}
+@media (max-width: 359px) {
+  #booking-entry .phone-contact-row,
+  #booking-entry .preferred-contact-options { grid-template-columns: minmax(0, 1fr); }
+  #booking-entry .preferred-contact-options .contact-method-label { justify-content: flex-start; }
+}
+
+
+/* Appearance tokens: brand/CTA forest text stays fixed; surfaces and ink vary. */
+:root {
+  --canvas: 13 35 24;
+  --raised: 26 61 40;
+  --moss-surface: 44 90 58;
+  --ink-main: 245 240 232;
+  --ink-strong: 255 255 255;
+  --ink-gold: 184 150 90;
+  --ink-accent: 212 176 122;
+  --line-accent: 184 150 90;
+  --line-contrast: 255 255 255;
+  --tint: 255 255 255;
+  --form-paper: 250 248 245;
+  --dialog-footer: 10 25 20;
+  --dialog-inset: 11 29 22;
+  --deep-panel: 18 47 35;
+  --green-panel: 27 67 50;
+  --success-panel: 6 78 59;
+  --status-emerald-200: 167 243 208;
+  --status-emerald-300: 110 231 183;
+  --status-emerald-400: 52 211 153;
+  --status-emerald-500: 16 185 129;
+  --status-emerald-600: 5 150 105;
+  --status-amber-200: 253 230 138;
+  --status-amber-300: 252 211 77;
+  --status-amber-400: 251 191 36;
+  --status-amber-500: 245 158 11;
+  --status-amber-600: 217 119 6;
+  --status-red-200: 254 202 202;
+  --status-red-300: 252 165 165;
+  --status-red-400: 248 113 113;
+  --status-red-500: 239 68 68;
+  --status-red-600: 220 38 38;
+  --status-green-200: 187 247 208;
+  --status-green-300: 134 239 172;
+  --status-green-400: 74 222 128;
+  --status-green-500: 34 197 94;
+  --status-green-600: 22 163 74;
+  --status-blue-200: 191 219 254;
+  --status-blue-300: 147 197 253;
+  --status-blue-400: 96 165 250;
+  --status-blue-500: 59 130 246;
+  --status-blue-600: 37 99 235;
+  --muted-color: 245 240 232;
+  --subtle-color: 255 255 255;
+  --muted-30-alpha: 0.3;
+  --subtle-30-alpha: 0.3;
+  --muted-40-alpha: 0.4;
+  --subtle-40-alpha: 0.4;
+  --muted-50-alpha: 0.5;
+  --subtle-50-alpha: 0.5;
+  --muted-60-alpha: 0.6;
+  --subtle-60-alpha: 0.6;
+  --muted-70-alpha: 0.7;
+  --subtle-70-alpha: 0.7;
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --canvas: 247 244 238;
+  --raised: 238 232 221;
+  --moss-surface: 225 235 222;
+  --ink-main: 19 45 34;
+  --ink-strong: 19 45 34;
+  --ink-gold: 122 91 32;
+  --ink-accent: 122 91 32;
+  --line-accent: 144 122 82;
+  --line-contrast: 19 45 34;
+  --tint: 19 45 34;
+  --form-paper: 255 254 250;
+  --dialog-footer: 238 232 221;
+  --dialog-inset: 247 244 238;
+  --deep-panel: 238 232 221;
+  --green-panel: 232 237 228;
+  --success-panel: 220 252 231;
+  --status-emerald-200: 22 101 52;
+  --status-emerald-300: 22 101 52;
+  --status-emerald-400: 22 101 52;
+  --status-emerald-500: 22 101 52;
+  --status-emerald-600: 22 101 52;
+  --status-amber-200: 133 77 14;
+  --status-amber-300: 133 77 14;
+  --status-amber-400: 133 77 14;
+  --status-amber-500: 133 77 14;
+  --status-amber-600: 133 77 14;
+  --status-red-200: 153 27 27;
+  --status-red-300: 153 27 27;
+  --status-red-400: 153 27 27;
+  --status-red-500: 153 27 27;
+  --status-red-600: 153 27 27;
+  --status-green-200: 22 101 52;
+  --status-green-300: 22 101 52;
+  --status-green-400: 22 101 52;
+  --status-green-500: 22 101 52;
+  --status-green-600: 22 101 52;
+  --status-blue-200: 30 64 175;
+  --status-blue-300: 30 64 175;
+  --status-blue-400: 30 64 175;
+  --status-blue-500: 30 64 175;
+  --status-blue-600: 30 64 175;
+  --muted-color: 92 103 95;
+  --subtle-color: 92 103 95;
+  --muted-30-alpha: 1;
+  --subtle-30-alpha: 1;
+  --muted-40-alpha: 1;
+  --subtle-40-alpha: 1;
+  --muted-50-alpha: 1;
+  --subtle-50-alpha: 1;
+  --muted-60-alpha: 1;
+  --subtle-60-alpha: 1;
+  --muted-70-alpha: 1;
+  --subtle-70-alpha: 1;
+  color-scheme: light;
+}
+/* Photo overlays and gallery viewing retain the original dark contrast context. */
+.theme-photo {
+  --canvas: 13 35 24;
+  --raised: 26 61 40;
+  --moss-surface: 44 90 58;
+  --ink-main: 245 240 232;
+  --ink-strong: 255 255 255;
+  --ink-gold: 184 150 90;
+  --ink-accent: 212 176 122;
+  --line-accent: 184 150 90;
+  --line-contrast: 255 255 255;
+  --tint: 255 255 255;
+  --form-paper: 250 248 245;
+  --dialog-footer: 10 25 20;
+  --dialog-inset: 11 29 22;
+  --deep-panel: 18 47 35;
+  --green-panel: 27 67 50;
+  --success-panel: 6 78 59;
+  --status-emerald-200: 167 243 208;
+  --status-emerald-300: 110 231 183;
+  --status-emerald-400: 52 211 153;
+  --status-emerald-500: 16 185 129;
+  --status-emerald-600: 5 150 105;
+  --status-amber-200: 253 230 138;
+  --status-amber-300: 252 211 77;
+  --status-amber-400: 251 191 36;
+  --status-amber-500: 245 158 11;
+  --status-amber-600: 217 119 6;
+  --status-red-200: 254 202 202;
+  --status-red-300: 252 165 165;
+  --status-red-400: 248 113 113;
+  --status-red-500: 239 68 68;
+  --status-red-600: 220 38 38;
+  --status-green-200: 187 247 208;
+  --status-green-300: 134 239 172;
+  --status-green-400: 74 222 128;
+  --status-green-500: 34 197 94;
+  --status-green-600: 22 163 74;
+  --status-blue-200: 191 219 254;
+  --status-blue-300: 147 197 253;
+  --status-blue-400: 96 165 250;
+  --status-blue-500: 59 130 246;
+  --status-blue-600: 37 99 235;
+  --muted-color: 245 240 232;
+  --subtle-color: 255 255 255;
+  --muted-30-alpha: 0.3;
+  --subtle-30-alpha: 0.3;
+  --muted-40-alpha: 0.4;
+  --subtle-40-alpha: 0.4;
+  --muted-50-alpha: 0.5;
+  --subtle-50-alpha: 0.5;
+  --muted-60-alpha: 0.6;
+  --subtle-60-alpha: 0.6;
+  --muted-70-alpha: 0.7;
+  --subtle-70-alpha: 0.7;
+}
+.theme-form-paper { color-scheme: light; }
+
+/* Reserved toggle slot prevents a layout shift when the deferred controller starts. */
+.theme-header-row { gap: 12px; }
+.theme-toggle-slot { display: inline-flex; flex: 0 0 80px; width: 80px; height: 44px; }
+.theme-toggle {
+  position: relative; display: inline-flex; align-items: center; justify-content: space-around;
+  width: 80px; height: 44px; border: 1px solid rgb(var(--line-accent) / .5);
+  border-radius: 999px; color: rgb(var(--ink-accent)); background: rgb(var(--raised));
+  box-shadow: inset 0 1px 0 rgb(var(--line-contrast) / .04); cursor: pointer; isolation: isolate;
+}
+.theme-toggle[hidden] { display: none; }
+.theme-toggle:focus-visible { outline: 2px solid rgb(var(--ink-accent)); outline-offset: 4px; }
+.theme-toggle-thumb {
+  position: absolute; left: 4px; top: 4px; width: 34px; height: 34px; border-radius: 50%;
+  background: rgb(var(--line-accent) / .15); transform: translateX(36px); transition: transform 150ms ease;
+}
+[data-theme="light"] .theme-toggle-thumb { transform: translateX(0); background: #FFFEFA; box-shadow: 0 2px 5px rgb(19 45 34 / .12); }
+.theme-icon { position: relative; width: 19px; height: 19px; pointer-events: none; }
+.theme-icon-sun { opacity: .65; }
+.theme-icon-moon { color: rgb(var(--ink-main)); }
+[data-theme="light"] .theme-icon-sun { opacity: 1; }
+[data-theme="light"] .theme-icon-moon { opacity: .55; }
+.theme-label-short, .theme-brand-short { display: none; }
+.theme-header-row > a:first-child { min-width: 0; }
+.site-header img { flex-shrink: 0; }
+@media (max-width: 767px) {
+  .theme-toggle-slot { flex-basis: 44px; width: 44px; }
+  .theme-toggle { width: 44px; justify-content: center; }
+  .theme-toggle-thumb { display: none; }
+  .theme-icon-sun { display: none; }
+  [data-theme="light"] .theme-icon-sun { display: block; }
+  [data-theme="light"] .theme-icon-moon { display: none; }
+}
+@media (max-width: 479px) {
+  .site-header { padding-inline: 0; }
+  .theme-header-row { padding-inline: 16px; gap: 8px; }
+  .theme-label-full, .theme-brand-full { display: none; }
+  .theme-label-short, .theme-brand-short { display: inline; }
+  .theme-header-link { min-width: 44px; min-height: 44px; padding-inline: 12px; flex-shrink: 0; white-space: nowrap; }
+}
+@media (prefers-reduced-motion: reduce) { .theme-toggle-thumb { transition: none; } }
+
+/* In-range dates and tiny weekday labels must remain legible in Ivory Light. */
+:root[data-theme="light"] .cal-modal-card [class~="text-ink-gold/70"] { color: rgb(var(--ink-gold)); }
+:root[data-theme="light"] .card-luxury-hover:hover {
+  box-shadow: 0 16px 36px -8px rgb(19 45 34 / .12), 0 0 0 1px rgb(144 122 82 / .12);
 }

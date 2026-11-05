@@ -817,7 +817,7 @@ console.log("25. Testing P0 Booking State Honesty & Network Failure Recovery..."
 assert.strictEqual(typeof renderAvailabilityUnknown, "function");
 const unknownHtml = renderAvailabilityUnknown("Beakim Darad");
 assert.ok(unknownHtml.includes("We couldn't check live availability"), "Must honestly state live availability could not be verified");
-assert.ok(unknownHtml.includes("Send a request and our team will confirm"), "Must invite manual request without false pre-approval");
+assert.ok(unknownHtml.includes("Send a request") && unknownHtml.includes("typically responds") && unknownHtml.includes("8AM–8PM EAT"), "Must invite a request with a typical desk-hours response, without false pre-approval");
 assert.ok(!unknownHtml.includes("Pre-Approved"), "Must NEVER claim pre-approval on network failure");
 
 assert.strictEqual(typeof renderInquiryNetworkFailure, "function");
@@ -961,8 +961,8 @@ assert.ok(darlingContent.includes('"parentOrganization"'), "Darling schema must 
 
 // Hero preload & cache query strings
 assert.ok(/rel="preload" as="image" href="assets\/hero-bg\.webp\?v=2\.2\.[1-9]"/i.test(indexContent), "Homepage must preload hero image with high priority and version tag");
-assert.ok(/assets\/css\/styles\.css\?v=2\.2\.[1-9]/i.test(indexContent), "Homepage CSS link must have valid version tag");
-assert.ok(/assets\/js\/main\.js\?v=2\.2\.[1-9]/i.test(indexContent), "Homepage main.js script must have valid version tag");
+assert.ok(/assets\/css\/styles\.css\?v=2\.\d+\.\d+/i.test(indexContent), "Homepage CSS link must have valid version tag");
+assert.ok(/assets\/js\/main\.js\?v=2\.\d+\.\d+/i.test(indexContent), "Homepage main.js script must have valid version tag");
 assert.ok(towerContent.includes('Sleeps Up to 4 Guests (2 Bedrooms)'), "Tower Cottages must claim sleeps up to 4 guests, not 4+");
 console.log("   ✅ Schema.org parentOrganization linked across properties and assets cache-busted with version tag.");
 
@@ -973,7 +973,7 @@ assert.strictEqual(typeof syncBreakfastAddonCard, "function");
 // Setup minimal mock DOM elements to test syncBreakfastAddonCard behavior
 const mockPriceBadge = { textContent: "+KSh 500 / person / day" };
 const mockDescription = { textContent: "poolside" };
-const mockCheckboxInput = { classes: new Set(["text-champagne"]), textContent: "", checked: true, disabled: false };
+const mockCheckboxInput = { classes: new Set(["text-ink-gold"]), textContent: "", checked: true, disabled: false };
 
 const mockCard = {
   classes: new Set(),
@@ -994,10 +994,10 @@ const mockCard = {
   },
   priceBadge: mockPriceBadge,
   querySelector(selector) {
-    // If querying generic .text-champagne, simulate realistic DOM returning checkbox first!
-    if (selector === ".text-champagne") return mockCheckboxInput;
-    if (selector === "p.text-champagne" || selector === ".text-champagne:not(input)") return mockPriceBadge;
-    if (selector === ".text-driftwood") return mockDescription;
+    // If querying generic .text-ink-gold, simulate realistic DOM returning checkbox first!
+    if (selector === ".text-ink-gold") return mockCheckboxInput;
+    if (selector === "p.text-ink-gold" || selector === ".text-ink-gold:not(input)") return mockPriceBadge;
+    if (selector === ".text-ink-accent") return mockDescription;
     return null;
   }
 };
@@ -1464,16 +1464,16 @@ assert.ok(
   "showToast() must use block-formatting centering (left-0 right-0 mx-auto w-fit) immune to transform resets"
 );
 
-// 4. Verify light booking form column has ZERO low-contrast text-driftwood
+// 4. Verify light booking form column has ZERO low-contrast text-ink-accent
 const freshIndex = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
-const lightFormStart = freshIndex.indexOf('bg-[#FAF8F5]');
+const lightFormStart = freshIndex.indexOf('bg-form-paper');
 assert.ok(lightFormStart !== -1, "index.html must have light booking form column");
 const lightFormEnd = freshIndex.indexOf('</form>', lightFormStart);
 const lightFormContent = freshIndex.slice(lightFormStart, lightFormEnd);
 
 assert.ok(
-  !lightFormContent.includes("text-driftwood"),
-  "Light booking form column (#FAF8F5) must NOT contain low-contrast text-driftwood"
+  !lightFormContent.includes("text-ink-accent"),
+  "Light booking form column (#FAF8F5) must NOT contain low-contrast text-ink-accent"
 );
 assert.ok(
   lightFormContent.includes("text-[#7A5B20]"),

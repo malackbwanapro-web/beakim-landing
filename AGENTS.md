@@ -64,3 +64,9 @@ Self-hosted fonts and licenses are required alongside compiled CSS. Only changed
 
 ## CRM implementation follow-up - 3 November 2026
 CRM runtime is now Next.js 15.5.28 with PostCSS 8.5.32 override. See Beakim CRM/ANTIGRAVITY-AUDIT-FIXES-2026-11-03.md for the R1-R9 implementation, verified tests and remaining release gates. Earlier blanket A01-A16 completion claims are superseded: durable off-host restore, hosted scheduling/delivery and deployed UAT still require evidence. Production defaults no longer authenticate and hosted CRM requires an initialized shared encrypted store. Use npm test in the CRM for all isolated suites. Website application files were not changed.
+
+## Approved corrective patch — 5 November 2026
+Corrective release 2.2.5 implements approved current-page WhatsApp routing, narrow-screen contact entry, catalog-driven homepage benefits, qualified response/inclusion copy and contrast fixes. See HANDOVER-ANTIGRAVITY-2.2.5.md. No CRM source, rates, analytics loading or deployment changes belong to this patch.
+
+## Public themes — 5 November 2026
+Theme release 2.3.0 adds Forest Dark (default) and Ivory Light across the nine public pages. Read HANDOVER-ANTIGRAVITY-THEMES-2.3.0.md. The semantic palette must preserve fixed forest CTA text and dark photo overlays. Booking/WhatsApp/CRM behaviour is unchanged.

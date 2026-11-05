@@ -26,3 +26,15 @@ mobile_ux.test.js checks same-page vs cross-page/query URL behavior, reduced-mot
 
 Test 36 now validates actual WOFF2 signatures, source manifest checksums and included SIL licenses; the obsolete Google Fonts DNS assertion was replaced because fonts are self-hosted.
 Test 39 now checks same-origin font delivery and font-display: swap instead of the obsolete external stylesheet preload requirement.
+
+## Approved corrective patch — 5 November 2026
+Corrective 2.2.5 regressions cover page-based WhatsApp routes, unchanged Tower telephone, static footer agreement, saved messages, inquiry/receipt/failure helpers, property benefits and measured contrast. Run mobile_ux.test.js and contact_routing.test.js without a CRM. The existing clean_code suite needs disposable TEST_DB_PATH and TEST_BACKUP_DIR paths; never use live guest storage.
+
+- contact_routing.test.js: current-page WhatsApp mapping, static footer consistency, saved text preservation, receipt/failure links, pricing boundary, catalog benefit truth and contrast ratios. npm run test:contact. The older availability-copy assertion now requires a typical desk-hours response rather than an unconditional confirmation promise.
+
+Local Lighthouse additionally exposed an existing dock visible-label/accessibility-name mismatch. Dock aria-labels now include their visible wording; no telephone targets changed.
+
+## Public themes — 5 November 2026
+Theme tests must cover early bootstrap, saved/invalid/blocked storage, cross-tab changes, switch state and retained form values. Existing color-selector fixtures now use semantic roles; original price, honesty, calendar and routing assertions remain. Use disposable DB/backup paths for the full suite.
+
+- theme.test.js: nine-page bootstrap/controller/storage/budget regressions. Run npm run test:theme.
