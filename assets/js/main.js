@@ -14,8 +14,8 @@
 
 const APP_CONFIG = Object.freeze({
   CONTACT: Object.freeze({
-    PHONE_RAW: "254746938529",
-    PHONE_FORMATTED: "+254 746 938 529",
+    PHONE_RAW: "254750864119",
+    PHONE_FORMATTED: "+254 750 864 119",
     DEFAULT_COUNTRY_CODE: "+254",
     CANONICAL_EMAIL: "info@beakimhospitalitygroup.co.ke",
     EMAIL: "info@beakimhospitalitygroup.co.ke"

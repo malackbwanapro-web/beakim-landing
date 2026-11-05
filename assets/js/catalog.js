@@ -211,7 +211,7 @@ const BEAKIM_CATALOG = {
     name: "Beakim Apartments",
     locality: "Diani Beach",
     address: "5th Row, Diani Beach, Kenya",
-    phone: "+254 746 938 529",
+    phone: "+254 750 864 119",
     coordinates: { latitude: -4.2750, longitude: 39.5880 },
     stayType: "hybrid",
     breakfastRate: 0,

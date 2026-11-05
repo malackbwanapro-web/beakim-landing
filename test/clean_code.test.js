@@ -50,7 +50,7 @@ console.log("🧪 RUNNING CLEAN CODE UNIT TEST SUITE...\n");
 
 // TEST 1: APP_CONFIG Immutability & Values
 console.log("1. Testing APP_CONFIG Immutability & Values...");
-assert.strictEqual(APP_CONFIG.CONTACT.PHONE_RAW, "254746938529");
+assert.strictEqual(APP_CONFIG.CONTACT.PHONE_RAW, "254750864119");
 assert.strictEqual(APP_CONFIG.CONTACT.DEFAULT_COUNTRY_CODE, "+254");
 assert.strictEqual(APP_CONFIG.CONTACT.CANONICAL_EMAIL, "info@beakimhospitalitygroup.co.ke");
 assert.strictEqual(APP_CONFIG.RATES.BREAKFAST_PER_PERSON_PER_DAY, 1000);
@@ -80,11 +80,11 @@ console.log("   ✅ APP_CONFIG and nested dictionaries are strictly frozen.");
 console.log("2. Testing CommunicationService Boundary Adapter...");
 const testMessage = "Hello World & Co. #Special+Chars!";
 const whatsappUrl = CommunicationService.buildWhatsAppUrl(testMessage);
-assert.ok(whatsappUrl.startsWith("https://wa.me/254746938529?text="));
+assert.ok(whatsappUrl.startsWith("https://wa.me/254750864119?text="));
 const parsedUrl = new URL(whatsappUrl);
 assert.strictEqual(parsedUrl.searchParams.get("text"), testMessage);
 const telUrl = CommunicationService.getTelephoneUrl();
-assert.strictEqual(telUrl, "tel:+254746938529");
+assert.strictEqual(telUrl, "tel:+254750864119");
 console.log("   ✅ WhatsApp URL correctly round-trips special characters via URLSearchParams.");
 console.log("   ✅ Telephone protocol link generated without magic literals.");
 
@@ -381,6 +381,7 @@ for (const propertyKey in BEAKIM_CATALOG) {
   assert.ok(prop.coordinates.longitude > 30, `Property ${propertyKey} longitude should be in East Africa`);
 }
 assert.strictEqual(BEAKIM_CATALOG["beakim-darad"].phone, "+254 750 864 119", "Beakim Darad must have reception desk phone +254 750 864 119");
+assert.strictEqual(BEAKIM_CATALOG["beakim-apartments"].phone, "+254 750 864 119", "Beakim Apartments must have office phone +254 750 864 119");
 assert.strictEqual(BEAKIM_CATALOG["diani-darling"].phone, "+254 119 237 439", "Diani Darling must have reception desk phone +254 119 237 439");
 console.log("   ✅ All properties in BEAKIM_CATALOG have verified phone numbers and GPS coordinates.");
 
@@ -531,6 +532,7 @@ assert.strictEqual(typeof toggleDaradRoomSelector, "function", "toggleDaradRoomS
 const indexHtml = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
 const daradHtml = fs.readFileSync(path.join(__dirname, "..", "beakim-darad.html"), "utf8");
 const darlingHtml = fs.readFileSync(path.join(__dirname, "..", "diani-darling.html"), "utf8");
+const apartmentsHtml = fs.readFileSync(path.join(__dirname, "..", "beakim-apartments.html"), "utf8");
 
 // Assert index.html contains the dynamic sub-selector and all 5 Darad room tier cards
 assert.ok(indexHtml.includes('id="darad-room-selector-container"'), "index.html must contain #darad-room-selector-container");
@@ -543,6 +545,10 @@ assert.ok(indexHtml.includes('Beakim Darad - Garden View Cottage (1-Bedroom)'), 
 // Assert direct reception office phone numbers
 assert.ok(daradHtml.includes("0750 864 119") || daradHtml.includes("+254 750 864 119"), "beakim-darad.html must display reception phone 0750 864 119");
 assert.ok(daradHtml.includes("tel:+254750864119"), "beakim-darad.html must have tel link +254750864119");
+assert.ok(apartmentsHtml.includes("0750 864 119") || apartmentsHtml.includes("+254 750 864 119"), "beakim-apartments.html must display office phone 0750 864 119");
+assert.ok(apartmentsHtml.includes("tel:+254750864119"), "beakim-apartments.html must have tel link +254750864119");
+assert.ok(indexHtml.includes("0750 864 119") || indexHtml.includes("+254 750 864 119"), "index.html must display main office phone 0750 864 119");
+assert.ok(indexHtml.includes("tel:+254750864119"), "index.html must have main office tel link +254750864119");
 assert.ok(darlingHtml.includes("0119 237 439") || darlingHtml.includes("+254 119 237 439"), "diani-darling.html must display reception phone 0119 237 439");
 assert.ok(darlingHtml.includes("tel:+254119237439"), "diani-darling.html must have tel link +254119237439");
 console.log("   ✅ Homepage Beakim Darad 5-tier room category selector and direct reception lines asserted successfully.");
