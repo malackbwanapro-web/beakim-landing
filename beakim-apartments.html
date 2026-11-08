@@ -33,7 +33,7 @@
   <!-- Compiled Production CSS -->
   <script data-theme-bootstrap>(function(){var t='dark';try{var s=localStorage.getItem('beakim-theme');if(s==='light'||s==='dark')t=s}catch(e){}document.documentElement.dataset.theme=t;var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==='light'?'#F7F4EE':'#0D2318'})();</script>
   <script src="assets/js/theme.js?v=2.3.0" defer></script>
-  <link rel="stylesheet" href="assets/css/styles.css?v=2.3.0" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=2.3.3" />
 
   <!-- Verbatim JSON-LD Schema -->
   <script type="application/ld+json">
@@ -73,7 +73,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="assets/js/catalog.js" defer></script>
-  <script src="assets/js/main.js?v=2.3.0" defer></script>
+  <script src="assets/js/main.js?v=2.3.3" defer></script>
   <link rel="canonical" href="https://www.beakimhospitalitygroup.co.ke/beakim-apartments" />
 
   <!-- Open Graph / Social Meta -->
@@ -651,17 +651,32 @@
     <div class="space-y-6">
       <span class="text-xs font-semibold uppercase tracking-widest text-ink-gold">Frequently Asked Questions</span>
       <div class="space-y-4">
-        <details class="bg-raised/30 border border-line-accent/15 rounded-lg p-4 cursor-pointer">
-          <summary class="font-semibold text-sm text-ink-main">How do long-term lease rates work?</summary>
-          <p class="text-xs text-muted-70 pt-2 leading-relaxed">Long-term rates depend on lease duration (e.g. 1 month, 6 months, 1 year). Please call or WhatsApp management directly to negotiate rates.</p>
+        <details name="faq-apartments" open class="group bg-raised/30 border border-line-accent/15 rounded-lg p-4 [&_summary::-webkit-details-marker]:hidden cursor-pointer hover:border-line-accent/30 transition">
+          <summary class="font-semibold text-sm text-ink-main flex items-center justify-between list-none outline-none">
+            <span>How do long-term lease rates work?</span>
+            <span class="text-ink-gold text-xl font-bold ml-2 transition duration-300 group-open:rotate-45">+</span>
+          </summary>
+          <div class="faq-answer">
+            <p class="text-xs text-muted-70 pt-2 leading-relaxed">Long-term rates depend on lease duration (e.g. 1 month, 6 months, 1 year). Please call or WhatsApp management directly to negotiate rates.</p>
+          </div>
         </details>
-        <details class="bg-raised/30 border border-line-accent/15 rounded-lg p-4 cursor-pointer">
-          <summary class="font-semibold text-sm text-ink-main">Is the swimming pool open to residents?</summary>
-          <p class="text-xs text-muted-70 pt-2 leading-relaxed">Yes, all residents in our 20 apartments have full complimentary access to the resort swimming pool and sun lounges.</p>
+        <details name="faq-apartments" class="group bg-raised/30 border border-line-accent/15 rounded-lg p-4 [&_summary::-webkit-details-marker]:hidden cursor-pointer hover:border-line-accent/30 transition">
+          <summary class="font-semibold text-sm text-ink-main flex items-center justify-between list-none outline-none">
+            <span>Is the swimming pool open to residents?</span>
+            <span class="text-ink-gold text-xl font-bold ml-2 transition duration-300 group-open:rotate-45">+</span>
+          </summary>
+          <div class="faq-answer">
+            <p class="text-xs text-muted-70 pt-2 leading-relaxed">Yes, all residents in our 20 apartments have full complimentary access to the resort swimming pool and sun lounges.</p>
+          </div>
         </details>
-        <details class="bg-raised/30 border border-line-accent/15 rounded-lg p-4 cursor-pointer">
-          <summary class="font-semibold text-sm text-ink-main">Are utilities included in short-term stays?</summary>
-          <p class="text-xs text-muted-70 pt-2 leading-relaxed">For short-term nightly bookings, all utilities (electricity, AC, Wi-Fi, water, security) are fully included in the nightly rate.</p>
+        <details name="faq-apartments" class="group bg-raised/30 border border-line-accent/15 rounded-lg p-4 [&_summary::-webkit-details-marker]:hidden cursor-pointer hover:border-line-accent/30 transition">
+          <summary class="font-semibold text-sm text-ink-main flex items-center justify-between list-none outline-none">
+            <span>Are utilities included in short-term stays?</span>
+            <span class="text-ink-gold text-xl font-bold ml-2 transition duration-300 group-open:rotate-45">+</span>
+          </summary>
+          <div class="faq-answer">
+            <p class="text-xs text-muted-70 pt-2 leading-relaxed">For short-term nightly bookings, all utilities (electricity, AC, Wi-Fi, water, security) are fully included in the nightly rate.</p>
+          </div>
         </details>
       </div>
     </div>

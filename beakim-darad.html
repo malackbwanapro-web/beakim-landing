@@ -33,7 +33,7 @@
   <!-- Compiled Production CSS -->
   <script data-theme-bootstrap>(function(){var t='dark';try{var s=localStorage.getItem('beakim-theme');if(s==='light'||s==='dark')t=s}catch(e){}document.documentElement.dataset.theme=t;var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==='light'?'#F7F4EE':'#0D2318'})();</script>
   <script src="assets/js/theme.js?v=2.3.0" defer></script>
-  <link rel="stylesheet" href="assets/css/styles.css?v=2.3.0" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=2.3.3" />
 
   <!-- Verbatim JSON-LD Schema -->
   <script type="application/ld+json">
@@ -81,7 +81,7 @@
 
   <!-- Firebase App & Firestore SDKs -->
   <script src="assets/js/catalog.js?v=2.3.0" defer></script>
-  <script src="assets/js/main.js?v=2.3.0" defer></script>
+  <script src="assets/js/main.js?v=2.3.3" defer></script>
   <link rel="canonical" href="https://www.beakimhospitalitygroup.co.ke/beakim-darad" />
 
   <!-- Open Graph / Social Meta -->
@@ -1048,32 +1048,38 @@
         <h3 class="font-display text-3xl md:text-4xl text-ink-main font-bold">Frequently Asked Questions</h3>
       </div>
       <div class="space-y-4">
-        <details class="bg-raised/40 border border-line-accent/15 rounded-xl p-5 cursor-pointer hover:border-line-accent/30 transition">
-          <summary class="font-semibold text-base text-ink-main flex items-center justify-between">
+        <details name="faq-darad" open class="group bg-raised/40 border border-line-accent/15 rounded-xl p-5 [&_summary::-webkit-details-marker]:hidden cursor-pointer hover:border-line-accent/30 transition">
+          <summary class="font-semibold text-base text-ink-main flex items-center justify-between list-none outline-none">
             <span>Are both swimming pools accessible to all guests?</span>
-            <span class="text-ink-gold text-lg ml-2">+</span>
+            <span class="text-ink-gold text-2xl font-bold ml-2 transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <p class="text-xs md:text-sm text-muted-70 pt-3 leading-relaxed">
-            Yes! Guests staying in Standard Rooms, Spacious Studios, Superior Rooms, or Garden View Cottages enjoy full complimentary access to both resort swimming pools and poolside lounging terraces.
-          </p>
+          <div class="faq-answer">
+            <p class="text-xs md:text-sm text-muted-70 pt-3 leading-relaxed">
+              Yes! Guests staying in Standard Rooms, Spacious Studios, Superior Rooms, or Garden View Cottages enjoy full complimentary access to both resort swimming pools and poolside lounging terraces.
+            </p>
+          </div>
         </details>
-        <details class="bg-raised/40 border border-line-accent/15 rounded-xl p-5 cursor-pointer hover:border-line-accent/30 transition">
-          <summary class="font-semibold text-base text-ink-main flex items-center justify-between">
+        <details name="faq-darad" class="group bg-raised/40 border border-line-accent/15 rounded-xl p-5 [&_summary::-webkit-details-marker]:hidden cursor-pointer hover:border-line-accent/30 transition">
+          <summary class="font-semibold text-base text-ink-main flex items-center justify-between list-none outline-none">
             <span>What are the check-in and check-out times?</span>
-            <span class="text-ink-gold text-lg ml-2">+</span>
+            <span class="text-ink-gold text-2xl font-bold ml-2 transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <p class="text-xs md:text-sm text-muted-70 pt-3 leading-relaxed">
-            Standard check-in is from 12:00 PM onwards, and check-out is by 10:00 AM. Early check-in or late check-out can be arranged upon request subject to availability.
-          </p>
+          <div class="faq-answer">
+            <p class="text-xs md:text-sm text-muted-70 pt-3 leading-relaxed">
+              Standard check-in is from 12:00 PM onwards, and check-out is by 10:00 AM. Early check-in or late check-out can be arranged upon request subject to availability.
+            </p>
+          </div>
         </details>
-        <details class="bg-raised/40 border border-line-accent/15 rounded-xl p-5 cursor-pointer hover:border-line-accent/30 transition">
-          <summary class="font-semibold text-base text-ink-main flex items-center justify-between">
+        <details name="faq-darad" class="group bg-raised/40 border border-line-accent/15 rounded-xl p-5 [&_summary::-webkit-details-marker]:hidden cursor-pointer hover:border-line-accent/30 transition">
+          <summary class="font-semibold text-base text-ink-main flex items-center justify-between list-none outline-none">
             <span>Is there secure parking available on-site?</span>
-            <span class="text-ink-gold text-lg ml-2">+</span>
+            <span class="text-ink-gold text-2xl font-bold ml-2 transition duration-300 group-open:rotate-45">+</span>
           </summary>
-          <p class="text-xs md:text-sm text-muted-70 pt-3 leading-relaxed">
-            Yes, we provide free private parking inside a 24/7 guarded and gated compound for all resident guests with vehicle access directly off Diani Links Road.
-          </p>
+          <div class="faq-answer">
+            <p class="text-xs md:text-sm text-muted-70 pt-3 leading-relaxed">
+              Yes, we provide free private parking inside a 24/7 guarded and gated compound for all resident guests with vehicle access directly off Diani Links Road.
+            </p>
+          </div>
         </details>
       </div>
     </div>

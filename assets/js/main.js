@@ -3501,6 +3501,113 @@ function initializeScrollRevealEngine() {
   revealElements.forEach(el => revealObserver.observe(el));
 }
 
+/**
+ * Smooth, mutually exclusive FAQ accordion drawer controller.
+ * Ensures clicking a new question smoothly slides the previously open answer closed
+ * while sliding the selected question's answer open in lockstep across all browsers.
+ */
+function initializeFaqExclusiveAccordion() {
+  if (typeof window === "undefined" || typeof document === "undefined") return;
+
+  const faqDetailsList = document.querySelectorAll("details[name^='faq-']");
+  if (!faqDetailsList || faqDetailsList.length === 0) return;
+
+  const isReducedMotion = () =>
+    Boolean(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+  function closeFaqDrawer(detailsEl, animate) {
+    const answerEl = detailsEl.querySelector(".faq-answer");
+    if (!animate || !answerEl || typeof answerEl.animate !== "function") {
+      detailsEl.removeAttribute("open");
+      return;
+    }
+
+    if (detailsEl.dataset.faqAnimating === "closing") return;
+    const startHeight = answerEl.offsetHeight;
+    if (startHeight <= 0) {
+      detailsEl.removeAttribute("open");
+      return;
+    }
+
+    detailsEl.dataset.faqAnimating = "closing";
+    answerEl.style.overflow = "hidden";
+
+    const anim = answerEl.animate(
+      [
+        { height: `${startHeight}px`, opacity: 1 },
+        { height: "0px", opacity: 0 }
+      ],
+      { duration: 280, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+    );
+
+    const finalizeClose = () => {
+      detailsEl.removeAttribute("open");
+      delete detailsEl.dataset.faqAnimating;
+      answerEl.style.overflow = "";
+    };
+
+    anim.onfinish = finalizeClose;
+    anim.oncancel = finalizeClose;
+  }
+
+  function openFaqDrawer(detailsEl, animate) {
+    const groupName = detailsEl.getAttribute("name");
+    if (groupName) {
+      const siblings = document.querySelectorAll(`details[name="${groupName}"]`);
+      siblings.forEach(sibling => {
+        if (sibling !== detailsEl && sibling.hasAttribute("open")) {
+          closeFaqDrawer(sibling, animate);
+        }
+      });
+    }
+
+    const answerEl = detailsEl.querySelector(".faq-answer");
+    if (!animate || !answerEl || typeof answerEl.animate !== "function") {
+      detailsEl.setAttribute("open", "");
+      delete detailsEl.dataset.faqAnimating;
+      return;
+    }
+
+    detailsEl.dataset.faqAnimating = "opening";
+    detailsEl.setAttribute("open", "");
+    const targetHeight = answerEl.scrollHeight;
+    answerEl.style.overflow = "hidden";
+
+    const anim = answerEl.animate(
+      [
+        { height: "0px", opacity: 0 },
+        { height: `${targetHeight}px`, opacity: 1 }
+      ],
+      { duration: 280, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+    );
+
+    const finalizeOpen = () => {
+      delete detailsEl.dataset.faqAnimating;
+      answerEl.style.overflow = "";
+    };
+
+    anim.onfinish = finalizeOpen;
+    anim.oncancel = finalizeOpen;
+  }
+
+  faqDetailsList.forEach(detailsEl => {
+    const summaryEl = detailsEl.querySelector("summary");
+    if (!summaryEl) return;
+
+    summaryEl.addEventListener("click", event => {
+      event.preventDefault();
+      const animate = !isReducedMotion();
+      const isOpen = detailsEl.hasAttribute("open") && detailsEl.dataset.faqAnimating !== "closing";
+
+      if (isOpen) {
+        closeFaqDrawer(detailsEl, animate);
+      } else {
+        openFaqDrawer(detailsEl, animate);
+      }
+    });
+  });
+}
+
 if (typeof window !== "undefined") {
   window.addEventListener("DOMContentLoaded", () => {
     initializeMobileChromeClearance();
@@ -3522,6 +3629,7 @@ if (typeof window !== "undefined") {
     initializeCleanHashScrolling();
     initializeConciergeHesitationEngine();
     initializeScrollRevealEngine();
+    initializeFaqExclusiveAccordion();
   });
 }
 
@@ -3579,6 +3687,7 @@ if (typeof module !== "undefined" && module.exports) {
     renderInquirySuccessReceipt,
     initializeConciergeHesitationEngine,
     initializeScrollRevealEngine,
+    initializeFaqExclusiveAccordion,
     renderInquiryNetworkFailure,
     renderInquiryCostBreakdown,
     BeakimDateRangePicker,

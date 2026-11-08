@@ -29,6 +29,7 @@ const {
   renderInquirySuccessReceipt,
   initializeConciergeHesitationEngine,
   initializeScrollRevealEngine,
+  initializeFaqExclusiveAccordion,
   BeakimDateRangePicker,
   SafeStorageService,
   isDemoModeActive,
@@ -1486,5 +1487,86 @@ assert.ok(!freshIndex.includes("fonts.googleapis.com"), "No external font styles
 
 console.log("   ✅ Reduced-motion layout preservation, stagger delay custom properties, and WCAG AA form contrast verified 100%.");
 
-console.log("\n🎉 ALL 39 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 40: Exclusive FAQ Accordion Initial Open State & Smooth Drawer Transition
+console.log("40. Testing Exclusive FAQ Accordion Initial Open State & Smooth Drawer Transition...");
+assert.strictEqual(typeof initializeFaqExclusiveAccordion, "function", "initializeFaqExclusiveAccordion must be exported");
+
+// 1. Verify first question in each homepage FAQ category has 'open' and exclusive 'name' attribute
+for (const groupName of ["faq-domestic", "faq-international", "faq-groups", "faq-general"]) {
+  const groupMatches = freshIndex.match(new RegExp(`<details[^>]*name="${groupName}"[^>]*>`, "g")) || [];
+  assert.ok(groupMatches.length >= 2, `Homepage must contain multiple <details name="${groupName}"> items`);
+  assert.ok(/\bopen\b/.test(groupMatches[0]), `First <details name="${groupName}"> must be open by default`);
+  for (let i = 1; i < groupMatches.length; i++) {
+    assert.ok(!/\bopen\b/.test(groupMatches[i]), `Subsequent <details name="${groupName}"> item ${i + 1} must start closed`);
+  }
+}
+
+// 2. Verify Beakim Darad and Beakim Apartments FAQ sections have first item open & exclusive group name
+const daradFaqHtml = fs.readFileSync(path.join(__dirname, "..", "beakim-darad.html"), "utf8");
+const daradFaqMatches = daradFaqHtml.match(/<details[^>]*name="faq-darad"[^>]*>/g) || [];
+assert.strictEqual(daradFaqMatches.length, 3, "beakim-darad.html must have 3 exclusive faq-darad items");
+assert.ok(/\bopen\b/.test(daradFaqMatches[0]), "First faq-darad item must be open by default");
+
+const aptsFaqHtml = fs.readFileSync(path.join(__dirname, "..", "beakim-apartments.html"), "utf8");
+const aptsFaqMatches = aptsFaqHtml.match(/<details[^>]*name="faq-apartments"[^>]*>/g) || [];
+assert.strictEqual(aptsFaqMatches.length, 3, "beakim-apartments.html must have 3 exclusive faq-apartments items");
+assert.ok(/\bopen\b/.test(aptsFaqMatches[0]), "First faq-apartments item must be open by default");
+
+// 3. Verify interactive exclusive toggle closes previously open drawer when another is clicked
+{
+  const prevWin = global.window;
+  const prevDocument = global.document;
+  const makeDetailsMock = (name, initiallyOpen) => {
+    let isOpen = initiallyOpen;
+    let clickHandler = null;
+    const answerEl = {
+      offsetHeight: 80,
+      scrollHeight: 80,
+      style: {},
+      animate() {
+        const animObj = { onfinish: null, oncancel: null };
+        Promise.resolve().then(() => { if (animObj.onfinish) animObj.onfinish(); });
+        return animObj;
+      }
+    };
+    return {
+      dataset: {},
+      getAttribute: (k) => (k === "name" ? name : null),
+      hasAttribute: (k) => (k === "open" ? isOpen : false),
+      setAttribute: (k) => { if (k === "open") isOpen = true; },
+      removeAttribute: (k) => { if (k === "open") isOpen = false; },
+      querySelector: (sel) => {
+        if (sel === "summary") {
+          return { addEventListener: (evt, fn) => { if (evt === "click") clickHandler = fn; } };
+        }
+        if (sel === ".faq-answer") return answerEl;
+        return null;
+      },
+      triggerClick: () => clickHandler && clickHandler({ preventDefault() {} })
+    };
+  };
+
+  const item1 = makeDetailsMock("faq-domestic", true);
+  const item2 = makeDetailsMock("faq-domestic", false);
+  global.window = { matchMedia: () => ({ matches: true }) }; // reduced-motion instant mode for synchronous assertion
+  global.document = {
+    querySelectorAll: (sel) => (sel.includes("faq-") ? [item1, item2] : [])
+  };
+
+  initializeFaqExclusiveAccordion();
+  assert.strictEqual(item1.hasAttribute("open"), true, "Item 1 starts open");
+  assert.strictEqual(item2.hasAttribute("open"), false, "Item 2 starts closed");
+
+  // Click Item 2 -> Item 1 must close and Item 2 must open
+  item2.triggerClick();
+  assert.strictEqual(item1.hasAttribute("open"), false, "Item 1 closes when Item 2 is clicked");
+  assert.strictEqual(item2.hasAttribute("open"), true, "Item 2 opens when clicked");
+
+  global.window = prevWin;
+  global.document = prevDocument;
+}
+
+console.log("   ✅ Exclusive FAQ accordion initial state and smooth mutual exclusion verified 100%.");
+
+console.log("\n🎉 ALL 40 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
 
