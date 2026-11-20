@@ -45,12 +45,12 @@
   ],
   "redirects": [
     {
-      "source": "/blog",
+      "source": "/blog.html",
       "destination": "/insights",
       "permanent": true
     },
     {
-      "source": "/blog.html",
+      "source": "/blog",
       "destination": "/insights",
       "permanent": true
     },

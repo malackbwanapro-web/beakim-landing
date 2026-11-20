@@ -612,23 +612,27 @@ BeakimDateRangePicker.state.step = "check-in";
 BeakimDateRangePicker.state.checkIn = null;
 BeakimDateRangePicker.state.checkOut = null;
 
+const testFutureCheckIn = getNairobiDateString(10);
+const testFutureCheckOut = getNairobiDateString(14);
+const testFutureEarlier = getNairobiDateString(8);
+
 // Step 1: Guest selects check-in date
-BeakimDateRangePicker.selectDate("2026-11-10");
-assert.strictEqual(BeakimDateRangePicker.state.checkIn, "2026-11-10", "Step 1 must set checkIn date");
+BeakimDateRangePicker.selectDate(testFutureCheckIn);
+assert.strictEqual(BeakimDateRangePicker.state.checkIn, testFutureCheckIn, "Step 1 must set checkIn date");
 assert.strictEqual(BeakimDateRangePicker.state.checkOut, null, "Step 1 must clear checkOut date to prompt checkOut selection");
 assert.strictEqual(BeakimDateRangePicker.state.step, "check-out", "Step 1 must transition step to check-out without closing");
 
 // Step 2: Guest selects check-out date
-BeakimDateRangePicker.selectDate("2026-11-14");
-assert.strictEqual(BeakimDateRangePicker.state.checkIn, "2026-11-10", "Step 2 must preserve checkIn date");
-assert.strictEqual(BeakimDateRangePicker.state.checkOut, "2026-11-14", "Step 2 must set checkOut date");
+BeakimDateRangePicker.selectDate(testFutureCheckOut);
+assert.strictEqual(BeakimDateRangePicker.state.checkIn, testFutureCheckIn, "Step 2 must preserve checkIn date");
+assert.strictEqual(BeakimDateRangePicker.state.checkOut, testFutureCheckOut, "Step 2 must set checkOut date");
 assert.strictEqual(BeakimDateRangePicker.state.step, "check-in", "Step 2 must reset step cycle to check-in for next booking");
 
 // Boundary: Selecting earlier date while in check-out mode gracefully re-anchors checkIn
 BeakimDateRangePicker.state.step = "check-out";
-BeakimDateRangePicker.state.checkIn = "2026-11-10";
-BeakimDateRangePicker.selectDate("2026-11-08");
-assert.strictEqual(BeakimDateRangePicker.state.checkIn, "2026-11-08", "Selecting earlier date must re-anchor checkIn");
+BeakimDateRangePicker.state.checkIn = testFutureCheckIn;
+BeakimDateRangePicker.selectDate(testFutureEarlier);
+assert.strictEqual(BeakimDateRangePicker.state.checkIn, testFutureEarlier, "Selecting earlier date must re-anchor checkIn");
 assert.strictEqual(BeakimDateRangePicker.state.checkOut, null, "Re-anchored checkIn must await checkOut selection");
 assert.strictEqual(BeakimDateRangePicker.state.step, "check-out", "Re-anchoring must remain in check-out step");
 
