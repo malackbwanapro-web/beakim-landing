@@ -39,21 +39,23 @@
 
 
   <header class="site-header fixed top-0 left-0 right-0 z-40 bg-canvas/90 backdrop-blur-md border-b border-line-accent/15 py-4 px-6">
-    <div class="theme-header-row max-w-7xl mx-auto flex items-center justify-between">
+    <div class="theme-header-row relative max-w-7xl mx-auto flex items-center justify-between">
       <a class="flex items-center gap-3" href="/">
         <img src="assets/logo-monogram.png?v=2.2.3" alt="Beakim Hospitality Logo" class="w-8 h-8 object-contain" />
         <span class="font-display text-base tracking-wider text-ink-main font-semibold"><span class="theme-brand-full">BEAKIM HOSPITALITY</span><span class="theme-brand-short" aria-hidden="true">BEAKIM</span></span>
       </a>
-      <span class="theme-toggle-slot">
-        <button type="button" class="theme-toggle" data-theme-toggle role="switch" aria-label="Dark theme" aria-checked="true" title="Switch to Ivory Light" hidden>
-          <span class="theme-toggle-thumb" aria-hidden="true"></span>
-          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
-          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20.5 14.1A8.5 8.5 0 019.9 3.5a8.5 8.5 0 1010.6 10.6z"/></svg>
-        </button>
-      </span>
-      <a class="theme-header-link text-xs font-semibold tracking-widest text-muted-60 hover:text-ink-gold transition uppercase" href="/" aria-label="← Back to Home"><span class="theme-label-full">
-        &larr; Back to Home
-      </span><span class="theme-label-short" aria-hidden="true">Home</span></a>
+      <div class="flex items-center gap-3">
+        <span class="theme-toggle-slot">
+          <button type="button" class="theme-toggle" data-theme-toggle role="switch" aria-label="Dark theme" aria-checked="true" title="Switch to Ivory Light" hidden>
+            <span class="theme-toggle-thumb" aria-hidden="true"></span>
+            <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+            <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20.5 14.1A8.5 8.5 0 019.9 3.5a8.5 8.5 0 1010.6 10.6z"/></svg>
+          </button>
+        </span>
+        <a class="theme-header-link text-xs font-semibold tracking-widest text-muted-60 hover:text-ink-gold transition uppercase" href="/" aria-label="← Back to Home"><span class="theme-label-full">
+          &larr; Back to Home
+        </span><span class="theme-label-short" aria-hidden="true">Home</span></a>
+      </div>
     </div>
   </header>
 

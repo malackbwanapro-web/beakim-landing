@@ -101,9 +101,9 @@
   </a>
 
 
-  <!-- â”€â”€ STICKY HEADER NAVIGATION â”€â”€ -->
+  <!-- ── STICKY HEADER NAVIGATION ── -->
   <header class="site-header fixed top-0 left-0 w-full z-50 bg-canvas/95 backdrop-blur-md border-b border-line-accent/15">
-    <div class="theme-header-row max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+    <div class="theme-header-row relative max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
       
       <!-- Brand Logo / Monogram -->
       <a class='flex items-center gap-3 group' href='/'>
@@ -115,22 +115,24 @@
       </a>
       
       <!-- Back to Home Text Link -->
-      <div class="hidden md:inline-flex items-center gap-6 text-xs font-semibold tracking-widest">
+      <nav class="hidden md:inline-flex items-center gap-6 text-xs font-semibold tracking-widest md:absolute md:left-1/2 md:-translate-x-1/2">
         <a class="text-muted-60 hover:text-ink-gold transition duration-300" href="/">&larr; <span class="uppercase">Home</span></a>
         <a class="text-muted-60 hover:text-ink-gold transition duration-300 uppercase" href="/insights">Insights</a>
-      </div>
+      </nav>
 
-      <!-- High-contrast Scroll To Booking Form CTA -->
-      <span class="theme-toggle-slot">
-        <button type="button" class="theme-toggle" data-theme-toggle role="switch" aria-label="Dark theme" aria-checked="true" title="Switch to Ivory Light" hidden>
-          <span class="theme-toggle-thumb" aria-hidden="true"></span>
-          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
-          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20.5 14.1A8.5 8.5 0 019.9 3.5a8.5 8.5 0 1010.6 10.6z"/></svg>
-        </button>
-      </span>
-      <a href="#booking-entry" class="theme-header-link bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 transform active:scale-95 shadow-md" aria-label="Book This Apartment"><span class="theme-label-full">
-        Book This Apartment
-      </span><span class="theme-label-short" aria-hidden="true">Book</span></a>
+      <!-- Right Actions: Theme Toggle + High-contrast Scroll To Booking Form CTA -->
+      <div class="flex items-center gap-3">
+        <span class="theme-toggle-slot">
+          <button type="button" class="theme-toggle" data-theme-toggle role="switch" aria-label="Dark theme" aria-checked="true" title="Switch to Ivory Light" hidden>
+            <span class="theme-toggle-thumb" aria-hidden="true"></span>
+            <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+            <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20.5 14.1A8.5 8.5 0 019.9 3.5a8.5 8.5 0 1010.6 10.6z"/></svg>
+          </button>
+        </span>
+        <a href="#booking-entry" class="theme-header-link bg-champagne hover:bg-driftwood text-deep-forest px-6 py-2.5 rounded text-xs font-semibold tracking-widest uppercase transition duration-300 transform active:scale-95 shadow-md" aria-label="Book This Apartment"><span class="theme-label-full">
+          Book This Apartment
+        </span><span class="theme-label-short" aria-hidden="true">Book</span></a>
+      </div>
     </div>
   </header>
 
