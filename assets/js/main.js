@@ -745,7 +745,7 @@ function processValidBookingSubmission(formData) {
   });
 
   const preferredContactMethod = formData.preferredContactMethod || "WhatsApp / Text";
-  const paymentMethodPreference = formData.paymentMethodPreference || "pesapal";
+  const paymentMethodPreference = PESAPAL_ONLINE_ENABLED ? (formData.paymentMethodPreference || "pesapal") : "inquiry";
   const paymentAmountOption = formData.paymentAmountOption || "DEPOSIT_50";
 
   const messageText = buildInquiryMessage({
@@ -1415,6 +1415,44 @@ function handleDateOrAddonChange() {
   }
 
   triggerLiveAvailabilityCheck();
+}
+
+/**
+ * Pesapal online checkout availability. Temporarily disabled while the merchant
+ * account carries a low per-transaction limit (~KSh 1,500). Flip to `true` to re-activate.
+ */
+const PESAPAL_ONLINE_ENABLED = false;
+
+/**
+ * Greys out and disables the Pesapal option on every public booking form,
+ * defaulting guests to "Request & Pay Later" while the gateway limit applies.
+ */
+function applyPesapalAvailability() {
+  if (PESAPAL_ONLINE_ENABLED || typeof document === "undefined") return;
+  const pesapalRadio = document.querySelector('input[name="payment-method-preference"][value="pesapal"]');
+  const inquiryRadio = document.querySelector('input[name="payment-method-preference"][value="inquiry"]');
+  if (!pesapalRadio || !inquiryRadio) return;
+  pesapalRadio.checked = false;
+  pesapalRadio.disabled = true;
+  inquiryRadio.checked = true;
+  const pesapalCard = document.getElementById("payment-choice-pesapal-card");
+  if (pesapalCard) {
+    pesapalCard.classList.add("opacity-50", "grayscale", "cursor-not-allowed", "pointer-events-none");
+    pesapalCard.classList.remove("cursor-pointer");
+    pesapalCard.setAttribute("aria-disabled", "true");
+    pesapalCard.title = "Online payment temporarily unavailable";
+    const note = document.createElement("span");
+    note.className = "block text-[10px] font-semibold text-muted-60 mt-1";
+    note.textContent = "Temporarily unavailable — please use Request & Pay Later.";
+    const body = pesapalCard.querySelector(".space-y-1");
+    if (body) body.appendChild(note);
+  }
+  handlePaymentPreferenceChange();
+}
+
+if (typeof document !== "undefined" && typeof document.addEventListener === "function") {
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", applyPesapalAvailability, { once: true });
+  else applyPesapalAvailability();
 }
 
 /**
@@ -2152,7 +2190,7 @@ function renderInquirySuccessReceipt(inquirySummary, inquiryId) {
         </div>
 
         <!-- Optional Instant Online Payment (Pesapal) -->
-        <div class="bg-champagne/10 border border-line-accent/30 rounded-xl p-3 text-xs space-y-2">
+        <div class="${PESAPAL_ONLINE_ENABLED ? "" : "hidden "}bg-champagne/10 border border-line-accent/30 rounded-xl p-3 text-xs space-y-2">
           <div class="flex items-center justify-between">
             <span class="font-bold text-ink-main text-[11px]">Ready to secure your room right now?</span>
             <span class="text-[9px] uppercase font-bold px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded">Instant Confirmation</span>
@@ -2392,7 +2430,7 @@ function showInquiryReviewModal(inquirySummary) {
             <span class="text-[11px] font-bold text-ink-gold uppercase tracking-wider block">💬 Request &amp; Pay Later</span>
             <span class="text-[10px] text-muted-60 block">Desk reviews dates &amp; sends confirmation link</span>
           </div>
-          <button type="button" onclick="switchModalPaymentMethod()" class="text-[11px] font-bold text-ink-gold bg-champagne/15 hover:bg-champagne/25 border border-line-accent/30 px-2.5 py-1.5 rounded-lg transition cursor-pointer">
+          <button type="button" onclick="switchModalPaymentMethod()" class="${PESAPAL_ONLINE_ENABLED ? "" : "hidden "}text-[11px] font-bold text-ink-gold bg-champagne/15 hover:bg-champagne/25 border border-line-accent/30 px-2.5 py-1.5 rounded-lg transition cursor-pointer">
             💳 Pay via Pesapal Instead
           </button>
         </div>
