@@ -65,3 +65,14 @@ WhatsApp routes by current URL page, not selected residence: home/Tower/Darad/ge
 theme.js owns only data-theme, toggle accessibility, theme-color metadata and the beakim-theme storage key. It never rewrites form DOM or booking values. Early HTML bootstrap sets the preference before CSS; dark is the default if storage is absent/blocked. Dynamic main.js UI uses semantic colors. Lightboxes retain theme-photo dark context.
 
 - theme.js: public appearance controller; owns the beakim-theme preference and accessible switch only.
+
+## Pesapal Online Checkout & 50% vs 100% Toggle — 23 November 2026
+Integrated official Pesapal v3 gateway directly into the public booking engine across all 5 properties:
+- `calculateReservationTotals` computes `depositDue` (50%), `formattedDepositDue`, `balanceDue` (50%), and `formattedBalanceDue`.
+- `extractBookingFormData` extracts `paymentMethodPreference` (`'pesapal'` vs `'inquiry'`) and `paymentAmountOption` (`'DEPOSIT_50'` vs `'FULL_100'`).
+- `handlePaymentPreferenceChange()` toggles `#pesapal-amount-toggle-wrapper` and synchronizes border styling.
+- `handleDateOrAddonChange()` dynamically updates `#pesapal-deposit-amount-badge`, `#pesapal-full-amount-badge`, `#summary-due-today-row` (label, amount, balance), and the responsive submit CTA text (`#booking-submit-btn-text`).
+- `renderInquiryCostBreakdown` displays the exact deposit breakdown and check-in balance.
+- `showInquiryReviewModal` provides an interactive 50% vs 100% toggle inside the modal, switching between `confirmAndInitiatePesapalCheckout()` and `confirmAndSubmitInquiry()`.
+- `confirmAndInitiatePesapalCheckout()` calls `CrmSyncService.initiateInstantCheckout` (`action: 'instant-checkout'`), sets busy spinner state, and redirects the guest to Pesapal hosted checkout with fallback to `renderInquiryNetworkFailure` on network exception.
+- `renderInquirySuccessReceipt` includes a secondary instant pay action (`initiateInstantCheckoutFromReceipt`) for guests who submitted an inquiry and decide to pay online immediately.

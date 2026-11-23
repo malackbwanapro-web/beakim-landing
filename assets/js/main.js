@@ -291,6 +291,44 @@ const CrmSyncService = Object.freeze({
       }
     }
     return null;
+  },
+
+  async initiateInstantCheckout(inquiryPayload, paymentOption = "DEPOSIT") {
+    try {
+      const endpoint = this.resolveEndpoint();
+      let controller = null;
+      let timeoutId = null;
+
+      if (typeof AbortController !== "undefined") {
+        controller = new AbortController();
+        timeoutId = setTimeout(() => controller.abort(), 15000);
+      }
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          action: "instant-checkout",
+          paymentOption,
+          ...inquiryPayload
+        }),
+        signal: controller ? controller.signal : undefined
+      });
+
+      if (timeoutId) clearTimeout(timeoutId);
+
+      if (response) {
+        return await response.json();
+      }
+    } catch (err) {
+      if (typeof console !== "undefined" && typeof console.debug === "function") {
+        console.debug("[CrmSyncService] Instant checkout request error:", err && err.message);
+      }
+    }
+    return null;
   }
 });
 
@@ -465,6 +503,11 @@ function calculateReservationTotals({ pricingSummary, adultsCount = 1, hasBreakf
     ? `KSh ${grandTotal.toLocaleString()}`
     : (pricingSummary ? pricingSummary.formattedTotal : "Invalid Dates");
 
+  const depositDue = Math.round(grandTotal * 0.5);
+  const formattedDepositDue = isValid ? `KSh ${depositDue.toLocaleString()}` : formattedGrandTotal;
+  const balanceDue = grandTotal - depositDue;
+  const formattedBalanceDue = isValid ? `KSh ${balanceDue.toLocaleString()}` : formattedGrandTotal;
+
   return {
     baseCost,
     formattedBaseCost,
@@ -473,6 +516,10 @@ function calculateReservationTotals({ pricingSummary, adultsCount = 1, hasBreakf
     formattedBreakfastCost,
     grandTotal,
     formattedGrandTotal,
+    depositDue,
+    formattedDepositDue,
+    balanceDue,
+    formattedBalanceDue,
     durationDays,
     adultsCount,
     unitsCount: units,
@@ -698,6 +745,8 @@ function processValidBookingSubmission(formData) {
   });
 
   const preferredContactMethod = formData.preferredContactMethod || "WhatsApp / Text";
+  const paymentMethodPreference = formData.paymentMethodPreference || "pesapal";
+  const paymentAmountOption = formData.paymentAmountOption || "DEPOSIT_50";
 
   const messageText = buildInquiryMessage({
     guestName: formData.name,
@@ -721,7 +770,9 @@ function processValidBookingSubmission(formData) {
   const inquiryPayload = CrmSyncService.buildPayload({
     formData: {
       ...formData,
-      unitsCount
+      unitsCount,
+      paymentMethodPreference,
+      paymentAmountOption
     },
     grandTotal: totals.grandTotal,
     formattedContactPhone
@@ -730,7 +781,9 @@ function processValidBookingSubmission(formData) {
   showInquiryReviewModal({
     formData: {
       ...formData,
-      unitsCount
+      unitsCount,
+      paymentMethodPreference,
+      paymentAmountOption
     },
     inquiryPayload,
     name: formData.name,
@@ -744,6 +797,8 @@ function processValidBookingSubmission(formData) {
     selectedAddons: formData.selectedAddons || [],
     specialRequests: formData.specialRequests || "",
     preferredContactMethod,
+    paymentMethodPreference,
+    paymentAmountOption,
     whatsappUrl,
     messageText,
     pricingSummary,
@@ -847,6 +902,12 @@ function extractBookingFormData() {
   const contactRadio = typeof document !== "undefined" ? document.querySelector('input[name="preferred-contact"]:checked') : null;
   const preferredContactMethod = contactRadio ? contactRadio.value : "WhatsApp / Text";
 
+  const paymentMethodRadio = typeof document !== "undefined" ? document.querySelector('input[name="payment-method-preference"]:checked') : null;
+  const paymentMethodPreference = paymentMethodRadio ? paymentMethodRadio.value : "pesapal";
+
+  const paymentAmountRadio = typeof document !== "undefined" ? document.querySelector('input[name="payment-amount-option"]:checked') : null;
+  const paymentAmountOption = paymentAmountRadio ? paymentAmountRadio.value : "DEPOSIT_50";
+
   const durationDays = calculateDateDifferenceInDays(checkInElement ? checkInElement.value : "", checkOutElement ? checkOutElement.value : "");
   const validNights = durationDays > 0 ? durationDays : 1;
 
@@ -868,6 +929,8 @@ function extractBookingFormData() {
     selectedAddons,
     hasBreakfast: breakfastChecked,
     preferredContactMethod,
+    paymentMethodPreference,
+    paymentAmountOption,
     honeypot: honeypotElement ? honeypotElement.value.trim() : "",
     nameElement,
     phoneElement,
@@ -1308,7 +1371,86 @@ function handleDateOrAddonChange() {
     formattedTotal: totals.formattedGrandTotal
   });
 
+  // Update Pesapal Badges in the form toggle
+  const depositBadge = document.getElementById("pesapal-deposit-amount-badge");
+  const fullBadge = document.getElementById("pesapal-full-amount-badge");
+  if (depositBadge) depositBadge.textContent = totals.isValid ? totals.formattedDepositDue : "50%";
+  if (fullBadge) fullBadge.textContent = totals.isValid ? totals.formattedGrandTotal : "100%";
+
+  // Update Live Pricing Due Today Row and CTA
+  const paymentMethodRadio = typeof document !== "undefined" ? document.querySelector('input[name="payment-method-preference"]:checked') : null;
+  const paymentMethod = paymentMethodRadio ? paymentMethodRadio.value : "pesapal";
+
+  const paymentAmountRadio = typeof document !== "undefined" ? document.querySelector('input[name="payment-amount-option"]:checked') : null;
+  const paymentAmountOption = paymentAmountRadio ? paymentAmountRadio.value : "DEPOSIT_50";
+
+  const dueTodayRow = document.getElementById("summary-due-today-row");
+  const dueTodayLabel = document.getElementById("summary-due-today-label");
+  const dueTodayAmount = document.getElementById("summary-due-today-amount");
+  const balanceLabel = document.getElementById("summary-balance-label");
+  const balanceAmount = document.getElementById("summary-balance-amount");
+  const submitBtnText = document.getElementById("booking-submit-btn-text");
+
+  if (dueTodayRow) dueTodayRow.classList.remove("hidden");
+  if (paymentMethod === "pesapal") {
+    if (paymentAmountOption === "FULL_100") {
+      if (dueTodayLabel) dueTodayLabel.textContent = "🔒 Due Now via Pesapal (100%):";
+      if (dueTodayAmount) dueTodayAmount.textContent = totals.isValid ? totals.formattedGrandTotal : "KSh 0";
+      if (balanceLabel) balanceLabel.textContent = "Balance due at check-in:";
+      if (balanceAmount) balanceAmount.textContent = "KSh 0 (Fully Cleared)";
+      if (submitBtnText) submitBtnText.textContent = totals.isValid ? `Proceed to Pay ${totals.formattedGrandTotal} via Pesapal →` : "Proceed to Review & Pay via Pesapal →";
+    } else {
+      if (dueTodayLabel) dueTodayLabel.textContent = "🔒 Deposit Due Now (50% Pesapal):";
+      if (dueTodayAmount) dueTodayAmount.textContent = totals.isValid ? totals.formattedDepositDue : "KSh 0";
+      if (balanceLabel) balanceLabel.textContent = "Balance due at check-in:";
+      if (balanceAmount) balanceAmount.textContent = totals.isValid ? totals.formattedBalanceDue : "KSh 0";
+      if (submitBtnText) submitBtnText.textContent = totals.isValid ? `Proceed to Pay ${totals.formattedDepositDue} Deposit via Pesapal →` : "Proceed to Review & Pay via Pesapal →";
+    }
+  } else {
+    if (dueTodayLabel) dueTodayLabel.textContent = "💬 Due Today (Request & Pay Later):";
+    if (dueTodayAmount) dueTodayAmount.textContent = "KSh 0";
+    if (balanceLabel) balanceLabel.textContent = "Pay upon host confirmation:";
+    if (balanceAmount) balanceAmount.textContent = totals.isValid ? `${totals.formattedDepositDue} (50% Deposit)` : "50% Deposit";
+    if (submitBtnText) submitBtnText.textContent = "Proceed to Review & Confirm Stay →";
+  }
+
   triggerLiveAvailabilityCheck();
+}
+
+/**
+ * Handles selection between online Pesapal checkout and Request & Pay Later inquiry.
+ */
+function handlePaymentPreferenceChange() {
+  if (typeof document === "undefined") return;
+
+  const paymentMethodRadio = document.querySelector('input[name="payment-method-preference"]:checked');
+  const paymentMethod = paymentMethodRadio ? paymentMethodRadio.value : "pesapal";
+
+  const toggleWrapper = document.getElementById("pesapal-amount-toggle-wrapper");
+  if (toggleWrapper) {
+    toggleWrapper.classList.toggle("hidden", paymentMethod !== "pesapal");
+  }
+
+  // Update card border styles
+  const pesapalCard = document.getElementById("payment-choice-pesapal-card");
+  const inquiryCard = document.getElementById("payment-choice-inquiry-card");
+  if (pesapalCard && inquiryCard) {
+    if (paymentMethod === "pesapal") {
+      pesapalCard.classList.add("border-line-accent", "bg-champagne/20");
+      pesapalCard.classList.remove("border-deep-forest/20", "bg-white");
+      inquiryCard.classList.remove("border-line-accent", "bg-champagne/20");
+      inquiryCard.classList.add("border-deep-forest/20", "bg-white");
+    } else {
+      inquiryCard.classList.add("border-line-accent", "bg-champagne/20");
+      inquiryCard.classList.remove("border-deep-forest/20", "bg-white");
+      pesapalCard.classList.remove("border-line-accent", "bg-champagne/20");
+      pesapalCard.classList.add("border-deep-forest/20", "bg-white");
+    }
+  }
+
+  if (typeof handleDateOrAddonChange === "function") {
+    handleDateOrAddonChange();
+  }
 }
 
 /**
@@ -2008,6 +2150,22 @@ function renderInquirySuccessReceipt(inquirySummary, inquiryId) {
             ${inquirySummary.estimatedTotal ? `<div class="flex justify-between gap-2 pt-1 border-t border-line-accent/10"><span class="text-muted-50">Estimated Total:</span> <span class="text-ink-gold font-bold text-right">${inquirySummary.estimatedTotal}</span></div>` : ""}
           </div>
         </div>
+
+        <!-- Optional Instant Online Payment (Pesapal) -->
+        <div class="bg-champagne/10 border border-line-accent/30 rounded-xl p-3 text-xs space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-ink-main text-[11px]">Ready to secure your room right now?</span>
+            <span class="text-[9px] uppercase font-bold px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded">Instant Confirmation</span>
+          </div>
+          <p class="text-[11px] text-muted-70">
+            Skip desk waiting: lock your reservation instantly by paying your deposit online via Pesapal (M-Pesa / Card).
+          </p>
+          <button type="button" onclick="initiateInstantCheckoutFromReceipt('${inquiryId}')"
+                  class="w-full bg-champagne/90 hover:bg-champagne text-deep-forest py-2.5 px-3 rounded-lg font-bold tracking-wider uppercase text-xs transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+            <span>💳</span>
+            <span>Pay 50% Deposit Online via Pesapal →</span>
+          </button>
+        </div>
       </div>
 
       <!-- Zone 3: Pinned Footer Actions (Always Visible) -->
@@ -2111,10 +2269,24 @@ function renderInquiryCostBreakdown(inquirySummary) {
       <div class="flex justify-between items-center gap-3 pt-3 border-t-2 border-line-accent/35 mt-1">
         <div>
           <span class="font-bold text-ink-main text-xs sm:text-sm block">Total Estimated Amount</span>
-          <span class="text-[10px] text-muted-60 block">🔒 No payment right now • Pay 50% deposit upon host confirmation</span>
+          <span class="text-[10px] text-muted-60 block">${(inquirySummary.paymentMethodPreference || "pesapal") === "pesapal" ? (((inquirySummary.paymentAmountOption || "DEPOSIT_50") === "FULL_100") ? "🔒 Direct online payment via Pesapal (100% full stay)" : "🔒 Pay 50% deposit now • Balance due at check-in") : "🔒 No payment right now • Pay 50% deposit upon host confirmation"}</span>
         </div>
         <span class="font-display font-bold text-ink-gold text-base sm:text-lg text-right shrink-0">${inquirySummary.estimatedTotal}</span>
       </div>
+
+      ${(inquirySummary.paymentMethodPreference || "pesapal") === "pesapal" ? `
+      <!-- Pesapal Payment Schedule -->
+      <div class="pt-2 border-t border-line-accent/20 bg-champagne/10 -mx-3.5 p-3 rounded-xl space-y-1 text-xs">
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-ink-main">${((inquirySummary.paymentAmountOption || "DEPOSIT_50") === "FULL_100") ? "Due Today (100% Full Payment):" : "Deposit Due Today (50% Pesapal):"}</span>
+          <span class="font-bold text-ink-gold font-mono">${((inquirySummary.paymentAmountOption || "DEPOSIT_50") === "FULL_100") ? (inquirySummary.estimatedTotal || totals.formattedGrandTotal) : (totals.formattedDepositDue || "50% Deposit")}</span>
+        </div>
+        <div class="flex justify-between items-center text-[11px] text-muted-70">
+          <span>${((inquirySummary.paymentAmountOption || "DEPOSIT_50") === "FULL_100") ? "Balance Due at Check-In:" : "Balance Due at Check-In:"}</span>
+          <span class="font-mono font-medium">${((inquirySummary.paymentAmountOption || "DEPOSIT_50") === "FULL_100") ? "KSh 0 (Fully Cleared)" : (totals.formattedBalanceDue || "50% Balance")}</span>
+        </div>
+      </div>
+      ` : ""}
 
       <!-- Deposit & Cancellation Policy Notice -->
       <div class="pt-2 border-t border-line-accent/15 text-[11px] text-muted-70 space-y-1">
@@ -2143,8 +2315,14 @@ function showInquiryReviewModal(inquirySummary) {
   }
   modalElement.className = "fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto overscroll-contain";
 
-  const channelIcon = inquirySummary.preferredContactMethod.includes("WhatsApp") ? "💬" :
-                      inquirySummary.preferredContactMethod.includes("Phone") ? "📞" : "✉️";
+  const channelIcon = inquirySummary.preferredContactMethod && inquirySummary.preferredContactMethod.includes("WhatsApp") ? "💬" :
+                      inquirySummary.preferredContactMethod && inquirySummary.preferredContactMethod.includes("Phone") ? "📞" : "✉️";
+
+  const isPesapal = (inquirySummary.paymentMethodPreference || "pesapal") === "pesapal";
+  const isFull = (inquirySummary.paymentAmountOption || "DEPOSIT_50") === "FULL_100";
+  const totals = inquirySummary.totals || {};
+  const depositDue = totals.formattedDepositDue || (totals.grandTotal ? `KSh ${Math.round(totals.grandTotal * 0.5).toLocaleString()}` : "50% Deposit");
+  const fullAmount = totals.formattedGrandTotal || inquirySummary.estimatedTotal || "Full Amount";
 
   modalElement.innerHTML = `
     <div class="bg-canvas border border-line-accent/35 rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden text-ink-main shadow-2xl relative my-auto">
@@ -2162,7 +2340,7 @@ function showInquiryReviewModal(inquirySummary) {
       <!-- Zone 2: Scrollable Summary Body -->
       <div class="p-5 sm:p-6 space-y-3.5 overflow-y-auto flex-1">
         <p class="text-xs text-ink-main/75 leading-relaxed">
-          Please verify your reservation details below. Confirming logs your request directly with our central reservations desk (<strong class="text-ink-gold">typically 15–30 min during desk hours, 8AM–8PM EAT</strong>).
+          Please verify your reservation details below. ${isPesapal ? `You can pay online now via <strong class="text-ink-gold">Pesapal (M-Pesa / Card)</strong> with instant booking lock, or request desk confirmation.` : `Confirming logs your request directly with our central reservations desk (<strong class="text-ink-gold">typically 15–30 min during desk hours, 8AM–8PM EAT</strong>).`}
         </p>
 
         <!-- Primary Guest & Stay Itinerary -->
@@ -2170,7 +2348,7 @@ function showInquiryReviewModal(inquirySummary) {
           <div class="flex justify-between gap-3"><span class="text-muted-60 shrink-0">Guest Name:</span><span class="font-semibold text-ink-main font-sans text-right">${inquirySummary.name}</span></div>
           <div class="flex justify-between gap-3"><span class="text-muted-60 shrink-0">Contact Phone:</span><span class="font-semibold text-ink-main font-sans text-right">${inquirySummary.phone}</span></div>
           ${inquirySummary.email ? `<div class="flex justify-between gap-3"><span class="text-muted-60 shrink-0">Email:</span><span class="text-ink-main font-sans text-right break-all">${inquirySummary.email}</span></div>` : ""}
-          <div class="flex justify-between gap-3"><span class="text-muted-60 shrink-0">Contact Via:</span><span class="font-semibold text-ink-gold font-sans text-right">${channelIcon} ${inquirySummary.preferredContactMethod}</span></div>
+          <div class="flex justify-between gap-3"><span class="text-muted-60 shrink-0">Contact Via:</span><span class="font-semibold text-ink-gold font-sans text-right">${channelIcon} ${inquirySummary.preferredContactMethod || "WhatsApp / Text"}</span></div>
           <div class="flex justify-between gap-3 pt-1.5 border-t border-line-accent/10"><span class="text-muted-60 shrink-0">Residence:</span><span class="font-semibold text-ink-gold font-sans text-right">${inquirySummary.property}</span></div>
           <div class="flex justify-between gap-3"><span class="text-muted-60 shrink-0">Stay Dates:</span><span class="text-ink-main font-sans text-right">${inquirySummary.dates}</span></div>
           <div class="flex justify-between gap-3"><span class="text-muted-60 shrink-0">Guests:</span><span class="text-ink-main font-sans text-right">${inquirySummary.guests}</span></div>
@@ -2178,17 +2356,67 @@ function showInquiryReviewModal(inquirySummary) {
           ${inquirySummary.specialRequests ? `<div class="flex justify-between gap-3 pt-1.5 border-t border-line-accent/10"><span class="text-muted-60 shrink-0">Arrival Notes:</span><span class="text-ink-main font-sans italic text-right">${inquirySummary.specialRequests}</span></div>` : ""}
         </div>
 
+        <!-- Payment Mode & 50% / 100% Deposit Toggle -->
+        ${isPesapal ? `
+        <div class="bg-raised/70 rounded-xl p-3.5 border border-line-accent/25 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold text-ink-gold uppercase tracking-wider flex items-center gap-1.5">
+              <span>💳</span> Payment Option (Pesapal Gateway)
+            </span>
+            <button type="button" onclick="switchModalPaymentMethod()" class="text-[10px] text-ink-gold/80 hover:text-ink-gold underline cursor-pointer">
+              Switch to Pay Later
+            </button>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <button type="button" onclick="switchModalPaymentAmount('DEPOSIT_50')"
+                    class="p-2.5 rounded-lg border text-left transition cursor-pointer ${!isFull ? 'border-line-accent bg-champagne/25 shadow-xs font-bold' : 'border-line-accent/20 bg-canvas/60 hover:border-line-accent/50'}">
+              <div class="flex items-center justify-between">
+                <span class="text-ink-main">50% Deposit</span>
+                <span class="text-[11px] font-mono font-bold text-ink-gold">${depositDue}</span>
+              </div>
+              <span class="text-[10px] text-muted-60 block mt-0.5 font-normal">Balance at check-in</span>
+            </button>
+            <button type="button" onclick="switchModalPaymentAmount('FULL_100')"
+                    class="p-2.5 rounded-lg border text-left transition cursor-pointer ${isFull ? 'border-line-accent bg-champagne/25 shadow-xs font-bold' : 'border-line-accent/20 bg-canvas/60 hover:border-line-accent/50'}">
+              <div class="flex items-center justify-between">
+                <span class="text-ink-main">100% Full</span>
+                <span class="text-[11px] font-mono font-bold text-ink-gold">${fullAmount}</span>
+              </div>
+              <span class="text-[10px] text-muted-60 block mt-0.5 font-normal">Zero due at check-in</span>
+            </button>
+          </div>
+        </div>
+        ` : `
+        <div class="bg-raised/70 rounded-xl p-3.5 border border-line-accent/25 flex items-center justify-between text-xs">
+          <div>
+            <span class="text-[11px] font-bold text-ink-gold uppercase tracking-wider block">💬 Request &amp; Pay Later</span>
+            <span class="text-[10px] text-muted-60 block">Desk reviews dates &amp; sends confirmation link</span>
+          </div>
+          <button type="button" onclick="switchModalPaymentMethod()" class="text-[11px] font-bold text-ink-gold bg-champagne/15 hover:bg-champagne/25 border border-line-accent/30 px-2.5 py-1.5 rounded-lg transition cursor-pointer">
+            💳 Pay via Pesapal Instead
+          </button>
+        </div>
+        `}
+
         <!-- Transparent Itemized Cost Breakdown -->
         ${renderInquiryCostBreakdown(inquirySummary)}
       </div>
 
       <!-- Zone 3: Pinned Footer Actions (Always Visible) -->
       <div class="px-5 py-4 border-t border-line-accent/20 bg-dialog-footer space-y-2.5 shrink-0">
+        ${isPesapal ? `
+        <button type="button" id="confirm-submit-inquiry-btn" onclick="confirmAndInitiatePesapalCheckout()"
+                class="w-full bg-champagne hover:bg-champagne/90 text-deep-forest py-3.5 px-5 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer active:scale-[0.99]">
+          <span class="text-base">🔒</span>
+          <span>${isFull ? `Pay ${fullAmount} Full Stay via Pesapal →` : `Pay ${depositDue} Deposit via Pesapal →`}</span>
+        </button>
+        ` : `
         <button type="button" id="confirm-submit-inquiry-btn" onclick="confirmAndSubmitInquiry()"
                 class="w-full bg-champagne hover:bg-champagne/90 text-deep-forest py-3.5 px-5 rounded-xl font-bold tracking-wider uppercase transition duration-300 shadow-xl flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer active:scale-[0.99]">
           <span class="text-base">✓</span>
           <span>Confirm &amp; Submit Reservation Inquiry</span>
         </button>
+        `}
 
         <div class="flex gap-2">
           <button type="button" onclick="closeInquiryModal()"
@@ -2207,6 +2435,93 @@ function showInquiryReviewModal(inquirySummary) {
   modalElement.classList.remove("hidden");
   modalElement.classList.add("flex");
   PageScrollLock.lock();
+}
+
+function switchModalPaymentAmount(option) {
+  if (!currentActiveInquiry) return;
+  currentActiveInquiry.paymentAmountOption = option;
+  showInquiryReviewModal(currentActiveInquiry);
+}
+
+function switchModalPaymentMethod() {
+  if (!currentActiveInquiry) return;
+  currentActiveInquiry.paymentMethodPreference = currentActiveInquiry.paymentMethodPreference === "pesapal" ? "inquiry" : "pesapal";
+  showInquiryReviewModal(currentActiveInquiry);
+}
+
+let isPesapalCheckoutInFlight = false;
+
+function setPesapalCheckoutBusy(isBusy, amountLabel = "") {
+  const submitButton = document.getElementById("confirm-submit-inquiry-btn");
+  if (!submitButton) return;
+  submitButton.disabled = isBusy;
+  if (isBusy) {
+    submitButton.innerHTML = `
+      <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-deep-forest inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <span>Connecting to Pesapal Secure Gateway...</span>
+    `;
+  } else {
+    submitButton.innerHTML = `<span>🔒 Pay ${amountLabel} via Pesapal &amp; Lock Stay →</span>`;
+  }
+}
+
+async function confirmAndInitiatePesapalCheckout() {
+  if (!currentActiveInquiry) return;
+  if (isPesapalCheckoutInFlight) return;
+  isPesapalCheckoutInFlight = true;
+
+  const isFull = (currentActiveInquiry.paymentAmountOption || "DEPOSIT_50") === "FULL_100";
+  const totals = currentActiveInquiry.totals || {};
+  const amountLabel = isFull
+    ? (totals.formattedGrandTotal || currentActiveInquiry.estimatedTotal)
+    : (totals.formattedDepositDue || "50% Deposit");
+
+  setPesapalCheckoutBusy(true, amountLabel);
+
+  try {
+    const paymentOption = isFull ? "FULL_BALANCE" : "DEPOSIT";
+    const result = await CrmSyncService.initiateInstantCheckout(currentActiveInquiry.inquiryPayload, paymentOption);
+
+    if (result && result.success && result.redirectUrl) {
+      if (typeof trackBookingFunnelEvent === "function") {
+        trackBookingFunnelEvent("checkout_initiated", {
+          property_name: currentActiveInquiry.property,
+          booking_id: result.bookingId,
+          payment_option: paymentOption,
+          amount: result.amount
+        });
+      }
+
+      if (typeof window !== "undefined" && window.location) {
+        window.location.href = result.redirectUrl;
+      }
+      return;
+    }
+
+    if (typeof console !== "undefined" && typeof console.warn === "function") {
+      console.warn("[Pesapal Checkout] Initiation failed:", result && result.error);
+    }
+
+    setPesapalCheckoutBusy(false, amountLabel);
+    renderInquiryNetworkFailure(currentActiveInquiry);
+  } catch (err) {
+    if (typeof console !== "undefined" && typeof console.error === "function") {
+      console.error("[Pesapal Checkout] Exception:", err);
+    }
+    setPesapalCheckoutBusy(false, amountLabel);
+    renderInquiryNetworkFailure(currentActiveInquiry);
+  } finally {
+    isPesapalCheckoutInFlight = false;
+  }
+}
+
+function initiateInstantCheckoutFromReceipt(inquiryId) {
+  if (!currentActiveInquiry) return;
+  currentActiveInquiry.paymentMethodPreference = "pesapal";
+  confirmAndInitiatePesapalCheckout();
 }
 
 function closeInquiryModal() {
@@ -3707,6 +4022,11 @@ if (typeof module !== "undefined" && module.exports) {
     selectTowerCottages2Br,
     processValidBookingSubmission,
     showInquiryReviewModal,
+    handlePaymentPreferenceChange,
+    switchModalPaymentAmount,
+    switchModalPaymentMethod,
+    confirmAndInitiatePesapalCheckout,
+    initiateInstantCheckoutFromReceipt,
     generateFallbackInquiryId,
     trackBookingFunnelEvent
   };

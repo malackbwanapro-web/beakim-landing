@@ -13,6 +13,8 @@
 | [`CHATGPT_AUDIT_2_BRIEF.md`](./CHATGPT_AUDIT_2_BRIEF.md) | Authoritative Handover & Briefing document for third-party audit team (ChatGPT Agents) establishing resolution of findings C01–C36, architectural non-negotiables, and targeted directives for Audit 2. | Third-Party Quality & Release Handover Protocol |
 | [`SEO_KEYWORD_TARGET_MATRIX.md`](./SEO_KEYWORD_TARGET_MATRIX.md) | Official local keyword clusters, on-page implementation proof, Schema.org rich results validation, and Google Search Console verification protocols. | Section 5.3 of Digital Marketing & Technology Services Agreement |
 | [`../seo-matrix.html`](../seo-matrix.html) | Interactive Executive Dashboard & Telemetry Portal expressing the SEO Keyword Matrix for Peter & Terri Gitahi with live SERP simulators and 1-click Google test suite. | Section 5.3 Interactive Verification Portal |
+| [`CLIENT_PROGRESS_REPORT_NOV_2026.md`](./CLIENT_PROGRESS_REPORT_NOV_2026.md) | Executive Progress & Launch Readiness Report for Peter & Terri Gitahi detailing 100% agency delivery, financial statement, and client pending actions. | Client Launch Handover Protocol & Section 3.2 |
+| [`BEAKIM_HOSPITALITY_PROGRESS_REPORT_NOV_2026.pdf`](./BEAKIM_HOSPITALITY_PROGRESS_REPORT_NOV_2026.pdf) | Formal compiled presentation PDF of the Executive Progress & Launch Readiness Report for client delivery. | Section 3.2 & Section 9.2 Client Deliverable |
 
 ---
 

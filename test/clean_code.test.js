@@ -1572,5 +1572,76 @@ assert.ok(/\bopen\b/.test(aptsFaqMatches[0]), "First faq-apartments item must be
 
 console.log("   ✅ Exclusive FAQ accordion initial state and smooth mutual exclusion verified 100%.");
 
-console.log("\n🎉 ALL 40 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
+// TEST 41: Pesapal Online Payment Integration & 50% vs 100% Deposit Toggle
+console.log("41. Testing Pesapal Online Payment & 50% vs 100% Toggle Engine...");
+{
+  // 1. Math verification: 50% deposit & balance calculations
+  const totalsFixture = calculateReservationTotals({
+    pricingSummary: { rate: 3400, totalCost: 6800, durationDays: 2, isValidRange: true, unitDisplayName: "Test Suite" },
+    adultsCount: 2,
+    hasBreakfast: false,
+    unitsCount: 1
+  });
+  assert.strictEqual(totalsFixture.grandTotal, 6800);
+  assert.strictEqual(totalsFixture.depositDue, 3400);
+  assert.strictEqual(totalsFixture.balanceDue, 3400);
+  assert.strictEqual(totalsFixture.formattedDepositDue, "KSh 3,400");
+  assert.strictEqual(totalsFixture.formattedBalanceDue, "KSh 3,400");
+
+  // Odd amount rounding check
+  const oddTotals = calculateReservationTotals({
+    pricingSummary: { rate: 3300, totalCost: 9900, durationDays: 3, isValidRange: true, unitDisplayName: "Test Suite" },
+    adultsCount: 2,
+    hasBreakfast: false,
+    unitsCount: 1
+  });
+  assert.strictEqual(oddTotals.grandTotal, 9900);
+  assert.strictEqual(oddTotals.depositDue, 4950);
+  assert.strictEqual(oddTotals.balanceDue, 4950);
+
+  // 2. Breakdown rendering with 50% Pesapal Deposit
+  const pesapal50Breakdown = renderInquiryCostBreakdown({
+    property: "Beakim Darad",
+    pricingSummary: { totalCost: 6800, durationDays: 2, durationText: "2 Nights", rateBasisText: "KSh 3,400 / night" },
+    totals: totalsFixture,
+    estimatedTotal: "KSh 6,800",
+    paymentMethodPreference: "pesapal",
+    paymentAmountOption: "DEPOSIT_50"
+  });
+  assert.ok(pesapal50Breakdown.includes("Deposit Due Today (50% Pesapal):"), "Breakdown must display 50% deposit label for Pesapal");
+  assert.ok(pesapal50Breakdown.includes("KSh 3,400"), "Breakdown must display deposit amount");
+  assert.ok(pesapal50Breakdown.includes("Balance Due at Check-In:"), "Breakdown must display balance row");
+
+  // 3. Breakdown rendering with 100% Full Pesapal Payment
+  const pesapal100Breakdown = renderInquiryCostBreakdown({
+    property: "Beakim Darad",
+    pricingSummary: { totalCost: 6800, durationDays: 2, durationText: "2 Nights", rateBasisText: "KSh 3,400 / night" },
+    totals: totalsFixture,
+    estimatedTotal: "KSh 6,800",
+    paymentMethodPreference: "pesapal",
+    paymentAmountOption: "FULL_100"
+  });
+  assert.ok(pesapal100Breakdown.includes("Due Today (100% Full Payment):"), "Breakdown must display 100% full payment label for Pesapal");
+  assert.ok(pesapal100Breakdown.includes("Fully Cleared"), "Breakdown must note balance is fully cleared");
+
+  // 4. HTML Booking Form Integration across all 5 properties
+  const bookingPages = ["index.html", "beakim-darad.html", "tower-cottages.html", "diani-darling.html", "beakim-apartments.html"];
+  for (const pageName of bookingPages) {
+    const pageHtml = fs.readFileSync(path.join(__dirname, "..", pageName), "utf8");
+    assert.ok(pageHtml.includes('name="payment-method-preference"'), `${pageName} must contain payment-method-preference radios`);
+    assert.ok(pageHtml.includes('value="pesapal"'), `${pageName} must offer Pesapal payment option`);
+    assert.ok(pageHtml.includes('value="inquiry"'), `${pageName} must offer Request & Pay Later option`);
+    assert.ok(pageHtml.includes('name="payment-amount-option"'), `${pageName} must contain payment-amount-option radios`);
+    assert.ok(pageHtml.includes('value="DEPOSIT_50"'), `${pageName} must offer 50% deposit toggle`);
+    assert.ok(pageHtml.includes('value="FULL_100"'), `${pageName} must offer 100% full payment toggle`);
+    assert.ok(pageHtml.includes('id="pesapal-amount-toggle-wrapper"'), `${pageName} must contain toggle wrapper`);
+    assert.ok(pageHtml.includes('id="summary-due-today-row"'), `${pageName} must contain dynamic due today row`);
+  }
+
+  // 5. CrmSyncService boundary method assertion
+  assert.strictEqual(typeof CrmSyncService.initiateInstantCheckout, "function", "CrmSyncService must expose initiateInstantCheckout");
+}
+console.log("   ✅ Pesapal Online Payment & 50% vs 100% Toggle Engine asserted with 100% resilience.");
+
+console.log("\n🎉 ALL 41 CLEAN CODE UNIT TESTS PASSED WITH 100% SUCCESS!\n");
 

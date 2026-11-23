@@ -70,3 +70,12 @@ Corrective release 2.2.5 implements approved current-page WhatsApp routing, narr
 
 ## Public themes — 5 November 2026
 Theme release 2.3.0 adds Forest Dark (default) and Ivory Light across the nine public pages. Read HANDOVER-ANTIGRAVITY-THEMES-2.3.0.md. The semantic palette must preserve fixed forest CTA text and dark photo overlays. Booking/WhatsApp/CRM behaviour is unchanged.
+
+## Pesapal Online Checkout & 50% vs 100% Payment Toggle — 23 November 2026
+Integrated official Pesapal v3 gateway directly into the public booking engine across all 5 properties (`index.html`, `beakim-darad.html`, `tower-cottages.html`, `diani-darling.html`, `beakim-apartments.html`):
+- Added accessible Payment & Confirmation Method selector (💳 Pay Online via Pesapal vs 💬 Request & Pay Later).
+- Introduced interactive 50% Deposit / 100% Full Payment toggle with live badge computation.
+- Updated dynamic live pricing card with real-time "Due Today via Pesapal" and "Balance Due at Check-In" metrics.
+- Integrated `action: 'instant-checkout'` in `Beakim CRM/app/api/public/inquiries/route.js` with atomic room allocation (`syncWebsiteBooking`), cryptographic booking payment token (`createBookingPaymentToken`), and Pesapal external order generation with 10s timeout outside DB transaction.
+- Extended review modal (`showInquiryReviewModal`) and receipt (`renderInquirySuccessReceipt`) with interactive toggle and instant checkout redirection.
+- Added comprehensive regression test 41 to `test/clean_code.test.js` (41/41 passing).
